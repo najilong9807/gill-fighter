@@ -1,0 +1,51 @@
+# 아가미파이터 iOS 빌드 (Codemagic, Mac 없이 클라우드에서 빌드 → TestFlight 업로드)
+# 저장소에는 이 파일과 app.zip(package.json·www·ios)만 올린다. 빌드 첫 단계에서 app.zip을 푼다.
+# 준비물(Codemagic 화면에서 한 번만):
+#   1) Team settings › Team integrations › Developer Portal 에 App Store Connect API 키를 이름 'asc' 로 등록
+#   2) Team settings › codemagic.yaml settings › Code signing identities
+#      - iOS certificates: 'Generate certificate' (Apple Distribution)
+#      - iOS provisioning profiles: 'Fetch profiles' 로 com.gillfighter.game 의 App Store 프로파일 가져오기
+#   3) APP_STORE_APPLE_ID = 6816376999 (App Store Connect 앱 번호, 입력해 둠)
+workflows:
+  ios-release:
+    name: 아가미파이터 iOS → TestFlight
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: asc
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.gillfighter.game
+      vars:
+        APP_STORE_APPLE_ID: 6816376999
+        XCODE_PROJECT: "ios/App/App.xcodeproj"
+        XCODE_SCHEME: "App"
+      node: 22
+      xcode: latest
+    scripts:
+      - name: 프로젝트 풀기 (app.zip)
+        script: unzip -q -o app.zip
+      - name: npm 설치
+        script: npm ci || npm install
+      - name: 웹 파일을 iOS 프로젝트로 복사
+        script: npx cap sync ios
+      - name: 서명 설정
+        script: xcode-project use-profiles --project "$XCODE_PROJECT"
+      - name: 빌드 번호 올리기
+        script: |
+          LATEST=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+          case "$LATEST" in ''|*[!0-9]*) LATEST=0;; esac
+          NEXT=$((LATEST + 1))
+          if [ "$NEXT" -lt "${BUILD_NUMBER:-1}" ]; then NEXT=$BUILD_NUMBER; fi
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $NEXT;/g" "$XCODE_PROJECT/project.pbxproj"
+          echo "build number $NEXT"
+      - name: ipa 만들기
+        script: xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

@@ -1,5 +1,5 @@
 # 아가미파이터 iOS 빌드 (Codemagic, Mac 없이 클라우드에서 빌드 → TestFlight 업로드)
-# 저장소에는 이 파일과 app.zip(package.json·www·ios)만 올린다. 빌드 첫 단계에서 app.zip을 푼다.
+# 저장소: 이 파일, app.zip(package.json·www·ios 기준본), patch.json(기준본 이후 게임 수정), apply_patch.py. 빌드 때 app.zip을 풀고 patch.json을 덮어쓴다.
 # 준비물(Codemagic 화면에서 한 번만):
 #   1) Team settings › Team integrations › Developer Portal 에 App Store Connect API 키를 이름 'asc' 로 등록
 #   2) Team settings › codemagic.yaml settings › Code signing identities
@@ -26,6 +26,8 @@ workflows:
     scripts:
       - name: 프로젝트 풀기 (app.zip)
         script: unzip -q -o app.zip
+      - name: 수정 사항 적용 (patch.json)
+        script: if [ -f patch.json ]; then python3 apply_patch.py; fi
       - name: npm 설치
         script: npm ci || npm install
       - name: 웹 파일을 iOS 프로젝트로 복사

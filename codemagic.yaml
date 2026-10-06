@@ -28,6 +28,8 @@ workflows:
         script: unzip -q -o app.zip
       - name: 수정 사항 적용 (patch.json)
         script: if [ -f patch.json ]; then python3 apply_patch.py; fi
+      - name: 실사풍 그림 넣기 (svart)
+        script: if [ -d svart ]; then mkdir -p www/svart && cp svart/*.webp www/svart/ && ls www/svart | wc -l; fi
       - name: npm 설치
         script: npm ci || npm install
       - name: 웹 파일을 iOS 프로젝트로 복사

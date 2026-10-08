@@ -9,7 +9,7 @@
 workflows:
   ios-release:
     name: 아가미파이터 iOS → TestFlight
-    max_build_duration: 60
+    max_build_duration: 30
     instance_type: mac_mini_m2
     integrations:
       app_store_connect: asc

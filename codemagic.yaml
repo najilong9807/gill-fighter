@@ -28,6 +28,8 @@ workflows:
         script: unzip -q -o app.zip
       - name: 수정 사항 적용 (patch.json)
         script: if [ -f patch.json ]; then python3 apply_patch.py; fi
+      - name: 앱 아이콘 넣기 (icon)
+        script: if [ -f icon/AppIcon-512@2x.png ]; then cp icon/AppIcon-512@2x.png ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png && ls -la ios/App/App/Assets.xcassets/AppIcon.appiconset/; fi
       - name: 실사풍 그림 넣기 (svart)
         script: if [ -d svart ]; then mkdir -p www/svart && cp svart/*.webp www/svart/ && ls www/svart | wc -l; fi
       - name: npm 설치

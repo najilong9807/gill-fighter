@@ -15,8 +15,10 @@ workflows:
       app_store_connect: asc
     environment:
       ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.gillfighter.game
+        provisioning_profiles:
+          - gillfighter_appstore_gc
+        certificates:
+          - gillfighter-dist
       vars:
         APP_STORE_APPLE_ID: 6816376999
         XCODE_PROJECT: "ios/App/App.xcodeproj"

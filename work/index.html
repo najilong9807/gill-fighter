@@ -9992,15 +9992,16 @@ function draw(){
     ctx.globalAlpha=1;
   }
   /* 1.2.0(빌드 58) 화면 밖 물고기는 그리지 않는다(안 보이는 종의 그림까지 만들어 메모리를 쓰던 것 줄이기) */
-  var cvx0=cam.x-cw/2/zoom,cvx1=cam.x+cw/2/zoom,cvy0=cam.y-ch/2/zoom,cvy1=cam.y+ch/2/zoom,scrMin=Math.min(cw,ch);
+  HUGEW=[];  var cvx0=cam.x-cw/2/zoom,cvx1=cam.x+cw/2/zoom,cvy0=cam.y-ch/2/zoom,cvy1=cam.y+ch/2/zoom,scrMin=Math.min(cw,ch);
   for(i=0;i<fish.length;i++){
     var f=fish[i],edible=playing&&f.s<=P.s*(f.bot?eatThr(f):eatR),danger=playing&&!edible&&f.s>=P.s*dangerThr(f);
     var cmg=f.s*3.2+60/zoom;if(f.x+cmg<cvx0||f.x-cmg>cvx1||f.y+cmg<cvy0||f.y-cmg>cvy1)continue;
     /* 1.2.0(빌드 58) 화면보다 훨씬 큰 물고기(다른 사람·보스)는 반투명하게 — 화면을 통째로 가려 내 물고기가 안 보이던 것 */
-    var huge=f.s*2.6*zoom>scrMin*.75;
-    if(f.look.light){var gp=lightPos(f.x,f.y,f.s,f.ang,f.look),gr=f.s*(1+.7*f.look.light);ctx.globalAlpha=(.22+.6*dkW)*(.85+.15*Math.sin(t*3+f.phase));ctx.globalCompositeOperation='lighter';ctx.drawImage(glow(f.look.glowCol||'200,240,255'),gp[0]-gr,gp[1]-gr,gr*2,gr*2);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
+    var hq=f.s*2.6*zoom/(scrMin*.75),huge=hq>1,hA=huge?clamp(.6/Math.pow(hq,.7),.16,.6):null; /* 1.1.13 화면보다 훨씬 큰 물고기일수록 더 옅게(10/14 대전 스샷: 14배 큰 초롱아귀가 빨간 위험 표시째 화면을 덮음) */
+    if(f.look.light&&!(huge&&hq>2.2)){var gp=lightPos(f.x,f.y,f.s,f.ang,f.look),gr=f.s*(1+.7*f.look.light);ctx.globalAlpha=(.22+.6*dkW)*(.85+.15*Math.sin(t*3+f.phase));ctx.globalCompositeOperation='lighter';ctx.drawImage(glow(f.look.glowCol||'200,240,255'),gp[0]-gr,gp[1]-gr,gr*2,gr*2);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
     if(f.chomp>0)drawChomp(f.x,f.y,f.s,f.ang,f.look,f.chomp);
-    (f.q?drawFishDeco:function(c,_,x,y,s2,a,L,o){drawFish(c,x,y,s2,a,L,o)})(ctx,null,f.x,f.y,f.s,f.ang,f.look,{q:f.q,chomp:f.chomp||0,px:f.s*zoom,phase:f.phase,stun:f.stun>0,angry:danger,mark:danger,line:danger?'#E5383B':null,minLw:minLw,alpha:huge?.6:null});
+    (f.q?drawFishDeco:function(c,_,x,y,s2,a,L,o){drawFish(c,x,y,s2,a,L,o)})(ctx,null,f.x,f.y,f.s,f.ang,f.look,{q:f.q,chomp:f.chomp||0,px:f.s*zoom,phase:f.phase,stun:f.stun>0,angry:danger,mark:danger&&!huge,line:danger?'#E5383B':null,minLw:minLw,alpha:hA});
+    if(huge&&danger&&playing){var dvx=f.x-P.x,dvy=f.y-P.y,dvl=Math.hypot(dvx,dvy)||1;HUGEW.push([dvx/dvl,dvy/dvl,Math.min(1,f.s*1.5/dvl)])}
     var inGlow=P.glowR&&Math.hypot(f.x-P.x,f.y-P.y)<P.glowR;
     var lblA=playing?(f.bot||scanOn||inGlow?1:(!danger&&f.s<P.s*.5)?0:clamp((danger?1.6:1.15)-Math.hypot(f.x-P.x,f.y-P.y)/(Math.min(cw,ch)/zoom*.42),0,1)):0;
     if(lblA>.03){
@@ -10013,6 +10014,8 @@ function draw(){
     }
     if(f.stun>0){ctx.fillStyle='#FFD93B';ctx.font=(f.s*.7)+'px sans-serif';ctx.textAlign='center';ctx.fillText('✦',f.x,f.y-f.s*.9)}
   }
+  /* 1.1.13 화면을 덮는 큰 위험 물고기가 있으면 그쪽 화면 가장자리에 빨간 빛 경고(몸은 옅게 그리므로 위험을 놓치지 않게) */
+  try{for(var hw=0;hw<HUGEW.length&&hw<3;hw++){var W=HUGEW[hw],ex2=cam.x+W[0]*cw/2/zoom*.92,ey2=cam.y+W[1]*ch/2/zoom*.92,rr=Math.min(cw,ch)/zoom*.42;ctx.globalAlpha=(.35+.25*Math.sin(t*6))*Math.max(.4,W[2]);ctx.drawImage(glow('229,56,59'),ex2-rr,ey2-rr,rr*2,rr*2);ctx.globalAlpha=1}}catch(e){}
   svDrawUnder();
   if(mode==='race')drawRace();
   if(!P.dead){
@@ -12598,7 +12601,7 @@ abyTr(TRT,{"심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터
 NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)"),T("심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석"),T("앱을 오래 켜 두거나 내렸다가 다시 열 때 꺼지는 일을 줄였어요"),T("작은 화면에서 상점 이름 · 물고기 고르기 버튼을 다듬었어요")];NEWS_LEAD['1.1.13']=T("끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑");
 /* ===== 1.1.13 대전: 상대 크기가 말이 안 되게 튀면 막고, 화면을 덮을 만큼 큰 상대가 나오면 자동으로 기록을 남긴다
    10/14 0시대 사용자 신고: 대전에서 상대 물고기가 화면을 꽉 채움(서버 기록·오류 기록엔 흔적 없음) → 다음엔 무엇이 왔는지 그대로 받아 보기 위함 ===== */
-var PEERCHK={};
+var PEERCHK={},HUGEW=[];
 var netStatePB=netState;netState=function(p){try{if(p&&p.i&&mode==='multi'){var now=performance.now(),k=PEERCHK[p.i],sv=+p.s;
     if(k&&isFinite(sv)&&sv>k.s*4&&now-k.t<1500){crumb('peerJump:'+(sv/k.s).toFixed(1));p.s=k.s*1.3;sv=p.s}
     if(isFinite(sv))PEERCHK[p.i]={s:sv,t:now};

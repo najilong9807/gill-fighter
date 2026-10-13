@@ -1,0 +1,30 @@
+import json
+from playwright.sync_api import sync_playwright
+D='file:///tmp/claude-0/-home-claude/e922937a-9a51-5144-b16c-c7a7a3d12de9/scratchpad/w/'
+with sync_playwright() as p:
+  b=p.chromium.launch(executable_path='/opt/pw-browsers/chromium',args=['--allow-file-access-from-files'])
+  pg=b.new_page(viewport={'width':390,'height':844},device_scale_factor=2);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)[:200]))
+  pg.route(lambda u:'supabase' in u or 'google' in u, lambda r:r.abort())
+  sv={'runs':12,'onb':1,'tut':1,'firstAt':1759000000000,'newsSeen':'1.1.12','newsMute':'1.1.12','thx1111':2,'pearls':500,'owned':['anchovy'],'pick':'anchovy','hwAtt':{'y':2026,'n':7,'d':'x'}}
+  pg.add_init_script("localStorage.setItem('fishproto.save2',%s)"%json.dumps(json.dumps(sv)))
+  pg.goto(D+'t2e.html?lang=ko&build=release&hw=1');pg.wait_for_timeout(2500)
+  ev=lambda c:pg.evaluate("c=>__ev(c)",c)
+  ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});startRun('single');1")
+  pg.wait_for_timeout(1500)
+  ev("P.time=58;HWB.next=50;1");pg.wait_for_timeout(1500)
+  print('spawn',ev("JSON.stringify([!!HWB.f,HWB.f&&Math.round(HWB.f.s),Math.round(P.s),state,mode,HW])"))
+  ev("HWB.f.x=P.x+P.s*4;HWB.f.y=P.y;1");pg.wait_for_timeout(400)
+  pg.screenshot(path='hwb_play.png')
+  ev("var f=HWB.f;f.nb=1;f.s=P.s*.5;consume(f,fish.indexOf(f));1");pg.wait_for_timeout(1200)
+  print('down',ev("JSON.stringify([HWB.done,save.hwCandy,save.hwBossN,HM().v,P.bonus])"))
+  pg.screenshot(path='hwb_down.png')
+  ev("save.hwCandy=85;persist();endRun(false,true);1");pg.wait_for_timeout(1500)
+  print('afterEnd',ev("JSON.stringify(HM().v)"))
+  ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});showTab('home');1");pg.wait_for_timeout(1500)
+  print('bar',ev("var b=$('hwBar');JSON.stringify([b.hidden,b.textContent])"))
+  ev("hwEvOpen();1");pg.wait_for_timeout(800)
+  pg.screenshot(path='hwev.png')
+  ev("hwmClaim('boss');hwcClaim(0);hwcClaim(1);1");pg.wait_for_timeout(600)
+  print('claimed',ev("JSON.stringify([save.pearls,save.gems,save.hwCandy,save.hwcGot])"))
+  pg.screenshot(path='hwev2.png')
+  print(errs)

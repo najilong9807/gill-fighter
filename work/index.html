@@ -6000,7 +6000,7 @@ function netTick(dt){
   var now=performance.now();
   if(!NET.ws&&state==='play'&&NET.retry>0){NET.retry-=dt;if(NET.retry<=0)netStart()}
   if(NET.live&&state==='play'&&NET.humans>0){NET.sendT-=dt;if(NET.sendT<=0){NET.sendT=1/5;
-    netCast('st',{i:netId(),n:netClean(myName()),l:P.look.id,x:Math.round(P.x),f:+(P.y/H).toFixed(5),s:+P.s.toFixed(2),vx:Math.round(P.vx),a:+P.ang.toFixed(2),k:P.kills|0,t:+P.time.toFixed(1)})}}
+    netCast('st',{i:netId(),n:netClean(myName()),l:P.look.id,x:Math.round(P.x),f:+(P.y/H).toFixed(5),s:+P.s.toFixed(2),vx:Math.round(P.vx),a:+P.ang.toFixed(2),k:P.kills|0,t:+P.time.toFixed(1),v:APP_VER})}}
   for(var i=bots.length-1;i>=0;i--){var b=bots[i];if(!b.peer)continue;
     if(now-b.last>4000){netDrop(b.peer);continue}
     var e=b.ent;if(!e)continue;var ty=b.tf*H,tx=b.tx+(b.tvx||0)*Math.min(.3,(now-b.last)/1000);
@@ -12595,6 +12595,16 @@ accNameFit=function(){try{var bs=document.querySelectorAll('#goodsAcc .good b');
 /* 1.1.13 업데이트 소식 */
 abyTr(TRT,{"심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)": "Deep Dive: “The Endless Abyss” — clear floor 30 to go on from floor 31 through the Sea Cave, Shipwreck Sea, Glowing Abyss and Volcanic Vent (up to floor 99)", "심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석": "Bonus gems the first time you clear abyss floors 40 · 50 · 70 · 99", "앱을 오래 켜 두거나 내렸다가 다시 열 때 꺼지는 일을 줄였어요": "Fewer shutdowns when the app stays open a long time or comes back from the background", "작은 화면에서 상점 이름 · 물고기 고르기 버튼을 다듬었어요": "Polished shop names and fish picker buttons on small screens", "끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑": "The Endless Abyss is open! Dive below floor 30 🌑"});abyTr(TRJ,{"심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)": "深海探検に「果てなき深淵」：30階をクリアすると31階から海底洞窟 · 沈没船の海 · 光る深海 · 熱水噴出孔の火山まで（最大99階）", "심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석": "深淵40 · 50 · 70 · 99階を初めてクリアするとボーナスジェム", "앱을 오래 켜 두거나 내렸다가 다시 열 때 꺼지는 일을 줄였어요": "アプリを長く開いたままにしたり、戻ってきたときに落ちることを減らしました", "작은 화면에서 상점 이름 · 물고기 고르기 버튼을 다듬었어요": "小さい画面でショップの名前と魚えらびのボタンを整えました", "끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑": "果てなき深淵がひらいた！30階より深くへ 🌑"});
 NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)"),T("심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석"),T("앱을 오래 켜 두거나 내렸다가 다시 열 때 꺼지는 일을 줄였어요"),T("작은 화면에서 상점 이름 · 물고기 고르기 버튼을 다듬었어요")];NEWS_LEAD['1.1.13']=T("끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑");
+/* ===== 1.1.13 대전: 상대 크기가 말이 안 되게 튀면 막고, 화면을 덮을 만큼 큰 상대가 나오면 자동으로 기록을 남긴다
+   10/14 0시대 사용자 신고: 대전에서 상대 물고기가 화면을 꽉 채움(서버 기록·오류 기록엔 흔적 없음) → 다음엔 무엇이 왔는지 그대로 받아 보기 위함 ===== */
+var PEERCHK={};
+var netStatePB=netState;netState=function(p){try{if(p&&p.i&&mode==='multi'){var now=performance.now(),k=PEERCHK[p.i],sv=+p.s;
+    if(k&&isFinite(sv)&&sv>k.s*4&&now-k.t<1500){crumb('peerJump:'+(sv/k.s).toFixed(1));p.s=k.s*1.3;sv=p.s}
+    if(isFinite(sv))PEERCHK[p.i]={s:sv,t:now};
+    var r=P.s>0?sv/P.s:0;if(r>=12&&!P.bigRep&&state==='play'){P.bigRep=1;crumb('peerBig:'+r.toFixed(1)+':'+p.l);
+      save.crashQ=(save.crashQ||[]).concat([{kind:'peerBig',v:APP_VER,at:Date.now(),m:'multi',r:Math.round(r*10)/10,s:Math.round(sv*10)/10,ps:Math.round(P.s*10)/10,l:String(p.l||'').slice(0,24),pv:String(p.v||'').slice(0,12),cm:Math.round(cmRel(sv)*10)/10,t:Math.round(P.time||0),zm:Math.round(zoom*100)/100,bc:(CR.bc||[]).slice(-8)}]).slice(-6);persist();setTimeout(crashSend,800)}}}catch(e){}
+  return netStatePB.apply(this,arguments)};
+var startRunPB=startRun;startRun=function(){PEERCHK={};try{P.bigRep=0}catch(e){}return startRunPB.apply(this,arguments)};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

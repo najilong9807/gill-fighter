@@ -6280,8 +6280,8 @@ function ateFish(f){
 function nextLocked(){for(var i=0;i<SPECIES.length;i++)if(!SPECIES[i].gem&&!owns(SPECIES[i].id))return SPECIES[i];return null}
 /* 1.1.7(빌드 73) 결과 화면 아래 설명: 한 덩어리 글 대신 문장마다 한 줄씩, 낱말이 중간에 끊기지 않게. '최고 기록 경신!'·해금 안내는 눈에 띄게 */
 function overMsg(msg){try{document.documentElement.style.setProperty('--newrec',JSON.stringify(LANG==='en'?'New':LANG==='ja'?'新記録':'신기록'))}catch(x){}var e=$('oMsg');if(!e)return;e.textContent='';e.classList.add('omsg');
-  String(msg||'').replace(/([.!?])\s+/g,'$1\n').replace(/([。！？])\s*/g,'$1\n').split('\n').forEach(function(s){s=s.trim();if(!s)return;var d=document.createElement('span');d.className='ml';
-    if(/^(최고 기록 경신|대전 최고 기록|처음 오신 선물|New best|New record|Welcome gift|最高記録|対戦の最高記録|初めてのプレゼント)/i.test(s)||/해금할 수 있어요|can unlock|解放できます/i.test(s))d.classList.add('hi');else if(/해금까지|to unlock|解放まで/i.test(s))d.classList.add('nx');
+  String(msg||'').replace(LANG==='ja'?/\.(\s+|$)/g:/^\b$/,'。 ').replace(/([.!?])\s+/g,'$1\n').replace(/([。！？])\s*/g,'$1\n').split('\n').forEach(function(s){s=s.trim();if(!s)return;var d=document.createElement('span');d.className='ml';
+    if(/^(최고 기록 경신|대전 최고 기록|처음 오신 선물|New best|New record|Welcome gift|New arena|最高記録|対戦の最高記録|初めてのプレゼント)/i.test(s)||/해금할 수 있어요|can unlock|解放できます/i.test(s))d.classList.add('hi');else if(/해금까지|to unlock|解放まで/i.test(s))d.classList.add('nx');
     d.textContent=s;e.appendChild(d)})}
 function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(state==='pause'&&P.surv&&!P.dead){['svUp','svBox','svRev'].forEach(function(id){var o=$(id);if(o)o.hidden=true});state='play'}
@@ -12672,6 +12672,8 @@ var showTabTF=showTab;showTab=function(p){var r=showTabTF.apply(this,arguments);
   while(n<14&&e.offsetHeight>lh*1.5&&f>f0*.72){f-=f0*.03;e.style.fontSize=f.toFixed(1)+'px';lh=parseFloat(getComputedStyle(e).lineHeight)||f*1.15;n++}
   if(e.offsetHeight>lh*1.5)e.style.fontSize=''}catch(x){}}
  ['crTitle','svTitle'].forEach(function(id){var e=$(id);if(!e||!window.MutationObserver)return;new MutationObserver(function(){[40,500,1300,2600].forEach(function(t){setTimeout(function(){fit1(e)},t)})}).observe(e,{childList:true,characterData:true,subtree:true})})})();
+/* 1.1.13: 일본어 '黄金のコイに 食べられました' 사이 빈칸 제거 */
+try{TRJ[' 먹혔어요. ']='食べられました。 '}catch(e){}
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

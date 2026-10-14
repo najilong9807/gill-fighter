@@ -12642,9 +12642,10 @@ function rdPaint(){try{var tb=$('tab-home');if(!tb)return;var d=$('playDot');if(
   var all=rdAll(),on=all>0&&page!=='home';if(d.hidden===on)d.hidden=!on;
   var pb=$('playBtn');if(pb){var sOn=rdSingle()>0;if(pb.classList.contains('rdot')!==sOn)pb.classList.toggle('rdot',sOn)}
   var svn=0;try{svn=svReadyN()+svAchReadyAll()+svDqReady()}catch(e){}
-  if(RD.sv>=0&&svn>RD.sv&&!(P&&P.surv&&state==='play'))banner(T('심해 생존 보상 달성!'),T('모드 고르기 › 심해 생존에서 받아요'));RD.sv=svn;
+  if(state==='play'&&svn>RD.sv&&RD.sv>=0){}else{if(RD.sv>=0&&svn>RD.sv)banner(T('심해 생존 보상 달성!'),T('모드 고르기 › 심해 생존에서 받아요'));RD.sv=svn}
   if(!RD.boot&&state==='home'&&page==='home'&&APPACT){RD.boot=true;if(all>0)setTimeout(function(){if(state==='home')banner(T('받을 보상이 있어요'),T('빨간 점이 있는 곳을 눌러 받아요'))},2500)}}catch(e){}}
 (function(){var st=document.createElement('style');st.textContent='#playBtn.rdot::before{content:"";position:absolute;top:-4px;left:-4px;width:15px;height:15px;border-radius:50%;background:#FF4D5E;box-shadow:0 0 0 2.5px #0B2C4A;animation:dotp 1.2s ease-in-out infinite;z-index:2}';document.head.appendChild(st)})();
+var startRunRD=startRun;startRun=function(){try{var bl=BAN_LAST&&BAN_LAST[0];if(bl===T('받을 보상이 있어요')||bl===T('심해 생존 보상 달성!')){var be=$('banner');if(be){be.hidden=true;be.classList.remove('go')}}}catch(e){}return startRunRD.apply(this,arguments)};
 var chestDotRD=chestDot;chestDot=function(){var r=chestDotRD.apply(this,arguments);rdPaint();return r};
 abyTr(TRT,{"심해 생존 보상 달성!":"Deep Survival reward ready!","모드 고르기 › 심해 생존에서 받아요":"Claim it in Modes › Deep Survival","받을 보상이 있어요":"You have rewards to claim","빨간 점이 있는 곳을 눌러 받아요":"Tap the red dots to collect"});
 abyTr(TRJ,{"심해 생존 보상 달성!":"深海サバイバルの報酬達成！","모드 고르기 › 심해 생존에서 받아요":"モード選択 › 深海サバイバルで受け取ろう","받을 보상이 있어요":"受け取れる報酬があります","빨간 점이 있는 곳을 눌러 받아요":"赤い点をタップして受け取ろう"});

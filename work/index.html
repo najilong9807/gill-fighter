@@ -10611,7 +10611,7 @@ function lbSyncWeek(){if(!save.lbSentW)save.lbSentW={};var nick=netClean(save.ni
 function lbSync(){setTimeout(lbSyncWeek,0);if(!save.lbSent)save.lbSent={};var nick=netClean(save.nick||'');['single','multi','camp','surv'].forEach(function(m,k){var v=lbBest(m);if(!(v>0))return;var sent=save.lbSent[m]||{};if(sent.v===v&&sent.n===nick)return;
   setTimeout(function(){lbReq('rpc/gf_submit',{p_pid:lbPid(),p_mode:m,p_nick:nick,p_fish:lbFish(m),p_score:v}).then(function(r){var x0=r&&r[0];if(x0&&+x0.best<v-.05)return;save.lbSent[m]={v:v,n:nick};persist();var x=r&&r[0];if(x)LB.cache[m+'_me']=x;delete LB.cache[m];if(lbMode===m&&$('rec')&&!$('rec').hidden)lbShow(m)}).catch(function(){})},k*400)})}
 function lbShow(m){lbMode=m;['single','multi','camp','surv'].forEach(function(k){var b=$('lbT-'+k);if(b)b.setAttribute('aria-pressed',k===m?'true':'false')});
-  var cp=m==='camp'||m==='surv',sg=document.querySelector('.lbper');if(sg)sg.hidden=cp;if(cp){var sv=(save.lbSent||{})[m];if(lbBest(m)>0&&(!sv||sv.v!==lbBest(m)))lbSync()}if(LANG==='en')[['single','Solo'],['multi','Arena'],['camp','Expedition'],['surv','Survival']].forEach(function(o){var b=$('lbT-'+o[0]);if(b)b.textContent=o[1]});
+  var cp=m==='camp'||m==='surv',sg=document.querySelector('.lbper');if(sg)sg.hidden=cp;if(cp){var sv=(save.lbSent||{})[m];if(lbBest(m)>0&&(!sv||sv.v!==lbBest(m)))lbSync()}if(LANG==='en')[['single','Solo'],['multi','Arena'],['camp','Expedition'],['surv','Survival']].forEach(function(o){var b=$('lbT-'+o[0]);if(b)b.textContent=o[1]});if(LANG==='ja')[['single','ソロ'],['multi','対戦'],['camp','深海探検'],['surv','サバイバル']].forEach(function(o){var b=$('lbT-'+o[0]);if(b)b.textContent=o[1]});
   var wk=!cp&&lbPer==='week',key=m+(wk?'_week':'');['week','all'].forEach(function(k){var b=$('lbP-'+k);if(b)b.setAttribute('aria-pressed',k===lbPer?'true':'false')});
   var sub=$('lbSub');if(sub)sub.textContent=m==='camp'?T('별이 많은 순서 · 같으면 더 깊이 간 사람이 위'):m==='surv'?T('더 깊은 챕터 순서 · 같으면 오래 버틴 사람이 위'):(m==='single'?T('싱글 점수 · '):T('대전 크기 · '))+(wk?T('매주 월요일에 새로 시작해요'):T('모든 사람의 최고 기록이에요'));if(cp){var pv=$('lbPrev');if(pv)pv.hidden=true}else lbPrevShow(m);
   var box=$('lbList'),me=$('lbMe');if(!box)return;
@@ -12677,7 +12677,7 @@ var showTabTF=showTab;showTab=function(p){var r=showTabTF.apply(this,arguments);
 try{TRJ[' 먹혔어요. ']='食べられました。 '}catch(e){}
 /* 1.1.13: 일본어 320px 출석 버튼 '…真珠 50' 잘림 · '1日/目' 두 줄 */
 try{TRJ['출석 보상 받기 · ']='受け取る · '}catch(e){}
-(function(){var st=document.createElement('style');st.textContent='.attrow li b{white-space:nowrap;letter-spacing:-.03em}#attGet{max-width:100%;overflow-wrap:anywhere}';document.head.appendChild(st)})();
+(function(){var st=document.createElement('style');st.textContent='.attrow li b{white-space:nowrap;letter-spacing:-.03em}#attGet{max-width:100%;overflow-wrap:anywhere}@media (max-width:370px){.dmtabs em{top:-9px;right:-4px;min-width:18px;height:18px;font-size:11px}}';document.head.appendChild(st)})();
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

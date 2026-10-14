@@ -6279,9 +6279,9 @@ function ateFish(f){
 }
 function nextLocked(){for(var i=0;i<SPECIES.length;i++)if(!SPECIES[i].gem&&!owns(SPECIES[i].id))return SPECIES[i];return null}
 /* 1.1.7(빌드 73) 결과 화면 아래 설명: 한 덩어리 글 대신 문장마다 한 줄씩, 낱말이 중간에 끊기지 않게. '최고 기록 경신!'·해금 안내는 눈에 띄게 */
-function overMsg(msg){var e=$('oMsg');if(!e)return;e.textContent='';e.classList.add('omsg');
-  String(msg||'').replace(/([.!?])\s+/g,'$1\n').split('\n').forEach(function(s){s=s.trim();if(!s)return;var d=document.createElement('span');d.className='ml';
-    if(/^(최고 기록 경신|대전 최고 기록|처음 오신 선물|New best|New record|Welcome gift)/i.test(s)||/해금할 수 있어요|can unlock/i.test(s))d.classList.add('hi');else if(/해금까지|to unlock/i.test(s))d.classList.add('nx');
+function overMsg(msg){try{document.documentElement.style.setProperty('--newrec',JSON.stringify(LANG==='en'?'New':LANG==='ja'?'新記録':'신기록'))}catch(x){}var e=$('oMsg');if(!e)return;e.textContent='';e.classList.add('omsg');
+  String(msg||'').replace(/([.!?])\s+/g,'$1\n').replace(/([。！？])\s*/g,'$1\n').split('\n').forEach(function(s){s=s.trim();if(!s)return;var d=document.createElement('span');d.className='ml';
+    if(/^(최고 기록 경신|대전 최고 기록|처음 오신 선물|New best|New record|Welcome gift|最高記録|対戦の最高記録|初めてのプレゼント)/i.test(s)||/해금할 수 있어요|can unlock|解放できます/i.test(s))d.classList.add('hi');else if(/해금까지|to unlock|解放まで/i.test(s))d.classList.add('nx');
     d.textContent=s;e.appendChild(d)})}
 function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(state==='pause'&&P.surv&&!P.dead){['svUp','svBox','svRev'].forEach(function(id){var o=$(id);if(o)o.hidden=true});state='play'}
@@ -12652,7 +12652,7 @@ abyTr(TRJ,{"심해 생존 보상 달성!":"深海サバイバルの報酬達成�
    · 작은 화면(320px) 영어 '내 수족관' 제목이 두 줄로 꺾여 아래 숫자 줄·물고기와 겹치던 것 → 한 줄 고정 + 좁은 화면은 글자 조금 작게
    · '내 소품' 카드 버튼(보관/놓기) 글자가 좁은 칸에서 잘리던 것 → 좁은 화면 글자 크기 맞춤
    · 큰 알림 글씨(예: 손님 알림)가 웹 글꼴이 늦게 읽히면 화면 밖으로 삐져나가던 것 → 글꼴이 바뀐 뒤 다시 크기 맞춤 ===== */
-(function(){var st=document.createElement('style');st.textContent='#tankUI .home-title{white-space:nowrap}@media (max-width:370px){#tankUI .home-title{font-size:min(9.4vw,46px)}}#banner{max-width:calc(100vw - 20px)}#banner b,#banner span{text-wrap-style:balance}@media (max-width:400px){#modePick .mcard .mcbeta{top:6px;right:auto;left:6px;font-size:11.5px;padding:2px 8px;z-index:2}}.myd-b{font-size:clamp(11px,3.4vw,13.5px)!important;padding-left:1px!important;padding-right:1px!important;letter-spacing:-.02em}';document.head.appendChild(st)})();
+(function(){var st=document.createElement('style');st.textContent='#tankUI .home-title{white-space:nowrap}@media (max-width:370px){#tankUI .home-title{font-size:min(9.4vw,46px)}}#banner{max-width:calc(100vw - 20px)}.crtitle{text-wrap-style:balance}.recline li{word-break:keep-all}.recline li b{white-space:nowrap}.recline li.new{position:relative}.recline li.new b::after{content:var(--newrec,"신기록");position:absolute;top:-9px;right:8px;font-size:10.5px;line-height:1;padding:3px 6px;border-radius:99px;background:#F2A52A;color:#fff}@media (max-width:370px){.recline li{padding:6px 8px;font-size:12px}}#banner b,#banner span{text-wrap-style:balance}@media (max-width:400px){#modePick .mcard .mcbeta{top:6px;right:auto;left:6px;font-size:11.5px;padding:2px 8px;z-index:2}}.myd-b{font-size:clamp(11px,3.4vw,13.5px)!important;padding-left:1px!important;padding-right:1px!important;letter-spacing:-.02em}';document.head.appendChild(st)})();
 var banner1BF=banner1;banner1=function(a,b){var r=banner1BF.apply(this,arguments);function fit(){try{var e=$('banner');if(!e||e.hidden)return;var mw=innerWidth-28;[e.querySelector('b'),e.querySelector('span')].forEach(function(q,qi){if(!q||q.style.whiteSpace==='normal')return;var w=q.scrollWidth||q.offsetWidth,f=parseFloat(getComputedStyle(q).fontSize)||(qi?18:34),nf=w>mw?f*mw/w:f,mn=qi?12:21;if(nf<mn){q.style.whiteSpace='normal';q.style.width=mw+'px';q.style.fontSize=Math.max(mn,Math.min(qi?18:34,nf*1.6)).toFixed(1)+'px'}else if(w>mw)q.style.fontSize=nf.toFixed(1)+'px'})}catch(x){}}
   setTimeout(fit,60);setTimeout(fit,400);setTimeout(fit,1200);try{document.fonts&&document.fonts.ready.then(fit)}catch(x){}return r};
 /* 수족관 제목이 오른쪽 진주·보석 칸을 밀어내지 않게: 칸에 닿으면 글자를 줄인다 */

@@ -4105,7 +4105,7 @@ function campInfo(){var n=CAMP.sel,f=campFloor(n),box=$('campInfo'),st=campStars
   if(tip.length){var tp=el('p','ci-tip');tip.forEach(function(t,i){if(i)tp.appendChild(document.createElement('br'));tp.appendChild(document.createTextNode(t))});box.appendChild(tp)}
   var ul=el('ul','ci-stars');for(var i=0;i<3;i++){var li=el('li',st>i?'ok':'');li.appendChild(el('i','','★'.repeat(i+1)));li.appendChild(el('span','',campStarShort(f,i)));ul.appendChild(li)}box.appendChild(ul);
   var rw=el('div','ci-rw');
-  if(st){rw.appendChild(el('small','',T('이미 깬 층이에요 · 별을 더 모아 보세요')))}
+  if(st){rw.appendChild(el('small','',st>=3?(LANG==='en'?'All 3 stars · replay for fun':LANG==='ja'?'星3つ達成 · 何度でも遊べます':'별 3개 다 모았어요 · 다시 즐겨도 돼요'):T('이미 깬 층이에요 · 별을 더 모아 보세요')))}
   else{rw.appendChild(el('small','',LANG==='en'?'First clear':T('첫 클리어 보상')));var rr=el('span','ci-chips');rr.appendChild(el('em','pearl',T('진주 ')+campFirstP(n)));if(f.type==='boss')rr.appendChild(el('em','gem',T('보석 ')+5));rr.appendChild(el('em','en',LANG==='en'?'⚡ back':T('⚡ 돌려받기')));rw.appendChild(rr)}
   box.appendChild(rw);
   var go=el('button','btn',T('출발 · ⚡1'));go.type='button';go.id='campGo';go.addEventListener('click',function(){campStart(n)});box.appendChild(go)}
@@ -12643,7 +12643,7 @@ function rdPaint(){try{var tb=$('tab-home');if(!tb)return;var d=$('playDot');if(
   var pb=$('playBtn');if(pb){var sOn=rdSingle()>0;if(pb.classList.contains('rdot')!==sOn)pb.classList.toggle('rdot',sOn)}
   var svn=0;try{svn=svReadyN()+svAchReadyAll()+svDqReady()}catch(e){}
   if(state==='play'&&svn>RD.sv&&RD.sv>=0){}else{if(RD.sv>=0&&svn>RD.sv)banner(T('심해 생존 보상 달성!'),T('모드 고르기 › 심해 생존에서 받아요'));RD.sv=svn}
-  if(!RD.boot&&state==='home'&&page==='home'&&APPACT){RD.boot=true;if(all>0)setTimeout(function(){if(state==='home')banner(T('받을 보상이 있어요'),T('빨간 점이 있는 곳을 눌러 받아요'))},2500)}}catch(e){}}
+  var ovOpen=function(){return [].some.call(document.querySelectorAll('.overlay'),function(o){return !o.hidden&&o.offsetParent!==null})};if(!RD.boot&&state==='home'&&page==='home'&&APPACT&&!ovOpen()){RD.boot=true;if(all>0)setTimeout(function(){if(state==='home'&&page==='home'&&!ovOpen()&&!$('intro'))banner(T('받을 보상이 있어요'),T('빨간 점이 있는 곳을 눌러 받아요'))},4800)}}catch(e){}}
 (function(){var st=document.createElement('style');st.textContent='#playBtn.rdot::before{content:"";position:absolute;top:-4px;left:-4px;width:15px;height:15px;border-radius:50%;background:#FF4D5E;box-shadow:0 0 0 2.5px #0B2C4A;animation:dotp 1.2s ease-in-out infinite;z-index:2}';document.head.appendChild(st)})();
 var startRunRD=startRun;startRun=function(){try{var bl=BAN_LAST&&BAN_LAST[0];if(bl===T('받을 보상이 있어요')||bl===T('심해 생존 보상 달성!')){var be=$('banner');if(be){be.hidden=true;be.classList.remove('go')}}}catch(e){}return startRunRD.apply(this,arguments)};
 var chestDotRD=chestDot;chestDot=function(){var r=chestDotRD.apply(this,arguments);rdPaint();return r};

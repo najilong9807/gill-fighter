@@ -12667,6 +12667,11 @@ function tkTitleFit(){try{var t=document.querySelector('#tankUI .home-title'),c=
     else if(k&&k.style.whiteSpace!=='normal'){k.style.whiteSpace='normal';k.style.maxWidth=Math.max(120,c.getBoundingClientRect().left-t.getBoundingClientRect().left-8)+'px'}
     else break}}catch(e){}}
 var showTabTF=showTab;showTab=function(p){var r=showTabTF.apply(this,arguments);if(p==='tank'){setTimeout(tkTitleFit,30);setTimeout(tkTitleFit,600)}return r};window.addEventListener('resize',function(){setTimeout(tkTitleFit,120)});
+/* 1.1.13: 결과 제목이 일본어에서 '骨も残りませ/んでした！'처럼 어색하게 끊기던 것 → 한 줄에 들어가면 글자를 조금(최대 72%) 줄여 한 줄로 */
+(function(){function fit1(e){try{if(!e||!e.offsetParent)return;e.style.fontSize='';var cs=getComputedStyle(e),f0=parseFloat(cs.fontSize)||28,lh=parseFloat(cs.lineHeight)||f0*1.15,f=f0,n=0;
+  while(n<14&&e.offsetHeight>lh*1.5&&f>f0*.72){f-=f0*.03;e.style.fontSize=f.toFixed(1)+'px';lh=parseFloat(getComputedStyle(e).lineHeight)||f*1.15;n++}
+  if(e.offsetHeight>lh*1.5)e.style.fontSize=''}catch(x){}}
+ ['crTitle','svTitle'].forEach(function(id){var e=$(id);if(!e||!window.MutationObserver)return;new MutationObserver(function(){[40,500,1300,2600].forEach(function(t){setTimeout(function(){fit1(e)},t)})}).observe(e,{childList:true,characterData:true,subtree:true})})})();
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

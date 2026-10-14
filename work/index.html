@@ -4021,7 +4021,7 @@ function campEnd(win,quit,by){
   if(ids.length){var h=document.createElement('b');h.className='crt-h';h.textContent=T('이번 판 체험 꾸미기');tb.appendChild(h);var row=document.createElement('div');row.className='crt-row';
     ids.forEach(function(id){var A=accById(id);if(!A)return;var it=document.createElement('div');it.className='crt-it';var bx=document.createElement('span');bx.className='crt-ico';
       var u=campAccPic(A);if(u){var im=new Image();im.alt='';im.src=u;bx.appendChild(im)}else{try{bx.appendChild(accIcon(A))}catch(e){}}
-      it.appendChild(bx);var nm=document.createElement('i');nm.className='crt-nm';nm.textContent=A.name;it.appendChild(nm);var pc=costEl(A.c);pc.classList.add('crt-pr');it.appendChild(pc);row.appendChild(it)});
+      it.appendChild(bx);var nm=document.createElement('i');nm.className='crt-nm';nm.textContent=T(A.name);it.appendChild(nm);var pc=costEl(A.c);pc.classList.add('crt-pr');it.appendChild(pc);row.appendChild(it)});
     tb.appendChild(row);var go=document.createElement('button');go.type='button';go.className='btn ghost crt-go';go.textContent=T('상점에서 보기');go.addEventListener('click',function(){$('campRes').hidden=true;toHome();showTab('sea');setTimeout(function(){var s=$('secAcc');if(s&&s.scrollIntoView)s.scrollIntoView({block:'start'})},80)});tb.appendChild(go)}
   P.trial=null;if(win)setTimeout(lbSync,1500);
   var nx=$('crNext');nx.hidden=!(win&&f.n<CAMP_N);nx.textContent=T('다음 층 · ⚡1');$('crAgain').textContent=(LANG==='en'?'Again':T('다시 하기'))+' ⚡1';$('crMap').textContent=LANG==='en'?'Map':T('층 지도');$('crAgain').closest('.crbtns').classList.toggle('solo',nx.hidden);
@@ -12678,6 +12678,8 @@ try{TRJ[' 먹혔어요. ']='食べられました。 '}catch(e){}
 /* 1.1.13: 일본어 320px 출석 버튼 '…真珠 50' 잘림 · '1日/目' 두 줄 */
 try{TRJ['출석 보상 받기 · ']='受け取る · '}catch(e){}try{TRJ['일간']='毎日'}catch(e){}
 (function(){var st=document.createElement('style');st.textContent='.attrow li b{white-space:nowrap;letter-spacing:-.03em}#attGet{max-width:100%;overflow-wrap:anywhere}.seanav button{min-height:32px}.sveq-slots{grid-template-columns:repeat(4,minmax(0,1fr))!important}.sveq-slot{min-width:0}@media (max-width:370px){.sveq-slots{gap:6px!important}}@media (max-width:370px){#svRk .head .tag,#svTr .head .tag,#svBud .head .tag{display:none}#svRkHd{text-wrap-style:balance}}@media (max-width:370px){.dmtabs em{top:-9px;right:-4px;min-width:18px;height:18px;font-size:11px}}';document.head.appendChild(st)})();
+/* 1.1.13: 꾸미기 12종(네온 리본 · 혜성 꼬리 · 행성 고리 등) 이름이 번역보다 먼저 만들어져 영어 · 일본어 상점에서 한국어로 보이던 것 */
+try{if(LANG!=='ko'){var HG13=/[\uAC00-\uD7A3]/;ACC.concat(typeof DECOR!=='undefined'?DECOR:[],typeof TANK_BGS!=='undefined'?TANK_BGS:[]).forEach(function(A){if(!A)return;['name','desc','sub'].forEach(function(k){if(typeof A[k]==='string'&&HG13.test(A[k])){var t=T(A[k]);if(t!==A[k])A[k]=t}})})}}catch(e){}
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

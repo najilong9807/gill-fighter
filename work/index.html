@@ -12625,6 +12625,10 @@ var modePickOpenSV=modePickOpen;modePickOpen=function(){var r=modePickOpenSV.app
     if(!svAllHard()){var h=1;while(h<=N&&svChS(h).hclear)h++;g=LANG==='en'?'Next: Hard Ch '+h:LANG==='ja'?'次はハード '+h+'章':'다음 목표: 어려움 '+h+'장'}
     else{var I=svChS(N).inf||0;g=LANG==='en'?'Endless Ch '+N+' best '+fmtTime(I):LANG==='ja'?'無限 '+N+'章 最高 '+fmtTime(I):'무한 '+N+'장 최고 '+fmtTime(I)}
     if(!svReadyN())el.textContent=g}}catch(e){}return r};
+/* ===== 1.1.13 판이 끝나고 홈·층 지도·모드 고르기로 오면, 판에서 쓰던 물고기 그림(종마다 그림판 4장)을 5초 넘게 안 쓴 것부터 비운다
+   10/14 19:49 gf_crash: 판(참치 27배까지 성장) 끝나고 홈에서 층 지도를 연 채 앱이 앞화면에서 꺼짐 — 그때 살아 있는 종 그림 48종 · 그림판 215개 ===== */
+function offPlayTrim(){try{if(state==='play')return;var n=sprIdle(5000);if(n)crumb('offTrim:'+n)}catch(e){}}
+var campOpenOT=campOpen;campOpen=function(){offPlayTrim();return campOpenOT.apply(this,arguments)};var modePickOpenOT=modePickOpen;modePickOpen=function(){offPlayTrim();return modePickOpenOT.apply(this,arguments)};var toHomeOT=toHome;toHome=function(){var r=toHomeOT.apply(this,arguments);setTimeout(offPlayTrim,5500);return r};var svChShowOT=svChShow;svChShow=function(){offPlayTrim();return svChShowOT.apply(this,arguments)};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

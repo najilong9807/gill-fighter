@@ -6000,7 +6000,7 @@ function netTick(dt){
   var now=performance.now();
   if(!NET.ws&&state==='play'&&NET.retry>0){NET.retry-=dt;if(NET.retry<=0)netStart()}
   if(NET.live&&state==='play'&&NET.humans>0){NET.sendT-=dt;if(NET.sendT<=0){NET.sendT=1/5;
-    netCast('st',{i:netId(),n:netClean(myName()),l:P.look.id,x:Math.round(P.x),f:+(P.y/H).toFixed(5),s:+P.s.toFixed(2),vx:Math.round(P.vx),a:+P.ang.toFixed(2),k:P.kills|0,t:+P.time.toFixed(1),v:APP_VER,vy:Math.round(P.vy)})}}
+    netCast('st',{i:netId(),n:netClean(myName()),l:P.look.id,x:Math.round(P.x),f:+(P.y/H).toFixed(5),s:+P.s.toFixed(2),vx:Math.round(P.vx),a:+P.ang.toFixed(2),k:P.kills|0,t:+P.time.toFixed(1),v:APP_VER,vy:Math.round(P.vy),c:Math.round(performance.now()),q:(NET.seq=(NET.seq|0)+1)});try{NET.sendT=netSendIv()}catch(e){}}}
   for(var i=bots.length-1;i>=0;i--){var b=bots[i];if(!b.peer)continue;
     if(now-b.last>4000){netDrop(b.peer);continue}
     var e=b.ent;if(!e)continue;var age=Math.min(.3,(now-b.last)/1000),ty=clamp(b.tf*H+(b.tvy||0)*age,0,H),tx=b.tx+(b.tvx||0)*age; /* 1.1.13 위아래 움직임도 예측(전엔 옆으로만 → 상하로 움직이면 늦게 따라가다 한꺼번에 휙 따라붙어 빨라 보였음) */
@@ -12717,16 +12717,21 @@ var endRunEV=endRun;endRun=function(win,quit,by){var t0=P?P.time:0,r=endRunEV.ap
    전엔 상대 위치가 올 때마다(초당 5번) 그 자리로 끌려가서, 패킷이 들쭉날쭉 오면(흔들림 · 유실) 상대가 멈칫 · 휙 하고 움직였다.
    이제 받은 위치를 시간표로 모아 두고 조금(패킷 간격 + 흔들림만큼, 120~450ms) 뒤 시점을 두 위치 사이로 매끈하게 이어 그린다(보간).
    패킷이 늦으면 마지막 속도로 최대 350ms만 예측하고 그 뒤엔 멈춤. 내 쪽도 방향을 크게 바꾸면 바로 보내(최소 0.1초 간격) 상대 화면에서 늦게 꺾이지 않게. */
-var NETI={on:true,unstableAt:0,k:[.5,1.5,30,90,1]}; /* 보간 지연 = 패킷 간격×.5 + 흔들림×1.5 + 30ms (최소 90) · 그 지연만큼 속도로 앞당겨 그림(시험: 흔들림 ±120ms·유실 15%에서 한 장면 이동량 편차 0.63→0.02, 위치 오차는 전과 같음) */
+var NETI={on:true,unstableAt:0,k:[.5,1.5,30,90,1,.6]};
+/* 보내는 간격: 사람 상대가 가까우면(화면 2.5개 안) 초당 7번, 멀면 3.5번, 없으면 5번 — 평균은 전과 비슷하게 두고 가까이 붙은 상대에게 더 자주 */
+function netSendIv(){try{if(!(NET.humans>0)||!P)return 1/5;var R=viewR()*2.5,near=false;for(var i=0;i<bots.length&&!near;i++){var b=bots[i];if(b.peer&&b.ent&&Math.abs(b.ent.x-P.x)<R&&Math.abs(b.ent.y-P.y)<R*1.4)near=true}return near?1/7:1/3.5}catch(e){return 1/5}} /* 보간 지연 = 패킷 간격×.5 + 흔들림×1.5 + 30ms (최소 90) · 그 지연만큼 속도로 앞당겨 그림(시험: 흔들림 ±120ms·유실 15%에서 한 장면 이동량 편차 0.63→0.02, 위치 오차는 전과 같음) */
 abyTr(TRT,{"연결이 불안정해요":"Unstable connection","상대 움직임이 잠깐 끊길 수 있어요":"Opponents may stutter for a moment"});
 abyTr(TRJ,{"연결이 불안정해요":"接続が不安定です","상대 움직임이 잠깐 끊길 수 있어요":"相手の動きが一瞬止まることがあります"});
 var netStateNI=netState;netState=function(p){var r=netStateNI.apply(this,arguments);
   try{if(NETI.on&&p&&p.i&&mode==='multi'){var b=netFind(p.i);if(b&&b.ent){var now=performance.now(),x=+p.x,y=clamp(+p.f||0,0,1)*H,sv=b.size;
-      if(!isFinite(x)||!isFinite(y))return r;var buf=b.buf;if(!buf){var cc=NETI.cache&&NETI.cache[p.i];buf=b.buf=(cc&&now-cc.t<6000)?cc.buf:[];(NETI.cache||(NETI.cache={}))[p.i]={buf:buf,t:now};if(cc&&cc.iv){b.iv=cc.iv;b.jit=cc.jit}}var lastS=buf[buf.length-1];
-      if(lastS){var iv=now-lastS.t;if(iv>0&&iv<3000){b.iv=b.iv==null?iv:b.iv*.8+iv*.2;b.jit=(b.jit||0)*.8+Math.abs(iv-b.iv)*.2}}
-      buf.push({t:now,x:x,y:y,s:sv,a:+p.a||0,vx:+p.vx||0,vy:isFinite(+p.vy)?+p.vy:0});if(buf.length>12)buf.shift();var ce=NETI.cache[p.i];if(ce){ce.t=now;ce.iv=b.iv;ce.jit=b.jit}}}}catch(e){}return r};
-function netInterp(b,now){var buf=b.buf;if(!buf||!buf.length)return null;var want=clamp((b.iv||200)*NETI.k[0]+(b.jit||0)*NETI.k[1]+NETI.k[2],NETI.k[3],450);b.dly=b.dly==null?want:b.dly+(want-b.dly)*.03;var delay=b.dly,rt=now-delay,n=buf.length,L=buf[n-1],lead=delay*NETI.k[4]/1000,o;
-  if(rt>=L.t){var ex=Math.min(.35,(rt-L.t)/1000);o={x:L.x+L.vx*(ex+lead),y:L.y+L.vy*(ex+lead),s:L.s,a:L.a,ex:(rt-L.t)/1000}}
+      if(!isFinite(x)||!isFinite(y))return r;var buf=b.buf;if(!buf){var cc=NETI.cache&&NETI.cache[p.i];buf=b.buf=(cc&&now-cc.t<6000)?cc.buf:[];(NETI.cache||(NETI.cache={}))[p.i]={buf:buf,t:now};if(cc&&cc.iv){b.iv=cc.iv;b.jit=cc.jit;b.off=cc.off;b.lv=cc.lv;b.seq=cc.seq}}var lastS=buf[buf.length-1];
+      /* 순서: 번호가 뒤로 간 패킷(늦게 도착한 옛것)은 버림 */var sq=+p.q;if(isFinite(sq)){if(b.seq!=null&&sq<=b.seq&&b.seq-sq<1000)return r;b.seq=sq}
+      /* 시각: 보낸 쪽 시계(c)가 있으면 '보낸 시각 + 최소 지연'으로 놓아 도착 흔들림을 빼 버린다(소스 엔진의 틱 시각 방식). 지연이 줄면 바로, 늘면 천천히 따라감 */
+      var st=now,cq=+p.c;b.clk=isFinite(cq)&&cq>0;if(b.clk){var cand=now-cq;if(b.off==null||cand<b.off)b.off=cand;else b.off+=(cand-b.off)*.02;st=cq+b.off;var lat=now-st;b.lv=Math.max((b.lv||0)*.985,lat);if(lastS&&st<=lastS.t)st=lastS.t+1}
+      if(lastS){var iv=st-lastS.t;if(iv>0&&iv<3000){b.iv=b.iv==null?iv:b.iv*.8+iv*.2;b.jit=(b.jit||0)*.8+Math.abs(iv-b.iv)*.2}}
+      buf.push({t:st,x:x,y:y,s:sv,a:+p.a||0,vx:+p.vx||0,vy:isFinite(+p.vy)?+p.vy:0});if(buf.length>12)buf.shift();var ce=NETI.cache[p.i];if(ce){ce.t=now;ce.iv=b.iv;ce.jit=b.jit;ce.off=b.off;ce.lv=b.lv;ce.seq=b.seq}}}}catch(e){}return r};
+function netInterp(b,now){var buf=b.buf;if(!buf||!buf.length)return null;var want=clamp((b.iv||200)*NETI.k[0]+(b.jit||0)*NETI.k[1]+(b.lv||0)*NETI.k[5]+NETI.k[2],NETI.k[3],450);b.dly=b.dly==null?want:b.dly+(want-b.dly)*.03;var delay=b.dly,rt=now-delay,n=buf.length,L=buf[n-1],lead=delay*NETI.k[4]/1000,o;
+  if(rt>=L.t){var ex=Math.min(.3,(rt-L.t)/1000),dk=ex<.15?ex:.15+(ex-.15)*(1-(ex-.15)/.3);o={x:L.x+L.vx*(dk+lead),y:L.y+L.vy*(dk+lead),s:L.s,a:L.a,ex:(rt-L.t)/1000}} /* 예측은 0.3초까지, 0.15초 넘으면 속도를 줄여 가며(소스 엔진 0.25초 한계 참고) */
   else if(rt<=buf[0].t)o={x:buf[0].x+buf[0].vx*lead,y:buf[0].y+buf[0].vy*lead,s:buf[0].s,a:buf[0].a,ex:0};
   else{for(var i=n-2;i>=0;i--){var A=buf[i],B=buf[i+1];if(rt>=A.t){var k=(rt-A.t)/Math.max(1,B.t-A.t),sv=(B.x-A.x)/Math.max(.001,(B.t-A.t)/1000),sy=(B.y-A.y)/Math.max(.001,(B.t-A.t)/1000);o={x:A.x+(B.x-A.x)*k+sv*lead,y:A.y+(B.y-A.y)*k+sy*lead,s:A.s+(B.s-A.s)*k,a:lerpAng(A.a,B.a,k),ex:0};break}}}
   if(!o)o={x:L.x,y:L.y,s:L.s,a:L.a,ex:0};o.y=clamp(o.y,0,H);return o}
@@ -12734,7 +12739,7 @@ var netTickNI=netTick;netTick=function(dt){
   try{if(NETI.on&&mode==='multi'){var now=performance.now(),worst=0;
     if(NET.live&&state==='play'&&NET.humans>0&&P){var da=Math.abs(((P.ang-(NET._la==null?P.ang:NET._la))%(Math.PI*2)+Math.PI*3)%(Math.PI*2)-Math.PI),sx=P.vx>8?1:P.vx<-8?-1:0;
       if((da>.55||(NET._sx!=null&&sx!==NET._sx&&sx!==0))&&now-(NET._ls||0)>110)NET.sendT=0;NET._sx=sx;NET._pst=NET.sendT}
-    for(var i=0;i<bots.length;i++){var b=bots[i];if(!b.peer||!b.ent)continue;var q=netInterp(b,now);if(!q)continue;
+    for(var i=0;i<bots.length;i++){var b=bots[i];if(!b.peer||!b.ent||!b.clk)continue;var q=netInterp(b,now);if(!q)continue; /* 보낸 시계가 없는 옛 버전 상대(친구 방)는 전 방식 그대로 */
       b.tx=q.x;b.tf=q.y/H;b.tvx=0;b.tvy=0;b.ta=q.a;b.size=q.s;if(q.ex>worst)worst=q.ex}
     if(worst>.6&&state==='play'&&now-NETI.unstableAt>20000){NETI.unstableAt=now;crumb('netUnstable');banner(T('연결이 불안정해요'),T('상대 움직임이 잠깐 끊길 수 있어요'))}}}catch(e){}
   var r=netTickNI.apply(this,arguments);

@@ -5523,7 +5523,7 @@ function svBeamDraw(b){var rI=svArt('ray');if(rI){var al2=b.spin?Math.min(1,b.li
 /* 쏘는 순간 총구 불꽃(짧게) */
 function svMuz(s){if(!SV.muz)SV.muz=[];if(SV.muz.length>=18)return;var sp=Math.hypot(s.vx||0,s.vy||0),a=sp>1?Math.atan2(s.vy,s.vx):(s.a||0);SV.muz.push({x:s.x,y:s.y,a:a,life:.12,c:s.jt?'140,210,255':s.nd?'215,190,255':s.tu?'255,170,160':'190,236,255',r:Math.max(10,(s.r||8)*1.6)})}
 function svMuzDraw(){if(!SV.muz||!SV.muz.length)return;ctx.save();ctx.globalCompositeOperation='lighter';ctx.lineCap='round';for(var i=0;i<SV.muz.length;i++){var m=SV.muz[i],q=m.life/.12,ux=Math.cos(m.a),uy=Math.sin(m.a);ctx.globalAlpha=q*.8;ctx.drawImage(glow(m.c),m.x-m.r,m.y-m.r,m.r*2,m.r*2);ctx.strokeStyle='rgba(255,255,255,'+(.8*q)+')';ctx.lineWidth=2.4/zoom;ctx.beginPath();for(var k=-1;k<=1;k++){var a=m.a+k*.45,l=m.r*(k?1:1.6)*(1.3-q*.3);ctx.moveTo(m.x+Math.cos(a)*m.r*.3,m.y+Math.sin(a)*m.r*.3);ctx.lineTo(m.x+Math.cos(a)*l,m.y+Math.sin(a)*l)}ctx.stroke()}ctx.restore()}
-function svDrawUnder(){SV.lod=SV.en.length>140||SV.sh.length>45||SV.pools.length>8; /* 1.1.9(빌드 152) 막판(적 140+ · 탄 45+ · 먹물 9+)엔 꼬리 잔상 · 빛 번짐 · 물결 조각 · 피해 숫자를 줄여 그리기 부담을 낮춤(사용자: 심해 생존 막판 렉) */if(!P.surv)return;var i,g,cvx0=cam.x-cw/2/zoom-60,cvx1=cam.x+cw/2/zoom+60,cvy0=cam.y-ch/2/zoom-60,cvy1=cam.y+ch/2/zoom+60,minLw=1.2/zoom;
+function svDrawUnder(){SV.lod=SV.en.length>140||SV.sh.length>45||SV.pools.length>8;SV.lod2=SV.en.length>190; /* 1.1.13: 10분 넘는 생존·보스 러시에서 적 200마리 넘으면 초당 30장 밑으로 떨어지던 것(10/14 실제 기록 26분 판, 10분 뒤 느린 장면 12189번) → 적 그림을 한 장으로, 특성 글자·맞은 빛 생략 */ /* 1.1.9(빌드 152) 막판(적 140+ · 탄 45+ · 먹물 9+)엔 꼬리 잔상 · 빛 번짐 · 물결 조각 · 피해 숫자를 줄여 그리기 부담을 낮춤(사용자: 심해 생존 막판 렉) */if(!P.surv)return;var i,g,cvx0=cam.x-cw/2/zoom-60,cvx1=cam.x+cw/2/zoom+60,cvy0=cam.y-ch/2/zoom-60,cvy1=cam.y+ch/2/zoom+60,minLw=1.2/zoom;
   /* 막힌 위·아래 */
   ctx.save();var gy;[[SV.y0,-1],[SV.y1,1]].forEach(function(q){var y=q[0],dir=q[1];if((dir<0&&cvy0>y)||(dir>0&&cvy1<y))return;var gr=ctx.createLinearGradient(0,y,0,y+dir*160);gr.addColorStop(0,'rgba(6,24,48,.0)');gr.addColorStop(1,'rgba(6,24,48,.55)');ctx.fillStyle=gr;ctx.fillRect(cvx0,Math.min(y,y+dir*2000),cvx1-cvx0,2000);
     ctx.setLineDash([14/zoom,10/zoom]);ctx.lineWidth=3/zoom;ctx.strokeStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.moveTo(cvx0,y);ctx.lineTo(cvx1,y);ctx.stroke();ctx.setLineDash([])});ctx.restore();svIceDraw(cvx0,cvx1,cvy0,cvy1);
@@ -5548,13 +5548,13 @@ function svDrawUnder(){SV.lod=SV.en.length>140||SV.sh.length>45||SV.pools.length
     if(svEdible(e)){ctx.beginPath();ctx.ellipse(e.x,e.y+e.s*.15,e.s*.95,e.s*.55,0,0,Math.PI*2);ctx.fillStyle='rgba(124,255,107,.22)';ctx.fill()}
     if(e.E.gold){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.7+.3*Math.sin(t*8);ctx.drawImage(glow('255,215,80'),e.x-e.s*2.4,e.y-e.s*2.4,e.s*4.8,e.s*4.8);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
     if((e.E.fin||e.E.beh==='dash')&&e.cw>0){ctx.save();ctx.globalAlpha=.5+.3*Math.sin(t*20);ctx.strokeStyle='#FF4F4F';ctx.lineWidth=e.s*(e.E.fin?.5:.35);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+Math.cos(e.ca)*e.s*(e.E.fin?6:9),e.y+Math.sin(e.ca)*e.s*(e.E.fin?6:9));ctx.stroke();ctx.restore()}
-    drawFish(ctx,e.x,e.y,e.s,e.ang,e.look,{px:e.s*zoom,phase:e.phase,n:e.E.boss?0:SV.lod?(e.s*zoom<45?1:3):e.s*zoom<30?3:5,minLw:minLw,angry:!!(e.E.elite||e.E.boss),line:e.hit>0?'#FFFFFF':(e.E.elite||e.E.boss)?'#E5383B':null,alpha:e.slow>0?.8:null});
-    if(e.af){var AF=SV_AF[e.af];ctx.globalAlpha=.55+.2*Math.sin(t*6);ctx.drawImage(glow(AF.c),e.x-e.s*1.9,e.y-e.s*1.9,e.s*3.8,e.s*3.8);ctx.globalAlpha=1;ctx.font='800 '+(14/zoom)+'px Jua,sans-serif';ctx.textAlign='center';ctx.lineWidth=4/zoom;ctx.strokeStyle='#0B2C4A';ctx.strokeText(AF.n,e.x,e.y-e.s*1.25-10/zoom);ctx.fillStyle='rgb('+AF.c+')';ctx.fillText(AF.n,e.x,e.y-e.s*1.25-10/zoom)}
+    drawFish(ctx,e.x,e.y,e.s,e.ang,e.look,{px:e.s*zoom,phase:e.phase,n:e.E.boss?0:SV.lod2&&!e.E.elite?1:SV.lod?(e.s*zoom<45?1:3):e.s*zoom<30?3:5,minLw:minLw,angry:!!(e.E.elite||e.E.boss),line:e.hit>0?'#FFFFFF':(e.E.elite||e.E.boss)?'#E5383B':null,alpha:e.slow>0?.8:null});
+    if(e.af){var AF=SV_AF[e.af];ctx.globalAlpha=.55+.2*Math.sin(t*6);ctx.drawImage(glow(AF.c),e.x-e.s*1.9,e.y-e.s*1.9,e.s*3.8,e.s*3.8);ctx.globalAlpha=1;if(!SV.lod2){ctx.font='800 '+(14/zoom)+'px Jua,sans-serif';ctx.textAlign='center';ctx.lineWidth=4/zoom;ctx.strokeStyle='#0B2C4A';ctx.strokeText(AF.n,e.x,e.y-e.s*1.25-10/zoom);ctx.fillStyle='rgb('+AF.c+')';ctx.fillText(AF.n,e.x,e.y-e.s*1.25-10/zoom)}}
     if(e.E.beh==='heal'){var hy=e.y-e.s*1.15,hs=7/zoom+e.s*.12;ctx.fillStyle='#7CFF6B';ctx.strokeStyle='#0B2C4A';ctx.lineWidth=2/zoom;ctx.beginPath();ctx.rect(e.x-hs*.35,hy-hs,hs*.7,hs*2);ctx.rect(e.x-hs,hy-hs*.35,hs*2,hs*.7);ctx.fill();ctx.stroke()}
     if(e.stn>0){ctx.save();ctx.strokeStyle='#FFE27A';ctx.lineWidth=2.5/zoom;var sy=e.y-e.s*1.05;for(var sq=0;sq<3;sq++){var sa=t*5+sq*2.1;ctx.beginPath();ctx.arc(e.x+Math.cos(sa)*e.s*.45,sy+Math.sin(sa)*e.s*.12,3.5/zoom+1,0,Math.PI*2);ctx.stroke()}ctx.restore()}
     if(e.crt>0){ctx.globalAlpha=.8;ctx.drawImage(glow('255,220,80'),e.x-e.s*.8,e.y-e.s*.8,e.s*1.6,e.s*1.6);ctx.globalAlpha=1}
     if(e.frz>0){ctx.globalAlpha=.45;ctx.beginPath();ctx.arc(e.x,e.y,e.s*.95,0,Math.PI*2);ctx.fillStyle='#CFF0FF';ctx.fill();ctx.globalAlpha=.95;ctx.lineWidth=3/zoom;ctx.strokeStyle='#5FB8E8';ctx.stroke();ctx.globalAlpha=1}
-    if(e.hit>0&&!e.E.boss){ctx.globalAlpha=e.hit*5;ctx.drawImage(glow('255,255,255'),e.x-e.s,e.y-e.s,e.s*2,e.s*2);ctx.globalAlpha=1}
+    if(e.hit>0&&!e.E.boss&&!SV.lod2){ctx.globalAlpha=e.hit*5;ctx.drawImage(glow('255,255,255'),e.x-e.s,e.y-e.s,e.s*2,e.s*2);ctx.globalAlpha=1}
     if(e.E.elite&&e.hp<e.max){var bw=e.s*1.6;ctx.fillStyle='rgba(11,44,74,.7)';ctx.fillRect(e.x-bw/2,e.y-e.s*1.2,bw,6/zoom);ctx.fillStyle='#FF5A5A';ctx.fillRect(e.x-bw/2,e.y-e.s*1.2,bw*e.hp/e.max,6/zoom)}}
 }
 /* 1.1.8(빌드 141) 장착한 장비가 물고기에 보이게(심해 생존): 지느러미=등급색 물방울 꼬리 · 갑옷=빛나는 테두리 · 이빨=입가 반짝 · 장신구=머리 위에 둥둥 */
@@ -6394,7 +6394,7 @@ function zoneMood(zf){
   var ak=clamp(1-Math.abs(zf-2.5)/.7,0,1),ac=clamp(1-Math.abs(zf-3.5)/.7,0,1),i,k;
   if(ak>.02){
     /* 1.1.8(빌드 126) 메모리: 굵은 선을 매 프레임 새로 그리던 것 → 줄기 그림을 한 번 만들어 두고 가로 띠로 잘라 흔들리게 붙인다(아이폰 웹 엔진에서 굵은 선 그리기가 메모리를 많이 잡았음) */
-    var span=cw+260,KS=kelpStrands(),NS=16;ctx.save();ctx.globalAlpha=ak;
+    var span=cw+260,KS=kelpStrands(),NS=(P&&P.surv&&SV.lod)?7:16;ctx.save();ctx.globalAlpha=ak;
     for(i=0;i<7;i++){
       var bx=(((i*span/7+h2(i,3,1)*80-parX*.8)%span)+span)%span-130,st=KS[i];if(!st)continue;var hh=st.hh,sc=st.c,sw=sc.width,sh=sc.height;
       for(k=0;k<NS;k++){var u0=k/NS,u1=(k+1)/NS,um=(u0+u1)/2,dx=Math.sin(t*.7+i*1.7+um*3.1)*(reduce?6:26)*um+Math.sin(um*5+i)*10;
@@ -9733,7 +9733,7 @@ function drawProp(k,cx,cy,w,alpha,dim,flip,sway){
   var p=PROPS[k];if(!p||!p.ok)return;
   var h=w*p.img.height/p.img.width;
   ctx.save();ctx.translate(cx,cy);if(flip)ctx.scale(-1,1);
-  if(!DL_IN){ctx.globalAlpha=alpha*.2;ctx.drawImage(p.shadow,-w/2+w*.07,-h/2+h*.1,w,h)} /* 1.1.11 먼 배경 소품은 그림자 생략(거의 안 보이고 화면 2장 분량을 더 칠하던 것) */
+  if(!DL_IN&&!(P&&P.surv&&SV.lod2)){ctx.globalAlpha=alpha*.2;ctx.drawImage(p.shadow,-w/2+w*.07,-h/2+h*.1,w,h)} /* 1.1.11 먼 배경 소품은 그림자 생략(거의 안 보이고 화면 2장 분량을 더 칠하던 것) */
   ctx.globalAlpha=alpha;
   if(sway)ctx.transform(1,0,sway,1,-sway*h*.5,0);
   ctx.drawImage(dim?p.dim:p.lit,-w/2,-h/2,w,h);
@@ -12680,6 +12680,11 @@ try{TRJ['출석 보상 받기 · ']='受け取る · '}catch(e){}try{TRJ['일간
 (function(){var st=document.createElement('style');st.textContent='.attrow li b{white-space:nowrap;letter-spacing:-.03em}#attGet{max-width:100%;overflow-wrap:anywhere}.seanav button{min-height:32px}.sveq-slots{grid-template-columns:repeat(4,minmax(0,1fr))!important}.sveq-slot{min-width:0}@media (max-width:370px){.sveq-slots{gap:6px!important}}@media (max-width:370px){#svRk .head .tag,#svTr .head .tag,#svBud .head .tag{display:none}#svRkHd{text-wrap-style:balance}}@media (max-width:370px){.dmtabs em{top:-9px;right:-4px;min-width:18px;height:18px;font-size:11px}}';document.head.appendChild(st)})();
 /* 1.1.13: 꾸미기 12종(네온 리본 · 혜성 꼬리 · 행성 고리 등) 이름이 번역보다 먼저 만들어져 영어 · 일본어 상점에서 한국어로 보이던 것 */
 try{if(LANG!=='ko'){var HG13=/[\uAC00-\uD7A3]/;ACC.concat(typeof DECOR!=='undefined'?DECOR:[],typeof TANK_BGS!=='undefined'?TANK_BGS:[]).forEach(function(A){if(!A)return;['name','desc','sub'].forEach(function(k){if(typeof A[k]==='string'&&HG13.test(A[k])){var t=T(A[k]);if(t!==A[k])A[k]=t}})})}}catch(e){}
+/* 1.1.13: 생존 막판(적 190마리 넘음)엔 화면 해상도를 잠깐 1.5배로 낮춰 칠하는 양을 줄임 → 적이 150마리 밑으로 줄거나 판이 끝나면 원래대로 */
+var LRES=false;
+function lresSet(on){if(on===LRES)return;LRES=on;try{var want=Math.min(window.devicePixelRatio||1,save&&save.lite?1.5:(on?1.5:2));if(Math.abs(want-dpr)>.01){dpr=want;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}}catch(e){}}
+var drawLR=draw;draw=function(){try{var sv=state==='play'&&P&&P.surv&&SV&&SV.en;if(sv){var n=SV.en.length;if(!LRES&&n>190)lresSet(true);else if(LRES&&n<150)lresSet(false)}else if(LRES)lresSet(false)}catch(e){}return drawLR.apply(this,arguments)};
+var resizeLR=resize;resize=function(){var r=resizeLR.apply(this,arguments);if(LRES){var want=Math.min(window.devicePixelRatio||1,1.5);if(dpr>want){dpr=want;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}}return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

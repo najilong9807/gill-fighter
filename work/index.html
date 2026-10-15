@@ -12702,6 +12702,14 @@ var endRunNB=endRun;endRun=function(win,quit,by){var r=endRunNB.apply(this,argum
     P.nbContd=true;save.nbC=(save.nbC|0)+1;persist();crumb('nbCont');
     setTimeout(function(){if(state==='over'&&mode==='single'&&!P.adContd){continueRun(true);P.fx.ghost=4;banner(T('처음이니까 한 번 더!'),T('나보다 큰 물고기(빨간 테두리)는 피해요'))}},900)}}catch(e){}
   return r};
+/* 1.1.13: 처음 8판 동안만 판이 끝날 때 짧은 기록을 남긴다(새로 온 사람이 왜 떠나는지 보려고 · 이름 · 기기 정보 없이 판 결과만, 한 사람당 최대 12번) */
+var endRunEV=endRun;endRun=function(win,quit,by){var t0=P?P.time:0,r=endRunEV.apply(this,arguments);
+  try{var n=save.runs|0;if(n>=1&&n<=8&&(save.nbEv|0)<12&&P&&mode!=='multi'){save.nbEv=(save.nbEv|0)+1;
+    var how=win?'win':quit?'quit':'eaten',bl=by&&(by.look||by.L)?String((by.look||by.L).id||'').slice(0,20):'';
+    save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:n,m:P.camp?'camp'+(P.camp.n||''):P.surv?'surv':'single',f:String(sel||'').slice(0,20),
+      t:Math.round(t0||0),cm:Math.round(cmOf(P.maxS||P.s)*10)/10,e:P.eaten|0,sc:(function(){try{return scoreNow()}catch(x){return 0}})(),how:how,by:bl,nbc:P.nbContd?1:0,
+      d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),pages:(CR.bc||[]).filter(function(x){return /^tab:/.test(x)}).length}]).slice(-8);persist();setTimeout(crashSend,1200)}}catch(e){}
+  return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

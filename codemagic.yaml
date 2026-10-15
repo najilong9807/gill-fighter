@@ -71,3 +71,18 @@ workflows:
         script: app-store-connect apps app-store-versions "$APP_STORE_APPLE_ID" || true
       - name: 심사 상태 (API)
         script: python3 asc_status.py || true
+  store-meta:
+    name: 1.1.13 스토어 정보 등록 (버전 · 업데이트 문구 39개 언어 · 스크린샷 · 순위표 범위 확인, 빌드 없음)
+    max_build_duration: 10
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: asc
+    environment:
+      vars:
+        APP_STORE_APPLE_ID: 6816376999
+        STORE_VERSION: "1.1.13"
+        DRY: "0"
+        STEPS: "version,whatsnew,shots,gc"
+    scripts:
+      - name: 스토어 정보 등록
+        script: python3 store_meta.py

@@ -12686,6 +12686,22 @@ function lresSet(on){if(on===LRES)return;LRES=on;try{var want=Math.min(window.de
 var svStartLR=svStart;svStart=function(){try{SV.ema=16;SV.slowK=1}catch(e){}var r=svStartLR.apply(this,arguments);try{SV.ema=16;SV.slowK=1}catch(e){}return r};
 var drawLR=draw;draw=function(){try{var sv=state==='play'&&P&&P.surv&&SV&&SV.en;if(sv){var n=SV.en.length;if(!LRES&&n>190)lresSet(true);else if(LRES&&n<150)lresSet(false)}else if(LRES)lresSet(false)}catch(e){}return drawLR.apply(this,arguments)};
 var resizeLR=resize;resize=function(){var r=resizeLR.apply(this,arguments);if(LRES){var want=Math.min(window.devicePixelRatio||1,1.5);if(dpr>want){dpr=want;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}}return r};
+/* 1.1.13: 처음 온 사람 붙잡기 (10/15 기록 분석: 첫날만 하고 떠난 25명은 싱글 점수 중간값 357점 · 40%가 300점도 못 넘김 · 심해 탐험/생존은 0명,
+   다시 온 20명은 60%가 심해 탐험/생존을 해 봄)
+   1) '처음이면 여기!'를 기록 도전(목표 없는 싱글) 대신 심해 탐험(1층: 물고기 먹기 미션, 별 · 첫 클리어 보상)에 붙인다
+   2) 처음 3판 동안 싱글에서 먹히면 한 번은 그 자리에서 무료로 이어서(광고 · 공유 없이) — 판마다 1번, 처음 3번까지 */
+(function(){var st=document.createElement('style');st.textContent='#modePick .mcard .mcbeta.mcfirst{background:#FF7A2E}#mpCamp.first{animation:mcpulse 1.6s ease-in-out infinite}@media (prefers-reduced-motion:reduce){#mpCamp.first{animation:none}}';document.head.appendChild(st)})();
+var modePickNB=modePickOpen;modePickOpen=function(){var r=modePickNB.apply(this,arguments);try{var rb=$('mpRecNew'),cp=$('mpCamp');
+  if(rb&&!rb.hidden&&cp&&!(campStarsOf(1)>0)){cp.appendChild(rb);$('mpRec').classList.remove('first');cp.classList.add('first')}
+  else{if(rb&&rb.parentNode===cp&&(rb.hidden||campStarsOf(1)>0)){rb.hidden=true}if(cp&&(!rb||rb.hidden))cp.classList.remove('first')}}catch(e){}return r};
+abyTr(TRT,{"처음이니까 한 번 더!":"First runs get a second chance!","나보다 큰 물고기(빨간 테두리)는 피해요":"Avoid fish bigger than you (red outline)"});
+abyTr(TRJ,{"처음이니까 한 번 더!":"はじめてだからもう一回！","나보다 큰 물고기(빨간 테두리)는 피해요":"自分より大きい魚（赤いふち）はよけよう"});
+var startRunNB=startRun;startRun=function(){var r=startRunNB.apply(this,arguments);try{P.nbContd=false}catch(e){}return r};
+var endRunNB=endRun;endRun=function(win,quit,by){var r=endRunNB.apply(this,arguments);
+  try{if(!win&&!quit&&state==='over'&&mode==='single'&&P&&!P.camp&&!P.surv&&!P.nbContd&&(save.runs|0)<=3&&(save.nbC|0)<3&&(P.time||0)>2){
+    P.nbContd=true;save.nbC=(save.nbC|0)+1;persist();crumb('nbCont');
+    setTimeout(function(){if(state==='over'&&mode==='single'&&!P.adContd){continueRun(true);P.fx.ghost=4;banner(T('처음이니까 한 번 더!'),T('나보다 큰 물고기(빨간 테두리)는 피해요'))}},900)}}catch(e){}
+  return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

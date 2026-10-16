@@ -12569,7 +12569,7 @@ var campFloorAB=campFloor;campFloor=function(n){if(n<=CAMP_BASE)return campFloor
   else if(ty==='size'){f.mult=Math.min(9,Math.round((1.6+n*.1)*100)/100);f.goal=100;f.lim=Math.round(12+(f.mult-1)*30)}
   else if(ty==='hunt'){a=campHab(z).filter(function(L){return L.cap>=8&&L.cap<=80});if(!a.length)a=campHab(z);f.tgt=a[(n*7)%a.length].id;f.goal=Math.min(9,5+Math.floor((n-31)/15));f.lim=20+18*f.goal}
   else if(ty==='survive'){f.goal=Math.min(250,Math.round((40+n*2.2)*1.06));f.eat2=Math.min(60,8+Math.round(n*.65))}
-  else{a=campHab(z);var used={};for(var q=10;q<n;q+=10)used[campFloor(q).boss]=1;var pk=null;for(var j=a.length-1;j>=0&&!pk;j--)if(!used[a[j].id]&&a[j].cap>=Math.max(80,a[a.length-1].cap*.25))pk=a[j];f.boss=(pk||a[a.length-1]).id;f.goal=1;f.bk=Math.min(10.5,8+(b-2)*.5);f.lim=Math.min(220,130+(b-2)*12)}
+  else{a=campHab(z);var used={};for(var q=10;q<n;q+=10)used[campFloor(q).boss]=1;var pk=null;for(var j=a.length-1;j>=0&&!pk;j--)if(!used[a[j].id]&&a[j].cap>=Math.max(80,a[a.length-1].cap*.25))pk=a[j];f.boss=(pk||a[a.length-1]).id;f.goal=1;f.bk=Math.min(10.3,7.8+(b-2)*.5);f.lim=Math.min(220,130+(b-2)*12)}
   return f};
 var ABY_MS={40:10,50:15,70:20,99:50};
 var campOpenAB=campOpen;campOpen=function(n){campSync();if(n>CAMP_N)n=CAMP_N;return campOpenAB(n)};

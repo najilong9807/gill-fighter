@@ -72,7 +72,7 @@ workflows:
       - name: 심사 상태 (API)
         script: python3 asc_status.py || true
   store-meta:
-    name: 1.1.13 스토어 정보 등록 (버전 · 업데이트 문구 39개 언어 · 스크린샷 · 순위표 범위 확인, 빌드 없음)
+    name: 1.1.13 스토어 정보 등록 (버전 · 업데이트 문구 39개 언어 · 스크린샷 54장 · 순위표 범위 확인, 빌드 없음)
     max_build_duration: 10
     instance_type: mac_mini_m2
     integrations:
@@ -82,7 +82,7 @@ workflows:
         APP_STORE_APPLE_ID: 6816376999
         STORE_VERSION: "1.1.13"
         DRY: "0"
-        STEPS: "version,whatsnew,shots,gc"
+        STEPS: "version,whatsnew,shots,gc"  # 종한이 스토어 글(docs/1.1.13-스토어글.md) 확인하면 ",listing" 추가, 지금 판매 중 홍보 문구만 바꾸려면 "promo_now"
     scripts:
       - name: 스토어 정보 등록
         script: python3 store_meta.py

@@ -20,12 +20,14 @@ class S:
       v={'id':'v113','attributes':{'versionString':'1.1.13','appStoreState':'PREPARE_FOR_SUBMISSION'}};s.versions.append(v)
       s.locs={l:{'id':'L'+l,'attributes':{'locale':l,'whatsNew':None}} for l in LOC}
       for l in ['ko','en-US','ja']:
-        for d in ['APP_IPHONE_67','APP_IPHONE_65']+(['APP_IPAD_PRO_3GEN_129'] if l!='ja' else []):
+        for d in ['APP_IPHONE_67','APP_IPHONE_65']+(['APP_IPAD_PRO_3GEN_129'] if l!='ja' else []):  # ja 아이패드는 세트가 없어서 새로 만들어야 함
           sid='S'+l+d;s.sets[sid]=(l,d);s.shots[sid]=['old%d'%i+sid for i in range(6)]
       return R(201,{'data':v})
     if m=='GET' and p.endswith('/appStoreVersionLocalizations'):return R(200,{'data':list(s.locs.values())})
     if m=='PATCH' and p.startswith('appStoreVersionLocalizations/'):
-      lid=p.split('/')[1];s.wn[lid]=b['data']['attributes']['whatsNew'];return R(200,{})
+      lid=p.split('/')[1];at=b['data']['attributes']
+      if 'whatsNew' in at: s.wn[lid]=at['whatsNew']
+      s.lst=getattr(s,'lst',{});s.lst.setdefault(lid,{}).update({k:v for k,v in at.items() if k!='whatsNew'});return R(200,{})
     if m=='GET' and p.endswith('/appScreenshotSets'):
       lid=p.split('/')[1][1:];return R(200,{'data':[{'id':k,'attributes':{'screenshotDisplayType':v[1]}} for k,v in s.sets.items() if v[0]==lid]})
     if m=='POST' and p=='appScreenshotSets':
@@ -41,6 +43,9 @@ class S:
     if m=='PATCH' and p.startswith('appScreenshots/'):return R(200,{})
     if m=='GET' and p.startswith('appScreenshots/'):return R(200,{'data':{'attributes':{'assetDeliveryState':{'state':'COMPLETE'}}}})
     if m=='PATCH' and p.endswith('/relationships/appScreenshots'):s.order[p.split('/')[1]]=[x['id'] for x in b['data']];return R(204)
+    if m=='GET' and p.endswith('/appInfos'):return R(200,{'data':[{'id':'ai_live','attributes':{'appStoreState':'READY_FOR_SALE'}},{'id':'ai_new','attributes':{'appStoreState':'PREPARE_FOR_SUBMISSION'}}]})
+    if m=='GET' and p.endswith('/appInfoLocalizations'):return R(200,{'data':[{'id':'AI'+l,'attributes':{'locale':l,'subtitle':'old'}} for l in LOC]})
+    if m=='PATCH' and p.startswith('appInfoLocalizations/'):s.sub=getattr(s,'sub',{});s.sub[p.split('/')[1]]=b['data']['attributes']['subtitle'];return R(200,{})
     if m=='GET' and p.endswith('/gameCenterDetail'):return R(200,{'data':{'id':'gc1'}})
     if m=='GET' and p.endswith('/gameCenterLeaderboards'):return R(200,{'data':[{'id':'1','attributes':{'vendorIdentifier':'gd_camp','referenceName':'camp','scoreRangeStart':'0','scoreRangeEnd':'10000'}},{'id':'2','attributes':{'vendorIdentifier':'gd_surv','referenceName':'surv','scoreRangeStart':None,'scoreRangeEnd':None}}]})
     return R(404,{'err':p})
@@ -51,4 +56,4 @@ sm.Api.__init__=lambda self,session=None:orig(self,s)
 sm.time.sleep=lambda x:None
 sm.main()
 print(dict(s.calls))
-print('whatsnew set',len(s.wn),'order sets',len(s.order),'shots per set',{k:len(v) for k,v in s.shots.items()})
+print('listing patched',len(getattr(s,'lst',{})),'subtitles',len(getattr(s,'sub',{})),sorted(getattr(s,'sub',{}).values())[:3]);print('whatsnew set',len(s.wn),'order sets',len(s.order),'shots per set',{k:len(v) for k,v in s.shots.items()})

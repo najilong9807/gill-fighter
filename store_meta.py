@@ -1,7 +1,9 @@
 # 1.1.13 스토어 정보 자동 등록 (Codemagic에서 실행, 키 값은 출력하지 않음)
 #   1) 1.1.13 버전이 없으면 만든다
 #   2) 업데이트 문구(What's New) 39개 언어 → store/whatsnew_1113.json
-#   3) 스크린샷 교체: 한·영·일 아이폰 6.9/6.5형, 한국어 아이패드 13형 (1~5번 shots_1112, 6번 shots_1113)
+#   3) 스크린샷 교체: 한·영·일 아이폰 6.9/6.5형 + 아이패드 13형 (1~5번 shots_1112, 6번 shots_1113) = 54장
+#   5) [STEPS에 'listing'을 넣을 때만] 키워드·홍보 문구(1.1.13용)·부제목 → store/listing_1113.json (ko · en-* · ja, 종한이 확인한 뒤에만)
+#   6) [STEPS에 'promo_now'를 넣을 때만] 지금 판매 중인 버전의 홍보 문구만 바꿈(심사 없이 바로 반영)
 #   4) Game Center 순위표 점수 범위 보고 (바꾸지는 않음)
 # 환경변수: DRY=1 이면 읽기만 하고 아무것도 바꾸지 않음. STEPS=version,whatsnew,shots,gc (기본: 전부)
 import os, sys, time, json, hashlib, subprocess
@@ -11,15 +13,15 @@ import requests
 APP = os.environ.get('APP_STORE_APPLE_ID', '6816376999')
 VER = os.environ.get('STORE_VERSION', '1.1.13')
 DRY = os.environ.get('DRY', '0') == '1'
-STEPS = set((os.environ.get('STEPS') or 'version,whatsnew,shots,gc').split(','))
+STEPS = set((os.environ.get('STEPS') or 'version,whatsnew,shots,gc').split(','))  # listing · promo_now 는 넣을 때만
 ROOT = os.path.dirname(os.path.abspath(__file__))
 B = 'https://api.appstoreconnect.apple.com/v1/'
 
 # 스크린샷: (ASC 언어, 화면 종류, 파일 접두사)
 SHOT_SETS = [
     ('ko', 'APP_IPHONE_67', '69_ko'), ('ko', 'APP_IPHONE_65', '65_ko'), ('ko', 'APP_IPAD_PRO_3GEN_129', 'ipad13_ko'),
-    ('en-US', 'APP_IPHONE_67', '69_en'), ('en-US', 'APP_IPHONE_65', '65_en'),
-    ('ja', 'APP_IPHONE_67', '69_ja'), ('ja', 'APP_IPHONE_65', '65_ja'),
+    ('en-US', 'APP_IPHONE_67', '69_en'), ('en-US', 'APP_IPHONE_65', '65_en'), ('en-US', 'APP_IPAD_PRO_3GEN_129', 'ipad13_en'),
+    ('ja', 'APP_IPHONE_67', '69_ja'), ('ja', 'APP_IPHONE_65', '65_ja'), ('ja', 'APP_IPAD_PRO_3GEN_129', 'ipad13_ja'),
 ]
 def shot_files(prefix):
     out = []
@@ -165,6 +167,51 @@ def step_gc(api):
             except: endn = None
             log('GC CHECK', v, 'need <=', need[v], 'range end', end, '->', 'OK' if endn is None or endn >= need[v] else 'TOO SMALL')
 
+def listing_text(lt, loc):
+    return lt.get(loc) or (lt.get('en-US') if loc.startswith('en-') else None)
+
+def step_listing(api, vid):
+    lt = json.load(open(os.path.join(ROOT, 'store', 'listing_1113.json'), encoding='utf-8'))
+    locs = localizations(api, vid); done = 0
+    for loc, l in sorted(locs.items()):
+        t = listing_text(lt, loc)
+        if not t: continue
+        a = l['attributes']; attrs = {}
+        if t.get('kw') and (a.get('keywords') or '') != t['kw']: attrs['keywords'] = t['kw']
+        if t.get('promo_1113') and (a.get('promotionalText') or '') != t['promo_1113']: attrs['promotionalText'] = t['promo_1113']
+        if not attrs: continue
+        log('LISTING', loc, sorted(attrs))
+        if DRY: continue
+        api.req('PATCH', 'appStoreVersionLocalizations/%s' % l['id'], {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': attrs}}); done += 1
+    # 부제목은 버전이 아니라 앱 정보(appInfo) 쪽
+    try:
+        infos = api.all('apps/%s/appInfos?limit=10' % APP)
+    except Exception as e:
+        log('APPINFO error', str(e)[:200]); infos = []
+    for info in infos:
+        st = info['attributes'].get('appStoreState') or info['attributes'].get('state') or ''
+        if st in ('READY_FOR_SALE',): continue  # 판매 중인 쪽은 못 바꿈, 준비 중인 appInfo만
+        for l in api.all('appInfos/%s/appInfoLocalizations?limit=50' % info['id']):
+            loc = l['attributes']['locale']; t = listing_text(lt, loc)
+            if not t or not t.get('sub') or (l['attributes'].get('subtitle') or '') == t['sub']: continue
+            log('SUBTITLE', loc, info['id'], st)
+            if DRY: continue
+            api.req('PATCH', 'appInfoLocalizations/%s' % l['id'], {'data': {'type': 'appInfoLocalizations', 'id': l['id'], 'attributes': {'subtitle': t['sub']}}}); done += 1
+    log('LISTING updated', done)
+
+def step_promo_now(api):
+    lt = json.load(open(os.path.join(ROOT, 'store', 'listing_1113.json'), encoding='utf-8'))
+    live = [v for v in api.all('apps/%s/appStoreVersions?filter[platform]=IOS&limit=50' % APP) if (v['attributes'].get('appStoreState') or '') == 'READY_FOR_SALE']
+    if not live: log('PROMO no live version'); return
+    locs = localizations(api, live[0]['id']); done = 0
+    for loc, l in sorted(locs.items()):
+        t = listing_text(lt, loc)
+        if not t or not t.get('promo') or (l['attributes'].get('promotionalText') or '') == t['promo']: continue
+        log('PROMO', loc, len(t['promo']))
+        if DRY: continue
+        api.req('PATCH', 'appStoreVersionLocalizations/%s' % l['id'], {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'promotionalText': t['promo']}}}); done += 1
+    log('PROMO updated', done)
+
 def main():
     if not os.environ.get('APP_STORE_CONNECT_PRIVATE_KEY'):
         log('no ASC key env; stop'); return
@@ -178,7 +225,9 @@ def main():
         else:
             if 'whatsnew' in STEPS: step_whatsnew(api, v['id'])
             if 'shots' in STEPS: step_shots(api, v['id'])
+            if 'listing' in STEPS: step_listing(api, v['id'])
     if 'gc' in STEPS: step_gc(api)
+    if 'promo_now' in STEPS: step_promo_now(api)
     log('DONE')
 
 if __name__ == '__main__':

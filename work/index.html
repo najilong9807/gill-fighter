@@ -12805,6 +12805,9 @@ var campStarShortJA=campStarShort;campStarShort=function(f,i){var r=campStarShor
   new MutationObserver(fit).observe(el,{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['hidden','class']});window.addEventListener('resize',fit)})();
 /* 1.1.13 영어 홈 위 아이콘 글자 'Ranking' 'Settings'(58px)가 아이콘 간격(57px)보다 넓어 서로 붙던 것 → 일본어처럼 10.5px */
 if(LANG!=='ko'){(function(){var st=document.createElement('style');st.textContent=(LANG==='en'?'#recBtn::after,#misBtn::after,#setBtn::after{font-size:10.5px;letter-spacing:0}':'')+'@media (orientation:landscape) and (max-height:560px){html[data-lang] #recBtn::after,html[data-lang] #misBtn::after,html[data-lang] #setBtn::after{font-size:9.5px;letter-spacing:-.07em}}';document.head.appendChild(st)})()} /* 가로 모드는 아이콘 간격이 49px라 더 작게 */
+/* 1.1.13 도감 '세트 · 업적' 막대: 320px에서 'セット・実/績' 'Sets &/achievements'로 깨짐 → 좁으면 글자 15px, 일본어는 '・' 뒤에서만 줄바꿈. 결과 창 '終了時のサ/イズ' → '最終サイズ' */
+(function(){var st=document.createElement('style');st.textContent='#achBtn b{word-break:keep-all}#achBtn small,#achBtn em{white-space:nowrap}@media (max-width:340px){#achBtn b{font-size:15px;-webkit-text-stroke-width:3.5px}}';document.head.appendChild(st)})();
+TRJ['세트 · 업적']='セット・\u200b実績';TRJ['끝날 때 크기']='最終サイズ';try{var abJ=$('achBtn');if(abJ&&LANG==='ja')abJ.querySelector('b').textContent=T('세트 · 업적')}catch(e){}
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

@@ -3836,8 +3836,9 @@ function spawnFish(initial,prey){
   /* v0.44 대전에서는 주변 물고기(상대 선수가 아닌 야생 물고기)를 좀 덜 크게 — 승부는 선수끼리 나게 */
   /* 1.1.7(빌드 73) 크기 균형: 깊은 바다의 '나보다 큰 물고기' 비율을 40~47% → 35% 안팎으로(깊이 내려가라고 하면서 너무 위험하지 않게) */
   /* 1.1.8(빌드 138) 큰 물고기를 얕은 바다에서도 다시 보이게: 깊을수록 조금만 더 많게(근소한 비중) */
+  var dU=(!fair()&&!P.camp&&(save.runs|0)>3)?.03:0; /* 1.1.13(10/16 종한 '난이도 조금씩 상향'): 처음 3판 뒤 싱글은 큰 물고기 21%→24% */
   ratio=fair()?(u<.64-.04*fd?rnd(.48,.88):u<.82-.04*fd?rnd(.9,1.1):rnd(1.15,1.45))
-    :(u<.66-.08*hk-.03*fd?rnd(.35,.85):u<.79-.08*hk-.03*fd?rnd(.9,1.1):rnd(1.15,1.8+.35*hk)); /* 1.1.10 사용자 요청 '여유 있게': 먹이 62%→66%(깊어져도 덜 줄게), 큰 물고기 1.2~2.2배 → 1.15~1.8배 */
+    :(u<.66-dU-.08*hk-.03*fd?rnd(.35,.85):u<.79-dU-.08*hk-.03*fd?rnd(.9,1.1):rnd(1.15,1.8+.35*hk)); /* 1.1.10 사용자 요청 '여유 있게': 먹이 62%→66%(깊어져도 덜 줄게), 큰 물고기 1.2~2.2배 → 1.15~1.8배 */
   /* 1.1.11 이 구역보다 훨씬 커졌을 때(먹이 상한의 1.2배 넘게) 화면이 '나보다 큰 물고기'로만 차던 것: 큰 물고기 일부를 먹이로 돌리고(최대 55%) 남은 큰 물고기는 1.35배까지만 */
   if(!fair()&&ratio>=1.15){var ovr0=P.s/Math.max(1,zoneFoodCap(zi));if(ovr0>1.2){if(Math.random()<Math.min(.55,(ovr0-1.2)*.5))ratio=rnd(.35,.85);else ratio=Math.min(ratio,1.35)}}
   if(ratio>=1.15&&Math.random()<.4)pool=SPECIES;
@@ -3845,7 +3846,7 @@ function spawnFish(initial,prey){
   var lk=pool[(Math.random()*pool.length)|0];if(P.camp&&mode==='single'){if(P.camp.type==='hunt'&&Math.random()<.14){lk=byId(P.camp.tgt);ratio=rnd(.45,.8)}else if(P.camp.type==='survive'&&Math.random()<.18)ratio=rnd(1.15,1.6)} /* 1.1.10 사냥 목표 22% → 14% · 버티기 큰 물고기 30%(1.2~1.9배) → 18%(1.15~1.6배) */ /* 1.2 탐험: 사냥 층은 목표 물고기를 더 자주, 버티기 층은 큰 물고기를 더 많이 */
   var fs=Math.max(5,P.s*ratio*(ratio>=1.15?(fair()?.94+.08*fd:.92+.1*fd):df)),zfc=zoneFoodCap(zi);if(ratio<1.15&&fs>zfc)fs=Math.max(5,zfc*rnd(.55,1),fair()?P.s*rnd(.3,.4):P.s*rnd(.18,.3)); /* 1.1.11 커져도 먹이가 점처럼 작아지지 않게 내 크기의 18~30%는 유지(더 깊은 곳 먹이가 여전히 더 큼) */ /* 1.1.9(빌드 155) 대전 크기 균형: 먹이는 내 0.48~0.88배(전 0.35~0.85) · 큰 물고기는 1.15~1.5배 안팎(전 최대 1.9배) · 구역 먹이 한계에 걸려도 내 0.3배 밑으로는 안 작게 — 작은 건 너무 작고 큰 건 너무 커 보이던 것 */ /* 1.1.7 구역마다 사는 물고기 크기 한계 — 1.1.8(빌드 138) 먹이(나보다 작은 물고기)에만. 큰 물고기는 어느 바다에나 나온다 */
   fish.push({x:x,y:y,vx:0,vy:0,s:fs,ang:ang,wa:ang,wt:rnd(.5,3),look:lk,
-    chase:rnd(.55,.8)*(1+.15*hk)*(1+.06*fd), /* 1.1.10 깊을수록 빨라지는 폭 12% → 6% */stun:0,phase:Math.random()*6});
+    chase:rnd(.55,.8)*(1+.15*hk)*(1+.06*fd)*(dU?1.04:1), /* 1.1.10 깊을수록 빨라지는 폭 12% → 6% */stun:0,phase:Math.random()*6});
 }
 function spawnPlank(initial){
   var R=viewR(),a=Math.random()*Math.PI*2,r=R*(initial?rnd(.1,1.4):rnd(1.05,1.5));
@@ -3899,11 +3900,12 @@ var CAMP_CYCLE=['eat','eat','size','hunt','survive','eat','size','hunt','survive
 function campHab(z){var a=(HAB[z]&&HAB[z].length?HAB[z]:SPECIES).slice();a.sort(function(x,y){return x.cap-y.cap||(x.id<y.id?-1:1)});return a}
 /* 1.2.0(빌드 53) 난이도 조금 올림 · 크기 목표는 '처음 크기의 몇 배'로 모든 물고기가 같은 기준(화면에는 고른 물고기의 cm로 보여 줌) */
 function campFloor(n){var sea=Math.floor((n-1)/10),i=(n-1)%10,ty=CAMP_CYCLE[i],z=CAMP_SEAS[sea].z,f={n:n,sea:sea,z:z,type:ty},a;
-  if(ty==='eat'){f.goal=12+Math.round(n*1.6);f.lim=Math.round(f.goal*2.6+12)}
-  else if(ty==='size'){f.mult=Math.round((1.6+n*.1)*100)/100;f.goal=100;f.lim=Math.round(12+(f.mult-1)*32)}
-  else if(ty==='hunt'){a=campHab(z).filter(function(L){return L.cap>=8&&L.cap<=60});if(!a.length)a=campHab(z);f.tgt=a[(n*7)%a.length].id;f.goal=3+Math.floor(n/6);f.lim=15+16*f.goal} /* 1.1.10 사냥 층이 3~10초 만에 끝나 너무 쉬웠던 것: 목표 2~6 → 3~8마리 */
-  else if(ty==='survive'){f.goal=Math.round(40+n*2.4);f.eat2=8+Math.round(n*.7)} /* 1.1.10 버티기 층이 다른 층보다 훨씬 어려웠던 것(시험에서 20판 중 0판): 67~152초 → 52~110초 */
-  else{a=campHab(z);f.boss=a[a.length-1].id;f.goal=1;f.bk=4.5+sea*1.5;f.lim=90+sea*20}
+  var dK=n>=6?1.08:1; /* 1.1.13 난이도 조금 상향: 6층부터 먹기·버티기 목표 8% 더, 사냥 제한 시간 8% 짧게, 보스 2번째 바다부터 조금 더 단단히 */
+  if(ty==='eat'){f.goal=Math.round((12+n*1.6)*dK);f.lim=Math.round(f.goal*2.6+12)}
+  else if(ty==='size'){f.mult=Math.round((1.6+n*.1)*100)/100;f.goal=100;f.lim=Math.round((12+(f.mult-1)*32)/(n>=6?1.06:1))}
+  else if(ty==='hunt'){a=campHab(z).filter(function(L){return L.cap>=8&&L.cap<=60});if(!a.length)a=campHab(z);f.tgt=a[(n*7)%a.length].id;f.goal=3+Math.floor(n/6);f.lim=Math.round((15+16*f.goal)/(n>=6?1.08:1))} /* 1.1.10 사냥 층이 3~10초 만에 끝나 너무 쉬웠던 것: 목표 2~6 → 3~8마리 */
+  else if(ty==='survive'){f.goal=Math.round((40+n*2.4)*dK);f.eat2=8+Math.round(n*.7)} /* 1.1.10 버티기 층이 다른 층보다 훨씬 어려웠던 것(시험에서 20판 중 0판): 67~152초 → 52~110초 */
+  else{a=campHab(z);f.boss=a[a.length-1].id;f.goal=1;f.bk=4.5+sea*1.5+(sea>=1?.4:0);f.lim=90+sea*20}
   return f}
 function campSave(){var c=save.camp;if(!c||typeof c!=='object')c=save.camp={s:{},ch:0};if(!c.s)c.s={};return c}
 function campStarsOf(n){return campSave().s[n]||0}
@@ -5073,6 +5075,7 @@ function svSpawn(type,ang,dist){var E=SV_E[type],C=SV.C||SV_CH[1],F,R=viewR(),a=
   if(y<SV.y0||y>SV.y1){y=cy-Math.sin(a)*d;if(y<SV.y0||y>SV.y1)y=clamp(y,SV.y0,SV.y1)}
   var svT0=svTv();var hk=(E.boss?1+svT0/900:1+svT0/80+Math.pow(svT0/300,2)+(svT0>300?Math.pow((Math.min(svT0,SV_LEN)-300)/200,2):0))*(SV.inf&&svT0>SV_LEN?1+Math.pow((svT0-SV_LEN)/200,2):1)*(E.boss?Math.pow(C.hk,.6):1+(C.hk-1)*clamp((svT0-60)/240,0,1)),e={x:x,y:y,vx:0,vy:0,s:E.s*(E.boss?1:rnd(.92,1.08)*Math.min(2.2,1+svT0/1200)),hp:E.hp*hk,max:E.hp*hk,v:E.v*C.vk*rnd(.9,1.1),E:E,type:type,look:byId(C.ids[type])||byId(E.id),ang:0,phase:Math.random()*6,hit:0,slow:0,wob:rnd(-.5,.5),hits:{},at:0,ch:0,inF:!!SV.fence};
   if(SV.dm&&!E.boss){e.hp*=SV.dm.hk||1;e.max=e.hp;e.v*=SV.dm.vk||1}
+  if(C.n>=3&&!E.boss){e.hp*=1.05;e.max=e.hp} /* 1.1.13 3장부터 적 체력 5% 더 */
   if(SV.hard){e.hp*=E.boss?1.5:1.7;e.max=e.hp;e.v*=1.06}
   if(E.boss){var bl=1+Math.min(SV.lv,60)/(C.n<=1?36:24)+Math.max(0,SV.lv-60)/48;/* 1.1.8(빌드 123) Lv 60 넘으면 보스 체력이 덜 가파르게(7~8장 마지막 보스가 1분 넘게 걸리던 것) */e.hp*=bl;e.max*=bl;e.born=SV.t;e.at=3;SV.boss=e;SV.bossN++;banner(T('보스 등장!'),e.look.name+(SV.br?' · '+T('보스 러시 ')+(SV.br.i)+' / '+SV.br.list.length:E.fin?T(' · 물리치면 승리!'):T(' · 물고기 떼 사이에서 보스를 쓰러뜨려요')));buzz([40,40,60]);shake=reduce?0:.3}
   if(!E.boss)svGpSpawn(e);SV.en.push(e);return e}
@@ -5209,7 +5212,7 @@ function svGems(dt){var mr=(70+P.s)*svK('mag'),i,g;
 function svMagnetAll(){for(var i=0;i<SV.gem.length;i++)SV.gem[i].pull=.5}
 function svWaves(dt){var t=svTv(),i,tk=SV_LEN/SV_LR;
   /* 초당 나오는 수: 1.1마리 → 10분에 7마리 */
-  var rk=(SV.dm&&SV.dm.rk||1)*(SV.hard?1.15:1)*(SV.arc==='storm'?1.15:1),rate=Math.min(SV.inf&&t>SV_LEN?13:9.5,1.4+t/60)*rk*(SV.fence?.25:1),alive=0,drift=0;for(i=0;i<SV.en.length;i++){if(SV.en[i].E.beh==='drift')drift++;else alive++}
+  var rk=(SV.dm&&SV.dm.rk||1)*(SV.hard?1.15:1)*(SV.arc==='storm'?1.15:1),rate=Math.min(SV.inf&&t>SV_LEN?13:9.5,1.4+t/60)*rk*(SV.fence?.25:1)*(((SV.C||SV_CH[1]).n>=3)?1.07:1) /* 1.1.13 3장부터 적 7% 더 자주 */,alive=0,drift=0;for(i=0;i<SV.en.length;i++){if(SV.en[i].E.beh==='drift')drift++;else alive++}
   var w=(SV.C||SV_CH[1]).w;SV.spT+=dt*rate;while(SV.spT>=1){SV.spT-=1;if(alive>=(SV.inf&&t>SV_LEN?230:SV_CAP)*Math.min(rk,1.3)*(SV.slowK||1))break; /* 1.1.13: 폰이 버거워하면(평균 초당 37장 밑) 동시에 나오는 적 수를 최대 28%까지 줄였다가 나아지면 되돌림 */var pool=[],k;for(k in w){var E=SV_E[k];if(!E||t<E.from)continue;pool.push(k)}
     var sum=0;pool.forEach(function(q){sum+=w[q]});var r=Math.random()*sum,pick='min';for(i=0;i<pool.length;i++){r-=w[pool[i]];if(r<=0){pick=pool[i];break}}
     if(pick==='jelly'){if(drift<20){var ja2=Math.random()*Math.PI*2;for(var q=0;q<4;q++)svSpawn('jelly',ja2+rnd(-.12,.12),viewR()*rnd(1.05,1.2));drift+=4}}else{svSpawn(pick);alive++}}
@@ -12562,11 +12565,11 @@ function campLastClear(){var c=campSave(),hi=0,k;for(k in c.s){var n=+k;if(c.s[k
 function campSync(){var n=CAMP_BASE;if(abyOpen()){var L=campLastClear();n=Math.min(CAMP_MAX,Math.max(40,Math.ceil((L+1)/10)*10))}CAMP_N=n;return n}
 var campFloorAB=campFloor;campFloor=function(n){if(n<=CAMP_BASE)return campFloorAB(n);
   var b=Math.floor((n-1)/10),i=(n-1)%10,S=CAMP_SEAS_ALL[Math.min(b,CAMP_SEAS_ALL.length-1)],ty=CAMP_CYCLE[i],z=S.z,f={n:n,sea:b,z:z,type:ty,aby:1},a,lp=S.lp?1:0;
-  if(ty==='eat'){f.goal=Math.min(90,30+Math.round((n-30)*.9));f.lim=Math.round(f.goal*3.2+20)}
+  if(ty==='eat'){f.goal=Math.min(96,Math.round((30+(n-30)*.9)*1.08));f.lim=Math.round(f.goal*3.2+20)} /* 1.1.13 난이도 조금 상향(+8%) */
   else if(ty==='size'){f.mult=Math.min(9,Math.round((1.6+n*.1)*100)/100);f.goal=100;f.lim=Math.round(12+(f.mult-1)*30)}
   else if(ty==='hunt'){a=campHab(z).filter(function(L){return L.cap>=8&&L.cap<=80});if(!a.length)a=campHab(z);f.tgt=a[(n*7)%a.length].id;f.goal=Math.min(9,5+Math.floor((n-31)/15));f.lim=20+18*f.goal}
-  else if(ty==='survive'){f.goal=Math.min(240,Math.round(40+n*2.2));f.eat2=Math.min(60,8+Math.round(n*.65))}
-  else{a=campHab(z);var used={};for(var q=10;q<n;q+=10)used[campFloor(q).boss]=1;var pk=null;for(var j=a.length-1;j>=0&&!pk;j--)if(!used[a[j].id]&&a[j].cap>=Math.max(80,a[a.length-1].cap*.25))pk=a[j];f.boss=(pk||a[a.length-1]).id;f.goal=1;f.bk=Math.min(10,7.5+(b-2)*.5);f.lim=Math.min(220,130+(b-2)*12)}
+  else if(ty==='survive'){f.goal=Math.min(250,Math.round((40+n*2.2)*1.06));f.eat2=Math.min(60,8+Math.round(n*.65))}
+  else{a=campHab(z);var used={};for(var q=10;q<n;q+=10)used[campFloor(q).boss]=1;var pk=null;for(var j=a.length-1;j>=0&&!pk;j--)if(!used[a[j].id]&&a[j].cap>=Math.max(80,a[a.length-1].cap*.25))pk=a[j];f.boss=(pk||a[a.length-1]).id;f.goal=1;f.bk=Math.min(10.5,8+(b-2)*.5);f.lim=Math.min(220,130+(b-2)*12)}
   return f};
 var ABY_MS={40:10,50:15,70:20,99:50};
 var campOpenAB=campOpen;campOpen=function(n){campSync();if(n>CAMP_N)n=CAMP_N;return campOpenAB(n)};
@@ -12604,7 +12607,7 @@ accNameFit=function(){try{var bs=document.querySelectorAll('#goodsAcc .good b');
 abyTr(TRT,{"심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)": "Deep Dive: “The Endless Abyss” — clear floor 30 to go on from floor 31 through the Sea Cave, Shipwreck Sea, Glowing Abyss and Volcanic Vent (up to floor 99)", "심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석": "Bonus gems the first time you clear abyss floors 40 · 50 · 70 · 99", "앱을 오래 켜 두거나 다시 열 때 꺼지는 일, 긴 생존 판 막판 버벅임을 줄였어요": "Fewer shutdowns when the app stays open a long time or comes back, and less stutter late in long Survival runs", "작은 화면에서 상점 이름 · 물고기 고르기 버튼을 다듬었어요": "Polished shop names and fish picker buttons on small screens", "끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑": "The Endless Abyss is open! Dive below floor 30 🌑"});abyTr(TRJ,{"심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)": "深海探検に「果てなき深淵」：30階をクリアすると31階から海底洞窟 · 沈没船の海 · 光る深海 · 熱水噴出孔の火山まで（最大99階）", "심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석": "深淵40 · 50 · 70 · 99階を初めてクリアするとボーナスジェム", "앱을 오래 켜 두거나 다시 열 때 꺼지는 일, 긴 생존 판 막판 버벅임을 줄였어요": "アプリを長く開いたままにしたり戻ってきたときに落ちること、長いサバイバル終盤のカクつきを減らしました", "작은 화면에서 상점 이름 · 물고기 고르기 버튼을 다듬었어요": "小さい画面でショップの名前と魚えらびのボタンを整えました", "끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑": "果てなき深淵がひらいた！30階より深くへ 🌑"});
 abyTr(TRT,{"심해 생존을 다 깨도 랭킹이 이어져요: 어려움 장 → 무한 8장 버틴 시간 순": "Deep Survival ranking keeps going after a full clear: Hard chapters, then Endless Ch 8 time"});abyTr(TRJ,{"심해 생존을 다 깨도 랭킹이 이어져요: 어려움 장 → 무한 8장 버틴 시간 순": "深海サバイバルを全クリアしてもランキングが続きます：ハード章 → 無限8章の生存時間"});
 abyTr(TRT,{"받을 보상이 있으면 플레이 탭 · 싱글 버튼에 빨간 점, 심해 생존 보상을 달성하면 바로 알려 줘요": "Red dots on the Play tab and Solo button when rewards are ready, plus an alert when a Deep Survival reward unlocks"});abyTr(TRJ,{"받을 보상이 있으면 플레이 탭 · 싱글 버튼에 빨간 점, 심해 생존 보상을 달성하면 바로 알려 줘요": "受け取れる報酬があるとプレイタブ・シングルボタンに赤い点、深海サバイバルの報酬達成もすぐお知らせ"});
-abyTr(TRT,{"작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요": "Polished shop names, fish picker, aquarium title and pop-up text on small screens", "대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요": "Fairer, smoother battles: slow phones move at the same speed, opponents no longer stutter or teleport on a shaky connection, and giant rivals are drawn smaller so they don't cover your screen, with a red dashed ring showing their real bite range"});abyTr(TRJ,{"작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요": "小さい画面でショップ名・魚えらび・水族館タイトル・お知らせの文字が切れないように整えました", "대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요": "対戦がより公平でなめらかに：遅いスマホでも同じ速さで動き、通信が不安定でも相手がカクついたり瞬間移動したりしません。自分よりずっと大きい相手は画面をおおわないよう小さめに表示し、本当に食べられる口の範囲は赤い点線で表示します"});abyTr(TRT,{"진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요":"Tidier pearl prices: rounded to hundreds, thousands and ten-thousands, plus a bigger welcome pearl gift"});abyTr(TRJ,{"진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요":"真珠の値段を切りのいい数字に整えました（百・千・万単位）。初めてのプレゼント真珠も増量"});NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)"),T("심해 생존을 다 깨도 랭킹이 이어져요: 어려움 장 → 무한 8장 버틴 시간 순"),T("대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요"),T("받을 보상이 있으면 플레이 탭 · 싱글 버튼에 빨간 점, 심해 생존 보상을 달성하면 바로 알려 줘요"),T("심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석"),T("앱을 오래 켜 두거나 다시 열 때 꺼지는 일, 긴 생존 판 막판 버벅임을 줄였어요"),T("작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요"),T("진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요")];NEWS_LEAD['1.1.13']=T("끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑");
+abyTr(TRT,{"작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요": "Polished shop names, fish picker, aquarium title and pop-up text on small screens", "대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요": "Fairer, smoother battles: slow phones move at the same speed, opponents no longer stutter or teleport on a shaky connection, and giant rivals are drawn smaller so they don't cover your screen, with a red dashed ring showing their real bite range"});abyTr(TRJ,{"작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요": "小さい画面でショップ名・魚えらび・水族館タイトル・お知らせの文字が切れないように整えました", "대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요": "対戦がより公平でなめらかに：遅いスマホでも同じ速さで動き、通信が不安定でも相手がカクついたり瞬間移動したりしません。自分よりずっと大きい相手は画面をおおわないよう小さめに表示し、本当に食べられる口の範囲は赤い点線で表示します"});abyTr(TRT,{"진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요":"Tidier pearl prices: rounded to hundreds, thousands and ten-thousands, plus a bigger welcome pearl gift"});abyTr(TRJ,{"진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요":"真珠の値段を切りのいい数字に整えました（百・千・万単位）。初めてのプレゼント真珠も増量"});abyTr(TRT,{"난이도를 조금 올렸어요: 싱글은 네 번째 판부터 큰 물고기가 조금 더, 심해 탐험 6층부터 목표 8% 더, 심해 생존 3장부터 적이 조금 더 자주·단단하게":"Slightly harder: a few more big fish in Solo from your 4th run, Expedition goals +8% from floor 6, Survival enemies a bit more frequent and tougher from chapter 3"});abyTr(TRJ,{"난이도를 조금 올렸어요: 싱글은 네 번째 판부터 큰 물고기가 조금 더, 심해 탐험 6층부터 목표 8% 더, 심해 생존 3장부터 적이 조금 더 자주·단단하게":"難易度を少し上げました：ソロは4回目のプレイから大きな魚が少し多く、深海探検は6階から目標が8%増、深海サバイバルは3章から敵が少し多く・硬く"});NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)"),T("심해 생존을 다 깨도 랭킹이 이어져요: 어려움 장 → 무한 8장 버틴 시간 순"),T("대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요"),T("받을 보상이 있으면 플레이 탭 · 싱글 버튼에 빨간 점, 심해 생존 보상을 달성하면 바로 알려 줘요"),T("심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석"),T("앱을 오래 켜 두거나 다시 열 때 꺼지는 일, 긴 생존 판 막판 버벅임을 줄였어요"),T("작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요"),T("진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요"),T("난이도를 조금 올렸어요: 싱글은 네 번째 판부터 큰 물고기가 조금 더, 심해 탐험 6층부터 목표 8% 더, 심해 생존 3장부터 적이 조금 더 자주·단단하게")];NEWS_LEAD['1.1.13']=T("끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑");
 /* ===== 1.1.13 대전: 상대 크기가 말이 안 되게 튀면 막고, 화면을 덮을 만큼 큰 상대가 나오면 자동으로 기록을 남긴다
    10/14 0시대 사용자 신고: 대전에서 상대 물고기가 화면을 꽉 채움(서버 기록·오류 기록엔 흔적 없음) → 다음엔 무엇이 왔는지 그대로 받아 보기 위함 ===== */
 var PEERCHK={},HUGEW=[];

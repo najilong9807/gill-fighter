@@ -1,0 +1,93 @@
+# 아가미파이터 iOS → TestFlight (GitHub Actions, codemagic.yaml 'ios-release'와 같은 순서)
+# 시작: GitHub › Actions › 'iOS release' › Run workflow, 또는 태그 ios-build-* 푸시
+# 필요한 Secrets (Settings › Secrets and variables › Actions): ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8
+#   - ASC_KEY_P8: App Store Connect API 키 파일(AuthKey_XXXX.p8) 내용 전체. 서명은 Apple 자동 서명(클라우드 관리 인증서) 사용 → 키 역할 Admin 필요
+name: iOS release
+on:
+  workflow_dispatch:
+  push:
+    tags: ['ios-build-*']
+concurrency:
+  group: ios-release
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 30
+    env:
+      APP_STORE_APPLE_ID: '6816376999'
+      BUNDLE_ID: com.gillfighter.game
+      XCODE_PROJECT: ios/App/App.xcodeproj
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Xcode 버전
+        run: xcodebuild -version
+      - name: 프로젝트 풀기 (app.zip)
+        run: unzip -q -o app.zip
+      - name: 수정 사항 적용 (patch.json)
+        run: if [ -f patch.json ]; then python3 apply_patch.py; fi
+      - name: 앱 아이콘 넣기
+        run: if [ -f icon/AppIcon-512@2x.png ]; then cp icon/AppIcon-512@2x.png ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png; fi
+      - name: 실사풍 그림 넣기 (svart)
+        run: if [ -d svart ]; then mkdir -p www/svart && cp svart/*.webp www/svart/ && ls www/svart | wc -l; fi
+      - name: npm 설치
+        run: npm ci || npm install
+      - name: 웹 파일을 iOS 프로젝트로 복사
+        run: npx cap sync ios
+      - name: API 키 준비
+        run: |
+          test -n "$ASC_KEY_ID" && test -n "$ASC_ISSUER_ID" && test -n "$ASC_KEY_P8" || { echo "::error::ASC_KEY_ID / ASC_ISSUER_ID / ASC_KEY_P8 Secrets 가 비어 있어요"; exit 1; }
+          mkdir -p ~/.appstoreconnect/private_keys
+          printf '%s\n' "$ASC_KEY_P8" > ~/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8
+          echo "ASC_KEY_PATH=$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8" >> $GITHUB_ENV
+          python3 -m pip install --quiet --break-system-packages pyjwt cryptography || python3 -m pip install --quiet pyjwt cryptography
+      - name: 팀 ID · 빌드 번호
+        run: |
+          TEAM=$(python3 ci/asc.py team); echo "TEAM_ID=$TEAM" >> $GITHUB_ENV; echo "team $TEAM"
+          NEXT=$(python3 ci/asc.py next-build "$APP_STORE_APPLE_ID"); echo "build number $NEXT"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $NEXT;/g" "$XCODE_PROJECT/project.pbxproj"
+          grep -m2 "MARKETING_VERSION" "$XCODE_PROJECT/project.pbxproj"
+      - name: 아카이브 (자동 서명)
+        run: |
+          set -o pipefail
+          mkdir -p build
+          xcodebuild -project "$XCODE_PROJECT" -scheme App -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath build/App.xcarchive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Automatic CODE_SIGN_IDENTITY="Apple Development" \
+            archive 2>&1 | tee build/archive.log | grep -E "error:|warning: .*sign|\*\* ARCHIVE" || true
+          test -d build/App.xcarchive
+      - name: ipa 만들기
+        run: |
+          cat > build/export.plist <<PL
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>teamID</key><string>${TEAM_ID}</string>
+            <key>destination</key><string>export</string>
+            <key>uploadSymbols</key><true/>
+          </dict></plist>
+          PL
+          xcodebuild -exportArchive -archivePath build/App.xcarchive -exportPath build/ipa -exportOptionsPlist build/export.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" 2>&1 | tail -20
+          ls -la build/ipa
+      - name: TestFlight 업로드
+        run: |
+          IPA=$(ls build/ipa/*.ipa | head -1)
+          xcrun altool --upload-app -f "$IPA" -t ios --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID" 2>&1 | tail -20
+      - name: 로그 보관
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build/*.log
+          if-no-files-found: ignore

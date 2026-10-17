@@ -1,0 +1,39 @@
+# 1.1.13 스토어 정보 등록 (codemagic.yaml 'store-meta'와 같음, 빌드 없음 · 리눅스라 무료 분 적게 씀)
+# 버전 만들기 · 업데이트 문구 39개 언어 · 스크린샷 54장 · 순위표 범위 확인
+name: Store meta
+on:
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: 'DRY=1 이면 읽기만 (바꾸지 않음)'
+        default: '1'
+        required: true
+      steps:
+        description: '단계 (version,whatsnew,shots,gc / 스토어 글까지: ,listing / 판매 중 홍보 문구만: promo_now)'
+        default: 'version,whatsnew,shots,gc'
+        required: true
+      version:
+        description: '스토어 버전'
+        default: '1.1.13'
+        required: true
+concurrency:
+  group: store-meta
+  cancel-in-progress: false
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      APP_STORE_APPLE_ID: '6816376999'
+      STORE_VERSION: ${{ inputs.version }}
+      DRY: ${{ inputs.dry }}
+      STEPS: ${{ inputs.steps }}
+      APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.ASC_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.ASC_KEY_P8 }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: 준비
+        run: python3 -m pip install --quiet requests pyjwt cryptography
+      - name: 스토어 정보 등록
+        run: python3 store_meta.py

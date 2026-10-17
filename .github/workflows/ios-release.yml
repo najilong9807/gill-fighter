@@ -93,7 +93,8 @@ jobs:
           codesign -d --entitlements :- "$APP" 2>/dev/null > build/ent.plist; cat build/ent.plist
           grep -q "com.apple.developer.game-center" build/ent.plist || { echo "::error::Game Center 권한이 빠졌어요"; exit 1; }
           grep -q "com.apple.developer.applesignin" build/ent.plist || { echo "::error::Apple 로그인 권한이 빠졌어요"; exit 1; }
-          if grep -A1 "get-task-allow" build/ent.plist | grep -q "<true/>"; then echo "::error::개발용 서명이에요"; exit 1; fi
+          GTA=$(/usr/libexec/PlistBuddy -c "Print :get-task-allow" build/ent.plist 2>/dev/null || echo false); echo "get-task-allow=$GTA"
+          [ "$GTA" = "false" ] || { echo "::error::개발용 서명이에요"; exit 1; }
           /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" -c "Print :CFBundleVersion" "$APP/Info.plist"
       - name: TestFlight 업로드
         run: |

@@ -10964,7 +10964,7 @@ function roomInvite(c){if(!/^\d{4}$/.test(c))return;if(state==='play'||state==='
 function appNative(){try{var C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.App?C.Plugins.App:null}catch(e){return null}}
 /* 1.1.5 새 버전 안내: 앱스토어에 올라간 버전이 지금 앱보다 높으면 처음 화면에 띠를 띄우고,
    그 버전을 처음 알게 됐을 때(또는 '나중에' 뒤 3일 지나서) 안내 창을 한 번 보여 준다. 업데이트는 앱스토어로 보낸다 */
-var APP_VER='1.1.12',UPD={v:null,notes:'',at:0,busy:false};
+var APP_VER='1.1.13',UPD={v:null,notes:'',at:0,busy:false};
 function verGt(a,b){a=String(a||'').split('.');b=String(b||'').split('.');for(var i=0;i<4;i++){var x=parseInt(a[i]||0,10)||0,y=parseInt(b[i]||0,10)||0;if(x!==y)return x>y}return false}
 function updCheck(force){
   var C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform())&&location.search.indexOf('updtest')<0)return;

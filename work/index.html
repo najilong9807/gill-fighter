@@ -12931,6 +12931,14 @@ var volcDrawOLD=volcDraw;volcDraw=function(){if(state!=='play'||(!VOLC.ev&&!VOLC
   for(i=0;i<VOLC.fx.length;i++){f=VOLC.fx[i];if(f.t<0||f.k!=='smoke')continue;var u2=f.t/f.dur,sz=f.h*(1+u2*.8),al2=.5*(u2<.15?u2/.15:1-(u2-.15)/.85);
     volcDrawImg('smoke',f.x,f.y,sz*240/225,sz,f.rot+u2*.3,al2)}
   ctx.restore()};
+/* 1.1.14 ① 신규 유저 흐름(퍼널): 처음 열기 → 연습 바다 끝 → 다음 날 다시 옴, 세 번만 짧게 남긴다(이름 · 기기 정보 없이, 판 기록 nb와 같은 통로)
+   설치하고 한 판도 안 끝낸 채 떠난 사람이 지금은 안 보여서 */
+function nfEv(ev){try{save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:0,ev:ev,runs:save.runs|0,d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),lang:LANG}]).slice(-8);persist();if(typeof crashSend==='function')setTimeout(crashSend,2500)}catch(e){}}
+var bootNF=boot;boot=function(){var fresh=!save.firstAt,r=bootNF.apply(this,arguments);
+  try{if(fresh&&!save.nfOpen){save.nfOpen=1;nfEv('open')}
+    else if(!save.nfRet&&save.firstAt){var dd=Math.floor((Date.now()-save.firstAt)/864e5);if(dd>=1&&dd<=7){save.nfRet=1;nfEv('ret'+dd)}}}catch(e){}
+  return r};
+var tutEndNF=tutEnd;tutEnd=function(done){var was=typeof TUT!=='undefined'&&TUT&&TUT.on,r=tutEndNF.apply(this,arguments);try{if(was&&!save.nfTut){save.nfTut=1;nfEv(done?'tut':'tutSkip')}}catch(e){}return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

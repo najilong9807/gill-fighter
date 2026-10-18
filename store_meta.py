@@ -80,7 +80,7 @@ def localizations(api, vid):
     return {l['attributes']['locale']: l for l in api.all('appStoreVersions/%s/appStoreVersionLocalizations?limit=50' % vid)}
 
 def step_whatsnew(api, vid):
-    wn = json.load(open(os.path.join(ROOT, 'store', 'whatsnew_1113.json'), encoding='utf-8'))
+    wn = json.load(open(os.path.join(ROOT, 'store', 'whatsnew_%s.json' % VER.replace('.', '')), encoding='utf-8'))  # 버전별 파일 (1.1.14 → whatsnew_1114.json)
     locs = localizations(api, vid)
     log('LOCALES in ASC', len(locs), sorted(locs))
     miss = [k for k in locs if k not in wn]

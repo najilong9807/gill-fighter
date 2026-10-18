@@ -9,12 +9,16 @@ on:
         default: '1'
         required: true
       steps:
-        description: '단계 (version,whatsnew,shots,gc / 스토어 글까지: ,listing / 판매 중 홍보 문구만: promo_now)'
+        description: '단계 (version,whatsnew,shots,gc / 스토어 글: ,listing / 빌드 붙이기 · 심사 메모 · 제출: ,build,notes,submit / 판매 중 홍보 문구만: promo_now)'
         default: 'version,whatsnew,shots,gc'
         required: true
+      submit_ok:
+        description: '실제 심사 제출 잠금: 제출할 버전을 그대로 적어야 제출됨 (비우면 확인만)'
+        default: ''
+        required: false
       version:
         description: '스토어 버전'
-        default: '1.1.13'
+        default: '1.1.14'
         required: true
 concurrency:
   group: store-meta
@@ -28,6 +32,7 @@ jobs:
       STORE_VERSION: ${{ inputs.version }}
       DRY: ${{ inputs.dry }}
       STEPS: ${{ inputs.steps }}
+      SUBMIT_OK: ${{ inputs.submit_ok }}
       APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.ASC_KEY_ID }}
       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.ASC_KEY_P8 }}

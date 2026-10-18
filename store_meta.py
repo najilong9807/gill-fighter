@@ -13,7 +13,9 @@ import requests
 APP = os.environ.get('APP_STORE_APPLE_ID', '6816376999')
 VER = os.environ.get('STORE_VERSION', '1.1.13')
 DRY = os.environ.get('DRY', '0') == '1'
-STEPS = set((os.environ.get('STEPS') or 'version,whatsnew,shots,gc').split(','))  # listing · promo_now 는 넣을 때만
+STEPS = set((os.environ.get('STEPS') or 'version,whatsnew,shots,gc').split(','))  # listing · promo_now · build · notes · submit 는 넣을 때만
+# submit 은 이중 잠금: DRY=0 이고 SUBMIT_OK=<버전> (예: SUBMIT_OK=1.1.14) 일 때만 실제로 심사에 제출
+SUBMIT_OK = os.environ.get('SUBMIT_OK', '')
 ROOT = os.path.dirname(os.path.abspath(__file__))
 B = 'https://api.appstoreconnect.apple.com/v1/'
 
@@ -212,6 +214,54 @@ def step_promo_now(api):
         api.req('PATCH', 'appStoreVersionLocalizations/%s' % l['id'], {'data': {'type': 'appStoreVersionLocalizations', 'id': l['id'], 'attributes': {'promotionalText': t['promo']}}}); done += 1
     log('PROMO updated', done)
 
+def step_build(api, v):
+    """그 버전 번호로 올라온 빌드 중 처리 끝난(VALID) 가장 최근 것을 스토어 버전에 붙인다"""
+    bs = api.all('builds?filter[app]=%s&filter[preReleaseVersion.version]=%s&filter[processingState]=VALID&sort=-uploadedDate&limit=20' % (APP, VER))
+    bs = [b for b in bs if not b['attributes'].get('expired')]
+    if not bs: log('BUILD none VALID for', VER); return None
+    b = bs[0]; num = b['attributes'].get('version')
+    cur = (api.get('appStoreVersions/%s/relationships/build' % v['id']).get('data') or {}).get('id')
+    if cur == b['id']: log('BUILD already attached', num); return b
+    log('BUILD attach', num, '(was %s)' % (cur or 'none'))
+    if DRY: return b
+    api.req('PATCH', 'appStoreVersions/%s/relationships/build' % v['id'], {'data': {'type': 'builds', 'id': b['id']}})
+    return b
+
+def step_notes(api, v):
+    """store/review_notes_<버전>.txt 가 있으면 심사 메모로 넣는다"""
+    f = os.path.join(ROOT, 'store', 'review_notes_%s.txt' % VER.replace('.', ''))
+    if not os.path.exists(f): log('NOTES file missing', os.path.basename(f), '-> skip'); return
+    txt = open(f, encoding='utf-8').read().strip()[:4000]
+    d = api.get('appStoreVersions/%s/appStoreReviewDetail' % v['id']).get('data')
+    if d and (d['attributes'].get('notes') or '').strip() == txt: log('NOTES same'); return
+    log('NOTES set', len(txt), 'chars')
+    if DRY: return
+    if d:
+        api.req('PATCH', 'appStoreReviewDetails/%s' % d['id'], {'data': {'type': 'appStoreReviewDetails', 'id': d['id'], 'attributes': {'notes': txt}}})
+    else:
+        api.req('POST', 'appStoreReviewDetails', {'data': {'type': 'appStoreReviewDetails', 'attributes': {'notes': txt},
+                 'relationships': {'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': v['id']}}}}})
+
+def step_submit(api, v):
+    """심사 제출 (reviewSubmissions). 빌드가 붙어 있어야 하고, DRY=0 + SUBMIT_OK=<버전> 일 때만 실제 제출"""
+    cur = (api.get('appStoreVersions/%s/relationships/build' % v['id']).get('data') or {}).get('id')
+    if not cur: log('SUBMIT stop: no build attached'); return False
+    live = DRY is False and SUBMIT_OK == VER
+    if not live: log('SUBMIT check ok (build attached) · not submitting (DRY=%s, SUBMIT_OK=%r)' % (int(DRY), SUBMIT_OK)); return False
+    subs = api.all('reviewSubmissions?filter[app]=%s&filter[platform]=IOS&filter[state]=READY_FOR_REVIEW&limit=10' % APP)
+    if subs: sid = subs[0]['id']; log('SUBMIT reuse submission', sid)
+    else:
+        sid = api.req('POST', 'reviewSubmissions', {'data': {'type': 'reviewSubmissions', 'attributes': {'platform': 'IOS'},
+                     'relationships': {'app': {'data': {'type': 'apps', 'id': APP}}}}})['data']['id']; log('SUBMIT new submission', sid)
+    items = api.all('reviewSubmissions/%s/items?limit=20' % sid)
+    has = any(((i.get('relationships') or {}).get('appStoreVersion') or {}).get('data', {}) .get('id') == v['id'] for i in items)
+    if not has:
+        api.req('POST', 'reviewSubmissionItems', {'data': {'type': 'reviewSubmissionItems',
+                 'relationships': {'reviewSubmission': {'data': {'type': 'reviewSubmissions', 'id': sid}},
+                                   'appStoreVersion': {'data': {'type': 'appStoreVersions', 'id': v['id']}}}}})
+    api.req('PATCH', 'reviewSubmissions/%s' % sid, {'data': {'type': 'reviewSubmissions', 'id': sid, 'attributes': {'submitted': True}}})
+    log('SUBMITTED', VER, 'submission', sid); return True
+
 def main():
     if not os.environ.get('APP_STORE_CONNECT_PRIVATE_KEY'):
         log('no ASC key env; stop'); return
@@ -226,6 +276,9 @@ def main():
             if 'whatsnew' in STEPS: step_whatsnew(api, v['id'])
             if 'shots' in STEPS: step_shots(api, v['id'])
             if 'listing' in STEPS: step_listing(api, v['id'])
+            if 'build' in STEPS: step_build(api, v)
+            if 'notes' in STEPS: step_notes(api, v)
+            if 'submit' in STEPS: step_submit(api, v)
     if 'gc' in STEPS: step_gc(api)
     if 'promo_now' in STEPS: step_promo_now(api)
     log('DONE')

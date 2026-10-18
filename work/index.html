@@ -12934,11 +12934,37 @@ var volcDrawOLD=volcDraw;volcDraw=function(){if(state!=='play'||(!VOLC.ev&&!VOLC
 /* 1.1.14 ① 신규 유저 흐름(퍼널): 처음 열기 → 연습 바다 끝 → 다음 날 다시 옴, 세 번만 짧게 남긴다(이름 · 기기 정보 없이, 판 기록 nb와 같은 통로)
    설치하고 한 판도 안 끝낸 채 떠난 사람이 지금은 안 보여서 */
 function nfEv(ev){try{save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:0,ev:ev,runs:save.runs|0,d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),lang:LANG}]).slice(-8);persist();if(typeof crashSend==='function')setTimeout(crashSend,2500)}catch(e){}}
-var bootNF=boot;boot=function(){var fresh=!save.firstAt,r=bootNF.apply(this,arguments);
+var bootNF=boot;boot=function(){var fresh=!save.firstAt&&!(save.runs>0)&&!(save.mp&&save.mp.games>0)&&!Object.keys(save.best||{}).length&&!(save.camp&&save.camp.s&&Object.keys(save.camp.s).length),r=bootNF.apply(this,arguments);
   try{if(fresh&&!save.nfOpen){save.nfOpen=1;nfEv('open')}
     else if(!save.nfRet&&save.firstAt){var dd=Math.floor((Date.now()-save.firstAt)/864e5);if(dd>=1&&dd<=7){save.nfRet=1;nfEv('ret'+dd)}}}catch(e){}
   return r};
 var tutEndNF=tutEnd;tutEnd=function(done){var was=typeof TUT!=='undefined'&&TUT&&TUT.on,r=tutEndNF.apply(this,arguments);try{if(was&&!save.nfTut){save.nfTut=1;nfEv(done?'tut':'tutSkip')}}catch(e){}return r};
+/* 1.1.14: 새로 온 사람에게 길 하나 — 1.1.14 이후 새로 설치한 사람(nfOpen)만, 처음 이틀(또는 탐험 별 6개 전)은
+   ① 싱글 버튼을 누르면 고르기 없이 심해 탐험 지도로 바로 (탐험 별 0개 · 8판 전까지만)
+   ② 오늘의 미션에서 대전 · 생존 미션을 싱글 미션으로 바꿔 줌 */
+function nuNew(){try{if(!save.nfOpen)return false;var fa=save.firstAt||Date.now();return Date.now()-fa<2*864e5&&campTotal()<6&&(save.runs|0)<12}catch(e){return false}}
+var modePickOpenNU=modePickOpen;modePickOpen=function(){try{if(nuNew()&&campTotal()===0&&(save.runs|0)<8&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)){$('modePick').hidden=true;return campOpen(1)}}catch(e){}return modePickOpenNU.apply(this,arguments)};
+var dmEnsureNU=dmEnsure;dmEnsure=function(){var had=save.dm&&save.dm.d===today()&&save.dm.ids&&save.dm.ids.length===3,M=dmEnsureNU.apply(this,arguments);
+  try{if(!had&&nuNew()){var away={arena:1,top3:1,surv:1,gulp:1},alt=['solo','eat','time','deep','pearl','feed'].filter(function(k){return M.ids.indexOf(k)<0});
+    M.ids=M.ids.map(function(k){return away[k]&&alt.length?alt.shift():k});M.nu=1;persist()}}catch(e){}return M};
+/* 1.1.14: Apple 계정 연동 해제 — 연동된 상태면 설정에 '연동 해제' 줄. 서버(gf-account op:'unlink')가 그 Apple 계정과 백업 코드의 연결만 지운다
+   (백업 코드와 저장 내용은 그대로). 서버가 아직 옛 버전이면 실패 안내만 하고 아무것도 바꾸지 않음 */
+abyTr(TRT,{'Apple 연동 해제':'Unlink Apple','해제':'Unlink','이 Apple 계정과 저장의 연결을 끊어요. 백업 코드와 저장은 그대로 남아요':'Removes the link between this Apple account and your save. Your backup code and save stay as they are.','Apple 연동을 해제할까요?':'Unlink your Apple account?','해제했어요':'Unlinked','지금은 해제할 수 없어요':"Can't unlink right now",'잠시 후 다시 해 주세요':'Please try again later','취소':'Cancel'});
+abyTr(TRJ,{'Apple 연동 해제':'Apple連携を解除','해제':'解除','이 Apple 계정과 저장의 연결을 끊어요. 백업 코드와 저장은 그대로 남아요':'このAppleアカウントとセーブの連携を解除します。バックアップコードとセーブはそのまま残ります。','Apple 연동을 해제할까요?':'Apple連携を解除しますか？','해제했어요':'解除しました','지금은 해제할 수 없어요':'今は解除できません','잠시 후 다시 해 주세요':'しばらくしてからもう一度お試しください','취소':'キャンセル'});
+function acctUnlink(){gfDlg({title:T('Apple 연동을 해제할까요?'),text:T('이 Apple 계정과 저장의 연결을 끊어요. 백업 코드와 저장은 그대로 남아요'),btns:[{t:T('해제'),fn:function(){
+  appleToken(function(tok){if(!tok){banner(T('Apple 로그인을 하지 못했어요'),'');return}
+    acctReq({op:'unlink',id_token:tok}).then(function(r){if(!r||!r.ok)throw new Error('x');save.acct=null;persist();crumb('acctUnlink');banner(T('해제했어요'),'');try{renderSetPage()}catch(e){}})
+    .catch(function(){banner(T('지금은 해제할 수 없어요'),T('잠시 후 다시 해 주세요'))})})}},{t:T('취소'),ghost:1,fn:function(){}}]})}
+var renderSetPageUL=renderSetPage;renderSetPage=function(){var r=renderSetPageUL.apply(this,arguments);try{
+  var b4=$('acctBtn');if(b4&&save.acct&&save.acct.on&&!$('acctOff')){var sC=$('setCloud');
+    var b=document.createElement('button');b.type='button';b.className='sw';b.id='acctOff';b.textContent=T('해제');b.addEventListener('click',acctUnlink);
+    var nr=setRow(T('Apple 연동 해제'),T('이 Apple 계정과 저장의 연결을 끊어요. 백업 코드와 저장은 그대로 남아요'),b);
+    var after=$('acctLoad');after=after?(after.closest('.setrow')||after.parentNode):null;
+    if(after&&after.parentNode)after.parentNode.insertBefore(nr,after.nextSibling);else if(sC)sC.appendChild(nr)}}catch(e){}return r};
+/* 1.1.14: 설정 맨 아래 버전 글씨가 1.1.11로 고정돼 있던 것 → 실제 버전(APP_VER)으로 */
+function verNoteFix(){try{document.querySelectorAll('#setp .note').forEach(function(n){var t=n.textContent,u=t.replace(/1\.1\.\d+/,APP_VER);if(u!==t)n.textContent=u})}catch(e){}}
+var renderSetPageVN=renderSetPage;renderSetPage=function(){var r=renderSetPageVN.apply(this,arguments);verNoteFix();return r};
+var trDOMVN=trDOM;trDOM=function(){var r=trDOMVN.apply(this,arguments);verNoteFix();return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

@@ -10,10 +10,10 @@ with sync_playwright() as p:
     pg.goto(D+'t2e.html?lang=ko&build=release');pg.wait_for_timeout(600)
     base={'onb':1,'tut':1,'newsSeen':'1.1.14','newsMute':'1.1.14','thx1111':2,'owned':['anchovy'],'pick':'anchovy'};base.update(sv)
     pg.add_init_script("localStorage.setItem('fishproto.save2',%s)"%json.dumps(json.dumps(base)))
-    pg.goto(D+'t2e.html?lang=ko&build=release');pg.wait_for_timeout(2500)
+    pg.goto(D+'t2e.html?lang=ko&build=release');pg.wait_for_timeout(4500)
     ev=lambda c:pg.evaluate("c=>__ev(c)",c)
     ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});showTab('home');1")
-    pg.click('#playBtn',force=True);ov=''
+    ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});document.getElementById('playBtn').click();1");ov=''
     for _ in range(30):
       pg.wait_for_timeout(200);ov=ev("['modePick','camp'].filter(function(i){return !document.getElementById(i).hidden}).join(',')")
       if ov:break

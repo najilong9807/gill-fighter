@@ -8811,6 +8811,7 @@ function renderSetPage(){
   s2.appendChild(setRow(T('심해 생존 피해 숫자'),T('끄면 맞힌 숫자가 안 떠서 싸움이 더 잘 보여요'),swBtn('dmgNum')));
   s2.appendChild(setRow(T('대전 순위표 펼쳐 두기'),T('끄면 대전 중에 내 순위 한 줄만 보여요 (눌러서 펼칠 수 있어요)'),swBtn('rankOpen')));
   if(hwSeason()){var hwb=document.createElement('button');hwb.type='button';hwb.className='sw';hwb.id='sw-hw';var hwp=function(){var on=!save.hwOff;hwb.setAttribute('aria-pressed',on?'true':'false');hwb.textContent=on?T('켜짐'):T('꺼짐')};hwp();hwb.addEventListener('click',function(){save.hwOff=!save.hwOff;persist();hwp();hwApply()});s2.appendChild(setRow(T('할로윈 분위기'),T('11월 21일까지 화면을 할로윈으로 꾸며요'),hwb))}
+  if(typeof wnSeason==='function'&&wnSeason()){var wnb=document.createElement('button');wnb.type='button';wnb.className='sw';wnb.id='sw-wn';var wnp=function(){var on=!save.wnOff;wnb.setAttribute('aria-pressed',on?'true':'false');wnb.textContent=on?T('켜짐'):T('꺼짐')};wnp();wnb.addEventListener('click',function(){save.wnOff=!save.wnOff;persist();wnp();wnApply()});s2.appendChild(setRow(T('겨울 바다 분위기'),T('1월 31일까지 바다에 눈송이가 내리고 반짝이 전구가 켜져요'),wnb))}
   box.appendChild(s2);
   var sM=setSec(T('소리'));
   sM.appendChild(setRow(T('배경음악'),T('홈·싱글·심해·대전마다 다른 곡이 나와요'),swBtn('bgm')));
@@ -9185,10 +9186,10 @@ function update(dt){
       var sk=sizeK(f),des=f.wa,spd=ref*.3*sk;
       if(playing){
         if(decoy&&f.s>=P.s*1.1&&Math.hypot(decoy.x-f.x,decoy.y-f.y)<vis*1.3+f.s){des=Math.atan2(decoy.y-f.y,decoy.x-f.x);spd=ref*f.chase*sk;if(Math.hypot(decoy.x-f.x,decoy.y-f.y)<f.s*.7)decoy.t=0}
-        else if(f.s>=P.s*1.1&&f.s>P.s*eatR&&d<vis*(f.bot?1.25:1)+f.s&&!hidden&&!inInk(f)){des=Math.atan2(dy,dx);spd=ref*f.chase*sk}
+        else if(f.s>=P.s*1.1&&f.s>P.s*eatR&&d<vis*(f.bot?(f.bot.pers==='hunt'?1.45:f.bot.pers==='shy'?1.05:1.25):1)+f.s&&!hidden&&!inInk(f)){des=Math.atan2(dy,dx);spd=ref*f.chase*sk}
         else if(f.s<=P.s*eatR&&lureRad&&d<lureRad&&nLure<5){nLure++;des=Math.atan2(dy,dx);spd=ref*.5}
         else if(f.s<=P.s*eatR&&glowRad&&d<glowRad&&!f.bot&&nGlow<3){nGlow++;des=Math.atan2(dy,dx);spd=ref*(.2+.16*dkP)}
-        else if(f.s<=P.s*eatR&&d<vis*.6+P.s&&!fxOn('camo')&&!fxOn('stalk')){des=Math.atan2(-dy,-dx);spd=ref*(f.bot?.95:.7)*sk}
+        else if(f.s<=P.s*eatR&&d<vis*(f.bot&&f.bot.pers==='shy'?.85:.6)+P.s&&!fxOn('camo')&&!fxOn('stalk')){des=Math.atan2(-dy,-dx);spd=ref*(f.bot?(f.bot.pers==='shy'?1.02:f.bot.pers==='hunt'?.9:.95):.7)*sk}
         else if(f.bot&&f.bot.prey&&fish.indexOf(f.bot.prey)>=0&&f.bot.prey.s<=f.s*.8){var pq=f.bot.prey;des=Math.atan2(pq.y-f.y,pq.x-f.x);spd=ref*.72*sk} /* 1.1.13 AI 선수도 가끔 작은 물고기를 쫓아가 먹는다(사람처럼) */
         else if(f.bot&&d>R*1.7){des=Math.atan2(dy,dx)+Math.sin(t*.3+f.phase)*.6;spd=ref*.75*sk}
       }
@@ -10955,8 +10956,10 @@ var shareInfo=null;
 function overShare(mp,L,cm,sc,quit){var b=$('oShare');if(!b)return;shareInfo={mp:mp,name:L.name,cm:cm,sc:sc,rank:0};b.hidden=!!quit||!((cm||0)>0);$('oShareT').textContent=T('기록 자랑하기')}
 $('oShare').addEventListener('click',function(){var I=shareInfo;if(!I)return;var wk=LB.cache[(I.mp?'multi':'single')+'_week_me'],t=T('아가미 파이터에서 ')+I.name+(LANG==='en'?T('까지 컸어요!')+fmt(I.cm)+'!':' '+fmt(I.cm)+T('까지 컸어요!'));
   if(!I.mp)t+=T(' · 점수 ')+nf(I.sc)+T('점');if(wk&&wk.rank&&!$('oRank').hidden)t+=T(' · 이번 주 ')+wk.rank+T('위');
-  var cL=null;try{cL=byId(sel)}catch(x){}var cst=[[T('크기'),fmt(I.cm)]];if(!I.mp)cst.push([T('점수'),nf(I.sc)]);if(wk&&wk.rank&&!$('oRank').hidden)cst.push([T('이번 주'),wk.rank+T('위')]);
-  shareCard({tag:I.mp?T('대전'):T('싱글 기록 도전'),title:(LANG==='en'?'Grew to '+fmt(I.cm)+'!':fmt(I.cm)+T('까지 컸어요!')),sub:I.name,stats:cst,fish:cL},t,$('oShareT'),T('기록 자랑하기'))});
+  var cL=null;try{cL=byId(sel)}catch(x){}var cst=[[T('크기'),fmt(I.cm)]];if(!I.mp)cst.push([T('점수'),nf(I.sc)]);
+  if(I.mp&&I.rank){t+=T(' · 대전 ')+I.rank+T('위')+(I.rank===1?' 👑':'');cst.push([T('순위'),I.rank+T('위 / ')+I.n]);if(I.eat)cst.push([T('먹은 물고기'),nf(I.eat)]);else if(I.t)cst.push([T('버틴 시간'),fmtTime(I.t)])}
+  if(wk&&wk.rank&&!$('oRank').hidden&&cst.length<3)cst.push([T('이번 주'),wk.rank+T('위')]);
+  shareCard({tag:I.mp?(I.rank===1?'👑 '+T('대전 1위'):T('대전')):T('싱글 기록 도전'),title:(LANG==='en'?'Grew to '+fmt(I.cm)+'!':fmt(I.cm)+T('까지 컸어요!')),sub:I.name,stats:cst,fish:cL},t,$('oShareT'),T('기록 자랑하기'))});
 $('svShare').addEventListener('click',function(){var I=SV.shareI;if(!I)return;var L=null;try{L=byId(sel)}catch(x){}
   var t=T('아가미 파이터 「심해 생존」')+' · '+I.tag+' · '+(I.br?T('보스 ')+I.br+T('마리'):fmtTime(I.t)+(I.win?T(' 버티고 승리!'):T(' 버텼어요')))+' · '+T('처치 ')+nf(I.k);
   shareCard({tag:T('심해 생존')+' · '+I.tag,title:I.title,sub:L?L.name+' · Lv '+I.lv:'Lv '+I.lv,stats:[[T('버틴 시간'),fmtTime(I.t)],[T('처치'),nf(I.k)],[T('레벨'),'Lv '+I.lv]],fish:L},t,$('svShareT'),T('자랑하기'))});
@@ -12621,10 +12624,13 @@ abyTr(TRT,{"받을 보상이 있으면 플레이 탭 · 싱글 버튼에 빨간 
 abyTr(TRT,{"작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요": "Polished shop names, fish picker, aquarium title and pop-up text on small screens", "대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요": "Fairer, smoother battles: slow phones move at the same speed, opponents no longer stutter or teleport on a shaky connection, and giant rivals are drawn smaller so they don't cover your screen, with a red dashed ring showing their real bite range"});abyTr(TRJ,{"작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요": "小さい画面でショップ名・魚えらび・水族館タイトル・お知らせの文字が切れないように整えました", "대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요": "対戦がより公平でなめらかに：遅いスマホでも同じ速さで動き、通信が不安定でも相手がカクついたり瞬間移動したりしません。自分よりずっと大きい相手は画面をおおわないよう小さめに表示し、本当に食べられる口の範囲は赤い点線で表示します"});abyTr(TRT,{"진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요":"Tidier pearl prices: rounded to hundreds, thousands and ten-thousands, plus a bigger welcome pearl gift"});abyTr(TRJ,{"진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요":"真珠の値段を切りのいい数字に整えました（百・千・万単位）。初めてのプレゼント真珠も増量"});abyTr(TRT,{"난이도를 조금 올렸어요: 싱글은 네 번째 판부터 큰 물고기가 조금 더, 심해 탐험 6층부터 목표 8% 더, 심해 생존 3장부터 적이 조금 더 자주·단단하게":"Slightly harder: a few more big fish in Solo from your 4th run, Expedition goals +8% from floor 6, Survival enemies a bit more frequent and tougher from chapter 3"});abyTr(TRJ,{"난이도를 조금 올렸어요: 싱글은 네 번째 판부터 큰 물고기가 조금 더, 심해 탐험 6층부터 목표 8% 더, 심해 생존 3장부터 적이 조금 더 자주·단단하게":"難易度を少し上げました：ソロは4回目のプレイから大きな魚が少し多く、深海探検は6階から目標が8%増、深海サバイバルは3章から敵が少し多く・硬く"});abyTr(TRT,{"알림을 켜 두면 다음 날 출석 보상도 알려 줘요 (처음 두 판 뒤에 한 번 물어봐요)":"With notifications on, we also remind you of the next day's check-in reward (asked once after your first two runs)"});
 abyTr(TRJ,{"알림을 켜 두면 다음 날 출석 보상도 알려 줘요 (처음 두 판 뒤에 한 번 물어봐요)":"通知をオンにすると翌日の出席報酬もお知らせします（最初の2回のプレイ後に一度だけ聞きます）"});
 /* 1.1.14: 속도 · 소리 고침 소식 번역 */
+abyTr(TRT,{"겨울 바다 시즌(11월 22일 ~ 1월 31일): 바다눈이 내리고 반짝이 전구가 켜져요 · 산타 모자 · 루돌프 뿔 등 겨울 꾸미기 7가지 · 산호 트리 소품 · 5일 겨울 출석 선물":"Winter Sea season (Nov 22 – Jan 31): marine snow and twinkle lights · 7 winter accessories including a Santa hat and reindeer antlers · Coral Christmas Tree prop · 5-day winter check-in gifts"});
+abyTr(TRJ,{"겨울 바다 시즌(11월 22일 ~ 1월 31일): 바다눈이 내리고 반짝이 전구가 켜져요 · 산타 모자 · 루돌프 뿔 등 겨울 꾸미기 7가지 · 산호 트리 소품 · 5일 겨울 출석 선물":"冬の海シーズン（11月22日〜1月31日）：マリンスノーときらきら電球 · サンタ帽やトナカイのツノなど冬の飾り7種 · サンゴのツリー · 5日間の冬ログインプレゼント"});
 abyTr(TRT,{"이제 커져도 느려지지 않아요! 🐟":"No more slowing down as you grow! 🐟","커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요":"No more slowing down as you grow: fully grown fish swim at the same speed as when they started and turn just as quickly","화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요":"Eruptions now come from an undersea volcano below: the lane where embers will shoot up glows red first, so move aside · embers are slower and fewer","다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요":"Fixed music and sound effects going silent after switching to another app, and Solo music stopping when the Halloween theme is turned off"});
 abyTr(TRJ,{"이제 커져도 느려지지 않아요! 🐟":"もう大きくなっても遅くなりません！🐟","커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요":"大きくなっても遅くなりません: 育ちきった大きな魚も最初と同じ速さで泳ぎ、向きもすばやく変えられます","화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요":"噴火は海の底の海底火山から噴き上がります: 火の粉が上がる帯が先に赤く光るので横によけて · 火の粉は遅く少なくなりました","다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요":"ほかのアプリから戻るとBGM・効果音が鳴らなくなる問題と、ハロウィンデコをオフにしたソロでBGMが止まる問題を直しました"});
 NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)"),T("심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석"),T("화산 폭발: 싱글은 가끔 '대폭발 경보' 뒤 10초 동안 바다 곳곳에서, 심해 탐험 열수구 화산층은 바위가 붉게 꿈틀거리면 불똥이 튀어요 · 피하세요, 맞은 물고기는 작아져요"),T("심해 생존을 다 깨도 랭킹이 이어져요: 어려움 장 → 무한 8장 버틴 시간 순"),T("대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요"),T("받을 보상이 있으면 플레이 탭 · 싱글 버튼에 빨간 점, 심해 생존 보상을 달성하면 바로 알려 줘요"),T("알림을 켜 두면 다음 날 출석 보상도 알려 줘요 (처음 두 판 뒤에 한 번 물어봐요)"),T("앱을 오래 켜 두거나 다시 열 때 꺼지는 일, 긴 생존 판 막판 버벅임을 줄였어요"),T("작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요"),T("진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요"),T("난이도를 조금 올렸어요: 싱글은 네 번째 판부터 큰 물고기가 조금 더, 심해 탐험 6층부터 목표 8% 더, 심해 생존 3장부터 적이 조금 더 자주·단단하게")];NEWS_LEAD['1.1.13']=T("끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑");
-NEWS['1.1.14']=[T("커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요"),T("화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요"),T("다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요")];NEWS_LEAD['1.1.14']=T("이제 커져도 느려지지 않아요! 🐟");
+abyTr(TRT,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"Arena: stay #1 and tap 'Finish as #1' to lock in the win · the share card now shows your rank and fish eaten · computer fish have personalities (relentless hunters, cautious swimmers)"});abyTr(TRJ,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"対戦で1位をキープしたら「1位で終える」ですぐ1位記録 · 自慢カードに順位と食べた数も · AIの相手ごとに性格が違います（しつこいハンター · 用心深い魚）"});
+NEWS['1.1.14']=[T("커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요"),T("대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)"),T("겨울 바다 시즌(11월 22일 ~ 1월 31일): 바다눈이 내리고 반짝이 전구가 켜져요 · 산타 모자 · 루돌프 뿔 등 겨울 꾸미기 7가지 · 산호 트리 소품 · 5일 겨울 출석 선물"),T("화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요"),T("다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요")];NEWS_LEAD['1.1.14']=T("이제 커져도 느려지지 않아요! 🐟");
 /* ===== 1.1.13 대전: 상대 크기가 말이 안 되게 튀면 막고, 화면을 덮을 만큼 큰 상대가 나오면 자동으로 기록을 남긴다
    10/14 0시대 사용자 신고: 대전에서 상대 물고기가 화면을 꽉 채움(서버 기록·오류 기록엔 흔적 없음) → 다음엔 무엇이 왔는지 그대로 받아 보기 위함 ===== */
 var PEERCHK={},HUGEW=[];
@@ -13074,6 +13080,158 @@ var netCastP2P=netCast;netCast=function(ev,p){if(!P2P.on)return netCastP2P.apply
   for(var k in P2P.peers){var pr=P2P.peers[k];if(!pr.open)continue;var dc=pr.dcs[lab];try{if(dc&&dc.readyState==='open'&&dc.bufferedAmount<65536)dc.send(s)}catch(e){}}};
 var netStartP2P=netStart;netStart=function(){if(p2pOk())return p2pStart();return netStartP2P.apply(this,arguments)};
 var netStopP2P=netStop;netStop=function(){if(P2P.on)p2pStop();return netStopP2P.apply(this,arguments)};
+/* ===== 1.1.14 겨울 바다 시즌 (11/22 ~ 1/31, 할로윈이 끝나는 날 이어서) =====
+   진짜 바다에도 내리는 '바다눈(마린 스노)'처럼 하얀 알갱이가 천천히 내리고, 홈 위에 반짝이 전구 줄.
+   겨울 한정 꾸미기(모자 4 · 얼굴 1 · 꼬리 2 · 소품 2, 전부 우리 게임 그림으로 직접 그림) · 겨울 출석 선물 5일 · 설정에서 끄기 */
+function wnSeason(){var q='';try{q=location.search||''}catch(e){}if(/[?&]wn=1/.test(q))return true;if(/[?&]wn=0/.test(q))return false;
+  var d=new Date(),m=d.getMonth()+1,dd=d.getDate();return (m===11&&dd>=22)||m===12||m===1}
+function wnSid(){var d=new Date();return d.getMonth()>=10?d.getFullYear():d.getFullYear()-1}
+function wnOn(){return wnSeason()&&!save.wnOff}
+var WN=false;
+function wnApply(){WN=wnOn();try{document.body.classList.toggle('wn',WN)}catch(e){}try{wnBarPaint()}catch(e){}}
+abyTr(TRT,{'겨울 바다 분위기':'Winter Sea theme','1월 31일까지 바다에 눈송이가 내리고 반짝이 전구가 켜져요':'Until January 31, marine snow drifts through the sea and twinkle lights glow',
+  '산타 모자':'Santa Hat','루돌프 뿔 머리띠':'Reindeer Antlers','눈꽃 털모자':'Snowflake Beanie','트리 꼭대기 별':'Tree-Top Star','눈 결정 안경':'Snow Crystal Glasses','눈송이 꼬리':'Snowflake Trail','반짝이 전구 꼬리':'Twinkle Light Trail',
+  '산호 트리':'Coral Christmas Tree','선물 상자 더미':'Gift Box Pile','겨울 한정 아이템이 나왔어요!':'Winter items are here!','보러 가기':'Take a look',
+  '겨울 출석 선물':'Winter check-in gift','일째 · ':'-day · ','수족관 › 꾸미기 › 소품에 넣어 뒀어요':'Added to Aquarium › Decorate › Props','상점 › 꾸미기에서 씌워 보세요':'Try it on in Shop › Accessories','진주 +':'Pearls +','보석 +':'Gems +',
+  '겨울 바다가 찾아왔어요! ❄️':'The winter sea is here! ❄️','수족관에 「산호 트리」를 넣어 드렸어요':'We put a Coral Christmas Tree in your aquarium','내일 또 오면 겨울 선물이 이어져요':'Come back tomorrow for the next winter gift'});
+abyTr(TRJ,{'겨울 바다 분위기':'冬の海の演出','1월 31일까지 바다에 눈송이가 내리고 반짝이 전구가 켜져요':'1月31日まで海にマリンスノーが降り、きらきら電球が灯ります',
+  '산타 모자':'サンタ帽','루돌프 뿔 머리띠':'トナカイのツノ','눈꽃 털모자':'雪の結晶ニット帽','트리 꼭대기 별':'ツリーのてっぺんの星','눈 결정 안경':'雪の結晶メガネ','눈송이 꼬리':'雪の結晶の尾','반짝이 전구 꼬리':'きらきら電球の尾',
+  '산호 트리':'サンゴのツリー','선물 상자 더미':'プレゼントの山','겨울 한정 아이템이 나왔어요!':'冬限定アイテムが登場！','보러 가기':'見に行く',
+  '겨울 출석 선물':'冬のログインプレゼント','일째 · ':'日目 · ','수족관 › 꾸미기 › 소품에 넣어 뒀어요':'水族館 › 飾る › 小物に入れました','상점 › 꾸미기에서 씌워 보세요':'ショップ › 飾りで着けてみてね','진주 +':'真珠 +','보석 +':'ジェム +',
+  '겨울 바다가 찾아왔어요! ❄️':'冬の海がやってきた！❄️','수족관에 「산호 트리」를 넣어 드렸어요':'水族館に「サンゴのツリー」を置きました','내일 또 오면 겨울 선물이 이어져요':'明日も来ると冬のプレゼントが続きます'});
+/* --- 그림 도우미 --- */
+function wnFlake(c,x,y,r,col,lw){c.save();c.translate(x,y);c.strokeStyle=col;c.lineWidth=lw;c.lineCap='round';for(var i=0;i<6;i++){c.rotate(Math.PI/3);c.beginPath();c.moveTo(0,0);c.lineTo(0,-r);c.moveTo(0,-r*.55);c.lineTo(-r*.22,-r*.75);c.moveTo(0,-r*.55);c.lineTo(r*.22,-r*.75);c.stroke()}c.restore()}
+var WN_BULB=[['#FF5A5A','255,90,90'],['#FFD23F','255,215,80'],['#5EDB6A','110,220,140'],['#5AA9FF','110,180,255'],['#FF8AD6','255,140,220']];
+function wnBulb(c,x,y,r,i,tw){var q=WN_BULB[i%WN_BULB.length],on=.55+.45*Math.sin(t*3+i*1.7)*(tw==null?1:tw);
+  c.save();c.globalCompositeOperation='lighter';c.globalAlpha*=.55*on;c.drawImage(glow(q[1]),x-r*3,y-r*3,r*6,r*6);c.restore();
+  c.beginPath();c.ellipse(x,y+r*.15,r*.62,r*.85,0,0,Math.PI*2);c.fillStyle=q[0];c.fill();c.lineWidth=Math.max(1,r*.22);c.strokeStyle='#0B2C4A';c.stroke();
+  c.fillStyle='#5A6B7A';c.fillRect(x-r*.35,y-r*.85,r*.7,r*.4);c.globalAlpha*=.7;c.fillStyle='#FFFFFF';c.beginPath();c.ellipse(x-r*.2,y-r*.05,r*.16,r*.28,-.3,0,Math.PI*2);c.fill()}
+/* --- 꾸미기 --- */
+ACC_HEAD.wn_santa=function(c,U){var lw=LW(U);
+  c.beginPath();c.moveTo(-U*.44,-U*.12);c.bezierCurveTo(-U*.34,-U*.82,U*.22,-U*1.08,U*.66,-U*.74);c.quadraticCurveTo(U*.3,-U*.56,U*.44,-U*.12);c.closePath();fo(c,lg(c,-U*1.05,0,'#FF6A6A','#C8202E'),lw);
+  c.save();c.clip();c.globalAlpha=.25;c.fillStyle='#FFFFFF';c.beginPath();c.ellipse(-U*.1,-U*.55,U*.12,U*.32,-.5,0,Math.PI*2);c.fill();c.restore();
+  c.beginPath();c.ellipse(0,-U*.1,U*.58,U*.17,0,0,Math.PI*2);fo(c,lg(c,-U*.27,U*.07,'#FFFFFF','#DCEBF5'),lw*.85);
+  c.beginPath();c.arc(U*.68,-U*.74,U*.15,0,Math.PI*2);fo(c,'#FFFFFF',lw*.85)};
+ACC_HEAD.wn_antler=function(c,U){c.lineCap='round';c.lineJoin='round';
+  function ant(sx){var P=[[sx*.2,-.04],[sx*.3,-.46],[sx*.5,-.82]],B=[[[sx*.27,-.3],[sx*.52,-.4]],[[sx*.38,-.62],[sx*.24,-.9]],[[sx*.46,-.74],[sx*.7,-.84]]];
+    [['#0B2C4A',U*.21],['#B07A45',U*.12]].forEach(function(q){c.strokeStyle=q[0];c.lineWidth=q[1];c.beginPath();c.moveTo(P[0][0]*U,P[0][1]*U);c.quadraticCurveTo(P[1][0]*U,P[1][1]*U,P[2][0]*U,P[2][1]*U);
+      B.forEach(function(b){c.moveTo(b[0][0]*U,b[0][1]*U);c.lineTo(b[1][0]*U,b[1][1]*U)});c.stroke()})}
+  ant(-1);ant(1);c.beginPath();c.ellipse(0,-U*.03,U*.42,U*.1,0,Math.PI,Math.PI*2);c.lineWidth=U*.11;c.strokeStyle='#0B2C4A';c.stroke();c.lineWidth=U*.065;c.strokeStyle='#D8303A';c.stroke();
+  c.beginPath();c.arc(-U*.36,-U*.08,U*.08,0,Math.PI*2);c.arc(U*.36,-U*.08,U*.08,0,Math.PI*2);fo(c,'#3EAE5A',LW(U)*.7)};
+ACC_HEAD.wn_beanie=function(c,U){var lw=LW(U);
+  c.beginPath();c.moveTo(-U*.5,-U*.08);c.bezierCurveTo(-U*.52,-U*.8,U*.52,-U*.8,U*.5,-U*.08);c.closePath();fo(c,lg(c,-U*.72,0,'#6BB4FF','#2F6FD8'),lw);
+  c.save();c.clip();c.fillStyle='rgba(255,255,255,.9)';c.fillRect(-U*.6,-U*.44,U*1.2,U*.07);for(var i=-2;i<=2;i++)wnFlake(c,i*U*.2,-U*.3,U*.06,'#FFFFFF',Math.max(1,U*.025));c.restore();
+  c.beginPath();c.rect(-U*.55,-U*.18,U*1.1,U*.18);fo(c,'#EAF4FF',lw*.85);c.save();c.beginPath();c.rect(-U*.55,-U*.18,U*1.1,U*.18);c.clip();c.strokeStyle='rgba(47,111,216,.35)';c.lineWidth=Math.max(1,U*.03);for(var k=-6;k<=6;k++){c.beginPath();c.moveTo(k*U*.09,-U*.18);c.lineTo(k*U*.09,0);c.stroke()}c.restore();
+  c.beginPath();c.arc(0,-U*.68,U*.16,0,Math.PI*2);fo(c,'#FFFFFF',lw*.85)};
+ACC_HEAD.wn_star=function(c,U){var lw=LW(U),cy=-U*.74;c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.4+.15*Math.sin(t*3);c.drawImage(glow('255,220,120'),-U*.7,cy-U*.6,U*1.4,U*1.2);c.restore();
+  c.beginPath();c.moveTo(0,-U*.06);c.lineTo(0,cy+U*.3);c.lineWidth=U*.12;c.strokeStyle='#0B2C4A';c.stroke();c.lineWidth=U*.06;c.strokeStyle='#C9A24A';c.stroke();
+  c.beginPath();for(var i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,r=i%2?U*.17:U*.4;c.lineTo(Math.cos(a)*r,cy+Math.sin(a)*r)}c.closePath();fo(c,lg(c,cy-U*.4,cy+U*.35,'#FFF6B0','#FFB21F'),lw);
+  c.globalAlpha=.55;c.fillStyle='#FFFFFF';c.beginPath();c.ellipse(-U*.08,cy-U*.1,U*.07,U*.13,-.4,0,Math.PI*2);c.fill();c.globalAlpha=1};
+ACC_FACE.wn_glass=function(c,E){var lw=Math.max(1.4,E*.3);c.beginPath();c.moveTo(-E*1.2,-E*.3);c.lineTo(-E*3,-E*.65);ol(c,lw);
+  c.beginPath();c.arc(0,0,E*1.3,0,Math.PI*2);c.fillStyle='rgba(190,235,255,.32)';c.fill();c.lineWidth=lw*1.9;c.strokeStyle='#0B2C4A';c.stroke();c.lineWidth=lw;c.strokeStyle='#E8F7FF';c.stroke();
+  wnFlake(c,E*.95,-E*.95,E*.55,'#0B2C4A',Math.max(1.6,E*.26));wnFlake(c,E*.95,-E*.95,E*.55,'#FFFFFF',Math.max(1,E*.14))};
+FX_SHAPE.flake=function(c,x,y,r,col,n){wnFlake(c,x,y,r*1.35,col,Math.max(1,r*.24))};
+FX_SHAPE.bulb=function(c,x,y,r,col,n){wnBulb(c,x,y,r*.9,(n|0),1)};
+FX_TRAIL.wn_snow=['flake',['#FFFFFF','#E3F5FF','#BFE6FF']];FX_TRAIL.wn_lights=['bulb',['#FFFFFF']];
+ACC.push(
+ {id:'wn_santa',slot:'head',name:T('산타 모자'),c:{cur:'pearls',price:1200},wn:1},
+ {id:'wn_antler',slot:'head',name:T('루돌프 뿔 머리띠'),c:{cur:'pearls',price:900},wn:1},
+ {id:'wn_beanie',slot:'head',name:T('눈꽃 털모자'),c:{cur:'pearls',price:1100},wn:1},
+ {id:'wn_star',slot:'head',name:T('트리 꼭대기 별'),c:{cur:'gems',price:18},wn:1},
+ {id:'wn_glass',slot:'face',name:T('눈 결정 안경'),c:{cur:'pearls',price:850},wn:1},
+ {id:'wn_snow',slot:'fx',name:T('눈송이 꼬리'),c:{cur:'pearls',price:1100},wn:1},
+ {id:'wn_lights',slot:'fx',name:T('반짝이 전구 꼬리'),c:{cur:'gems',price:20},wn:1});
+/* --- 수족관 소품 --- */
+DECO_DRAW.wn_tree=function(w,h,sd){var by=h*.46,i;decoShadow(by,w*.42,w*.08);var c=ctx,lw=Math.max(1.4,w*.03);
+  c.beginPath();c.rect(-w*.07,by-h*.16,w*.14,h*.16);fo(c,lg(c,by-h*.16,by,'#E77A6A','#B4473C'),lw);
+  var T3=[[by-h*.12,w*.5,h*.34],[by-h*.36,w*.4,h*.32],[by-h*.58,w*.29,h*.3]];
+  T3.forEach(function(q,k){c.beginPath();c.moveTo(-q[1],q[0]);c.quadraticCurveTo(-q[1]*.3,q[0]-q[2]*.45,0,q[0]-q[2]);c.quadraticCurveTo(q[1]*.3,q[0]-q[2]*.45,q[1],q[0]);
+    c.quadraticCurveTo(0,q[0]+h*.05,-q[1],q[0]);c.closePath();fo(c,lg(c,q[0]-q[2],q[0],k%2?'#3FCF9A':'#46D6A0','#1E8F6E'),lw)});
+  c.lineWidth=Math.max(1,w*.016);c.strokeStyle='rgba(255,236,170,.9)';T3.forEach(function(q){c.beginPath();c.moveTo(-q[1]*.8,q[0]-q[2]*.18);c.quadraticCurveTo(0,q[0]-q[2]*.02,q[1]*.8,q[0]-q[2]*.3);c.stroke()});
+  var B=[[-.32,-.2],[.22,-.24],[-.1,-.12],[.34,-.06],[-.24,-.42],[.16,-.46],[-.04,-.36],[.1,-.62],[-.12,-.66]];
+  B.forEach(function(p,j){wnBulb(c,p[0]*w,by+p[1]*h,w*.035,j+(sd*7|0))});
+  var sy=by-h*.88;c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.5;c.drawImage(glow('255,225,130'),-w*.22,sy-w*.22,w*.44,w*.44);c.restore();
+  c.beginPath();for(i=0;i<10;i++){var a=-Math.PI/2+i*Math.PI/5,r=i%2?w*.045:w*.1;c.lineTo(Math.cos(a)*r,sy+Math.sin(a)*r)}c.closePath();fo(c,lg(c,sy-w*.1,sy+w*.1,'#FFF6B0','#FFB21F'),lw*.9)};
+DECO_DRAW.wn_gifts=function(w,h,sd){var by=h*.46,c=ctx,lw=Math.max(1.4,w*.03);decoShadow(by,w*.46,w*.07);
+  var G=[[-.22,.44,.36,'#E5384B','#FFD23F'],[.2,.4,.3,'#3A7FE0','#FFFFFF'],[-.02,.3,.26,'#3EAE5A','#FF5A5A']];
+  G.forEach(function(g,k){var bw=w*g[1],bh=h*g[2],x=w*g[0],y=k===2?by-h*.42-bh*.0:by-bh;if(k===2)y=by-h*.36-bh;
+    c.beginPath();c.rect(x-bw/2,y,bw,bh);fo(c,g[3],lw);c.save();c.globalAlpha=.18;c.fillStyle='#FFFFFF';c.fillRect(x-bw/2,y,bw*.3,bh);c.restore();
+    c.fillStyle=g[4];c.fillRect(x-bw*.07,y,bw*.14,bh);c.fillRect(x-bw/2,y+bh*.38,bw,bh*.14);c.beginPath();c.rect(x-bw/2,y,bw,bh);ol(c,lw);
+    c.beginPath();c.ellipse(x-bw*.13,y-bw*.06,bw*.15,bw*.09,-.5,0,Math.PI*2);c.ellipse(x+bw*.13,y-bw*.06,bw*.15,bw*.09,.5,0,Math.PI*2);fo(c,g[4],lw*.8)})};
+DECOR.push(
+ {id:'wn_tree',name:T('산호 트리'),w:.26,ar:1.3,draw:'wn_tree',c:{cur:'pearls',price:1200},wn:1},
+ {id:'wn_gifts',name:T('선물 상자 더미'),w:.25,ar:.9,draw:'wn_gifts',c:{cur:'pearls',price:900},wn:1});
+/* 목록: 겨울 동안엔 겨울 것 먼저, 기간 밖엔 안 가진 겨울 것 숨김 */
+var hwListWN=hwList;hwList=function(arr,own){var r=hwListWN(arr,own);if(wnSeason())return r.filter(function(o){return o.wn}).concat(r.filter(function(o){return !o.wn}));return r.filter(function(o){return !o.wn||own(o)})};
+/* --- 홈 · 플레이 화면: 바다눈 + 전구 줄 --- */
+function wnSnow(c,n,spd,big,par){var sm=Math.min(cw,ch),i;for(i=0;i<n;i++){var a=h2(i,71,1),b=h2(i,71,2),z=.4+.6*h2(i,71,3),r=(par?(.45+.9*z):(.8+1.8*z))*big*(sm/400);
+  var px=par?(cam.x*zoom*.15*z):0,py=par?(cam.y*zoom*.15*z):0,sw=Math.sin(t*.6+i*1.3)*(par?6:12);
+  var x=((a*cw*1.2+sw-px)%(cw*1.2)+cw*1.2)%(cw*1.2)-cw*.1,y=((b*ch*1.2+t*spd*z*sm*.04-py)%(ch*1.2)+ch*1.2)%(ch*1.2)-ch*.1;
+  if(par){c.globalAlpha=.10+.22*z;c.fillStyle='#EAF6FF';c.beginPath();c.ellipse(x,y,r*1.6,r,Math.sin(t+i)*.6,0,Math.PI*2);c.fill()} /* 플레이: 먹이(진주 알갱이)와 헷갈리지 않게 작고 흐린 '바다눈' */
+  else{c.globalAlpha=(.25+.45*z);c.fillStyle='#FFFFFF';c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();if(z>.82)wnFlake(c,x,y,r*2.6,'rgba(255,255,255,.8)',Math.max(1,r*.38))}}c.globalAlpha=1}
+var WN_SAFE=null;function wnSafeTop(){if(WN_SAFE==null){try{var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;height:env(safe-area-inset-top,0px);width:1px;visibility:hidden';document.body.appendChild(d);WN_SAFE=d.getBoundingClientRect().height||0;d.remove()}catch(e){WN_SAFE=0}}return WN_SAFE}
+var WN_GY={w:0,y:0,t:0};function wnGarY(){var now=performance.now();if(WN_GY.w===cw&&now-WN_GY.t<4000)return WN_GY.y;var y=wnSafeTop()+8;try{['misBtn','setBtn','recBtn'].forEach(function(id){var e=$(id);if(e&&e.offsetParent){var r=e.getBoundingClientRect(),lb=e.parentNode&&e.parentNode.getBoundingClientRect?e.parentNode.getBoundingClientRect():r;y=Math.max(y,r.bottom,lb.bottom)}})}catch(e){}WN_GY={w:cw,y:y+6,t:now};return y+6}
+function wnGarland(c){var sm=Math.min(cw,ch),n=Math.max(6,Math.round(cw/64)),y0=wnGarY(),sag=sm*.045,br=sm*.023,i; /* 위쪽 버튼 줄 바로 아래에 걸어서 전구가 가리지 않게 */
+  c.lineWidth=Math.max(2,sm*.006);c.strokeStyle='rgba(16,44,64,.9)';c.beginPath();c.moveTo(0,y0);for(i=1;i<=n;i++)c.quadraticCurveTo(cw*(i-.5)/n,y0+sag*2,cw*i/n,y0);c.stroke();
+  for(i=0;i<n;i++){var bx=cw*(i+.5)/n,byy=y0+sag+br*.6;wnBulb(c,bx,byy,br,i)}}
+var drawWN=draw;draw=function(){drawWN();if(!WN||HW)return;try{var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);
+  if(state==='home'||state==='menu'){if(page!=='tank'){wnSnow(c,reduce?14:34,reduce?0:1,1.4,false);wnGarland(c)}else wnSnow(c,reduce?10:22,reduce?0:.8,1.1,false)}
+  else if(state==='play'||state==='pause')wnSnow(c,reduce?14:46,reduce?0:.6,1,true);
+  c.restore()}catch(e){}};
+/* --- 홈 위 겨울 띠(한 번 누르면 이번 겨울엔 다시 안 보임) --- */
+(function(){var hb=document.querySelector('.home-bottom');if(!hb)return;var b=document.createElement('button');b.type='button';b.className='updbar hwbar wnbar';b.id='wnBar';b.hidden=true;
+  b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><g stroke="#0B2C4A" stroke-width="3.2" stroke-linecap="round"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7"/></g><g stroke="#E8F7FF" stroke-width="1.7" stroke-linecap="round"><path d="M12 2v20M3.3 7l17.4 10M3.3 17L20.7 7M9.5 4.5L12 7l2.5-2.5M9.5 19.5L12 17l2.5 2.5"/></g></svg><span></span><b></b>';
+  b.querySelector('span').textContent=T('겨울 한정 아이템이 나왔어요!');b.querySelector('b').textContent=T('보러 가기');
+  b.addEventListener('click',function(){save.wnSeen=wnSid();persist();wnBarPaint();try{accSlot='head';showTab('sea');setTimeout(function(){var e=$('goodsAcc');if(e&&e.scrollIntoView)e.scrollIntoView({block:'start',behavior:'smooth'})},250)}catch(e){}});
+  var u=$('updBar');hb.insertBefore(b,u||hb.firstChild)})();
+function wnBarPaint(){var b=$('wnBar');if(!b)return;b.hidden=!(WN&&!HW&&save.wnSeen!==wnSid())}
+/* --- 겨울 출석 선물 5일: 하루에 하나씩(빠진 날은 건너뛰지 않고 이어서) --- */
+var WN_GIFTS=[{d:'wn_tree'},{p:300},{a:'wn_santa'},{g:3},{a:'wn_snow'}];
+function wnAttCheck(tries){try{if(!WN||HW)return;var A=save.wnAtt;if(!A||A.s!==wnSid())A=save.wnAtt={s:wnSid(),n:0,last:''};if(A.n>=WN_GIFTS.length||A.last===today())return;
+  if((save.runs||0)<1||page!=='home'||state!=='home'||document.querySelector('.overlay:not([hidden])')||save.newsSeen!==APP_VER){if((tries||0)<20)setTimeout(function(){wnAttCheck((tries||0)+1)},1500);return}
+  var R=WN_GIFTS[A.n],sub='';A.n++;A.last=today();
+  if(R.d){var D=decoById(R.d),dd=DS(),W=TWW();if(D&&dd.placed.length<DECO_MAX){var nx=decoSpot(D,true);dd.placed.push({k:R.d,x:nx,y:clamp((floorAt(nx*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95),s:1,f:0});sub=T('수족관에 「산호 트리」를 넣어 드렸어요')}else{dd.inv[R.d]=(dd.inv[R.d]||0)+1;sub=T('수족관 › 꾸미기 › 소품에 넣어 뒀어요')}try{refreshTank()}catch(e){}}
+  if(R.p){save.pearls+=R.p;sub=T('진주 +')+R.p}
+  if(R.g){save.gems+=R.g;sub=T('보석 +')+R.g}
+  if(R.a){var S=AS();if(S.own.indexOf(R.a)<0)S.own.push(R.a);var Ac=accById(R.a);sub=(Ac?Ac.name:'')+' · '+T('상점 › 꾸미기에서 씌워 보세요')}
+  persist();crumb('wnAtt:'+A.n);buzz([20,30,20]);
+  banner(A.n===1?T('겨울 바다가 찾아왔어요! ❄️'):T('겨울 출석 선물')+' '+(LANG==='en'?'Day '+A.n:A.n+T('일째 · ').replace(' · ','')),sub+(A.n<WN_GIFTS.length?' · '+T('내일 또 오면 겨울 선물이 이어져요'):''));
+  try{refreshHome(true)}catch(e){}}catch(e){}}
+var showTabWN=showTab;showTab=function(p){var r=showTabWN.apply(this,arguments);if(p==='home'){try{wnBarPaint()}catch(e){}setTimeout(function(){wnAttCheck(0)},2600)}return r};
+setTimeout(function(){wnApply();setInterval(wnApply,6e4);setTimeout(function(){wnAttCheck(0)},3200)},300);
+/* ===== 1.1.14 대전 '1위로 마치기'(10/20 대전 시뮬: 봇이 1등을 찍은 판 23판 중 1등으로 끝난 건 1판 — 1등을 지키며 마치는 방법이 안 보였음) =====
+   판 시작 60초 뒤부터(처음 크기의 3배 이상), 1등을 5초 지키면 금색 버튼 — 처음엔 시작 크기 차이로 1등이 금방 바뀌어서(시뮬: 1등 첫 도달 절반이 25초 안) → 누르면 그 자리에서 1위로 끝(대전 기록 · 트로피 · 1위 횟수 그대로). 친구 바다는 기록이 없어서 안 보임 */
+abyTr(TRT,{'대전 1위':'Arena #1',' · 대전 ':' · Arena #','1위로 마치기':'Finish as #1','지금 1등이에요!':"You're #1!",'1등일 때 마치면 1위로 기록돼요':'Finish while you are #1 to record a win'});
+abyTr(TRJ,{'대전 1위':'対戦1位',' · 대전 ':' · 対戦','1위로 마치기':'1位で終える','지금 1등이에요!':'いま1位です！','1등일 때 마치면 1위로 기록돼요':'1位のうちに終えると1位として記録されます'});
+(function(){var st=document.createElement('style');st.textContent='#mpWin{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 178px);transform:translateX(-50%);z-index:30;border:0;border-radius:999px;padding:9px 18px 9px 12px;font:inherit;font-family:var(--disp,inherit);font-size:17px;color:#3A2400;background:linear-gradient(180deg,#FFE98F,#FFB21F);box-shadow:0 4px 0 #B3700A,0 8px 18px rgba(0,0,0,.28);display:flex;align-items:center;gap:7px;white-space:nowrap;animation:mpWinP 1.2s ease-in-out infinite;cursor:pointer}#mpWin[hidden]{display:none}#mpWin svg{width:24px;height:24px;flex:none}@keyframes mpWinP{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}@media (prefers-reduced-motion:reduce){#mpWin{animation:none}}@media (orientation:landscape) and (max-height:560px){#mpWin{bottom:calc(env(safe-area-inset-bottom,0px) + 22px)}}';document.head.appendChild(st);
+  var b=document.createElement('button');b.type='button';b.id='mpWin';b.hidden=true;
+  b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z" fill="#FFF4C2" stroke="#0B2C4A" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="14.5" r="1.6" fill="#E5384B" stroke="#0B2C4A" stroke-width="1"/></svg><span></span>';
+  b.querySelector('span').textContent=T('1위로 마치기');
+  b.addEventListener('click',function(){try{if(mode==='multi'&&state==='play'&&!NET.room&&mpRank()===1){crumb('mpWin');b.hidden=true;buzz([30,40,60]);MPW.fin=1;endRun(false,true);try{MUS.win()}catch(e){}}}catch(e){}});
+  document.body.appendChild(b)})();
+var MPW={t1:0,fin:0};
+/* 대전 기록 칸이 빠진 저장(복원 · 옛 저장)이면 끝날 때 '트로피 NaN개'가 되던 것 → 판 시작 때 빈 칸을 0으로 */
+function mpFix(){try{if(!save.mp||typeof save.mp!=='object')save.mp={};['games','wins','top3','trophy','best'].forEach(function(k){if(!(save.mp[k]>=0)||!isFinite(save.mp[k]))save.mp[k]=0})}catch(e){}}
+mpFix();var startRunMF=startRun;startRun=function(){mpFix();return startRunMF.apply(this,arguments)};
+/* 1위로 마치기는 '그만두기'가 아니라 이긴 것 → 결과 화면의 기록 자랑하기 · 별점 요청이 그대로 나오게. 자랑 카드에 순위 · 시간 · 먹은 수를 같이 실음 */
+var overShare0=overShare;overShare=function(mp,L,cm,sc,quit){var fin=MPW.fin;MPW.fin=0;overShare0(mp,L,cm,sc,quit&&!fin);
+  try{if(shareInfo){shareInfo.rank=(mp&&!NET.room)?mpRank():0;shareInfo.n=bots.length+1;shareInfo.t=P.time||0;shareInfo.eat=P.eaten||0;shareInfo.fin=fin}}catch(e){}
+  if(fin)try{askReview('arena1')}catch(e){}};
+function mpWinTick(){var b=$('mpWin');if(!b)return;var ok=false;try{ok=mode==='multi'&&state==='play'&&!NET.room&&P&&!P.dead&&(P.time||0)>=60&&P.s>=(P.startS||P.s)*3&&bots.length>=3&&mpRank()===1}catch(e){}
+  if(ok){if(!MPW.t1)MPW.t1=performance.now();if(performance.now()-MPW.t1>=5000&&b.hidden){b.hidden=false;buzz(18);crumb('mpWinShow');if(!save.mpWinTip){save.mpWinTip=1;persist();banner(T('지금 1등이에요!'),T('1등일 때 마치면 1위로 기록돼요'))}}}
+  else{MPW.t1=0;if(!b.hidden)b.hidden=true}}
+setInterval(mpWinTick,250);
+/* ===== 1.1.14 대전 AI 성격: 다 똑같이 움직여서 '봇 티'가 나던 것 → 세 가지 성격
+   사냥꾼(hunt): 더 멀리서 알아보고 끈질기게 쫓아옴 · 조심이(shy): 작을 땐 일찍 · 빨리 도망, 클 땐 덜 쫓음 · 보통(calm)
+   1등 견제: 내가 1등이고 상대가 나보다 조금 작을 때(0.7~0.95배) 사냥꾼은 먹이를 더 빨리 모아 따라붙는다(크기 차를 좁혀 긴장감). 밸런스는 mpsim으로 기존과 비교 */
+function botPers(){var r=Math.random();return r<.3?'hunt':r<.6?'shy':'calm'}
+var spawnBotPS=spawnBot;spawnBot=function(b){if(b&&!b.peer&&!b.boss&&!b.pers)b.pers=botPers();spawnBotPS.apply(this,arguments);try{var e=b.ent;if(e&&b.pers==='hunt')e.chase=rnd(.86,.95);else if(e&&b.pers==='shy')e.chase=rnd(.72,.84)}catch(x){}};
+var botDownPS=botDown;botDown=function(b,byMe){botDownPS.apply(this,arguments);try{if(b&&!b.peer)b.pers=botPers()}catch(x){}}; /* 새 이름으로 들어오면 성격도 새로 */
+var BPS={t:0};
+function botPersTick(dt){if(mode!=='multi'||state!=='play'||NET.room||!P||P.dead)return;BPS.t+=dt;if(BPS.t<1)return;BPS.t=0;
+  var lead=mpRank()===1;for(var i=0;i<bots.length;i++){var b=bots[i],e=b.ent;if(!e||b.peer||b.pers!=='hunt')continue;var q=e.s/P.s;
+    if(lead&&q>=.7&&q<.95&&(P.time||0)>40){e.s*=1.006;b.size=e.s}}} /* 1초에 0.6% — 30초면 약 1.2배 */
+var updatePS=update;update=function(dt){var r=updatePS.apply(this,arguments);try{botPersTick(dt)}catch(e){}return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

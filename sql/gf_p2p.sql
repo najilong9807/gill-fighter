@@ -75,6 +75,12 @@ begin
         and exists(select 1 from gf_p2p_mem m where m.room = v_room and m.pid = o->>'to');
   end if;
 
+  -- 새로 들어올 때(p_after < 0): 예전 판에 나한테 온 요청은 건너뛰도록 지금까지의 마지막 번호만 알려 줌
+  if coalesce(p_after,0) < 0 then
+    return jsonb_build_object('room', v_room, 'top', (select coalesce(max(id),0) from gf_p2p_msg where to_pid = p_me),
+      'mem', coalesce((select jsonb_agg(pid) from gf_p2p_mem where room = v_room and pid <> p_me and seen > now() - interval '12 seconds'), '[]'::jsonb), 'msg', '[]'::jsonb);
+  end if;
+
   select jsonb_build_object(
     'room', v_room,
     'mem', coalesce((select jsonb_agg(pid) from gf_p2p_mem where room = v_room and pid <> p_me and seen > now() - interval '12 seconds'), '[]'::jsonb),

@@ -13029,33 +13029,37 @@ function netChanShow(){try{var n=(NET.humans|0),ch=LANG==='ko'?NET.shard+T('번 
 /* 1.1.14 P2P 대전(10/20 종한 '유료로 안 하는 방법'): 서버(DB 함수 gf_p2p)는 '누가 같은 채널인지 + 연결 요청'만 소개하고,
    대전 중 위치(st) · 물기(bite) · 죽음(ded)은 폰끼리 직접(WebRTC) 주고받는다 → 실시간 서버 메시지 · 동시 연결 한도를 안 씀(무료 DB 요청은 횟수 제한 없음).
    원격 설정 gf_cfg 의 p2p=1 일 때만 켜짐(배포 전엔 지금 방식 그대로). 직접 연결이 안 되는 상대는 안 보이고 컴퓨터 물고기가 채움 */
-var P2P={on:false,room:'',me:'',peers:{},after:0,out:[],t:0,gen:0,t0:0,fail:0,dead:{}};
+var P2P={on:false,room:'',me:'',peers:{},after:0,out:[],t:0,gen:0,t0:0,fail:0,dead:{},tries:{}};
+function p2pDead(k){var n=P2P.tries[k]=(P2P.tries[k]||0)+1;P2P.dead[k]=performance.now()+Math.min(600000,15000*Math.pow(4,n-1))} /* 안 붙는 상대는 15초 · 1분 · 4분 · 최대 10분 뒤 다시 */
 var P2P_ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'}];
 function p2pOk(){return typeof RTCPeerConnection!=='undefined'&&!!(NET.cfg&&NET.cfg.p2p===1)}
 function p2pHumans(){var n=0;for(var k in P2P.peers)if(P2P.peers[k].open)n++;NET.humans=n}
 function p2pClose(k,quiet){var pr=P2P.peers[k];if(!pr)return;delete P2P.peers[k];try{pr.pc.close()}catch(e){}if(!quiet){delete NET.roster[k];try{netDrop(k)}catch(e){}p2pHumans()}}
 function p2pStop(silent){var was=P2P.on,room=P2P.room,me=P2P.me;P2P.gen++;P2P.on=false;clearTimeout(P2P.t);for(var k in P2P.peers)p2pClose(k,true);P2P.peers={};NET.humans=0;
   if(was&&!silent&&me)try{lbReq('rpc/gf_p2p',{p_room:room||null,p_me:me,p_leave:true}).catch(function(){})}catch(e){}}
-function p2pStart(){p2pStop(true);P2P.gen++;P2P.on=true;P2P.room=NET.room?'f-'+NET.room:'';P2P.me=netId();P2P.peers={};P2P.after=0;P2P.out=[];P2P.t0=performance.now();P2P.fail=0;
+function p2pWatch(){if(!P2P.on)return;var now=performance.now();for(var k in P2P.peers){var pr=P2P.peers[k];if(pr.open&&now-(pr.rx||0)>6000){crumb('p2p:quiet');p2pClose(k)}}} /* 6초 동안 아무것도 안 오면(앱을 갑자기 끈 사람) 연결 정리 */
+setInterval(p2pWatch,2000);
+function p2pStart(){p2pStop(true);P2P.gen++;P2P.on=true;P2P.room=NET.room?'f-'+NET.room:'';P2P.me=netId();P2P.peers={};P2P.after=-1;P2P.out=[];P2P.t0=performance.now();P2P.fail=0;
   NET.live=true;NET.topic='p2p';NET.roster={};NET.humans=0;NET.ws=null;crumb('p2p:start');p2pPoll()}
-function p2pNext(){var pend=P2P.out.length>0,k;for(k in P2P.peers)if(!P2P.peers[k].open)pend=true;
-  var iv=(pend||performance.now()-P2P.t0<10000)?800:((NET.cfg&&+NET.cfg.p2pIv)||8000); /* 다 연결되면 8초마다(무료 전송량 아끼기) */P2P.t=setTimeout(p2pPoll,iv)}
+function p2pNext(){var wait=false,k;for(k in P2P.peers)if(!P2P.peers[k].open)wait=true;
+  var iv=(P2P.out.length>0||performance.now()-P2P.t0<10000)?800:wait?2000:((NET.cfg&&+NET.cfg.p2pIv)||8000); /* 다 연결되면 8초마다(무료 전송량 아끼기) */P2P.t=setTimeout(p2pPoll,iv)}
 function p2pPoll(){if(!P2P.on)return;var g=P2P.gen,out=P2P.out.splice(0,20);
   lbReq('rpc/gf_p2p',{p_room:P2P.room||null,p_me:P2P.me,p_out:out,p_after:P2P.after,p_per:NET.maxPer}).then(function(r){if(g!==P2P.gen||!P2P.on)return;
     if(!r||r.err){P2P.fail++;if(P2P.fail>4){crumb('p2p:down');p2pStop(true);NET.live=false;return}p2pNext();return}P2P.fail=0;
+    if(r.top!=null)P2P.after=Math.max(+r.top||0,P2P.after); /* 예전 판 요청 건너뛰기 */
     if(r.room&&!P2P.room){P2P.room=r.room;var m=/(\d+)$/.exec(r.room);if(m)NET.shard=+m[1];setTimeout(function(){if(P2P.on&&mode==='multi'&&state==='play')try{netChanShow()}catch(e){}},2500)}
     (r.msg||[]).forEach(function(m){P2P.after=Math.max(P2P.after,+m.id||0);p2pSig(m.f,m.b)});
     var now=performance.now(),set={};(r.mem||[]).forEach(function(k){set[k]=1;if(!P2P.peers[k]&&P2P.me<k&&!(P2P.dead[k]>now))p2pOffer(k)});
     for(var k in P2P.peers){var pr=P2P.peers[k];if(!set[k]&&!pr.open&&now-pr.t0>10000)p2pClose(k)}
     p2pNext()}).catch(function(){if(g!==P2P.gen)return;P2P.fail++;if(P2P.fail>4){crumb('p2p:down');p2pStop(true);NET.live=false;return}p2pNext()})}
 function p2pPc(k){var pc=new RTCPeerConnection({iceServers:P2P_ICE}),pr={pc:pc,open:false,t0:performance.now(),dcs:{}};P2P.peers[k]=pr;
-  pc.onconnectionstatechange=function(){var st=pc.connectionState;if((st==='failed'||st==='closed')&&P2P.peers[k]===pr){crumb('p2p:fail');P2P.dead[k]=performance.now()+30000;p2pClose(k)}};
+  pc.onconnectionstatechange=function(){var st=pc.connectionState;if((st==='failed'||st==='closed')&&P2P.peers[k]===pr){crumb('p2p:fail');p2pDead(k);p2pClose(k)}};
   pc.ondatachannel=function(e){p2pDc(k,pr,e.channel)};
-  setTimeout(function(){if(P2P.peers[k]===pr&&!pr.open){crumb('p2p:tmo');P2P.dead[k]=performance.now()+30000;p2pClose(k)}},12000);
+  setTimeout(function(){if(P2P.peers[k]===pr&&!pr.open){crumb('p2p:tmo');p2pDead(k);p2pClose(k)}},20000); /* 느린 폰 · 사람 많을 때도 붙을 시간 20초, 안 붙으면 15초 뒤 다시 */
   return pr}
 function p2pDc(k,pr,dc){pr.dcs[dc.label]=dc;
-  dc.onopen=function(){var u=pr.dcs.u,r=pr.dcs.r;if(u&&r&&u.readyState==='open'&&r.readyState==='open'&&!pr.open){pr.open=true;p2pHumans();crumb('p2p:open')}};
-  dc.onmessage=function(e){if(P2P.peers[k]!==pr)return;var o;try{o=JSON.parse(e.data)}catch(x){return}if(!o||typeof o.e!=='string')return;try{netOn({topic:NET.topic,event:'broadcast',payload:{event:o.e,payload:o.p}})}catch(x){}};
+  dc.onopen=function(){var u=pr.dcs.u,r=pr.dcs.r;if(u&&r&&u.readyState==='open'&&r.readyState==='open'&&!pr.open){pr.open=true;pr.rx=performance.now();P2P.tries[k]=0;p2pHumans();crumb('p2p:open')}};
+  dc.onmessage=function(e){if(P2P.peers[k]!==pr)return;pr.rx=performance.now();var o;try{o=JSON.parse(e.data)}catch(x){return}if(!o||typeof o.e!=='string')return;try{netOn({topic:NET.topic,event:'broadcast',payload:{event:o.e,payload:o.p}})}catch(x){}};
   dc.onclose=function(){if(P2P.peers[k]===pr)p2pClose(k)}}
 function p2pIce(pc){return new Promise(function(res){if(pc.iceGatheringState==='complete')return res();var t=setTimeout(res,2500);
   pc.addEventListener('icegatheringstatechange',function(){if(pc.iceGatheringState==='complete'){clearTimeout(t);res()}})})}

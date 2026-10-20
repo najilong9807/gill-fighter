@@ -16,7 +16,7 @@ with sync_playwright() as p:
         print(case,lang,r)
         if case=='old' and lang=='ko':
             pg.screenshot(path='news.png')
-            pg.click('#newsOk');pg.wait_for_timeout(300)
+            pg.click('#newsOk');pg.wait_for_timeout(600);pg.evaluate("__ev('NEWS_PG.cover||1')");(pg.click('#newsOk') if pg.is_visible('#newsOk') else None);pg.wait_for_timeout(2500);pg.evaluate("__ev('document.querySelectorAll(\\'.overlay\\').forEach(function(o){o.hidden=true});1')")
             pg.click('#playBtn');pg.wait_for_timeout(300);pg.click('#mpRec');pg.wait_for_timeout(1200)
             print('hapt',pg.evaluate("__ev(`(function(){for(var i=0;i<fish.length;i++){if(fish[i].s<=P.s*eatRatio()){consume(fish[i],i);break}}buzz(70);return __hp})()`)"))
         ctx.close()

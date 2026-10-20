@@ -8049,11 +8049,12 @@ function sprAnchor(spr){
   var hc=col(.68),ec=col(.8),ht=Hh;for(i=hc-2;i<=hc+2;i++)if(i>=0&&i<W&&top[i]>=0&&top[i]<ht)ht=top[i];
   return spr.anc={hx:(hc+.5)/W,hy:ht/Hh,hh:Math.max(.15,(bot[hc]-top[hc])/Hh),ex:(ec+.5)/W,ey:(top[ec]+(bot[ec]-top[ec])*.36)/Hh,eh:Math.max(.12,(bot[ec]-top[ec])/Hh)};
 }
-function fishFrame(c,x,y,ang,L,o){
+function fishFrame(c,x,y,ang,L,o,s){
   c.translate(x,y);
   if(L.kind==='horse'||L.kind==='float'){if(Math.cos(ang)<0)c.scale(-1,1);c.rotate(Math.sin(ang)*(Math.cos(ang)<0?-1:1)*.3)}
   else{c.rotate(ang);if(Math.cos(ang)<0)c.scale(1,-1)}
-  if(o.lift)c.scale(1.22,1.22);if(!o.stun)c.rotate(Math.sin(t*8+(o.phase||0))*.05);
+  if(s)bodyXf(c,s,L,o);else if(o.lift)c.scale(1.22,1.22);
+  if(s){var spq=SPRITES[L.id];if(spq&&spq.ok){var dmq=spriteDims(spq,s*(o.puff?1.2:1));c.scale(1,spriteAnim(L,o,dmq[1]).fy)}} /* 해파리처럼 위아래로 오므리는 물고기도 모자가 같이 */if(!o.stun)c.rotate(Math.sin(t*8+(o.phase||0))*.05);
 }
 function accGeom(L,s,o){
   var spr=SPRITES[L.id];
@@ -8131,9 +8132,9 @@ function accBack(c,id,x,y,s,ang,pts){
 function accFront(c,q,x,y,s,ang,L,o,g){
   if(q.fx==='sparkle'){var i;for(i=0;i<5;i++){var a=t*1.3+i*Math.PI*2/5,px=x+Math.cos(a)*s*1.5,py=y+Math.sin(a)*s*.9,tw=.5+.5*Math.sin(t*5+i*2);c.fillStyle='#FFFBE0';star4(c,px,py,s*(.08+.12*tw));c.fill()}}
   if(!q.head&&!q.face)return;
-  c.save();fishFrame(c,x,y,ang,L,o);
+  c.save();fishFrame(c,x,y,ang,L,o,s);
   if(q.face&&ACC_FACE[q.face]){c.save();c.translate(g.ex,g.ey);var fk=FACEOFF[q.face];if(fk&&g.E0)c.translate(-(g.E-g.E0)*fk[0],-(g.E-g.E0)*fk[1]);ACC_FACE[q.face](c,g.E);c.restore()}
-  if(q.head&&ACC_HEAD[q.head]){c.save();c.translate(g.hx,g.hy+g.U*.1);if(g.rot)c.rotate(g.rot);ACC_HEAD[q.head](c,g.U);c.restore()}
+  if(q.head&&ACC_HEAD[q.head]){ACC_G=g;c.save();c.translate(g.hx,g.hy+g.U*.1);if(g.rot)c.rotate(g.rot);ACC_HEAD[q.head](c,g.U);ACC_G=null;c.restore()}
   c.restore();
 }
 function drawFishDeco(c,pts,x,y,s,ang,L,o){
@@ -8147,7 +8148,7 @@ function drawFishDeco(c,pts,x,y,s,ang,L,o){
 function accIcon(A){
   var cv2=document.createElement('canvas'),S=56,k=2,c;cv2.width=S*k;cv2.height=S*k;cv2.className='accico';c=cv2.getContext('2d');c.setTransform(k,0,0,k,0,0);
   var fx0={goldmask:[.62,.66,.11],laser:[.28,.5,.12],whiskers:[.42,.22,.18],tongue:[.3,.22,.17],sweat:[.72,.56,.18],bandage:[.55,.26,.18],pixel:[.55,.55,.16],holo:[.62,.5,.14],chef:[.5,.95,.6],tophat:[.5,.95,.64],starcrown:[.5,.98,.6],dragonhorns:[.58,.96,.62],viking:[.5,.92,.62],orbit:[.5,1.06,.78],jellyhat:[.5,.84,.62],cowboy:[.5,.8,.66],tiara:[.5,.86,.8],beanie:[.5,.88,.72],wizard:[.5,.9,.6],party:[.5,.9,.62],headphones:[.52,.42,.62],beret:[.48,.8,.75],bunny:[.5,.96,.62],unicorn:[.42,.92,.66],halo:[.5,.95,.8],blush:[.58,.1,.2],patch:[.62,.5,.11],goggles:[.7,.5,.13],freckles:[.5,.2,.2],clownnose:[.3,.3,.19],mustache:[.3,.24,.19],gum:[.22,.28,.17],mask:[.62,.5,.12],visor:[.6,.5,.14],nerd:[.66,.5,.14],lashes:[.66,.5,.16]}[A.id];
-  if(A.slot==='head'){c.translate(S*(fx0?fx0[0]:.5),S*(fx0?fx0[1]:.86));ACC_HEAD[A.id](c,S*(fx0?fx0[2]:.72))}
+  if(A.slot==='head'){ACC_G=null;c.translate(S*(fx0?fx0[0]:.5),S*(fx0?fx0[1]:.86));ACC_HEAD[A.id](c,S*(fx0?fx0[2]:.72))}
   else if(A.slot==='face'){c.translate(S*(fx0?fx0[0]:.66),S*(fx0?fx0[1]:.5));ACC_FACE[A.id](c,S*(fx0?fx0[2]:.15))}
   else{var fake=[];for(var i=0;i<14;i++)fake.push({x:S*.78-i*S*.05,y:S*.5+Math.sin(i*.6)*S*.08});
     if(A.id==='goldglow'){c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.8;c.drawImage(glow('255,205,80'),0,0,S,S);c.restore();c.fillStyle='#FFF3A0';star4(c,S/2,S/2,S*.18);c.fill()}
@@ -9555,6 +9556,18 @@ var hexTile=(function(){
 function josa(w,a,b,ro){var c=w.charCodeAt(w.length-1)-0xAC00;if(c<0||c>11171)return b;var j=c%28;return j===0||(ro&&j===8)?b:a}
 function fmtShort(cm){return cm<10?(Math.round(cm*10)/10)+'cm':cm<100?Math.round(cm)+'cm':(cm/100).toFixed(1)+'m'}
 
+/* 1.1.14 몸 움직임(톡 튀기 · 들어올림 · 먹는 모션)을 한 곳에서 — 꾸미기(모자 · 안경)도 같은 움직임을 따라가게(전엔 먹을 때 물고기만 앞으로 덥석, 모자는 제자리라 들썩였음) */
+function bodyXf(c,s,L,o){
+  if(o.pop)c.scale(1+o.pop*.2,1-o.pop*.12);
+  if(o.lift)c.scale(1.22,1.22);
+  if(o.chomp>0){var cq=o.chomp,ce=Math.sin((1-cq)*Math.PI),cs=L._eat;
+    if(cs==='shake'){c.translate(s*.3*ce,0);c.rotate(Math.sin((1-cq)*Math.PI*4)*.24*cq)}
+    else if(cs==='gulp'){c.translate(s*.18*ce,0);c.scale(1+.05*ce,1+.3*ce)}
+    else if(cs==='pulse'){c.scale(1-.22*ce,1+.2*ce)}
+    else if(cs==='stab'){c.translate(s*.6*ce,0);c.scale(1+.12*ce,1-.08*ce)}
+    else if(cs==='whip'){c.translate(s*.35*ce,0);c.rotate(Math.sin((1-cq)*Math.PI*2)*.3)}
+    else{c.translate(s*.32*ce,0);c.scale(1+.16*ce,1-.12*ce)}}
+}
 function drawFish(c,x,y,s,ang,L,o){
   o=o||{};
   var A=o.alpha!=null?o.alpha:1,k;
@@ -9572,9 +9585,8 @@ function drawFish(c,x,y,s,ang,L,o){
   c.save();c.translate(x,y);
   if(L.kind==='horse'||L.kind==='float'){if(Math.cos(ang)<0)c.scale(-1,1);c.rotate(Math.sin(ang)*(Math.cos(ang)<0?-1:1)*.3)}
   else{c.rotate(ang);if(Math.cos(ang)<0)c.scale(1,-1)}
-  if(o.pop)c.scale(1+o.pop*.2,1-o.pop*.12);
-  if(o.lift)c.scale(1.22,1.22);
-  if(o.chomp>0){
+  bodyXf(c,s,L,o);
+  if(false){
     /* 먹는 모션(어종별): 덥석(기본) / 흔들어 뜯기(상어·이빨) / 꿀꺽 부풀기(큰 입) / 오므렸다 펴기(문어·해파리) / 찌르기(새치류) / 채찍처럼 휘기(장어류) */
     var cq=o.chomp,ce=Math.sin((1-cq)*Math.PI),cs=L._eat;
     if(cs==='shake'){c.translate(s*.3*ce,0);c.rotate(Math.sin((1-cq)*Math.PI*4)*.24*cq)}
@@ -11787,7 +11799,7 @@ var HWT=null;function hwTint(k){var c=ctx;k=k==null?1:k;if(!HWT||HWT.w!==cw||HWT
     var m=x.createRadialGradient(W*.78,Hh*.06,0,W*.78,Hh*.06,Math.max(W,Hh)*.55);m.addColorStop(0,'rgba(220,210,255,.30)');m.addColorStop(.35,'rgba(170,150,255,.12)');m.addColorStop(1,'rgba(170,150,255,0)');x.fillStyle=m;x.fillRect(0,0,W,Hh);
     var o=x.createLinearGradient(0,Hh*.6,0,Hh);o.addColorStop(0,'rgba(255,120,30,0)');o.addColorStop(1,'rgba(255,120,30,.22)');x.fillStyle=o;x.fillRect(0,0,W,Hh);HWT={w:cw,h:ch,cv:v}}
   var dk=0;try{if(state!=='home'&&state!=='menu')dk=clamp(darkAt(cam.y),0,1)}catch(_){}c.save();c.setTransform(dpr,0,0,dpr,0,0);c.globalAlpha=(1-.75*dk)*k;c.globalCompositeOperation='source-over';c.drawImage(HWT.cv,0,0,cw,ch);c.restore()} /* 깊어서 어두운 곳은 색을 줄여 심해의 어두움을 지킨다 */
-function hwWorldFx(){try{hwTint()}catch(_){}var sm=Math.min(cw,ch)/zoom,cs=sm*.6,vx0=cam.x-cw/2/zoom,vy0=cam.y-ch/2/zoom,vx1=cam.x+cw/2/zoom,vy1=cam.y+ch/2/zoom,
+function hwWorldFx(){try{hwTint()}catch(_){}if(HWBG_NEW)return;var sm=Math.min(cw,ch)/zoom,cs=sm*.6,vx0=cam.x-cw/2/zoom,vy0=cam.y-ch/2/zoom,vx1=cam.x+cw/2/zoom,vy1=cam.y+ch/2/zoom,
   gx0=Math.floor(vx0/cs)-1,gx1=Math.floor(vx1/cs)+1,gy0=Math.floor(vy0/cs)-1,gy1=Math.floor(vy1/cs)+1,cx,cy,n=0;
   if((gx1-gx0)*(gy1-gy0)>120)return;var c=ctx,pa=c.globalAlpha;
   for(cx=gx0;cx<=gx1;cx++)for(cy=gy0;cy<=gy1;cy++){var r=h2(cx*7.3+1,cy*13.1+2,3);if(r>.4)continue;
@@ -12153,7 +12165,9 @@ ACC.push(
  {id:'hw_bones',slot:'fx',name:T('뼈다귀 꼬리'),c:{cur:'pearls',price:1200},hw:1},
  {id:'hw_souls',slot:'fx',name:T('도깨비불 꼬리'),c:{cur:'gems',price:22},hw:1}
 );
-Object.keys(HW2H).forEach(function(id){var q=HW2H[id];ACC_HEAD[id]=function(c,U){var im=hwAcs(q[0]);if(!im)return;var w=U*q[1],h=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-h,w,h)}});
+var ACC_G=null;Object.keys(HW2H).forEach(function(id){var q=HW2H[id];ACC_HEAD[id]=function(c,U){var im=hwAcs(q[0]);if(!im)return;var w=U*q[1],h=w*im.naturalHeight/im.naturalWidth,lift=0;
+  /* 1.1.14 모자 아래 끝이 눈을 덮지 않게(미라 붕대는 원래 눈 위를 감는 거라 예외) */if(ACC_G&&ACC_G.eyeLim!=null&&id!=='hw_mummy'){var bt=U*q[2];if(bt>ACC_G.eyeLim)lift=Math.min(U*.35,bt-Math.max(0,ACC_G.eyeLim))}
+  c.drawImage(im,-w/2+q[3]*U,U*q[2]-h-lift,w,h)}});
 Object.keys(HW2F).forEach(function(id){var q=HW2F[id];ACC_FACE[id]=function(c,E){var im=hwAcs(q[0]);if(!im)return;var w=E*q[1],h=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w*q[2],-h*q[3],w,h)}});
 Object.keys(HW2X).forEach(function(id){var k=HW2X[id];FX_SHAPE[id]=function(c,x,y,r,col,n){var im=hwAcs(k);if(!im)return;var m=r*(id==='hw_souls'?3.0:2.2),ar=im.naturalWidth/im.naturalHeight,h=ar>1?m/ar:m,w=ar>1?m:m*ar;
   if(id==='hw_souls'){c.save();c.globalCompositeOperation='lighter';c.globalAlpha*=.3;c.drawImage(glow('200,90,255'),x-h*.7,y-h*.7,h*1.4,h*1.4);c.restore()}
@@ -12257,7 +12271,7 @@ function hwFloat(c,W,H,par,n,seed,alpha){var g=hwSpr('hw_ghost'),p=hwSpr('hw_pum
       a=alpha*(isP?1:(.55+.45*(.5+.5*Math.sin(t*.6+i*1.9))));
     c.save();c.globalAlpha=a*(isP?.6:.4);c.globalCompositeOperation='lighter';c.drawImage(glow(isP?'255,150,40':'150,210,255'),x-ww*1.1,y-hh*.9,ww*2.2,hh*1.8);c.restore();
     c.save();c.globalAlpha=a;c.translate(x,y);if(!isP){c.rotate(Math.sin(t*.9+i)*.08);if((i+Math.floor(t/9))%2)c.scale(-1,1)}c.drawImage(im,-ww/2,-hh/2,ww,hh);c.restore()}}
-var drawFarHw=drawFar;drawFar=function(dx,dy){drawFarHw(dx,dy);try{if(HW&&!reduce&&(state==='play'||state==='pause'||state==='over')){var dk=0;try{dk=mode==='single'?darkAt(P.y):0}catch(e){}hwFloat(ctx,cw,ch,parX*.08,mode==='multi'?3:4,61,.9*(1-.4*dk))}}catch(e){}};
+var drawFarHw=drawFar;drawFar=function(dx,dy){drawFarHw(dx,dy);try{if(HW&&!reduce&&(state==='play'||state==='pause'||state==='over')){var dk=0;try{dk=mode==='single'?darkAt(P.y):0}catch(e){}if(HWBG_NEW)hwPlayBg(ctx,cw,ch,parX,dk);else hwFloat(ctx,cw,ch,parX*.08,mode==='multi'?3:4,61,.9*(1-.4*dk))}}catch(e){}};
 var drawTankFxHw3=drawTankFx;drawTankFx=function(B,W,H,cam){drawTankFxHw3(B,W,H,cam);try{if(HW&&!reduce&&W>200&&page==='tank')hwFloat(ctx,W,H,(cam||0)*.15,3,71,.72)}catch(e){}};
 
 /* ===== 1.1.12 Game Center 순위표 (네이티브 GfGameCenter 기능이 있는 빌드에서만 · 없으면 아무 일도 안 함) ===== */
@@ -12630,7 +12644,8 @@ abyTr(TRT,{"이제 커져도 느려지지 않아요! 🐟":"No more slowing down
 abyTr(TRJ,{"이제 커져도 느려지지 않아요! 🐟":"もう大きくなっても遅くなりません！🐟","커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요":"大きくなっても遅くなりません: 育ちきった大きな魚も最初と同じ速さで泳ぎ、向きもすばやく変えられます","화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요":"噴火は海の底の海底火山から噴き上がります: 火の粉が上がる帯が先に赤く光るので横によけて · 火の粉は遅く少なくなりました","다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요":"ほかのアプリから戻るとBGM・効果音が鳴らなくなる問題と、ハロウィンデコをオフにしたソロでBGMが止まる問題を直しました"});
 NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31층부터 해저 동굴 · 난파선 바다 · 빛나는 심해 · 열수구 화산까지 (최대 99층)"),T("심연 40 · 50 · 70 · 99층을 처음 깨면 보너스 보석"),T("화산 폭발: 싱글은 가끔 '대폭발 경보' 뒤 10초 동안 바다 곳곳에서, 심해 탐험 열수구 화산층은 바위가 붉게 꿈틀거리면 불똥이 튀어요 · 피하세요, 맞은 물고기는 작아져요"),T("심해 생존을 다 깨도 랭킹이 이어져요: 어려움 장 → 무한 8장 버틴 시간 순"),T("대전이 더 공정하고 부드러워졌어요: 느린 폰도 같은 속도로 움직이고, 인터넷이 흔들려도 상대가 멈칫거리거나 순간이동하지 않아요. 나보다 훨씬 큰 상대는 화면을 덮지 않게 줄여서 보여 주고, 실제로 먹히는 입 범위는 빨간 점선으로 보여요"),T("받을 보상이 있으면 플레이 탭 · 싱글 버튼에 빨간 점, 심해 생존 보상을 달성하면 바로 알려 줘요"),T("알림을 켜 두면 다음 날 출석 보상도 알려 줘요 (처음 두 판 뒤에 한 번 물어봐요)"),T("앱을 오래 켜 두거나 다시 열 때 꺼지는 일, 긴 생존 판 막판 버벅임을 줄였어요"),T("작은 화면에서 상점 이름 · 물고기 고르기 · 수족관 제목 · 알림 글자가 잘리지 않게 다듬었어요"),T("진주 가격을 깔끔하게 정리했어요: 백 · 천 · 만 단위로 맞추고, 처음 오신 선물 진주를 늘렸어요"),T("난이도를 조금 올렸어요: 싱글은 네 번째 판부터 큰 물고기가 조금 더, 심해 탐험 6층부터 목표 8% 더, 심해 생존 3장부터 적이 조금 더 자주·단단하게")];NEWS_LEAD['1.1.13']=T("끝없는 심연이 열렸어요! 30층 아래로 더 깊이 내려가요 🌑");
 abyTr(TRT,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"Arena: stay #1 and tap 'Finish as #1' to lock in the win · the share card now shows your rank and fish eaten · computer fish have personalities (relentless hunters, cautious swimmers)"});abyTr(TRJ,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"対戦で1位をキープしたら「1位で終える」ですぐ1位記録 · 自慢カードに順位と食べた数も · AIの相手ごとに性格が違います（しつこいハンター · 用心深い魚）"});
-NEWS['1.1.14']=[T("커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요"),T("대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)"),T("겨울 바다 시즌(11월 22일 ~ 1월 31일): 바다눈이 내리고 반짝이 전구가 켜져요 · 산타 모자 · 루돌프 뿔 등 겨울 꾸미기 7가지 · 산호 트리 소품 · 5일 겨울 출석 선물"),T("화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요"),T("다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요")];NEWS_LEAD['1.1.14']=T("이제 커져도 느려지지 않아요! 🐟");
+abyTr(TRT,{"꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)":"Accessories now sit snugly on each fish's head and eyes and move with it when it eats · Solo and Arena show glowing jack-o'-lanterns and ghosts in the background like the home screen (they stay put as you grow)"});abyTr(TRJ,{"꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)":"きせかえが魚ごとに頭や目にぴったり合い、食べるときも一緒に動きます · ソロ・対戦の背景にもホーム画面のようにジャック・オー・ランタンとおばけ（大きくなっても位置は変わりません）"});
+NEWS['1.1.14']=[T("커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요"),T("꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)"),T("대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)"),T("겨울 바다 시즌(11월 22일 ~ 1월 31일): 바다눈이 내리고 반짝이 전구가 켜져요 · 산타 모자 · 루돌프 뿔 등 겨울 꾸미기 7가지 · 산호 트리 소품 · 5일 겨울 출석 선물"),T("화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요"),T("다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요")];NEWS_LEAD['1.1.14']=T("이제 커져도 느려지지 않아요! 🐟");
 /* ===== 1.1.13 대전: 상대 크기가 말이 안 되게 튀면 막고, 화면을 덮을 만큼 큰 상대가 나오면 자동으로 기록을 남긴다
    10/14 0시대 사용자 신고: 대전에서 상대 물고기가 화면을 꽉 채움(서버 기록·오류 기록엔 흔적 없음) → 다음엔 무엇이 왔는지 그대로 받아 보기 위함 ===== */
 var PEERCHK={},HUGEW=[];
@@ -13232,6 +13247,36 @@ function botPersTick(dt){if(mode!=='multi'||state!=='play'||NET.room||!P||P.dead
   var lead=mpRank()===1;for(var i=0;i<bots.length;i++){var b=bots[i],e=b.ent;if(!e||b.peer||b.pers!=='hunt')continue;var q=e.s/P.s;
     if(lead&&q>=.7&&q<.95&&(P.time||0)>40){e.s*=1.006;b.size=e.s}}} /* 1초에 0.6% — 30초면 약 1.2배 */
 var updatePS=update;update=function(dt){var r=updatePS.apply(this,arguments);try{botPersTick(dt)}catch(e){}return r};
+/* ===== 1.1.14 모자 자리 다시 맞춤(종한 '꾸미기 템이 물고기별로 딱 안 맞아 어색'):
+   그림마다 실제 몸 윤곽(가는 지느러미 가시는 빼고)을 재서 → 눈 바로 뒤 머리 윗면에 앉히고, 머리 두께에 맞는 크기, 머리 기울기만큼 기울임.
+   표: [머리 위 x, 그 자리 윗면 y, 몸 두께, 윗면 기울기, 주둥이 끝 x] (그림 비율, 개발 때 한 번 재서 넣음 — work/tools/hatscan.py) */
+var HATG={"anchovy":[0.86,0.354,0.521,0.833,0.98],"clownfish":[0.855,0.281,0.465,1.053,0.98],"tomatoclown":[0.855,0.281,0.465,1.053,0.98],"seahorse":[0.65,0.05,0.515,0.647,0.98],"butterfly":[0.765,0.318,0.405,2.365,0.98],"bluetang":[0.825,0.212,0.653,1.186,0.98],"mandarinfish":[0.81,0.267,0.425,0.333,0.98],"flyingfish":[0.85,0.504,0.248,0.355,0.98],"betta":[0.825,0.345,0.23,0.46,0.98],"goldfish":[0.865,0.366,0.373,0.986,0.98],"lanternfish":[0.82,0.328,0.466,0.776,0.975],"jack":[0.86,0.316,0.43,0.886,0.98],"mackerel":[0.86,0.316,0.43,0.886,0.98],"seadragon":[0.795,0.189,0.225,0.631,0.975],"lionfish":[0.865,0.45,0.278,0.651,0.98],"angelfish":[0.805,0.182,0.587,1.538,0.98],"barreleye":[0.755,0.252,0.649,0.458,0.98],"piranha":[0.825,0.284,0.507,1.081,0.98],"moonjelly":[0.69,0.043,0.671,0.488,0.98],"blackpiranha":[0.825,0.284,0.507,1.081,0.98],"fangtooth":[0.715,0.171,0.726,0.479,0.97],"flatfish":[0.855,0.266,0.469,1.641,0.98],"puffer":[0.825,0.091,0.8,1.182,0.98],"parrotfish":[0.77,0.198,0.619,0.794,0.98],"rockfish":[0.845,0.26,0.457,1.26,0.98],"viperfish":[0.765,0.205,0.63,0,0.97],"seabream":[0.845,0.26,0.457,1.26,0.98],"blackbream":[0.845,0.26,0.457,1.26,0.98],"flounder":[0.855,0.266,0.469,1.641,0.98],"dragonfish":[0.85,0.077,0.473,0.549,0.98],"koi":[0.82,0.33,0.472,1.226,0.98],"seanettle":[0.69,0.043,0.671,0.488,0.98],"stingray":[0.84,0.176,0.667,0.818,0.98],"blobfish":[0.545,0.018,0.964,-0.268,0.975],"rainbowtrout":[0.845,0.286,0.451,0.879,0.98],"porcupine":[0.785,0.174,0.728,0.761,0.975],"angler":[0.65,0.235,0.75,0.221,0.98],"octopus":[0.63,0.126,0.815,0.168,0.98],"atolla":[0.775,0.072,0.647,0.216,0.98],"yellowtail":[0.84,0.292,0.427,1.011,0.98],"vampiresquid":[0.82,0.055,0.376,0.183,0.975],"blueringed":[0.63,0.126,0.815,0.168,0.98],"salmon":[0.845,0.286,0.451,0.879,0.98],"dumbo":[0.62,0.123,0.784,0,0.98],"barracuda":[0.725,0.368,0.461,0.789,0.98],"footballfish":[0.6,0.229,0.747,0.353,0.975],"eel":[0.84,0,0.85,0.5,0.98],"hairtail":[0.815,0.23,0.29,0.7,0.98],"wrasse":[0.74,0.083,0.758,0.333,0.98],"chimaera":[0.765,0.168,0.624,0.198,0.98],"moray":[0.86,0.167,0.75,2.083,0.98],"gulper":[0.815,0.007,0.737,0.073,0.98],"coelacanth":[0.86,0.387,0.355,0.887,0.98],"yellowfin":[0.825,0.301,0.462,0.86,0.98],"tuna":[0.825,0.301,0.462,0.86,0.98],"frilledshark":[0.81,0.063,0.703,0.781,0.98],"sunfish":[0.805,0.315,0.403,0.484,0.98],"marlin":[0.695,0.381,0.429,1.905,0.97],"sailfish":[0.73,0.5,0.258,3.594,0.98],"swordfish":[0.615,0.423,0.333,0.901,0.98],"goblinshark":[0.595,0.2,0.729,0.471,0.98],"mako":[0.805,0.351,0.414,0.541,0.98],"shark":[0.805,0.351,0.414,0.541,0.98],"thresher":[0.83,0.599,0.21,0.382,0.98],"hammerhead":[0.815,0.4,0.32,0.5,0.98],"greenlandshark":[0.87,0.337,0.378,1.02,0.98],"sawfish":[0.595,0.443,0.314,1.286,0.98],"manta":[0.815,0.332,0.337,0.816,0.98],"oarfish":[0.855,0.333,0.424,0.606,0.98],"giantsquid":[0.52,0.356,0.322,-1.222,0.98],"whaleshark":[0.84,0.299,0.433,0.746,0.98],"yellowtang":[0.81,0.195,0.678,1.271,0.98],"blackmoor":[0.855,0.359,0.387,0.915,0.98],"pinkseahorse":[0.645,0.05,0.815,0.618,0.98],"weedydragon":[0.79,0.189,0.225,0.631,0.975],"ogon":[0.82,0.33,0.472,1.226,0.98],"sockeye":[0.845,0.286,0.451,0.879,0.98],"goldhammer":[0.815,0.4,0.32,0.5,0.98],"pinkmanta":[0.845,0.352,0.296,0.51,0.98],"boxfish":[0.755,0.143,0.82,1.128,0.955],"moorish":[0.755,0.298,0.544,1.228,0.965],"trigger":[0.755,0.22,0.67,0.826,0.96],"seabass":[0.755,0.279,0.477,0.721,0.96],"cod":[0.755,0.269,0.5,0.577,0.965],"cuttle":[0.755,0.416,0.36,2.022,0.97],"mahi":[0.755,0.046,0.725,0.459,0.965],"grouper":[0.755,0.195,0.628,0.885,0.965],"eagleray":[0.865,0.399,0.203,1.304,0.965],"tigershark":[0.755,0.31,0.488,0.595,0.97]};
+var accGeomHG=accGeom;accGeom=function(L,s,o){var g=accGeomHG(L,s,o);try{var q=HATG[L.id],spr=SPRITES[L.id];if(q&&spr&&spr.ok){var w=g.len,h=g.ht;
+  var U=Math.min(q[2]*h*1.15,Math.max(.01,(q[4]-q[0]))*w*4);U=clamp(U,s*.44,s*.85);
+  g.hx=(q[0]-.5)*w;g.hy=(q[1]-.5)*h;g.U=U;g.E=Math.min(g.E,Math.max(s*.085,q[2]*h*.3));g.eyeLim=(g.ey-g.E*1.05)-(g.hy+U*.1);g.rot=clamp(Math.atan(q[3]*h/w)*.6,-.2,.35)}}catch(e){}return g};
+/* ===== 1.1.14 싱글 · 대전 핼러윈 배경(종한: '잭오랜턴 · 유령을 홈 화면처럼, 먹을 때마다 움직이는 것 고치기, 정신 사납지 않게')
+   전엔 바다 속 작은 호박 · 유령을 '화면 크기 ÷ 확대' 칸에 뿌려서, 먹고 커질 때마다(확대가 바뀔 때마다) 자리가 통째로 바뀌었음.
+   → 바다 속 소품은 빼고, 홈과 같은 그림(빛나는 잭오랜턴 2 · 반투명 유령 3)을 화면 뒤 먼 배경에 둠. 크기 · 자리는 화면 기준이라 커져도 안 움직이고,
+     헤엄치면 아주 천천히 흘러감(먼 배경 느낌). 깊고 어두운 곳은 흐리게. 가끔(20초에 한 번) 먼 곳으로 박쥐 세 마리가 지나감 */
+var HWBG_NEW=true;
+function hwPlayBg(c,W,H,parX,dk){var g=hwSpr('hw_ghost'),p=hwSpr('hw_pump'),pp=hwSpr('hw_pumps');if(!g||!p||!pp)return;
+  var sm=Math.min(W,H),A=(1-.5*(dk||0))*(mode==='multi'?.85:1),i,span=W*1.6;
+  function wx(u,d){return ((((u*W+W*.3-parX*d)%span)+span)%span)-W*.3}
+  /* 잭오랜턴: 화면 위쪽 양옆 근처, 천천히 위아래 · 촛불처럼 깜빡 */
+  var PK=[[.2,.64,.12,p,0,.05],[.84,.42,.14,pp,3,.04]];
+  for(i=0;i<PK.length;i++){var k=PK[i],im=k[3],ph=sm*k[2],pw=ph*im.naturalWidth/im.naturalHeight,px=wx(k[0],k[5]),py=H*k[1]+Math.sin(t*.8+k[4])*sm*.012,fl=.5+.18*Math.sin(t*6+k[4])+.08*Math.sin(t*13.7+k[4]);
+    c.save();c.globalCompositeOperation='lighter';c.globalAlpha=fl*.8*A;c.drawImage(glow('255,150,40'),px-pw*1.3,py-ph*1.2,pw*2.6,ph*2.4);c.restore();
+    c.save();c.globalAlpha=A;c.drawImage(im,px-pw/2,py-ph/2,pw,ph);c.restore();
+    c.save();c.globalCompositeOperation='lighter';c.globalAlpha=Math.max(0,fl-.42)*.6*A;c.drawImage(glow('255,200,90'),px-pw*.45,py-ph*.25,pw*.9,ph*.7);c.restore()}
+  /* 유령: 반투명, 천천히 떠다님 */
+  var GH=[[.28,.38,.17,0,.07],[.74,.52,.14,2.2,.06],[.58,.82,.12,4.1,.09]];
+  for(i=0;i<GH.length;i++){var q=GH[i],gh=sm*q[2],gw=gh*g.naturalWidth/g.naturalHeight,gx=wx(q[0],q[4])+Math.sin(t*.35+q[3])*W*.04,gy=H*q[1]+Math.sin(t*.9+q[3])*sm*.02,ga=(.42+.26*(.5+.5*Math.sin(t*.6+q[3]*1.7)))*A;
+    c.save();c.globalAlpha=ga*.6;c.globalCompositeOperation='lighter';c.drawImage(glow('150,210,255'),gx-gw*1.1,gy-gh*.75,gw*2.2,gh*1.5);c.restore();
+    c.save();c.globalAlpha=ga;c.translate(gx,gy);c.rotate(Math.sin(t*.9+q[3])*.08);if(Math.sin(t*.35+q[3]+1.57)<0)c.scale(-1,1);c.drawImage(g,-gw/2,-gh/2,gw,gh);c.restore()}
+  /* 박쥐: 20초에 한 번, 6초 동안 먼 곳을 가로질러 감 */
+  var cyc=t%20;if(cyc<6){var u=cyc/6,dir=Math.floor(t/20)%2?1:-1;for(i=0;i<3;i++){var bx=dir>0?-W*.1+u*W*1.2-i*sm*.06:W*1.1-u*W*1.2+i*sm*.06,by=H*(.1+.04*i)+Math.sin(u*9+i*2)*sm*.015;
+    c.save();c.globalAlpha=.45*A*Math.sin(u*Math.PI);hwBat(c,bx,by,sm*(.022-.004*i),'#1E1030',i*1.3);c.restore()}}
+}
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

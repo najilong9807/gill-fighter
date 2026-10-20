@@ -40,7 +40,7 @@ with sync_playwright() as p:
     home_ws=log['ws']
     res=[]
     for r in range(rounds):
-      ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});NET.room='';curSrv=SERVERS[0];startRun('multi');1")
+      ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});NET.room='';curSrv=SERVERS[0];startRun('multi');P.fx.ghost=99999;clearInterval(window.__gh);window.__gh=setInterval(function(){if(P&&P.fx)P.fx.ghost=99999},500);1")
       if closes:
         pg.wait_for_timeout(1500)
         for _ in range(closes):

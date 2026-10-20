@@ -5925,7 +5925,7 @@ function roomRank(){var r=1,n=1,i;for(i=0;i<bots.length;i++)if(bots[i].peer&&!ne
    - 연결이 안 되면(오프라인·웹 미리보기) 조용히 예전처럼 AI 물고기하고만 겨룬다. */
 var NET={url:'wss://tfkdcguuuuwocshascat.supabase.co/realtime/v1/websocket',
   key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRma2RjZ3V1dXV3b2NzaGFzY2F0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUwNzYwNDEsImV4cCI6MjEwMDY1MjA0MX0.ZfHDXEO3XO_gZlBE_UIvb0ubsGRrKhcdjpY98T7kZcE',
-  ws:null,live:false,retry:0,topic:'',room:'',shard:1,maxShard:2,maxPer:4,hzNear:5,hzFar:2.5,rc:0,fullUntil:0,cfg:null,ref:0,jref:'',hb:0,sendT:0,roster:{},humans:0,gen:0,met:false};
+  ws:null,live:false,retry:0,topic:'',room:'',shard:1,maxShard:50,maxPer:16,hzNear:5,hzFar:2.5,rc:0,fullUntil:0,cfg:null,ref:0,jref:'',hb:0,sendT:0,roster:{},humans:0,gen:0,met:false};
 /* 이름 금칙어: 입력할 때 막고(설정), 다른 사람 이름도 한 번 더 거른다. 그래서 대전에 신고·차단 기능은 두지 않는다(사용자 결정 2026-09-29) */
 var BAD_WORDS=['시발','씨발','씨바','ㅅㅂ','ㅆㅂ','병신','븅신','ㅂㅅ','개새','개세','새끼','섀끼','좆','존나','졸라','ㅈㄴ','미친','ㅁㅊ','지랄','ㅈㄹ','닥쳐','꺼져','엠창','애미','애비','니미','느금','섹스','야동','보지','자지','변태','강간','일베','틀딱','fuck','fuk','shit','bitch','sex','nigger','nigga','cunt','dick','pussy','porn','slut','whore','rape','nazi','hitler'];
 function badName(n){var z=String(n||'').toLowerCase().replace(/[\s._\-*~!@#$%^&()0-9]/g,'');for(var i=0;i<BAD_WORDS.length;i++)if(z.indexOf(BAD_WORDS[i])>=0)return true;return false}
@@ -5964,7 +5964,7 @@ function netTrack(){netPush('presence',{type:'presence',event:'track',payload:{n
 function netOn(m){
   if(m.topic===LOB.topic){if(LOB.via==='net')lobOn(m);return}
   if(m.topic!==NET.topic)return;
-  if(m.event==='phx_reply'&&m.ref===NET.jref){if(m.payload&&m.payload.status==='ok'){NET.live=true;netTrack()}return}
+  if(m.event==='phx_reply'&&m.ref===NET.jref){if(m.payload&&m.payload.status==='ok'){NET.live=true;netTrack();if(!NET.room)setTimeout(function(){if(NET.live&&mode==='multi'&&state==='play')netChanShow()},900)}return}
   if(m.event==='presence_state'){NET.roster={};netPresence(m.payload,null);
     /* 이 바다에 사람이 꽉 찼으면 다음 바다로 조용히 옮긴다 */
     return}
@@ -13017,10 +13017,15 @@ var volcDrawPD=volcDraw;volcDraw=function(){var r=volcDrawPD.apply(this,argument
 var lobStartAR=lobStart;lobStart=function(){if(NET.cfg&&NET.cfg.lobby)return lobStartAR.apply(this,arguments)};
 var lobViaNetAR=lobViaNet;lobViaNet=function(){if(NET.cfg&&NET.cfg.lobby)return lobViaNetAR.apply(this,arguments)};
 function netCfgApply(c){if(!c||typeof c!=='object')return;var n=function(v,a,b,d){v=+v;return isFinite(v)?Math.max(a,Math.min(b,v)):d};
-  NET.cfg=c;NET.maxShard=n(c.shards,1,500,NET.maxShard)|0;NET.maxPer=n(c.per,2,16,NET.maxPer)|0;NET.hzNear=n(c.hzNear,1,7,NET.hzNear);NET.hzFar=n(c.hzFar,1,7,NET.hzFar);
+  NET.cfg=c;NET.maxShard=n(c.shards,1,999,NET.maxShard)|0;NET.maxPer=n(c.per,2,16,NET.maxPer)|0;NET.hzNear=n(c.hzNear,1,7,NET.hzNear);NET.hzFar=n(c.hzFar,1,7,NET.hzFar);
   if(c.lobby&&LOB&&!LOB.ws&&!document.hidden)setTimeout(lobStart,0)}
 function netCfgLoad(){try{if(typeof lbReq!=='function')return;lbReq('rpc/gf_cfg',{p_v:APP_VER}).then(function(r){if(r&&typeof r==='object'){netCfgApply(Array.isArray(r)?r[0]:r);crumb('cfg')}}).catch(function(){})}catch(e){}}
 setTimeout(netCfgLoad,1500);
+/* 1.1.14(10/20 종한 '4명은 싸우는 재미가 없다 · 지렁이 게임처럼 채널을 여러 개'): 바다당 16명 그대로, 차면 2 · 3 · 4번 채널이 계속 열림(최대 50, 원격 설정으로 조절).
+   들어가면 '3번 채널 · 사람 5명'을 잠깐 보여 줌. 무료 한도를 넘으면 요금 대신 끊김 → 위의 안전장치로 컴퓨터 물고기 바다 */
+abyTr(TRT,{'번 채널':'Channel ','사람 ':'Players ','명과 함께':' with you','컴퓨터 물고기와 함께':'with computer fish'});
+abyTr(TRJ,{'번 채널':'チャンネル','사람 ':'プレイヤー ','명과 함께':'人と一緒','컴퓨터 물고기와 함께':'コンピューターの魚と一緒'});
+function netChanShow(){try{var n=(NET.humans|0),ch=LANG==='ko'?NET.shard+T('번 채널'):T('번 채널')+NET.shard;banner(ch,n>0?(LANG==='en'?n+' other player'+(n>1?'s':'')+' here':LANG==='ja'?'ほかに'+n+'人':'다른 사람 '+n+'명과 함께'):T('컴퓨터 물고기와 함께'))}catch(e){}}
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

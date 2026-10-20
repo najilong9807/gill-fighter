@@ -13504,6 +13504,19 @@ ACC_HEAD.viking=function(c,U){pShadow(c,0,U*.1,U*.5,U*.08,.3);
 /* 상점 아이콘(ACC_G 없음)에서는 띠까지 보이게 살짝 올리고, 작은 박쥐 티아라 · 뿔은 크게 */
 ['hw_horns','hw_cat','hw_bonecrown','hw_candycrown','hw_battiara','hw_beanie','hw_pumpcrown','wn_antler'].forEach(function(k){var f=ACC_HEAD[k];ACC_HEAD[k]=function(c,U){if(ACC_G)return f(c,U);var z=k==='hw_battiara'?1.15:k==='hw_horns'?1.1:k==='wn_antler'?.9:1;c.save();c.translate(0,-U*.16);c.scale(z,z);f(c,U);c.restore()}});
 ['hw_batlens','hw_patch'].forEach(function(k){try{delete HW2F[k]}catch(e){}});
+/* ===== 1.1.14 업데이트 소식 첫 장(종한 요청): 첫 장은 한 줄 인사를 크게, 업데이트 내용은 둘째 장부터. 모든 언어에 같은 글 그대로 */
+var NEWS_COVER={'1.1.14':'현지 언니 곰마워용 앙~⭐️'},NEWS_PG={v:null,cover:false};
+(function(){var st=document.createElement('style');st.textContent='#newsCover{margin:18px 6px 22px;padding:30px 12px;text-align:center;font-family:var(--disp,inherit);font-size:clamp(30px,9vw,44px);line-height:1.35;color:#0B2C4A;word-break:keep-all;border-radius:22px;background:linear-gradient(180deg,#FFF6D8,#FFE6B0);box-shadow:inset 0 0 0 3px #fff,0 4px 0 rgba(180,120,20,.25);animation:nwcIn .5s cubic-bezier(.2,1.4,.4,1)}#newsCover[hidden]{display:none}#newsPg{font-size:13px;opacity:.6;margin-left:8px}@keyframes nwcIn{from{transform:scale(.8);opacity:0}to{transform:none;opacity:1}}@media (prefers-reduced-motion:reduce){#newsCover{animation:none}}';document.head.appendChild(st);
+  var lead=$('newsLead');if(lead&&!$('newsCover')){var d=document.createElement('div');d.id='newsCover';d.hidden=true;lead.parentNode.insertBefore(d,lead)}
+  var tag=$('newsTag');if(tag&&!$('newsPg')){var sp=document.createElement('span');sp.id='newsPg';tag.parentNode.appendChild(sp)}})();
+function newsPage(cover){var c=$('newsCover'),pg=$('newsPg'),m=$('newsMute');NEWS_PG.cover=cover;
+  if(c){c.hidden=!cover;if(cover)c.textContent=NEWS_COVER[NEWS_PG.v]||''}
+  if(cover){$('newsLead').hidden=true;$('newsList').hidden=true;$('newsOk').textContent=T('다음')+' ▶';if(m)m.hidden=true}
+  else{$('newsLead').hidden=!NEWS_LEAD[NEWS_PG.v];$('newsList').hidden=false;$('newsOk').textContent=T('확인');if(m)m.hidden=false}
+  if(pg)pg.textContent=NEWS_COVER[NEWS_PG.v]?(cover?'1 / 2':'2 / 2'):''}
+var newsOpenCV=newsOpen;newsOpen=function(v){var r=newsOpenCV(v);try{NEWS_PG.v=v;newsPage(!!(r&&NEWS_COVER[v]))}catch(e){}return r};
+$('newsOk').addEventListener('click',function(e){if(!NEWS_PG.cover)return;e.stopImmediatePropagation();e.preventDefault();crumb('newsCover');newsPage(false);try{$('newsList').scrollTop=0}catch(_){}},true);
+abyTr(TRT,{'다음':'Next'});abyTr(TRJ,{'다음':'次へ'});
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

@@ -13277,6 +13277,88 @@ function hwPlayBg(c,W,H,parX,dk){var g=hwSpr('hw_ghost'),p=hwSpr('hw_pump'),pp=h
   var cyc=t%20;if(cyc<6){var u=cyc/6,dir=Math.floor(t/20)%2?1:-1;for(i=0;i<3;i++){var bx=dir>0?-W*.1+u*W*1.2-i*sm*.06:W*1.1-u*W*1.2+i*sm*.06,by=H*(.1+.04*i)+Math.sin(u*9+i*2)*sm*.015;
     c.save();c.globalAlpha=.45*A*Math.sin(u*Math.PI);hwBat(c,bx,by,sm*(.022-.004*i),'#1E1030',i*1.3);c.restore()}}
 }
+/* ===== 1.1.14 옆모습 꾸미기(종한: '물고기는 옆모습인데 꾸미기는 정면이라 이상해')
+   정면 그림이던 핼러윈 · 겨울 꾸미기를 옆에서 본 모양으로 다시 그림. 물고기 앞(주둥이) = +x, 위 = -y, 원점 = 머리 윗면(모자) / 눈 가운데(얼굴).
+   머리띠 · 왕관처럼 머리를 두르는 것은 '가까운 쪽'을 또렷하게, '먼 쪽'은 살짝 뒤로 · 어둡게 겹쳐 그려서 옆에서 본 느낌.
+   마녀 모자 · 거미줄 실크햇 · 허수아비 모자 · 미라 붕대 · 가면무도회 가면 · 거미 외눈 안경 · 뱀파이어 눈 분장은 원래 그림이 옆모습이라 그대로 */
+var SIDE_DK='#0B2C4A';
+function svOL(c,lw){c.lineWidth=lw;c.strokeStyle=SIDE_DK;c.lineJoin='round';c.lineCap='round';c.stroke()}
+function svFO(c,col,lw){c.fillStyle=col;c.fill();svOL(c,lw)}
+/* 머리띠(옆에서 보면 머리 위를 넘어가는 짧은 곡선) */
+function svBand(c,U,col,x0,lw){c.beginPath();c.moveTo(x0-U*.1,U*.14);c.quadraticCurveTo(x0-U*.02,-U*.08,x0+U*.12,U*.12);c.lineWidth=U*.12+lw*2;c.strokeStyle=SIDE_DK;c.lineCap='round';c.stroke();c.lineWidth=U*.12;c.strokeStyle=col;c.stroke()}
+/* 악마 뿔: 앞으로 휘는 뿔 두 개(먼 쪽은 뒤 · 어둡게) */
+ACC_HEAD.hw_horns=function(c,U){var lw=LW(U);
+  function horn(x,k,g0,g1){c.save();c.translate(x,0);c.scale(k,k);c.beginPath();c.moveTo(-U*.09,U*.04);c.bezierCurveTo(-U*.13,-U*.28,-U*.04,-U*.52,U*.22,-U*.62);c.bezierCurveTo(U*.04,-U*.44,U*.07,-U*.2,U*.09,U*.04);c.closePath();
+    svFO(c,lg(c,-U*.62,0,g0,g1),lw/k);c.beginPath();c.moveTo(-U*.04,-U*.08);c.bezierCurveTo(-U*.06,-U*.28,0,-U*.42,U*.12,-U*.52);c.lineWidth=Math.max(1,U*.03);c.strokeStyle='rgba(255,255,255,.6)';c.stroke();c.restore()}
+  horn(-U*.3,.78,'#B0162A','#6A0A18');svBand(c,U,'#2A1A2E',-U*.1,lw*.8);horn(U*.05,1,'#FF4A4A','#B0102A')};
+/* 검은 고양이 귀 + 주황 리본 */
+ACC_HEAD.hw_cat=function(c,U){var lw=LW(U);
+  function ear(x,k,col,inn){c.save();c.translate(x,0);c.scale(k,k);c.beginPath();c.moveTo(-U*.22,U*.06);c.quadraticCurveTo(-U*.2,-U*.4,U*.02,-U*.66);c.quadraticCurveTo(U*.2,-U*.36,U*.26,U*.06);c.closePath();svFO(c,col,lw/k);
+    if(inn){c.beginPath();c.moveTo(-U*.1,-U*.02);c.quadraticCurveTo(-U*.08,-U*.32,U*.03,-U*.5);c.quadraticCurveTo(U*.13,-U*.3,U*.15,-U*.02);c.closePath();c.fillStyle=inn;c.fill()}c.restore()}
+  ear(-U*.26,.86,'#15101C','#7A4060');svBand(c,U,'#15101C',-U*.06,lw*.8);ear(U*.06,1,'#221A2A','#FF9FC0');
+  /* 리본(옆 매듭) */c.save();c.translate(U*.3,U*.02);c.beginPath();c.moveTo(0,0);c.lineTo(U*.2,-U*.13);c.lineTo(U*.22,U*.1);c.closePath();svFO(c,'#FF8A1F',lw*.8);c.beginPath();c.moveTo(0,0);c.lineTo(-U*.17,-U*.12);c.lineTo(-U*.15,U*.11);c.closePath();svFO(c,'#E06A10',lw*.8);c.beginPath();c.arc(0,0,U*.06,0,Math.PI*2);svFO(c,'#FFB050',lw*.7);c.restore()};
+/* 왕관 공통: 띠(옆에서 본 앞뒤 길이) + 뾰족한 것들(가까운 쪽 크게, 먼 쪽 작게 · 어둡게) */
+function svCrown(c,U,o){var lw=LW(U),L=-U*.46,R=U*.46,i;
+  /* 먼 쪽 장식 */for(i=0;i<o.nb;i++){var xb=L+(R-L)*(i+.75)/(o.nb+.5);o.spike(c,xb,-U*.2,.72,true)}
+  c.beginPath();c.moveTo(L,-U*.24);c.quadraticCurveTo(0,-U*.3,R,-U*.24);c.lineTo(R+U*.02,U*.04);c.quadraticCurveTo(0,U*.12,L-U*.02,U*.04);c.closePath();svFO(c,lg(c,-U*.3,U*.1,o.b0,o.b1),lw);
+  for(i=0;i<o.nf;i++){var xf=L+(R-L)*(i+.5)/o.nf;o.spike(c,xf,-U*.26,1,false)}
+  if(o.band)o.band(c,L,R)}
+ACC_HEAD.hw_candycrown=function(c,U){var lw=LW(U);svCrown(c,U,{nb:2,nf:3,b0:'#FFE070',b1:'#D89A10',
+  spike:function(c,x,y,k,far){c.save();c.translate(x,y);c.scale(k,k);var w=U*.13,h=U*.5;c.beginPath();c.moveTo(-w,0);c.quadraticCurveTo(-w*.6,-h*.7,0,-h);c.quadraticCurveTo(w*.6,-h*.7,w,0);c.closePath();
+    c.save();c.clip();c.fillStyle=far?'#C88A20':'#FFC21A';c.fillRect(-w,-h*.38,w*2,h*.4);c.fillStyle=far?'#C0601A':'#FF8A1F';c.fillRect(-w,-h*.72,w*2,h*.36);c.fillStyle=far?'#C8C0B0':'#FFFDF4';c.fillRect(-w,-h,w*2,h*.3);c.restore();svOL(c,lw/k);c.restore()},
+  band:function(c,L,R){for(var i=0;i<3;i++){var x=L+(R-L)*(i+.5)/3;c.beginPath();c.arc(x,-U*.09,U*.065,0,Math.PI*2);svFO(c,'#FF7A1A',lw*.6)}}})};
+ACC_HEAD.hw_bonecrown=function(c,U){var lw=LW(U);svCrown(c,U,{nb:2,nf:3,b0:'#F2E6CC',b1:'#BBA884',
+  spike:function(c,x,y,k,far){c.save();c.translate(x,y);c.scale(k,k);var col=far?'#B8AA8A':'#F4EAD2';c.beginPath();c.moveTo(-U*.075,U*.02);c.lineTo(-U*.04,-U*.3);c.lineTo(0,-U*.44);c.lineTo(U*.04,-U*.3);c.lineTo(U*.075,U*.02);c.closePath();svFO(c,lg(c,-U*.44,0,far?'#C8BC9C':'#FFF8E6',col),lw/k*.8);
+    if(!far){c.beginPath();c.moveTo(0,-U*.2);c.lineTo(U*.035,-U*.13);c.lineTo(0,-U*.06);c.lineTo(-U*.035,-U*.13);c.closePath();svFO(c,'#9A4AE0',lw*.5)}c.restore()},
+  band:function(c,L,R){/* 앞쪽 옆얼굴 해골(앞을 봄) */c.save();c.translate(R-U*.15,-U*.11);c.beginPath();c.moveTo(-U*.12,U*.06);c.bezierCurveTo(-U*.16,-U*.16,U*.1,-U*.2,U*.13,-U*.02);c.lineTo(U*.15,U*.04);c.lineTo(U*.1,U*.06);c.lineTo(U*.1,U*.12);c.lineTo(-U*.04,U*.12);c.closePath();svFO(c,'#FFF6E0',lw*.6);
+    c.fillStyle='#3A1A5A';c.beginPath();c.ellipse(U*.05,-U*.03,U*.035,U*.04,0,0,Math.PI*2);c.fill();c.beginPath();c.moveTo(U*.12,U*.01);c.lineTo(U*.14,U*.05);c.lineTo(U*.11,U*.05);c.closePath();c.fill();
+    c.strokeStyle='#3A1A5A';c.lineWidth=Math.max(.8,U*.015);for(var i=0;i<3;i++){c.beginPath();c.moveTo(U*(.0+i*.035),U*.08);c.lineTo(U*(.0+i*.035),U*.12);c.stroke()}c.restore();
+    c.beginPath();c.arc(L+U*.2,-U*.1,U*.05,0,Math.PI*2);svFO(c,'#9A4AE0',lw*.5)}})};
+/* 박쥐 티아라: 머리띠 + 앞을 보는 박쥐(날개를 뒤로 올림) + 붉은 보석 */
+ACC_HEAD.hw_battiara=function(c,U){var lw=LW(U);
+  function wing(k,ry,col){c.save();c.translate(U*.02,-U*.22);c.rotate(ry);c.scale(k,k);c.beginPath();c.moveTo(0,0);c.quadraticCurveTo(-U*.24,-U*.3,-U*.64,-U*.2);
+    c.quadraticCurveTo(-U*.56,-U*.08,-U*.5,-U*.04);c.quadraticCurveTo(-U*.44,-U*.12,-U*.36,-U*.02);c.quadraticCurveTo(-U*.28,-U*.1,-U*.2,U*.02);c.quadraticCurveTo(-U*.12,-U*.05,-U*.04,U*.06);c.closePath();svFO(c,col,lw/k*.8);c.restore()}
+  wing(.85,-.35,'#2E2240');svBand(c,U,'#2A2034',-U*.04,lw*.7);
+  c.beginPath();c.ellipse(U*.06,-U*.2,U*.11,U*.085,-.15,0,Math.PI*2);svFO(c,'#2A2034',lw*.8);
+  c.beginPath();c.arc(U*.17,-U*.26,U*.07,0,Math.PI*2);svFO(c,'#2A2034',lw*.7);
+  c.beginPath();c.moveTo(U*.13,-U*.31);c.lineTo(U*.12,-U*.42);c.lineTo(U*.18,-U*.33);c.closePath();svFO(c,'#2A2034',lw*.5);
+  c.beginPath();c.arc(U*.2,-U*.27,U*.018,0,Math.PI*2);c.fillStyle='#FFD23F';c.fill();
+  wing(1,-.05,'#4A3466');c.beginPath();c.moveTo(U*.02,-U*.04);c.lineTo(U*.09,-U*.14);c.lineTo(U*.16,-U*.04);c.lineTo(U*.09,U*.06);c.closePath();svFO(c,lg(c,-U*.14,U*.06,'#FF5A6A','#A00A24'),lw*.6)};
+/* 호박 니트 모자: 옆에서 본 둥근 모자 + 접힌 단 + 뒤로 꼬인 꼭지 + 앞쪽에 잭오랜턴 얼굴 반쪽 */
+ACC_HEAD.hw_beanie=function(c,U){var lw=LW(U);c.beginPath();c.moveTo(-U*.48,U*.02);c.bezierCurveTo(-U*.54,-U*.62,U*.4,-U*.78,U*.48,U*.02);c.closePath();svFO(c,lg(c,-U*.7,0,'#FFA040','#E0661A'),lw);
+  c.save();c.clip();c.strokeStyle='rgba(150,60,10,.45)';c.lineWidth=Math.max(1,U*.03);for(var i=-3;i<=3;i++){c.beginPath();c.moveTo(i*U*.13,0);c.quadraticCurveTo(i*U*.15,-U*.36,i*U*.09+U*.02,-U*.7);c.stroke()}
+  c.fillStyle='#4A2208';c.beginPath();c.moveTo(U*.22,-U*.36);c.lineTo(U*.34,-U*.36);c.lineTo(U*.3,-U*.24);c.closePath();c.fill();c.beginPath();c.moveTo(U*.08,-U*.16);c.quadraticCurveTo(U*.26,-U*.08,U*.46,-U*.18);c.lineTo(U*.46,-U*.1);c.quadraticCurveTo(U*.24,U*.02,U*.08,-U*.1);c.closePath();c.fill();c.restore();
+  c.beginPath();c.moveTo(-U*.52,-U*.05);c.quadraticCurveTo(0,-U*.13,U*.52,-U*.05);c.lineTo(U*.54,U*.14);c.quadraticCurveTo(0,U*.06,-U*.54,U*.14);c.closePath();svFO(c,'#E8701E',lw);
+  c.save();c.clip();c.strokeStyle='rgba(120,50,10,.5)';c.lineWidth=Math.max(1,U*.03);for(i=-5;i<=5;i++){c.beginPath();c.moveTo(i*U*.1,-U*.1);c.lineTo(i*U*.1,U*.12);c.stroke()}c.restore();
+  c.beginPath();c.moveTo(-U*.04,-U*.6);c.quadraticCurveTo(-U*.06,-U*.8,-U*.24,-U*.84);c.quadraticCurveTo(-U*.3,-U*.76,-U*.2,-U*.74);c.lineWidth=U*.09+lw*2;c.strokeStyle=SIDE_DK;c.stroke();c.lineWidth=U*.09;c.strokeStyle='#7A4A20';c.stroke()};
+/* 호박 유령 왕관: 금 띠 안에 호박, 앞쪽 잭오랜턴 반쪽 얼굴(빛남), 뒤에서 꼬마 유령이 빼꼼 */
+ACC_HEAD.hw_pumpcrown=function(c,U){var lw=LW(U);
+  c.save();c.globalAlpha*=.95;c.beginPath();c.moveTo(-U*.44,-U*.3);c.bezierCurveTo(-U*.52,-U*.62,-U*.22,-U*.66,-U*.26,-U*.36);c.closePath();svFO(c,'#F4F2FF',lw*.7);c.fillStyle=SIDE_DK;c.beginPath();c.arc(-U*.34,-U*.48,U*.025,0,Math.PI*2);c.fill();c.restore();
+  c.beginPath();c.ellipse(0,-U*.3,U*.44,U*.34,0,0,Math.PI*2);svFO(c,lg(c,-U*.64,0,'#FFA640','#E06010'),lw);
+  c.save();c.globalCompositeOperation='lighter';c.globalAlpha*=.5;c.drawImage(glow('255,210,90'),U*.04,-U*.56,U*.42,U*.42);c.restore();
+  c.fillStyle='#FFD84A';c.beginPath();c.moveTo(U*.18,-U*.44);c.lineTo(U*.32,-U*.44);c.lineTo(U*.27,-U*.32);c.closePath();c.fill();c.beginPath();c.moveTo(U*.06,-U*.22);c.quadraticCurveTo(U*.24,-U*.14,U*.4,-U*.24);c.lineTo(U*.38,-U*.14);c.quadraticCurveTo(U*.22,-U*.06,U*.06,-U*.14);c.closePath();c.fill();
+  c.beginPath();c.moveTo(-U*.02,-U*.62);c.quadraticCurveTo(-U*.04,-U*.76,-U*.16,-U*.78);c.lineWidth=U*.07+lw*2;c.strokeStyle=SIDE_DK;c.stroke();c.lineWidth=U*.07;c.strokeStyle='#5A7A2A';c.stroke();
+  svCrown(c,U,{nb:0,nf:4,b0:'#FFE070',b1:'#C88A10',spike:function(c,x,y,k){c.beginPath();c.moveTo(x-U*.07,y+U*.02);c.lineTo(x,y-U*.14);c.lineTo(x+U*.07,y+U*.02);c.closePath();svFO(c,'#FFD040',lw*.7);c.beginPath();c.arc(x,y-U*.16,U*.035,0,Math.PI*2);svFO(c,'#FFE890',lw*.5)},
+    band:function(c,L,R){for(var i=0;i<2;i++){var x=L+(R-L)*(i*.5+.3);c.beginPath();c.moveTo(x,-U*.17);c.lineTo(x+U*.06,-U*.09);c.lineTo(x,-U*.01);c.lineTo(x-U*.06,-U*.09);c.closePath();svFO(c,'#9A4AE0',lw*.5)}}})};
+/* 박쥐 선글라스: 눈에 렌즈 하나 + 뒤로 날개 하나 + 다리 */
+ACC_FACE.hw_batlens=function(c,E){var lw=Math.max(1.4,E*.26);c.beginPath();c.moveTo(-E*1.1,-E*.3);c.lineTo(-E*3.1,-E*.7);c.lineWidth=lw*1.8;c.strokeStyle=SIDE_DK;c.stroke();c.lineWidth=lw;c.strokeStyle='#2A2034';c.stroke();
+  c.beginPath();c.moveTo(-E*.7,-E*.7);c.quadraticCurveTo(-E*1.6,-E*2.6,-E*3.2,-E*2.4);c.quadraticCurveTo(-E*2.8,-E*1.8,-E*3,-E*1.3);c.quadraticCurveTo(-E*2.3,-E*1.5,-E*2.1,-E*.9);c.quadraticCurveTo(-E*1.6,-E*1.1,-E*1.2,-E*.2);c.closePath();svFO(c,'#2A2034',lw*.8);
+  c.beginPath();c.ellipse(0,0,E*1.35,E*1.15,0,0,Math.PI*2);c.fillStyle=lg(c,-E,E,'#9A5AF0','#3A1470');c.fill();c.lineWidth=lw*1.9;c.strokeStyle=SIDE_DK;c.stroke();c.lineWidth=lw;c.strokeStyle='#4A3466';c.stroke();shine(c,E)};
+/* 해골 안대: 눈을 덮는 안대 + 뒤로 넘어가는 끈 */
+ACC_FACE.hw_patch=function(c,E){var lw=Math.max(1.4,E*.24);c.beginPath();c.moveTo(-E*.6,-E*.9);c.lineTo(-E*2.5,-E*2.4);c.moveTo(-E*1.2,E*.4);c.lineTo(-E*3.1,E*.3);c.lineWidth=E*.3+lw*2;c.strokeStyle=SIDE_DK;c.stroke();c.lineWidth=E*.3;c.strokeStyle='#23262E';c.stroke();
+  c.beginPath();c.ellipse(E*.05,0,E*1.35,E*1.2,0,0,Math.PI*2);c.fillStyle=lg(c,-E,E,'#3A3E48','#14161C');c.fill();c.lineWidth=lw*1.6;c.strokeStyle=SIDE_DK;c.stroke();
+  c.fillStyle='#F4F0E6';c.beginPath();c.arc(E*.05,-E*.2,E*.42,0,Math.PI*2);c.fill();c.fillRect(-E*.17,E*.05,E*.44,E*.28);c.fillStyle='#14161C';c.beginPath();c.arc(-E*.1,-E*.22,E*.11,0,Math.PI*2);c.arc(E*.2,-E*.22,E*.11,0,Math.PI*2);c.fill();
+  c.strokeStyle='#F4F0E6';c.lineWidth=Math.max(1,E*.14);c.beginPath();c.moveTo(-E*.55,E*.55);c.lineTo(E*.65,E*.95);c.moveTo(E*.65,E*.55);c.lineTo(-E*.55,E*.95);c.stroke()};
+/* 루돌프 뿔: 가까운 뿔 + 먼 뿔(뒤 · 어둡게) + 빨간 머리띠 */
+(function(){var ant0=ACC_HEAD.wn_antler;ACC_HEAD.wn_antler=function(c,U){c.lineCap='round';c.lineJoin='round';
+  function ant(x,k,col){c.save();c.translate(x,0);c.scale(k,k);var P=[[0,0],[-.06,-.46],[.14,-.86]],B=[[[-.04,-.3],[.24,-.44]],[[.02,-.62],[-.2,-.9]],[[.1,-.74],[.38,-.8]]];
+    [[SIDE_DK,U*.2/k],[col,U*.115/k]].forEach(function(q){c.strokeStyle=q[0];c.lineWidth=q[1];c.beginPath();c.moveTo(P[0][0]*U,P[0][1]*U);c.quadraticCurveTo(P[1][0]*U,P[1][1]*U,P[2][0]*U,P[2][1]*U);
+      B.forEach(function(b){c.moveTo(b[0][0]*U,b[0][1]*U);c.lineTo(b[1][0]*U,b[1][1]*U)});c.stroke()});c.restore()}
+  ant(-U*.22,.84,'#8A5A30');svBand(c,U,'#D8303A',-U*.06,LW(U)*.8);ant(U*.04,1,'#B07A45')};ACC_HEAD.wn_antler.old=ant0})();
+['hw_horns','hw_cat','hw_bonecrown','hw_candycrown','hw_battiara','hw_beanie','hw_pumpcrown'].forEach(function(k){try{delete HW2H[k]}catch(e){}});
+/* 상점 아이콘(ACC_G 없음)에서는 띠까지 보이게 살짝 올리고, 작은 박쥐 티아라 · 뿔은 크게 */
+['hw_horns','hw_cat','hw_bonecrown','hw_candycrown','hw_battiara','hw_beanie','hw_pumpcrown','wn_antler'].forEach(function(k){var f=ACC_HEAD[k];ACC_HEAD[k]=function(c,U){if(ACC_G)return f(c,U);var z=k==='hw_battiara'?1.15:k==='hw_horns'?1.1:k==='wn_antler'?.9:1;c.save();c.translate(0,-U*.16);c.scale(z,z);f(c,U);c.restore()}});
+['hw_batlens','hw_patch'].forEach(function(k){try{delete HW2F[k]}catch(e){}});
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

@@ -1,6 +1,6 @@
 What's new in 1.1.15:
 (1) Still no in-app purchases, accounts, data collection changes or new SDKs.
-(2) New players who skip the tutorial see three short control tips during their first runs; the existing first-run pearl gift and a next-size goal are now shown on screen.
+(2) On first launch, new players choose a nickname (pre-filled random suggestion, 10 characters, filtered for offensive words; shown on leaderboards/Arena; no account, can be changed in Settings). New players who skip the tutorial see three short control tips during their first runs; the existing first-run pearl gift and a next-size goal are now shown on screen.
 (3) If frames are consistently slow on a device, the game lowers the canvas resolution for the rest of that run. Runs with many slow frames send an anonymous performance record (mode, frame statistics, random device ID only) to the existing crash/diagnostic table.
 (4) Cosmetic placement fixes for rays and mantas.
 

@@ -13555,6 +13555,27 @@ var endRunFR=endRun;endRun=function(win,quit){var st=state,isS=mode==='single'&&
 setInterval(function(){try{if(state!=='play'||!P)return;var tm=P.time||0;
   if(FR.tips&&FR.i<FR_TIPS.length&&tm>=FR.next){var hn=$('hint');if(hn){hn.textContent=T(FR_TIPS[FR.i]);hintT=4;crumb('frTip'+FR.i)}FR.i++;FR.next=tm+4.5}
   if(FR.gift&&!FR.giftOk&&tm>=15){FR.giftOk=1;texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'🎁 '+T('선물 확보! 진주 +')+FR.gift,life:2.2,big:1});try{buzz(20)}catch(_){}}}catch(e){}},250);
+/* ===== 1.1.15 신규 유저는 닉네임부터(종한 요청): 처음 켜면 연습 바다 전에 이름 정하기.
+   추천 이름이 미리 들어 있어 바로 '시작'해도 됨 · 🎲로 다른 추천 · 10자까지 · 금칙어는 막음(설정의 이름 칸과 같은 규칙). 나중에 설정에서 바꿀 수 있음 */
+abyTr(TRT,{'닉네임을 정해 주세요':'Choose your nickname','랭킹과 대전에서 다른 사람에게 보이는 이름이에요':'This name is shown to others in rankings and Arena','이 이름으로 시작':'Start with this name','다른 이름 추천':'Suggest another','나중에 설정에서 바꿀 수 있어요 · 10자까지':'You can change it later in Settings · up to 10 characters','이름을 넣어 주세요':'Please enter a name'});
+abyTr(TRJ,{'닉네임을 정해 주세요':'ニックネームを決めてください','랭킹과 대전에서 다른 사람에게 보이는 이름이에요':'ランキングや対戦でほかの人に表示される名前です','이 이름으로 시작':'この名前ではじめる','다른 이름 추천':'ほかの名前','나중에 설정에서 바꿀 수 있어요 · 10자까지':'あとで設定から変更できます · 10文字まで','이름을 넣어 주세요':'名前を入力してください'});
+function nickSuggest(){for(var i=0;i<30;i++){var x=nickSuggest0();if(x.length<=10)return x}return nickSuggest0().slice(0,10)}
+function nickSuggest0(){var r=function(a){return a[Math.floor(Math.random()*a.length)]},n=10+Math.floor(Math.random()*90);
+  if(LANG==='en')return r(['Swift','Brave','Tiny','Zippy','Sunny','Lucky','Bubbly','Mighty'])+r(['Fin','Puff','Gill','Ray','Koi','Eel'])+n;
+  if(LANG==='ja')return r(['すばやい','げんきな','ちいさな','ゆかいな','つよい','きらきら'])+r(['イワシ','フグ','タコ','サメ','コイ'])+n;
+  return r(['날쌘','배고픈','용감한','반짝','꼬마','씩씩한','느긋한','깜찍한'])+r(['멸치','복어','문어','상어','해마','고등어'])+n}
+(function(){var st=document.createElement('style');st.textContent='#nickFirst .panel{max-width:380px}#nickFirst h1{font-size:24px;margin:4px 0 6px}#nickFirst .lead{margin:0 0 14px}#nfIn{width:100%;box-sizing:border-box;font:inherit;font-size:22px;text-align:center;padding:14px 12px;border-radius:16px;border:3px solid #BFE0F2;background:#fff;color:#0B2C4A;outline:none}#nfIn:focus{border-color:#3BA3E0}#nfIn[aria-invalid=true]{border-color:#E5384B}#nickFirst .nfrow{display:flex;gap:8px;margin-top:10px}#nickFirst .nfnote{display:block;margin-top:10px;font-size:12px;opacity:.7;text-align:center}#nickFirst .nickwarn{display:block;color:#C0303A;margin-top:6px;text-align:center}#nickFirst .nferr{display:block;color:#C0303A;margin-top:6px;text-align:center}';document.head.appendChild(st)})();
+function nickFirstOpen(done){var el=$('nickFirst');if(!el){el=document.createElement('div');el.className='overlay';el.id='nickFirst';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
+    el.innerHTML='<div class="panel"><h1 id="nfH"></h1><p class="lead" id="nfL"></p><input id="nfIn" type="text" maxlength="10" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><small class="nferr" id="nfErr" hidden></small><div class="nfrow"><button class="btn ghost" id="nfDice" type="button"></button></div><div class="row"><button class="btn" id="nfOk" type="button"></button></div><small class="nfnote" id="nfNote"></small></div>';document.body.appendChild(el);
+    var inp=$('nfIn');inp.addEventListener('input',function(){var v=inp.value;if(badName(v)){$('nfErr').textContent=T('쓸 수 없는 말이 들어 있어요. 다른 이름을 써 주세요');$('nfErr').hidden=false;inp.setAttribute('aria-invalid','true')}else{$('nfErr').hidden=true;inp.removeAttribute('aria-invalid')}});
+    $('nfDice').addEventListener('click',function(){inp.value=nickSuggest();inp.dispatchEvent(new Event('input'));$('nfErr').hidden=true;buzz(10)});
+    var ok=function(){var v=inp.value.replace(/[\u0000-\u001f<>]/g,'').replace(/\s+/g,' ').trim().slice(0,10);if(!v){$('nfErr').textContent=T('이름을 넣어 주세요');$('nfErr').hidden=false;return}if(badName(v)){$('nfErr').textContent=T('쓸 수 없는 말이 들어 있어요. 다른 이름을 써 주세요');$('nfErr').hidden=false;return}
+      save.nick=v;save.nickSet=1;persist();crumb('nickFirst');try{nfEv('nick')}catch(e){}try{inp.blur()}catch(e){}el.hidden=true;var d=el._done;el._done=null;if(d)setTimeout(d,250)};
+    $('nfOk').addEventListener('click',ok);inp.addEventListener('keydown',function(e){if(e.key==='Enter')ok()})}
+  $('nfH').textContent=T('닉네임을 정해 주세요');$('nfL').textContent=T('랭킹과 대전에서 다른 사람에게 보이는 이름이에요');$('nfOk').textContent=T('이 이름으로 시작');$('nfDice').textContent='🎲 '+T('다른 이름 추천');$('nfNote').textContent=T('나중에 설정에서 바꿀 수 있어요 · 10자까지');
+  var inp=$('nfIn');inp.value=(save.nick&&!badName(save.nick))?save.nick:nickSuggest();$('nfErr').hidden=true;el._done=done;el.hidden=false;crumb('nickAsk')}
+var tutBootNK=tutBoot;tutBoot=function(){if($('intro')){setTimeout(tutBoot,500);return}
+  if(state==='home'&&!save.onb&&!(save.runs>0)&&!save.nickSet){if($('nickFirst')&&!$('nickFirst').hidden)return;nickFirstOpen(function(){tutBootNK()});return}return tutBootNK()};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

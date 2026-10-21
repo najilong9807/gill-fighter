@@ -6259,7 +6259,7 @@ function bannerOff(){try{clearTimeout(bannerT);BAN_Q=null;clearTimeout(BAN_QT);B
 /* 1.1.10(b175) 스크롤되는 목록(부스터 · 업데이트 소식 · 곡 고르기 등)에 아래로 더 있으면 끝을 흐리게 해서 '더 있어요'를 보여 준다 */
 setInterval(function(){try{document.querySelectorAll('.bs-list,.updnotes,#shList,.svup-list,#svUpList').forEach(function(e){if(!e.offsetParent){return}var m=e.scrollHeight>e.clientHeight+6&&e.scrollTop+e.clientHeight<e.scrollHeight-6;if(e.classList.contains('fadeb')!==m)e.classList.toggle('fadeb',m)})}catch(x){}},400);
 var BAN_Q=null,BAN_QT=0;
-function banBlock(){var i,o,ids=['over','svRes'];for(i=0;i<ids.length;i++){o=$(ids[i]);if(o&&!o.hidden)return 2}ids=['svGuide','svUp','sheet','svBox','onb','prolog','news','upd','svRev','pause'];for(i=0;i<ids.length;i++){o=$(ids[i]);if(o&&!o.hidden)return 1}return 0}
+function banBlock(){var i,o,ids=['over','svRes'];for(i=0;i<ids.length;i++){o=$(ids[i]);if(o&&!o.hidden)return 2}ids=['svGuide','svUp','sheet','svBox','onb','prolog','news','upd','svRev','pause','wev'];for(i=0;i<ids.length;i++){o=$(ids[i]);if(o&&!o.hidden)return 1}return 0}
 function banner(a,b){var bk=0;try{bk=banBlock()}catch(x){}if(bk===2)return;if(bk===1){BAN_Q=[a,b,Date.now()];clearTimeout(BAN_QT);BAN_QT=setTimeout(banFlush,600);return}banner0(a,b)}
 function banFlush(){if(!BAN_Q)return;var q=BAN_Q,bk=0;try{bk=banBlock()}catch(x){}if(bk===2||Date.now()-q[2]>15000){BAN_Q=null;return}if(bk===1){BAN_QT=setTimeout(banFlush,600);return}BAN_Q=null;banner0(q[0],q[1])}
 function banHold(){try{var e=$('banner');if(e&&!e.hidden&&BAN_LAST){clearTimeout(bannerT);e.hidden=true;BAN_Q=[BAN_LAST[0],BAN_LAST[1],Date.now()];clearTimeout(BAN_QT);BAN_QT=setTimeout(banFlush,600)}}catch(x){}}
@@ -10080,6 +10080,7 @@ function draw(){
     if(P.look.light||fxOn('flare')){var mp2=lightPos(P.x,P.y,P.s,P.ang,P.look),mr=P.s*(1.2+.8*(P.look.light||1))*(fxOn('flare')?1.8:1)*(fxOn('lure')?1.4:1);ctx.globalAlpha=(.3+.6*dkW)*(.88+.12*Math.sin(t*3));ctx.globalCompositeOperation='lighter';ctx.drawImage(glow(P.look.glowCol||'235,250,255'),mp2[0]-mr,mp2[1]-mr,mr*2,mr*2);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
     if(fxOn('slow'))aura(ctx,P.x,P.y,Math.min(cw,ch)/zoom*.5,'150,205,255',.14);
     if(decoy)drawFish(ctx,decoy.x,decoy.y,decoy.s,decoy.ang,decoy.look,{px:decoy.s*zoom,alpha:.55*Math.min(1,decoy.t*2),phase:decoy.ph,minLw:minLw});
+    if(typeof graceLeft==='function'){var gL=graceLeft();if(gL>0){var gA=Math.min(1,gL/.8)*(gL<1?(.55+.45*Math.sin(t*18)):1);ctx.save();ctx.globalAlpha=.5*gA;ctx.beginPath();ctx.arc(P.x,P.y,P.s*1.55,0,Math.PI*2);ctx.lineWidth=2.6/zoom;ctx.strokeStyle='rgba(190,240,255,1)';ctx.stroke();ctx.globalAlpha=.12*gA;ctx.fillStyle='rgba(190,240,255,1)';ctx.fill();ctx.globalAlpha=.55*gA;ctx.beginPath();ctx.arc(P.x-P.s*.55,P.y-P.s*.6,P.s*.22,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.restore()}}
     if(fxOn('puff')||fxOn('feast')||fxOn('gold')||fxOn('ghost'))aura(ctx,P.x,P.y,P.s*2.4,'255,217,59',.55);
     if(fxOn('bite')||fxOn('frenzy'))aura(ctx,P.x,P.y,P.s*2.4,'255,79,123',.55);
     if(fxOn('leap'))aura(ctx,P.x,P.y,P.s*2.8,'255,255,255',.6);
@@ -12099,7 +12100,7 @@ abyTr(TRJ,{'이끼 묘비':'苔むしたお墓','호박 무더기':'かぼちゃ
 
 /* ===== 1.1.11 할로윈 선물: 할로윈 기간에 앱을 열면 모든 분 수족관에 「호박 무더기」 하나를 무료로(한 해 한 번). 수족관이 가득이면 보관함으로. 출석 선물 창 위에 안내 ===== */
 var HWGIFT='hw_jackpile';
-function hwGiftCheck(){try{if(!hwSeason())return;var y=new Date().getFullYear();if(save.hwGift===y)return;if(!(cw>0&&ch>0))return;var D=decoById(HWGIFT);if(!D)return;
+function hwGiftCheck(){try{if(!hwSeason())return;if(!((save.runs|0)>0))return;/* 1.1.15: 처음 켠 사람은 닉네임 · 연습 먼저, 선물 알림은 첫 판 뒤 홈에서 */var y=new Date().getFullYear();if(save.hwGift===y)return;if(!(cw>0&&ch>0))return;var D=decoById(HWGIFT);if(!D)return;
   var d=DS(),W=TWW(),put=false;
   if(d.placed.length<DECO_MAX){var nx=decoSpot(D,true);
     d.placed.push({k:HWGIFT,x:nx,y:clamp((floorAt(nx*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95),s:1,f:0});put=true}
@@ -13558,19 +13559,19 @@ setInterval(function(){try{if(AQ.on&&state!=='play'&&state!=='pause')aqReport()}
    ① 튜토리얼을 건너뛴 사람: 처음 3판 동안 판 초반에 조작 요령 3줄을 차례로(아래 안내줄, 4초씩)
    ② 처음 3판 싱글은 '15초만 버티면 진주 선물'이 있는데 안 보였음 → 판 시작에 알려 주고, 15초가 되면 '선물 확보!'
    ③ 처음 3판 싱글의 결과 화면: 다음 판 목표 한 줄(이번 크기보다 조금 더 크게) */
-abyTr(TRT,{'손가락을 대고 움직이면 물고기가 따라와요':'Touch and drag — your fish follows your finger','나보다 작은 물고기만 먹을 수 있어요 · 큰 물고기는 입만 피하면 돼요':'You can only eat fish smaller than you · just stay away from big mouths','오른쪽 아래 버튼을 누르면 특수 능력을 써요':'Tap the bottom-right button to use your special ability','15초만 버티면 진주 선물!':'Last 15 seconds for a pearl gift!','선물 확보! 진주 +':'Gift secured! Pearls +','다음 판 목표: ':'Next goal: ','까지 크기':''});
+abyTr(TRT,{'손가락을 대고 움직이면 물고기가 따라와요':'Touch and drag — your fish follows your finger','나보다 작은 물고기만 먹을 수 있어요 · 큰 물고기는 입만 피하면 돼요':'You can only eat fish smaller than you · just stay away from big mouths','오른쪽 아래 버튼을 누르면 특수 능력을 써요':'Tap the bottom-right button to use your special ability','15초만 버티면 진주 선물!':'Survive 15 seconds for a pearl gift!','선물 확보! 진주 +':'Gift secured! Pearls +','다음 판 목표: ':'Next goal: ','까지 크기':''});
 abyTr(TRJ,{'손가락을 대고 움직이면 물고기가 따라와요':'指を当てて動かすと魚がついてきます','나보다 작은 물고기만 먹을 수 있어요 · 큰 물고기는 입만 피하면 돼요':'自分より小さい魚だけ食べられます · 大きい魚は口だけ避ければOK','오른쪽 아래 버튼을 누르면 특수 능력을 써요':'右下のボタンで特殊能力を使います','15초만 버티면 진주 선물!':'15秒耐えたら真珠プレゼント！','선물 확보! 진주 +':'プレゼント確保！真珠 +','다음 판 목표: ':'次の目標: ','까지 크기':'まで大きくなる'});
 var tutEndFR=tutEnd;tutEnd=function(done){var was=typeof TUT!=='undefined'&&TUT&&TUT.on,r=tutEndFR.apply(this,arguments);try{if(was&&!done&&!save.tutSk){save.tutSk=1;persist()}}catch(e){}return r};
 var FR={tips:0,gift:0,giftOk:0};
 var startRunFR=startRun;startRun=function(){var r=startRunFR.apply(this,arguments);try{FR.tips=(save.tutSk&&(save.runs|0)<=3&&!P.surv)?1:0;FR.next=5.5;FR.i=0;
   FR.gift=(mode==='single'&&!P.camp&&!P.surv&&(save.ng|0)<3&&(save.runs|0)<=6)?[45,30,20][save.ng|0]:0;FR.giftOk=0;
-  if(FR.gift)setTimeout(function(){try{if(state==='play'&&FR.gift)texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'🎁 '+T('15초만 버티면 진주 선물!'),life:2.6})}catch(e){}},1600)}catch(e){}return r};
+  if(FR.gift)setTimeout(function(){try{if(state==='play'&&FR.gift&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)){var hn=$('hint');if(hn){hn.textContent='🎁 '+T('15초만 버티면 진주 선물!');hintT=3.6}}}catch(e){}},1600)}catch(e){}return r};
 var FR_TIPS=['손가락을 대고 움직이면 물고기가 따라와요','나보다 작은 물고기만 먹을 수 있어요 · 큰 물고기는 입만 피하면 돼요','오른쪽 아래 버튼을 누르면 특수 능력을 써요'];
 var endRunFR=endRun;endRun=function(win,quit){var st=state,isS=mode==='single'&&P&&!P.camp&&!P.surv,r=endRunFR.apply(this,arguments);
   try{if(st==='play'&&state==='over'&&isS&&(save.runs|0)<=3&&!quit){var cm=cmOf(P.s),goal=Math.max(cm+1,Math.ceil(cm*1.3)),m=$('oMsg');if(m&&!(win||P.full)){var last=m.lastElementChild,el=document.createElement(last?last.tagName:'span');if(last&&last.className)el.className=last.className;el.textContent=T('다음 판 목표: ')+fmt(goal)+T('까지 크기');m.appendChild(el)}}}catch(e){}return r};
 setInterval(function(){try{if(state!=='play'||!P)return;var tm=P.time||0;
   if(FR.tips&&FR.i<FR_TIPS.length&&tm>=FR.next){var hn=$('hint');if(hn){hn.textContent=T(FR_TIPS[FR.i]);hintT=4;crumb('frTip'+FR.i)}FR.i++;FR.next=tm+4.5}
-  if(FR.gift&&!FR.giftOk&&tm>=15){FR.giftOk=1;texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'🎁 '+T('선물 확보! 진주 +')+FR.gift,life:2.2,big:1});try{buzz(20)}catch(_){}}}catch(e){}},250);
+  if(FR.gift&&!FR.giftOk&&tm>=15){FR.giftOk=1;texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'🎁 '+T('진주 +')+FR.gift,life:2.2,big:1});try{buzz(20)}catch(_){}}}catch(e){}},250);
 /* ===== 1.1.15 신규 유저는 닉네임부터(종한 요청): 처음 켜면 연습 바다 전에 이름 정하기.
    추천 이름이 미리 들어 있어 바로 '시작'해도 됨 · 🎲로 다른 추천 · 10자까지 · 금칙어는 막음(설정의 이름 칸과 같은 규칙). 나중에 설정에서 바꿀 수 있음 */
 abyTr(TRT,{'닉네임을 정해 주세요':'Choose your nickname','랭킹과 대전에서 다른 사람에게 보이는 이름이에요':'This name is shown to others in rankings and Arena','이 이름으로 시작':'Start with this name','다른 이름 추천':'Suggest another','나중에 설정에서 바꿀 수 있어요 · 10자까지':'You can change it later in Settings · up to 10 characters','이름을 넣어 주세요':'Please enter a name'});
@@ -13609,8 +13610,8 @@ var lbShowDC=lbShow;lbShow=function(){var r=lbShowDC.apply(this,arguments);try{l
    이번 주 이벤트 바다 3판(20초 이상) → 진주 200 + 보석 3. 홈 띠로 알려 주고, 누르면 설명 · 진행 · 받기 · 바로 하기 */
 var WEV=[{k:'treasure',ico:'💰',n:'보물 바다',d:'이번 주 기록 도전은 진주를 1.5배 받아요'},{k:'giant',ico:'🐋',n:'거대 물고기 주간',d:'큰 물고기가 더 크게 나오고, 큰 물고기 사냥 진주가 2배'},{k:'swarm',ico:'🐟',n:'먹이 풍년',d:'작은 물고기가 훨씬 많아 빨리 커요'}];
 var WEV_GOAL=3,WEV_RW={p:200,g:3};
-abyTr(TRT,{'보물 바다':'Treasure Sea','이번 주 기록 도전은 진주를 1.5배 받아요':'Score Challenge pays 1.5× pearls this week','거대 물고기 주간':'Giant Fish Week','큰 물고기가 더 크게 나오고, 큰 물고기 사냥 진주가 2배':'Big fish grow even bigger, and hunting them pays 2× pearls','먹이 풍년':'Feeding Frenzy','작은 물고기가 훨씬 많아 빨리 커요':'Lots more small fish — grow fast','이번 주 이벤트 바다':"This week's event sea",'이번 주 이벤트 · ':'This week · ','기록 도전 3판 하면 진주 200 + 보석 3':'Play Score Challenge 3 times: 200 pearls + 3 gems','받기':'Claim','바로 하기':'Play now','받았어요':'Claimed','다음 주 월요일에 새 이벤트':'New event next Monday','이벤트 보상을 받았어요!':'Event reward claimed!','판':' runs'});
-abyTr(TRJ,{'보물 바다':'お宝の海','이번 주 기록 도전은 진주를 1.5배 받아요':'今週のスコアチャレンジは真珠1.5倍','거대 물고기 주간':'巨大魚ウィーク','큰 물고기가 더 크게 나오고, 큰 물고기 사냥 진주가 2배':'大きい魚がさらに大きく、大物狩りの真珠が2倍','먹이 풍년':'エサ大漁','작은 물고기가 훨씬 많아 빨리 커요':'小さい魚が多くて早く育つ','이번 주 이벤트 바다':'今週のイベントの海','이번 주 이벤트 · ':'今週のイベント · ','기록 도전 3판 하면 진주 200 + 보석 3':'スコアチャレンジ3回で真珠200 + ジェム3','받기':'受け取る','바로 하기':'すぐ遊ぶ','받았어요':'受け取りました','다음 주 월요일에 새 이벤트':'次の月曜に新イベント','이벤트 보상을 받았어요!':'イベント報酬を受け取りました！','판':'回'});
+abyTr(TRT,{'보물 바다':'Treasure Sea','이번 주 기록 도전은 진주를 1.5배 받아요':'Score Challenge pays 1.5× pearls this week','거대 물고기 주간':'Giant Fish Week','큰 물고기가 더 크게 나오고, 큰 물고기 사냥 진주가 2배':'Big fish grow even bigger, and hunting them pays 2× pearls','먹이 풍년':'Feeding Frenzy','작은 물고기가 훨씬 많아 빨리 커요':'Lots more small fish — grow fast','이번 주 이벤트 바다':"This week's event sea",'이번 주 이벤트 · ':'This week · ','기록 도전 3판 하면 진주 200 + 보석 3':'Play Score Challenge 3 times: 200 pearls + 3 gems','받기':'Claim','바로 하기':'Play now','받았어요':'Claimed','다음 주 월요일에 새 이벤트':'New event next Monday','이벤트 보상을 받았어요!':'Event reward claimed!','판':' runs','이번 주 이벤트 완료! 홈에서 보상을 받아요':'Weekly event complete! Claim your reward at home'});
+abyTr(TRJ,{'보물 바다':'お宝の海','이번 주 기록 도전은 진주를 1.5배 받아요':'今週のスコアチャレンジは真珠1.5倍','거대 물고기 주간':'巨大魚ウィーク','큰 물고기가 더 크게 나오고, 큰 물고기 사냥 진주가 2배':'大きい魚がさらに大きく、大物狩りの真珠が2倍','먹이 풍년':'エサ大漁','작은 물고기가 훨씬 많아 빨리 커요':'小さい魚が多くて早く育つ','이번 주 이벤트 바다':'今週のイベントの海','이번 주 이벤트 · ':'今週のイベント · ','기록 도전 3판 하면 진주 200 + 보석 3':'スコアチャレンジ3回で真珠200 + ジェム3','받기':'受け取る','바로 하기':'すぐ遊ぶ','받았어요':'受け取りました','다음 주 월요일에 새 이벤트':'次の月曜に新イベント','이벤트 보상을 받았어요!':'イベント報酬を受け取りました！','판':'回','이번 주 이벤트 완료! 홈에서 보상을 받아요':'今週のイベント達成！ホームで報酬を受け取ろう'});
 function wevNow(){try{var w=wkId(),n=parseInt(w.split('-W')[1],10)||0,y=parseInt(w,10)||0;return WEV[(y*53+n)%WEV.length]}catch(e){return WEV[0]}}
 function wevS(){var w=wkId();if(!save.wev||save.wev.w!==w)save.wev={w:w,n:0,got:0};return save.wev}
 function wevOn(){try{return mode==='single'&&P&&!P.camp&&!P.surv&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)&&!fair()}catch(e){return false}}
@@ -13619,7 +13620,7 @@ var runGainWE=runGain;runGain=function(win){var k=P&&P.wev,hp=P&&P.huntPearls;if
 var spawnFishWE=spawnFish;spawnFish=function(initial,prey){if(P&&P.wev==='swarm'&&!prey&&Math.random()<.35)prey=true;var n0=fish.length,r=spawnFishWE.call(this,initial,prey);try{for(var i=n0;i<fish.length;i++)wevGiant(fish[i])}catch(e){}return r};
 function wevGiant(f){if(!f)return;f.giant=0;if(P&&P.wev==='giant'&&!f.bot&&f.s>=P.s*1.15&&Math.random()<.3){f.s*=1.3;f.giant=1}}
 var startRunWE=startRun;startRun=function(){var r=startRunWE.apply(this,arguments);try{P.wev=wevOn()?wevNow().k:null;P.wevC=0;try{fish.forEach(wevGiant)}catch(x){}if(P.wev&&(save.runs|0)>3){var e=wevNow();setTimeout(function(){try{if(state==='play'&&P.wev)banner(e.ico+' '+T(e.n),T(e.d))}catch(x){}},900)}}catch(e){}return r};
-var endRunWE=endRun;endRun=function(win,quit){var st=state,k=P&&P.wev,tm=P&&P.time||0,r=endRunWE.apply(this,arguments);try{if(st==='play'&&state==='over'&&k&&tm>=20&&!P.wevC){P.wevC=1;var S=wevS();if(S.n<WEV_GOAL){S.n++;persist();wevBarPaint()}}}catch(e){}return r};
+var endRunWE=endRun;endRun=function(win,quit){var st=state,k=P&&P.wev,tm=P&&P.time||0,r=endRunWE.apply(this,arguments);try{if(st==='play'&&state==='over'&&k&&tm>=20&&!P.wevC){P.wevC=1;var S=wevS();if(S.n<WEV_GOAL&&!S.got){S.n++;persist();wevBarPaint();var m=$('oMsg');if(m){var last=m.lastElementChild,el=document.createElement(last?last.tagName:'span');if(last&&last.className)el.className=last.className;var e=wevNow();el.textContent=S.n>=WEV_GOAL?('🎁 '+T('이번 주 이벤트 완료! 홈에서 보상을 받아요')):(e.ico+' '+T(e.n)+' '+S.n+' / '+WEV_GOAL);m.appendChild(el)}}}}catch(e){}return r};
 /* 홈 띠 + 창 */
 (function(){var st=document.createElement('style');st.textContent='#wevBar .wevp{margin-left:auto;font-family:var(--disp);font-size:13px;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.9);color:#0B2C4A}#wevBar.ready .wevp{background:#FFD23F}#wev .wevbig{font-size:44px;text-align:center;margin:6px 0 0}#wev .wevbar{height:12px;border-radius:999px;background:#E3EEF6;overflow:hidden;margin:10px 0 4px}#wev .wevbar i{display:block;height:100%;background:linear-gradient(90deg,#3BA3E0,#2E9A4B);border-radius:999px}#wev .wevn{text-align:center;font-family:var(--disp);color:#12365A}#wev .wevrw{text-align:center;font-size:13px;color:#557089;margin:4px 0 0}';document.head.appendChild(st);
   var hb=document.querySelector('.home-bottom');if(!hb)return;var b=document.createElement('button');b.type='button';b.className='updbar wevbar';b.id='wevBar';b.hidden=true;b.innerHTML='<span class="wevi"></span><span class="wevt"></span><b class="wevp"></b>';
@@ -13635,6 +13636,11 @@ function wevOpen(){var el=$('wev');if(!el){el=document.createElement('div');el.c
   $('wevFill').style.width=Math.min(100,S.n/WEV_GOAL*100)+'%';$('wevN').textContent=Math.min(S.n,WEV_GOAL)+' / '+WEV_GOAL+T('판');$('wevRw').textContent=S.got?T('다음 주 월요일에 새 이벤트'):T('기록 도전 3판 하면 진주 200 + 보석 3');
   $('wevGo').textContent=S.got?T('확인'):ready?T('받기'):T('바로 하기');$('wevX').textContent=T('닫기');$('wevX').parentNode.hidden=!!S.got;el.hidden=false}
 setInterval(function(){try{if(state==='home')wevBarPaint()}catch(e){}},3000);setTimeout(function(){try{wevBarPaint()}catch(e){}},1500);
+/* ===== 1.1.15 시작 보호막: 실제 기록(10/21) 처음 하는 사람 판이 4~6초 만에 큰 물고기에게 먹혀 끝나는 경우가 많음 →
+   싱글 · 원정 판 시작 직후 잠깐 거품 보호막(처음 6판 4초, 그다음 2.5초). 생존 · 대전 · 친구 바다는 그대로(공정) */
+function graceLeft(){try{if(!P||state!=='play'||!P.grace)return 0;return Math.max(0,P.grace-(P.time||0))}catch(e){return 0}}
+var invulnGR=invuln;invuln=function(){return graceLeft()>0||invulnGR()};
+var startRunGR=startRun;startRun=function(){var r=startRunGR.apply(this,arguments);try{P.grace=(mode==='single'&&!P.surv&&!fair()&&!(typeof TUT!=='undefined'&&TUT&&TUT.on))?((save.runs|0)<6?4:2.5):0}catch(e){}return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

@@ -10990,7 +10990,7 @@ function roomInvite(c){if(!/^\d{4}$/.test(c))return;if(state==='play'||state==='
 function appNative(){try{var C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.App?C.Plugins.App:null}catch(e){return null}}
 /* 1.1.5 새 버전 안내: 앱스토어에 올라간 버전이 지금 앱보다 높으면 처음 화면에 띠를 띄우고,
    그 버전을 처음 알게 됐을 때(또는 '나중에' 뒤 3일 지나서) 안내 창을 한 번 보여 준다. 업데이트는 앱스토어로 보낸다 */
-var APP_VER='1.1.14',UPD={v:null,notes:'',at:0,busy:false};
+var APP_VER='1.1.15',UPD={v:null,notes:'',at:0,busy:false};
 function verGt(a,b){a=String(a||'').split('.');b=String(b||'').split('.');for(var i=0;i<4;i++){var x=parseInt(a[i]||0,10)||0,y=parseInt(b[i]||0,10)||0;if(x!==y)return x>y}return false}
 function updCheck(force){
   var C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform())&&location.search.indexOf('updtest')<0)return;
@@ -12649,6 +12649,7 @@ NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31�
 abyTr(TRT,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"Arena: stay #1 and tap 'Finish as #1' to lock in the win · the share card now shows your rank and fish eaten · computer fish have personalities (relentless hunters, cautious swimmers)"});abyTr(TRJ,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"対戦で1位をキープしたら「1位で終える」ですぐ1位記録 · 自慢カードに順位と食べた数も · AIの相手ごとに性格が違います（しつこいハンター · 用心深い魚）"});
 abyTr(TRT,{"꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)":"Accessories now sit snugly on each fish's head and eyes and move with it when it eats · Solo and Arena show glowing jack-o'-lanterns and ghosts in the background like the home screen (they stay put as you grow)"});abyTr(TRJ,{"꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)":"きせかえが魚ごとに頭や目にぴったり合い、食べるときも一緒に動きます · ソロ・対戦の背景にもホーム画面のようにジャック・オー・ランタンとおばけ（大きくなっても位置は変わりません）"});
 NEWS['1.1.14']=[T("커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요"),T("꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)"),T("대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)"),T("겨울 바다 시즌(11월 22일 ~ 1월 31일): 바다눈이 내리고 반짝이 전구가 켜져요 · 산타 모자 · 루돌프 뿔 등 겨울 꾸미기 7가지 · 산호 트리 소품 · 5일 겨울 출석 선물"),T("화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요"),T("다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요")];NEWS_LEAD['1.1.14']=T("이제 커져도 느려지지 않아요! 🐟");
+abyTr(TRT,{"처음 하는 분께 조작 요령을 차례로 알려 주고, 처음 판의 진주 선물과 다음 목표가 보여요":"New players get quick control tips one at a time, and the first-run pearl gift and next goal are shown","폰이 버거워하면 자동으로 화질을 한 단계 낮춰 더 부드럽게 움직여요":"If your phone struggles, graphics quality steps down automatically for smoother play","가오리 · 만타 꾸미기가 몸 위에 자연스럽게 앉아요":"Accessories on rays and mantas now sit naturally on the body","더 부드럽게, 처음도 쉽게! 🐠":"Smoother, and easier to start! 🐠"});abyTr(TRJ,{"처음 하는 분께 조작 요령을 차례로 알려 주고, 처음 판의 진주 선물과 다음 목표가 보여요":"はじめての方に操作のコツを順番にお知らせ。最初のプレイの真珠プレゼントと次の目標も表示されます","폰이 버거워하면 자동으로 화질을 한 단계 낮춰 더 부드럽게 움직여요":"端末が重いときは自動で画質を一段下げ、なめらかに動きます","가오리 · 만타 꾸미기가 몸 위에 자연스럽게 앉아요":"エイ・マンタのきせかえが体の上に自然に乗ります","더 부드럽게, 처음도 쉽게! 🐠":"よりなめらかに、はじめてでもかんたん！🐠"});NEWS['1.1.15']=[T("처음 하는 분께 조작 요령을 차례로 알려 주고, 처음 판의 진주 선물과 다음 목표가 보여요"),T("폰이 버거워하면 자동으로 화질을 한 단계 낮춰 더 부드럽게 움직여요"),T("가오리 · 만타 꾸미기가 몸 위에 자연스럽게 앉아요")];NEWS_LEAD['1.1.15']=T("더 부드럽게, 처음도 쉽게! 🐠");
 /* ===== 1.1.13 대전: 상대 크기가 말이 안 되게 튀면 막고, 화면을 덮을 만큼 큰 상대가 나오면 자동으로 기록을 남긴다
    10/14 0시대 사용자 신고: 대전에서 상대 물고기가 화면을 꽉 채움(서버 기록·오류 기록엔 흔적 없음) → 다음엔 무엇이 왔는지 그대로 받아 보기 위함 ===== */
 var PEERCHK={},HUGEW=[];
@@ -12730,7 +12731,7 @@ try{TRJ['출석 보상 받기 · ']='受け取る · '}catch(e){}try{TRJ['일간
 try{if(LANG!=='ko'){var HG13=/[\uAC00-\uD7A3]/;ACC.concat(typeof DECOR!=='undefined'?DECOR:[],typeof TANK_BGS!=='undefined'?TANK_BGS:[]).forEach(function(A){if(!A)return;['name','desc','sub'].forEach(function(k){if(typeof A[k]==='string'&&HG13.test(A[k])){var t=T(A[k]);if(t!==A[k])A[k]=t}})})}}catch(e){}
 /* 1.1.13: 생존 막판(적 190마리 넘음)엔 화면 해상도를 잠깐 1.5배로 낮춰 칠하는 양을 줄임 → 적이 150마리 밑으로 줄거나 판이 끝나면 원래대로 */
 var LRES=false;
-function lresSet(on){if(on===LRES)return;LRES=on;try{var want=Math.min(window.devicePixelRatio||1,save&&save.lite?1.5:(on?1.5:2));if(Math.abs(want-dpr)>.01){dpr=want;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}}catch(e){}}
+function lresSet(on){if(on===LRES)return;LRES=on;try{var want=Math.min(window.devicePixelRatio||1,save&&save.lite?1.5:((on||(typeof AQ!=='undefined'&&AQ.lv))?1.5:2));if(Math.abs(want-dpr)>.01){dpr=want;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}}catch(e){}}
 var svStartLR=svStart;svStart=function(){try{SV.ema=16;SV.slowK=1}catch(e){}var r=svStartLR.apply(this,arguments);try{SV.ema=16;SV.slowK=1}catch(e){}return r};
 var drawLR=draw;draw=function(){try{var sv=state==='play'&&P&&P.surv&&SV&&SV.en;if(sv){var n=SV.en.length;if(!LRES&&n>190)lresSet(true);else if(LRES&&n<150)lresSet(false)}else if(LRES)lresSet(false)}catch(e){}return drawLR.apply(this,arguments)};
 var resizeLR=resize;resize=function(){var r=resizeLR.apply(this,arguments);if(LRES){var want=Math.min(window.devicePixelRatio||1,1.5);if(dpr>want){dpr=want;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}}return r};
@@ -13264,10 +13265,10 @@ var ACC_EXT={},ACC_Q=null;function accExt(id){var e=ACC_EXT[id];if(e)return e;va
   /* 아래 끝은 '덩어리' 기준(갓끈 · 매달린 거미 같은 가는 것은 빼고) */for(j=N-1;j>=0;j--)if(rc[j]>=mx*.25){b=j;break}
   e={l:(N/2-l)/U,r:(r-N/2)/U,b:(b-N*.62)/U,t:(N*.62-t)/U};ACC_EXT[id]=e;return e}catch(_){return null}}
 var accGeomHG=accGeom;accGeom=function(L,s,o){var g=accGeomHG(L,s,o);try{var q=HATG[L.id],qt=HATT[L.id],spr=SPRITES[L.id];if(q&&qt&&spr&&spr.ok){var w=g.len,h=g.ht;
-  var U=Math.min(q[2]*h*1.15,Math.max(.01,(q[4]-q[0]))*w*4);U=clamp(U,s*.32,(L.id==='manta'||L.id==='pinkmanta'||L.id==='eagleray'||L.id==='stingray')?s*.5:s*.85);
+  var U=Math.min(q[2]*h*1.15,Math.max(.01,(q[4]-q[0]))*w*4);var RAY=L.id==='manta'||L.id==='pinkmanta'||L.id==='eagleray'||L.id==='stingray';U=clamp(U,s*.32,RAY?s*.42:s*.85);
   var hid=ACC_Q&&ACC_Q.head,noSlide=hid==='hw_mummy'||hid==='headphones'||hid==='earmuff'||hid==='halo'||hid==='orbit'||hid==='ghostpal'||hid==='spiderdrop';var tl=qt[0],ex=qt[1],ey=qt[2],er=Math.max(qt[3],.02),xe=ACC_Q&&ACC_Q.head?accExt(ACC_Q.head):null,hwL=(xe?xe.l:.42)*U/w,hwR=(xe?xe.r:.42)*U/w,dN=((xe?Math.max(0,xe.b):.06)+.1)*U/h,x=q[0],best=x,bc=-9;
   for(var k=0;k<=(noSlide?0:45);k++){var xx=q[0]-k*.01,yy=hatTop(tl,xx);if(yy<0)continue;var near=xx+hwR>ex-er*1.3&&xx-hwL<ex+er*1.3,cl=near?(ey-er*1.4)-(yy+dN):1;if(cl>bc){bc=cl;best=xx}if(cl>=0){best=xx;break}}
-  var yt=hatTop(tl,best),sl=(hatTop(tl,best+.04)-hatTop(tl,best-.04))/.08;
+  if(RAY&&!noSlide)best=Math.max(best-.05,.3); /* 1.1.15 가오리류: 위에서 본 몸이라 머리 앞끝보다 눈 뒤 몸 위가 자연스러움 */var yt=hatTop(tl,best),sl=(hatTop(tl,best+.04)-hatTop(tl,best-.04))/.08;
   g.hx=(best-.5)*w;g.hy=(yt-.5)*h;g.U=U;g.rot=clamp(Math.atan(sl*h/w)*.42,-.15,.25);g.E=Math.min(g.E,Math.max(s*.085,q[2]*h*.3));g.eyeLim=(g.ey-g.E*1.05)-(g.hy+U*.1);g.slid=+(q[0]-best).toFixed(2);g.lift=(bc<0&&!noSlide)?Math.min(U*.4,-bc*h):0}}catch(e){}return g};
 /* ===== 1.1.14 싱글 · 대전 핼러윈 배경(종한: '잭오랜턴 · 유령을 홈 화면처럼, 먹을 때마다 움직이는 것 고치기, 정신 사납지 않게')
    전엔 바다 속 작은 호박 · 유령을 '화면 크기 ÷ 확대' 칸에 뿌려서, 먹고 커질 때마다(확대가 바뀔 때마다) 자리가 통째로 바뀌었음.
@@ -13517,6 +13518,43 @@ function newsPage(cover){var c=$('newsCover'),pg=$('newsPg'),m=$('newsMute');NEW
 var newsOpenCV=newsOpen;newsOpen=function(v){var r=newsOpenCV(v);try{NEWS_PG.v=v;newsPage(!!(r&&NEWS_COVER[v]))}catch(e){}return r};
 $('newsOk').addEventListener('click',function(e){if(!NEWS_PG.cover)return;e.stopImmediatePropagation();e.preventDefault();crumb('newsCover');newsPage(false);try{$('newsList').scrollTop=0}catch(_){}},true);
 abyTr(TRT,{'다음':'Next'});abyTr(TRJ,{'다음':'次へ'});
+/* ===== 1.1.15 버벅임 줄이기(종한 선택): 기기에서 실제로 느릴 때만 화질을 한 단계 낮춤 + 모든 모드의 끊김을 기록
+   실제 기록: 끊김 보고 2건 모두 심해 생존 · 화면 3배 아이폰(느린 장면 6% · 21%, 가장 긴 멈춤 0.1~0.15초).
+   개발 PC 측정은 그림 처리 방식이 아이폰과 달라 믿기 어려워서, 기기에서 잰 프레임 시간으로 판단한다.
+   - 판 중 최근 평균 프레임이 24ms(초당 약 41장)를 2.5초 넘게 넘으면 '가벼운 화질': 화면 해상도 2배→1.5배, 물고기 꼬리 물결 조각 9→4장
+   - 판이 끝나면 원래 화질로. 설정의 '가벼운 화질'(lite)을 켠 사람은 원래대로 그대로
+   - 판이 끝날 때 느린 장면이 6% 넘은 판만 기록(모드 · 판 시간 · 평균/최악 프레임 · 화질 단계) — 다음 개선에 쓸 실제 기기 데이터 */
+var AQ={ema:16,lv:0,slowT:0,n:0,s:0,w:0,last:0,on:false};
+function aqReset(){AQ.ema=16;AQ.slowT=0;AQ.n=0;AQ.s=0;AQ.w=0;AQ.on=true;if(AQ.lv)aqSet(0)}
+function aqSet(lv){if(AQ.lv===lv)return;AQ.lv=lv;crumb('aq'+lv);try{var want=Math.min(window.devicePixelRatio||1,(save&&save.lite)||lv?1.5:2);if(typeof LRES!=='undefined'&&LRES)want=Math.min(want,1.5);if(Math.abs(want-dpr)>.01){dpr=want;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}}catch(e){}}
+var resizeAQ=resize;resize=function(){var r=resizeAQ.apply(this,arguments);if(AQ.lv&&dpr>1.5){dpr=1.5;cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr)}return r};
+(function aqLoop(ts){try{var d=AQ.last?ts-AQ.last:0;AQ.last=ts;var vis=!document.hidden&&(typeof APPACT==='undefined'||APPACT);
+  if(state==='play'&&AQ.on&&vis&&d>0&&d<500){AQ.n++;if(d>34)AQ.s++;if(d>AQ.w)AQ.w=d;AQ.ema=AQ.ema*.95+Math.min(d,100)*.05;
+    if(AQ.lv===0&&!save.lite){if(AQ.ema>24)AQ.slowT+=d/1000;else AQ.slowT=Math.max(0,AQ.slowT-d/2000);if(AQ.slowT>2.5&&AQ.n>120)aqSet(1)}}}catch(e){}requestAnimationFrame(aqLoop)})(0);
+var drawWavyAQ=drawWavy;drawWavy=function(c,img,w,h,ph,amp,n){if(AQ.lv&&(!n||n>4))n=4;return drawWavyAQ.call(this,c,img,w,h,ph,amp,n)};
+function aqReport(){try{if(!AQ.on)return;AQ.on=false;if(AQ.n>900&&AQ.s/AQ.n>.06){save.crashQ=(save.crashQ||[]).concat([{kind:'lag',v:APP_VER,md:P&&P.surv?'surv':P&&P.camp?'camp':mode,t:Math.round(P&&P.time||0),sr:Math.round(AQ.s/AQ.n*100),n:AQ.n,w:Math.round(AQ.w),aq:AQ.lv,lt:save.lite?1:0,dpr:window.devicePixelRatio||1,fi:(typeof fish!=='undefined'&&fish)?fish.length:0,at:Date.now()}]).slice(-8);persist();setTimeout(function(){try{crashSend()}catch(e){}},3000)}}catch(e){}if(AQ.lv)aqSet(0)}
+var startRunAQ=startRun;startRun=function(){aqReset();return startRunAQ.apply(this,arguments)};
+var svStartAQ=svStart;svStart=function(){aqReset();return svStartAQ.apply(this,arguments)};
+var endRunAQ=endRun;endRun=function(){var st=state,r=endRunAQ.apply(this,arguments);if(st==='play'&&state!=='play')aqReport();return r};
+setInterval(function(){try{if(AQ.on&&state!=='play'&&state!=='pause')aqReport()}catch(e){}},2000); /* 생존 · 탐험처럼 따로 끝나는 판도 홈으로 오면 정리 */
+/* ===== 1.1.15 첫 판 붙잡기(종한 선택)
+   기록: 1.1.14 영어 사용자가 처음 켜서 튜토리얼을 건너뛰고 싱글 2판(13초 · 3분) 하고 그만둠. 처음 사람은 판이 짧고 목표가 안 보이면 바로 떠남.
+   ① 튜토리얼을 건너뛴 사람: 처음 3판 동안 판 초반에 조작 요령 3줄을 차례로(아래 안내줄, 4초씩)
+   ② 처음 3판 싱글은 '15초만 버티면 진주 선물'이 있는데 안 보였음 → 판 시작에 알려 주고, 15초가 되면 '선물 확보!'
+   ③ 처음 3판 싱글의 결과 화면: 다음 판 목표 한 줄(이번 크기보다 조금 더 크게) */
+abyTr(TRT,{'손가락을 대고 움직이면 물고기가 따라와요':'Touch and drag — your fish follows your finger','나보다 작은 물고기만 먹을 수 있어요 · 큰 물고기는 입만 피하면 돼요':'You can only eat fish smaller than you · just stay away from big mouths','오른쪽 아래 버튼을 누르면 특수 능력을 써요':'Tap the bottom-right button to use your special ability','15초만 버티면 진주 선물!':'Last 15 seconds for a pearl gift!','선물 확보! 진주 +':'Gift secured! Pearls +','다음 판 목표: ':'Next goal: ','까지 크기':''});
+abyTr(TRJ,{'손가락을 대고 움직이면 물고기가 따라와요':'指を当てて動かすと魚がついてきます','나보다 작은 물고기만 먹을 수 있어요 · 큰 물고기는 입만 피하면 돼요':'自分より小さい魚だけ食べられます · 大きい魚は口だけ避ければOK','오른쪽 아래 버튼을 누르면 특수 능력을 써요':'右下のボタンで特殊能力を使います','15초만 버티면 진주 선물!':'15秒耐えたら真珠プレゼント！','선물 확보! 진주 +':'プレゼント確保！真珠 +','다음 판 목표: ':'次の目標: ','까지 크기':'まで大きくなる'});
+var tutEndFR=tutEnd;tutEnd=function(done){var was=typeof TUT!=='undefined'&&TUT&&TUT.on,r=tutEndFR.apply(this,arguments);try{if(was&&!done&&!save.tutSk){save.tutSk=1;persist()}}catch(e){}return r};
+var FR={tips:0,gift:0,giftOk:0};
+var startRunFR=startRun;startRun=function(){var r=startRunFR.apply(this,arguments);try{FR.tips=(save.tutSk&&(save.runs|0)<=3&&!P.surv)?1:0;FR.next=5.5;FR.i=0;
+  FR.gift=(mode==='single'&&!P.camp&&!P.surv&&(save.ng|0)<3&&(save.runs|0)<=6)?[45,30,20][save.ng|0]:0;FR.giftOk=0;
+  if(FR.gift)setTimeout(function(){try{if(state==='play'&&FR.gift)texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'🎁 '+T('15초만 버티면 진주 선물!'),life:2.6})}catch(e){}},1600)}catch(e){}return r};
+var FR_TIPS=['손가락을 대고 움직이면 물고기가 따라와요','나보다 작은 물고기만 먹을 수 있어요 · 큰 물고기는 입만 피하면 돼요','오른쪽 아래 버튼을 누르면 특수 능력을 써요'];
+var endRunFR=endRun;endRun=function(win,quit){var st=state,isS=mode==='single'&&P&&!P.camp&&!P.surv,r=endRunFR.apply(this,arguments);
+  try{if(st==='play'&&state==='over'&&isS&&(save.runs|0)<=3&&!quit){var cm=cmOf(P.s),goal=Math.max(cm+1,Math.ceil(cm*1.3)),m=$('oMsg');if(m&&!(win||P.full)){var last=m.lastElementChild,el=document.createElement(last?last.tagName:'span');if(last&&last.className)el.className=last.className;el.textContent=T('다음 판 목표: ')+fmt(goal)+T('까지 크기');m.appendChild(el)}}}catch(e){}return r};
+setInterval(function(){try{if(state!=='play'||!P)return;var tm=P.time||0;
+  if(FR.tips&&FR.i<FR_TIPS.length&&tm>=FR.next){var hn=$('hint');if(hn){hn.textContent=T(FR_TIPS[FR.i]);hintT=4;crumb('frTip'+FR.i)}FR.i++;FR.next=tm+4.5}
+  if(FR.gift&&!FR.giftOk&&tm>=15){FR.giftOk=1;texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'🎁 '+T('선물 확보! 진주 +')+FR.gift,life:2.2,big:1});try{buzz(20)}catch(_){}}}catch(e){}},250);
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

@@ -1,0 +1,13 @@
+What's new in 1.1.15:
+(1) Still no in-app purchases, accounts, data collection changes or new SDKs.
+(2) New players who skip the tutorial see three short control tips during their first runs; the existing first-run pearl gift and a next-size goal are now shown on screen.
+(3) If frames are consistently slow on a device, the game lowers the canvas resolution for the rest of that run. Runs with many slow frames send an anonymous performance record (mode, frame statistics, random device ID only) to the existing crash/diagnostic table.
+(4) Cosmetic placement fixes for rays and mantas.
+
+Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Backup; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Backup that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
+
+Purpose and audience: Gill Fighter is a casual "eat and grow" fish game. The player guides a small fish, eats smaller fish to grow and avoids bigger ones, collects 89 fish species, levels them up with in-game pearls and decorates a personal aquarium. It is for casual mobile gamers (12+) who want short 2-5 minute sessions with one-finger controls, and Solo can be played offline.
+
+How to use: No account, login or sample file is needed. Launch the app and tap Solo on the home screen, then choose Score Challenge or Deep Expedition. Touch and drag anywhere to move; the bottom-right button uses the special ability. Bottom tabs: Play, Tank (aquarium decoration and the aquarium house), Dex (fish collection), Shop (upgrades, decorations and boosters for in-game currency only). "Arena" is an online shared sea with other players and computer-controlled fish; there is no chat. "Friends" lets players who type the same 4-digit number share a separate Arena sea. The gear icon (top right) opens settings and an optional contact form. Progress is saved on the device; the leaderboard (random device ID, optional nickname, best score) is stored on Supabase.
+
+External services: Google AdMob (optional rewarded video ads, non-personalized only - the player may choose to watch an ad to continue a run once), Web3Forms (delivers optional contact form messages to the developer's email), Supabase (Realtime relays Arena positions and the online player count; the database keeps leaderboard rows, optional backups and anonymous crash and first-session play records (random device ID only)) and Apple (optional Game Center and Sign in with Apple, described above). No payments, in-app purchases, AI services or analytics SDK.

@@ -3,6 +3,7 @@ What's new in 1.1.15:
 (2) On first launch, new players choose a nickname (pre-filled random suggestion, 10 characters, filtered for offensive words; shown on leaderboards/Arena; no account, can be changed in Settings). New players who skip the tutorial see three short control tips during their first runs; the existing first-run pearl gift and a next-size goal are now shown on screen.
 (3) If frames are consistently slow on a device, the game lowers the canvas resolution for the rest of that run. Runs with many slow frames send an anonymous performance record (mode, frame statistics, random device ID only) to the existing crash/diagnostic table.
 (4) Cosmetic placement fixes for rays and mantas.
+(5) Weekly event (date-based, no server): each week Score Challenge gets one of three rule changes (1.5x pearls, bigger fish, more small fish). Playing 3 runs of 20+ seconds that week unlocks a reward of in-game currency (200 pearls + 3 gems). Leaderboard rows for ranks 1-3 show medals and titles. A new winter background track plays during the existing winter season.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Backup; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Backup that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

@@ -6151,7 +6151,8 @@ function deepTick(dt){
       banner(T('먹이 떼가 나타났어요!'),T('↓ 아래쪽 떼를 먹으면 빨리 자라요'));buzz(20)}}}
   /* ③ 갈매기: 1~2구역에서 이 구역 먹이보다 너무 커졌을 때 */
   var big=P.s>zoneFoodCap(1)*1.3,g=DPZ.gull; /* 1.1.10 사용자 요청: 갈매기는 조금 더 커졌을 때부터(먹이 상한의 1.1배 → 1.3배) */
-  if(g){g.t+=dt;if(!g.hit&&g.t>=g.warn){g.hit=1;gullStrike(g)}if(g.t>g.warn+1)DPZ.gull=null}
+  if(g&&z>1&&!g.hit){DPZ.gull=null} /* 1.1.15 종한 요청: 갈매기는 맨 위 · 그 밑 바다에서만 — 경고 중에 더 아래로 내려가면 취소 */
+  else if(g){g.t+=dt;if(!g.hit&&g.t>=g.warn){g.hit=1;if(zoneAt(P.y)<=1)gullStrike(g)}if(g.t>g.warn+1)DPZ.gull=null}
   else if(z<=1&&big){DPZ.gullT-=dt;if(DPZ.gullT<=0){DPZ.gullT=rnd(4,7)*(z===0?.7:1);
     DPZ.gull={x:P.x+P.vx*.9,y:clamp(P.y+P.vy*.9,H*.005,H*2/ZONES.length),r:P.s*1.5+34*scaleOf(P.s),t:0,warn:1.7,hit:0,dir:Math.random()<.5?1:-1};
     if(!DPZ.tip.gull){DPZ.tip.gull=1;banner(T('갈매기가 노려요!'),T('큰 물고기는 얕은 바다가 위험해요 ↓'))}}}
@@ -9095,7 +9096,7 @@ function useSkill(){
 function consume(f,i){
   P.chomp=1;
   /* 1.1.4: 흡입·유인 한 번에 먹을 수 있는 수는 6마리까지 — 넘으면 효과가 바로 끝난다 */
-  if(fxOn('suck')||fxOn('lure')){P.pullN=(P.pullN||0)+1;if(P.pullN>=6){P.fx.suck=0;P.fx.lure=0}}
+  if(fxOn('whirl')){P.whirlN=(P.whirlN|0)+1;if(P.whirlN>=12)P.fx.whirl=0}else if(fxOn('suck')||fxOn('lure')){P.pullN=(P.pullN||0)+1;if(P.pullN>=6){P.fx.suck=0;P.fx.lure=0}}
   /* 1.1.7 나보다 훨씬 작은 먹이(내 크기의 40% 미만)는 덜 자란다 — 얕은 바다에서 작은 물고기만 먹으며 계속 크는 것 막기 */
   var rl=f.s/P.s,pk=deepOn()&&!f.school&&!f.bot&&rl<.4?Math.max(.12,Math.pow(rl/.4,2)):1;
   if(f.nb&&!f.school){for(var j0=texts.length-1;j0>=0;j0--)if(texts[j0].big)texts.splice(j0,1);texts.push({x:P.x,y:P.y-P.s*2.4-40/zoom,txt:T('역전 꺼-억!'),life:1.6,big:1});shake=reduce?0:Math.max(shake,.14);buzz([20,30,45])} /* 1.1.10 물어뜯어 작게 만든 물고기를 결국 먹으면 '역전' */
@@ -9182,7 +9183,7 @@ function update(dt){
   var lureRad=fxOn('lure')?P.s*4.5+140*scaleOf(P.s):0,magK=fair()?0:Math.max(P.look.magnet||0,P.boost&&P.boost.magnet?2.2:0,rsLv('magnet')?.7+.17*rsLv('magnet'):0),magRad=magK?P.s*magK+60*scaleOf(P.s):0;
   if(shake>0)shake=Math.max(0,shake-dt);
   /* v0.49 흡입: 반경을 절반으로, 끌어당기는 힘도 줄이고, 나보다 확실히 작은 것(먹을 수 있는 크기의 80%)만 끌린다 */
-  var suckRad=fxOn('suck')?P.s*3.4+70*scaleOf(P.s):0;
+  var whirlOn=fxOn('whirl'),suckRad=whirlOn?P.s*5.2+120*scaleOf(P.s):fxOn('suck')?P.s*3.4+70*scaleOf(P.s):0;
   /* v0.50 불빛 유인(패시브): 스스로 빛나는 물고기는 어두운 곳에서 불빛 안의 작은 물고기와 먹이 구슬을 끌어당긴다. 어두울수록 넓고 세다 */
   var lk=(!fair()&&P.look.light)?P.look.light:0,dkP=darkAt(P.y),glowRad=lk&&dkP>.08?(P.s*3+90*scaleOf(P.s))*lk*(.5+.5*dkP):0;P.glowR=glowRad;P.glowK=dkP;
   /* 1.1.4 끌어오기 제한: 유인 스킬은 한 번에 5마리, 불빛 패시브는 3마리, 흡입은 4마리까지만 끌린다 */
@@ -9225,7 +9226,7 @@ function update(dt){
       spd*=slowK;f.ang=lerpAng(f.ang,des,dt*(f.rage>0?5:3.5)*slowK);
       f.vx+=(Math.cos(f.ang)*spd-f.vx)*Math.min(1,dt*4);f.vy+=(Math.sin(f.ang)*spd-f.vy)*Math.min(1,dt*4);
     }
-    if(playing&&suckRad&&f.s<=P.s*eatR*.8&&d<suckRad&&d>1&&nSuck<4){nSuck++;f.vx=dx/d*ref*1.05;f.vy=dy/d*ref*1.05}
+    if(playing&&suckRad&&f.s<=P.s*eatR*.8&&d<suckRad&&d>1&&nSuck<(whirlOn?9:4)){nSuck++;f.vx=dx/d*ref*(whirlOn?1.35:1.05);f.vy=dy/d*ref*(whirlOn?1.35:1.05)}
     f.x+=f.vx*dt*slowK;f.y=clamp(f.y+f.vy*dt*slowK,f.s*.6,H-f.s*.6);
 
     var pm=playing?mouthOf(P.x,P.y,P.s,P.ang,P.look):null,dmo=pm?Math.hypot(f.x-pm[0],f.y-pm[1]):1e9;
@@ -9257,15 +9258,15 @@ function update(dt){
     for(j=i-1;j>=0;j--){
       var b=fish[j];if(b.peerEnt||b.boss)continue;var dd=Math.hypot(a.x-b.x,a.y-b.y);
       if(dd<(a.s+b.s)*.5){
-        if(a.s>b.s*1.3){a.chomp=1;burst(b.x,b.y,b.s,3);if(a.bot){a.s=Math.sqrt(a.s*a.s+.3*b.s*b.s);if(b.bot)a.bot.kills++}if(b.bot)botDown(b.bot,false);fish.splice(j,1);i--}
-        else if(b.s>a.s*1.3){b.chomp=1;burst(a.x,a.y,a.s,3);if(b.bot){b.s=Math.sqrt(b.s*b.s+.3*a.s*a.s);if(a.bot)b.bot.kills++}if(a.bot)botDown(a.bot,false);fish.splice(i,1);break}
+        if(a.s>b.s*1.3&&!b.gold){a.chomp=1;burst(b.x,b.y,b.s,3);if(a.bot){a.s=Math.sqrt(a.s*a.s+.3*b.s*b.s);if(b.bot)a.bot.kills++}if(b.bot)botDown(b.bot,false);fish.splice(j,1);i--}
+        else if(b.s>a.s*1.3&&!a.gold){b.chomp=1;burst(a.x,a.y,a.s,3);if(b.bot){b.s=Math.sqrt(b.s*b.s+.3*a.s*a.s);if(a.bot)b.bot.kills++}if(a.bot)botDown(a.bot,false);fish.splice(i,1);break}
       }
     }
   }
   for(i=plank.length-1;i>=0;i--){
     var p=plank[i],pdx=P.x-p.x,pdy=P.y-p.y,pd=Math.hypot(pdx,pdy);
     if(playing&&pd>1&&pd<Math.max(suckRad,magRad,glowRad*.9)){p.x+=pdx/pd*ref*1.7*dt;p.y+=pdy/pd*ref*1.7*dt}
-    if(playing&&pd<P.s*.8+p.s){if(p.clock)try{clockEat(p)}catch(_){}if(p.candy)try{candyEat(p)}catch(_){}grow(p.s*Math.sqrt(P.look.plankMult||1),p.x,p.y);plank.splice(i,1);continue}
+    if(playing&&pd<P.s*.8+p.s){if(p.clock)try{clockEat(p)}catch(_){}if(p.whirl)try{whirlEat(p)}catch(_){}if(p.candy)try{candyEat(p)}catch(_){}grow(p.s*Math.sqrt(P.look.plankMult||1),p.x,p.y);plank.splice(i,1);continue}
     if(Math.hypot(p.x-cam.x,p.y-cam.y)>R*2.2||p.s<P.s*.08)plank.splice(i,1);
   }
   /* 1.1.10 사용자 요청: 깊이 내려갈수록 먹을 게 없던 것 — 나를 쫓는 큰 물고기가 화면 근처에 쌓여 38마리 자리를 다 차지하고, 먹이는 먹는 족족 사라졌다.
@@ -10013,7 +10014,7 @@ function draw(){
   for(i=0;i<plank.length;i++){
     var p=plank[i],pr=p.s*(.9+Math.sin(t*3+p.ph)*.12),py=p.y+Math.sin(t*1.5+p.ph)*p.s*.5,fc=FOOD[p.col||0];
     ctx.beginPath();ctx.ellipse(p.x+pr*.35,py+pr*.95,pr*.95,pr*.5,0,0,Math.PI*2);ctx.fillStyle=SHADOW;ctx.fill();
-    if(p.clock)drawClockP(p,pr,py);else if(p.candy)drawCandy(p,pr,py);else ctx.drawImage(PELLET[p.col||0],p.x-pr*1.15,py-pr*1.15,pr*2.3,pr*2.3);
+    if(p.clock)drawClockP(p,pr,py);else if(p.whirl)drawWhirlP(p,pr,py);else if(p.candy)drawCandy(p,pr,py);else ctx.drawImage(PELLET[p.col||0],p.x-pr*1.15,py-pr*1.15,pr*2.3,pr*2.3);
   }
   /* v0.48 글자 방울 */
   if(letter){
@@ -10053,6 +10054,7 @@ function draw(){
     if(mq&&danger&&playing){ctx.save();ctx.beginPath();ctx.arc(mq[0],mq[1],mq[2],0,Math.PI*2);ctx.fillStyle='rgba(229,56,59,.10)';ctx.fill();ctx.lineWidth=Math.max(2,3/zoom);ctx.setLineDash([10/zoom,8/zoom]);ctx.strokeStyle='rgba(229,56,59,.75)';ctx.stroke();ctx.restore()}
     if(huge&&danger&&playing){var dvx=f.x-P.x,dvy=f.y-P.y,dvl=Math.hypot(dvx,dvy)||1;HUGEW.push([dvx/dvl,dvy/dvl,Math.min(1,f.s*1.5/dvl)])}
     var inGlow=P.glowR&&Math.hypot(f.x-P.x,f.y-P.y)<P.glowR;
+    if(f.gold)try{goldFx(f,dX,dY,dS)}catch(_){}
     var lblA=playing?(f.bot||scanOn||inGlow?1:(!danger&&f.s<P.s*.75)?0:clamp((danger?1.4:1)-Math.hypot(f.x-P.x,f.y-P.y)/(Math.min(cw,ch)/zoom*(danger?.34:.24)),0,1)):0; /* 1.1.15 덜어내기: 크기 표시는 가까운 위험한 물고기 · 비슷한 크기만 */
     if(lblA>.03){
       ctx.globalAlpha=lblA;ctx.font=(14/zoom)+'px "Black Han Sans", Jua, sans-serif';ctx.textAlign='center';
@@ -12666,7 +12668,7 @@ NEWS['1.1.13']=[T("심해 탐험에 「끝없는 심연」: 30층을 깨면 31�
 abyTr(TRT,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"Arena: stay #1 and tap 'Finish as #1' to lock in the win · the share card now shows your rank and fish eaten · computer fish have personalities (relentless hunters, cautious swimmers)"});abyTr(TRJ,{"대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)":"対戦で1位をキープしたら「1位で終える」ですぐ1位記録 · 自慢カードに順位と食べた数も · AIの相手ごとに性格が違います（しつこいハンター · 用心深い魚）"});
 abyTr(TRT,{"꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)":"Accessories now sit snugly on each fish's head and eyes and move with it when it eats · Solo and Arena show glowing jack-o'-lanterns and ghosts in the background like the home screen (they stay put as you grow)"});abyTr(TRJ,{"꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)":"きせかえが魚ごとに頭や目にぴったり合い、食べるときも一緒に動きます · ソロ・対戦の背景にもホーム画面のようにジャック・オー・ランタンとおばけ（大きくなっても位置は変わりません）"});
 NEWS['1.1.14']=[T("커져도 느려지지 않아요: 다 자란 큰 물고기도 처음 속도 그대로 헤엄치고 방향도 빠르게 바꿔요"),T("꾸미기가 물고기마다 머리 · 눈에 딱 맞게 앉고, 먹을 때도 같이 움직여요 · 싱글 · 대전 뒤로 홈 화면처럼 잭오랜턴 · 유령이 떠 있어요(커져도 자리가 안 바뀜)"),T("대전에서 1등을 지키면 '1위로 마치기' 버튼으로 바로 1위 기록 · 끝난 뒤 자랑 카드에 순위와 먹은 수까지 · AI 상대마다 성격이 달라요(끈질긴 사냥꾼 · 조심스러운 물고기)"),T("겨울 바다 시즌(11월 22일 ~ 1월 31일): 바다눈이 내리고 반짝이 전구가 켜져요 · 산타 모자 · 루돌프 뿔 등 겨울 꾸미기 7가지 · 산호 트리 소품 · 5일 겨울 출석 선물"),T("화산 폭발이 바다 밑 해저 화산에서 솟아올라요: 불똥이 솟을 줄이 붉게 빛나며 먼저 보이니 옆으로 피하세요 · 불똥은 더 느리고 적어졌어요"),T("다른 앱에 갔다 오면 음악 · 효과음이 안 나던 것, 할로윈 꾸미기를 끈 싱글에서 음악이 멈추던 것을 고쳤어요")];NEWS_LEAD['1.1.14']=T("이제 커져도 느려지지 않아요! 🐟");
-abyTr(TRT,{"처음 하는 분께 조작 요령을 차례로 알려 주고, 처음 판의 진주 선물과 다음 목표가 보여요":"New players get quick control tips one at a time, and the first-run pearl gift and next goal are shown","폰이 버거워하면 자동으로 화질을 한 단계 낮춰 더 부드럽게 움직여요":"If your phone struggles, graphics quality steps down automatically for smoother play","가오리 · 만타 꾸미기가 몸 위에 자연스럽게 앉아요":"Accessories on rays and mantas now sit naturally on the body","더 부드럽게, 처음도 쉽게! 🐠":"Smoother, and easier to start! 🐠"});abyTr(TRJ,{"처음 하는 분께 조작 요령을 차례로 알려 주고, 처음 판의 진주 선물과 다음 목표가 보여요":"はじめての方に操作のコツを順番にお知らせ。最初のプレイの真珠プレゼントと次の目標も表示されます","폰이 버거워하면 자동으로 화질을 한 단계 낮춰 더 부드럽게 움직여요":"端末が重いときは自動で画質を一段下げ、なめらかに動きます","가오리 · 만타 꾸미기가 몸 위에 자연스럽게 앉아요":"エイ・マンタのきせかえが体の上に自然に乗ります","더 부드럽게, 처음도 쉽게! 🐠":"よりなめらかに、はじめてでもかんたん！🐠"});abyTr(TRT,{"매주 바뀌는 '이번 주 이벤트 바다'! 기록 도전 3판 하면 진주 200 + 보석 3":"A new event sea every week! Play Score Challenge 3 times for 200 pearls + 3 gems","랭킹 1~3위에 메달과 칭호가 붙고, 내 순위 줄이 반짝여요":"Top 3 in the ranking get medals and titles, and your own row glows","겨울 시즌(11/22부터)엔 새 겨울 음악이 흘러요":"New winter music plays during the winter season (from Nov 22)","처음 하는 분께 조작 요령을 알려 주고, 폰이 버거우면 자동으로 화질을 낮춰 더 부드럽게":"Control tips for new players, and graphics step down automatically when your phone struggles","매주 새로운 바다가 열려요! 🌊":"A new sea opens every week! 🌊"});abyTr(TRJ,{"매주 바뀌는 '이번 주 이벤트 바다'! 기록 도전 3판 하면 진주 200 + 보석 3":"毎週かわる「今週のイベントの海」！スコアチャレンジ3回で真珠200 + ジェム3","랭킹 1~3위에 메달과 칭호가 붙고, 내 순위 줄이 반짝여요":"ランキング1〜3位にメダルと称号、自分の行がキラッと光ります","겨울 시즌(11/22부터)엔 새 겨울 음악이 흘러요":"冬シーズン(11/22〜)は新しい冬の音楽が流れます","처음 하는 분께 조작 요령을 알려 주고, 폰이 버거우면 자동으로 화질을 낮춰 더 부드럽게":"はじめての方に操作のコツ、端末が重いときは自動で画質を下げてなめらかに","매주 새로운 바다가 열려요! 🌊":"毎週あたらしい海がひらく！🌊"});abyTr(TRT,{"한결 깔끔해진 화면: 알림은 위쪽에 작게, 홈은 한 줄씩, 상점은 칸별로 정리했어요":"Cleaner screens: small notices at the top, a tidier home and a neatly sorted shop"});abyTr(TRJ,{"한결 깔끔해진 화면: 알림은 위쪽에 작게, 홈은 한 줄씩, 상점은 칸별로 정리했어요":"画面をすっきり：お知らせは上に小さく、ホームとショップを整理しました"});abyTr(TRT,{"싱글에 새 아이템 시계! 먹으면 3초 동안 모든 물고기가 멈춰요":"New in Solo: the clock! Grab it and every fish freezes for 3 seconds"});abyTr(TRJ,{"싱글에 새 아이템 시계! 먹으면 3초 동안 모든 물고기가 멈춰요":"ソロに新アイテムの時計！取ると3秒間すべての魚が止まります"});NEWS['1.1.15']=[T("매주 바뀌는 '이번 주 이벤트 바다'! 기록 도전 3판 하면 진주 200 + 보석 3"),T("싱글에 새 아이템 시계! 먹으면 3초 동안 모든 물고기가 멈춰요"),T("랭킹 1~3위에 메달과 칭호가 붙고, 내 순위 줄이 반짝여요"),T("겨울 시즌(11/22부터)엔 새 겨울 음악이 흘러요"),T("처음 하는 분께 조작 요령을 알려 주고, 폰이 버거우면 자동으로 화질을 낮춰 더 부드럽게"),T("한결 깔끔해진 화면: 알림은 위쪽에 작게, 홈은 한 줄씩, 상점은 칸별로 정리했어요")];NEWS_LEAD['1.1.15']=T("매주 새로운 바다가 열려요! 🌊");
+abyTr(TRT,{"처음 하는 분께 조작 요령을 차례로 알려 주고, 처음 판의 진주 선물과 다음 목표가 보여요":"New players get quick control tips one at a time, and the first-run pearl gift and next goal are shown","폰이 버거워하면 자동으로 화질을 한 단계 낮춰 더 부드럽게 움직여요":"If your phone struggles, graphics quality steps down automatically for smoother play","가오리 · 만타 꾸미기가 몸 위에 자연스럽게 앉아요":"Accessories on rays and mantas now sit naturally on the body","더 부드럽게, 처음도 쉽게! 🐠":"Smoother, and easier to start! 🐠"});abyTr(TRJ,{"처음 하는 분께 조작 요령을 차례로 알려 주고, 처음 판의 진주 선물과 다음 목표가 보여요":"はじめての方に操作のコツを順番にお知らせ。最初のプレイの真珠プレゼントと次の目標も表示されます","폰이 버거워하면 자동으로 화질을 한 단계 낮춰 더 부드럽게 움직여요":"端末が重いときは自動で画質を一段下げ、なめらかに動きます","가오리 · 만타 꾸미기가 몸 위에 자연스럽게 앉아요":"エイ・マンタのきせかえが体の上に自然に乗ります","더 부드럽게, 처음도 쉽게! 🐠":"よりなめらかに、はじめてでもかんたん！🐠"});abyTr(TRT,{"매주 바뀌는 '이번 주 이벤트 바다'! 기록 도전 3판 하면 진주 200 + 보석 3":"A new event sea every week! Play Score Challenge 3 times for 200 pearls + 3 gems","랭킹 1~3위에 메달과 칭호가 붙고, 내 순위 줄이 반짝여요":"Top 3 in the ranking get medals and titles, and your own row glows","겨울 시즌(11/22부터)엔 새 겨울 음악이 흘러요":"New winter music plays during the winter season (from Nov 22)","처음 하는 분께 조작 요령을 알려 주고, 폰이 버거우면 자동으로 화질을 낮춰 더 부드럽게":"Control tips for new players, and graphics step down automatically when your phone struggles","매주 새로운 바다가 열려요! 🌊":"A new sea opens every week! 🌊"});abyTr(TRJ,{"매주 바뀌는 '이번 주 이벤트 바다'! 기록 도전 3판 하면 진주 200 + 보석 3":"毎週かわる「今週のイベントの海」！スコアチャレンジ3回で真珠200 + ジェム3","랭킹 1~3위에 메달과 칭호가 붙고, 내 순위 줄이 반짝여요":"ランキング1〜3位にメダルと称号、自分の行がキラッと光ります","겨울 시즌(11/22부터)엔 새 겨울 음악이 흘러요":"冬シーズン(11/22〜)は新しい冬の音楽が流れます","처음 하는 분께 조작 요령을 알려 주고, 폰이 버거우면 자동으로 화질을 낮춰 더 부드럽게":"はじめての方に操作のコツ、端末が重いときは自動で画質を下げてなめらかに","매주 새로운 바다가 열려요! 🌊":"毎週あたらしい海がひらく！🌊"});abyTr(TRT,{"한결 깔끔해진 화면: 알림은 위쪽에 작게, 홈은 한 줄씩, 상점은 칸별로 정리했어요":"Cleaner screens: small notices at the top, a tidier home and a neatly sorted shop"});abyTr(TRJ,{"한결 깔끔해진 화면: 알림은 위쪽에 작게, 홈은 한 줄씩, 상점은 칸별로 정리했어요":"画面をすっきり：お知らせは上に小さく、ホームとショップを整理しました"});abyTr(TRT,{"싱글 새 아이템: 시계 · 소용돌이 · 황금 물고기":"New Solo items: clock, whirlpool and golden fish"});abyTr(TRJ,{"싱글 새 아이템: 시계 · 소용돌이 · 황금 물고기":"ソロに新アイテム：時計・うずしお・金色の魚"});NEWS['1.1.15']=[T("매주 바뀌는 '이번 주 이벤트 바다'! 기록 도전 3판 하면 진주 200 + 보석 3"),T("싱글 새 아이템: 시계 · 소용돌이 · 황금 물고기"),T("랭킹 1~3위에 메달과 칭호가 붙고, 내 순위 줄이 반짝여요"),T("겨울 시즌(11/22부터)엔 새 겨울 음악이 흘러요"),T("처음 하는 분께 조작 요령을 알려 주고, 폰이 버거우면 자동으로 화질을 낮춰 더 부드럽게"),T("한결 깔끔해진 화면: 알림은 위쪽에 작게, 홈은 한 줄씩, 상점은 칸별로 정리했어요")];NEWS_LEAD['1.1.15']=T("매주 새로운 바다가 열려요! 🌊");
 /* ===== 1.1.13 대전: 상대 크기가 말이 안 되게 튀면 막고, 화면을 덮을 만큼 큰 상대가 나오면 자동으로 기록을 남긴다
    10/14 0시대 사용자 신고: 대전에서 상대 물고기가 화면을 꽉 채움(서버 기록·오류 기록엔 흔적 없음) → 다음엔 무엇이 왔는지 그대로 받아 보기 위함 ===== */
 var PEERCHK={},HUGEW=[];
@@ -13778,9 +13780,8 @@ abyTr(TRT,{'시간 정지!':'Time stop!','3초 동안 모든 물고기가 멈춰
 var CLK_MAX=3,CLK_GAP=45,CLK_FIRST=30,CLK_DUR=3;
 function clockOk(){try{return state==='play'&&mode==='single'&&!P.surv&&!fair()&&!(typeof TUT!=='undefined'&&TUT.on)&&!P.dead}catch(e){return false}}
 var spawnPlankCK=spawnPlank;spawnPlank=function(initial){spawnPlankCK(initial);if(initial||!clockOk())return;var tm=P.time||0;
-  if((P.clkN|0)>=CLK_MAX||tm<CLK_FIRST||tm-(P.clkAt==null?-99:P.clkAt)<CLK_GAP||Math.random()>.1)return;
-  for(var i=0;i<plank.length;i++)if(plank[i].clock)return;
-  var p=plank[plank.length-1];if(!p||p.candy)return;p.clock=1;p.s=Math.max(5,P.s*.36);P.clkAt=tm};
+  if((P.clkN|0)>=CLK_MAX||tm<CLK_FIRST||tm-(P.clkAt==null?-99:P.clkAt)<CLK_GAP||Math.random()>.1||spBusy())return;
+  var p=plank[plank.length-1];if(!p||p.candy)return;p.clock=1;p.s=Math.max(5,P.s*.36);P.clkAt=tm;P.spAt=tm};
 function clockEat(p){P.clkN=(P.clkN|0)+1;P.fx.freeze=CLK_DUR;try{buzz([15,40,15])}catch(e){}try{sfx&&sfx('pop')}catch(e){}crumb('clock');
   try{banner(T('시간 정지!'),T('3초 동안 모든 물고기가 멈춰요'))}catch(e){}}
 var invulnCK=invuln;invuln=function(){return fxOn('freeze')||invulnCK()};
@@ -13795,6 +13796,43 @@ function drawClockP(p,pr,py){var r=Math.max(pr*1.25,7),c=ctx,bob=Math.sin(t*2.4+
 /* 멈춘 동안: 화면 전체에 옅은 하늘빛 + 남은 시간 고리(내 물고기 주위) */
 var drawCK=draw;draw=function(){drawCK();try{if(state==='play'&&P&&fxOn('freeze')){var c=ctx,left=P.fx.freeze,a=Math.min(1,left/.4);c.save();c.setTransform(dpr,0,0,dpr,0,0);c.globalAlpha=.16*a;c.fillStyle='#BFE6FF';c.fillRect(0,0,cw,ch);
   var g=c.createRadialGradient(cw/2,ch/2,Math.min(cw,ch)*.3,cw/2,ch/2,Math.max(cw,ch)*.75);g.addColorStop(0,'rgba(190,230,255,0)');g.addColorStop(1,'rgba(150,210,255,.55)');c.globalAlpha=a;c.fillStyle=g;c.fillRect(0,0,cw,ch);c.restore()}}catch(e){}};
+/* ===== 1.1.15 시계 친구들(종한 선택): 소용돌이 · 황금 물고기 — 싱글(기록 도전 · 심해 탐험)만
+   · 특별 아이템은 화면에 한 번에 하나만, 아무 특별 아이템이나 나온 뒤 25초는 다음 것 안 나옴(화면 복잡해지지 않게)
+   · 소용돌이 🌀: 먹이 구슬 자리에 가끔(25초 뒤부터 · 40초에 한 번쯤 · 최대 3개). 먹으면 3초 동안 주변 작은 물고기를 넓게 빨아들임(최대 12마리)
+   · 황금 물고기: 20초 뒤부터 가끔(최대 2마리) 반짝이는 작은 금붕어가 나타나 도망다님. 14초 안에 잡으면 진주 +50, 놓치면 사라짐 */
+abyTr(TRT,{'소용돌이!':'Whirlpool!','주변 작은 물고기를 빨아들여요':'Sucking in the small fish around you','황금 물고기다!':'A golden fish!','잡으면 진주를 듬뿍 받아요':'Catch it for lots of pearls','황금 물고기를 잡았어요!':'Golden fish caught!','황금 물고기가 도망갔어요':'The golden fish got away'});
+abyTr(TRJ,{'소용돌이!':'うずしお！','주변 작은 물고기를 빨아들여요':'まわりの小さい魚を吸いこみます','황금 물고기다!':'金色の魚だ！','잡으면 진주를 듬뿍 받아요':'つかまえると真珠がたっぷり','황금 물고기를 잡았어요!':'金色の魚をつかまえた！','황금 물고기가 도망갔어요':'金色の魚が逃げちゃった'});
+var SP_GAP=25,WH_MAX=3,WH_GAP=40,WH_FIRST=25,WH_DUR=3,GD_MAX=2,GD_GAP=50,GD_FIRST=20,GD_LIFE=14,GD_B=125;
+function spBusy(){try{var tm=P.time||0;if(tm-(P.spAt==null?-99:P.spAt)<SP_GAP)return true;for(var i=0;i<plank.length;i++)if(plank[i].clock||plank[i].whirl)return true;for(i=0;i<fish.length;i++)if(fish[i].gold)return true}catch(e){}return false}
+var spawnPlankWH=spawnPlank;spawnPlank=function(initial){spawnPlankWH(initial);if(initial||!clockOk())return;var tm=P.time||0;
+  if((P.whN|0)>=WH_MAX||tm<WH_FIRST||tm-(P.whAt==null?-99:P.whAt)<WH_GAP||Math.random()>.1||spBusy())return;
+  var p=plank[plank.length-1];if(!p||p.candy||p.clock)return;p.whirl=1;p.s=Math.max(5,P.s*.36);P.whAt=tm;P.spAt=tm};
+function whirlEat(p){P.whN=(P.whN|0)+1;P.whirlN=0;P.fx.whirl=WH_DUR;try{buzz([10,20,10,20])}catch(e){}crumb('whirl');try{banner(T('소용돌이!'),T('주변 작은 물고기를 빨아들여요'))}catch(e){}}
+function drawWhirlP(p,pr,py){var r=Math.max(pr*1.25,7),c=ctx,sp=t*3+(p.ph||0);c.save();c.translate(p.x,py);
+  c.globalCompositeOperation='lighter';c.globalAlpha=.5+.2*Math.sin(t*4+(p.ph||0));c.drawImage(glow('140,230,255'),-r*2.4,-r*2.4,r*4.8,r*4.8);c.globalCompositeOperation='source-over';c.globalAlpha=1;
+  c.fillStyle='#E8FBFF';c.strokeStyle='#0B2C4A';c.lineWidth=Math.max(1.2,r*.16);c.beginPath();c.arc(0,0,r,0,Math.PI*2);c.fill();c.stroke();
+  c.rotate(-sp);c.lineCap='round';for(var k=0;k<3;k++){c.strokeStyle=k%2?'#2F9FD8':'#5FD0F0';c.lineWidth=Math.max(1.4,r*.2);c.beginPath();for(var a=0;a<=Math.PI*1.5;a+=.2){var rr=r*.12+r*.62*(a/(Math.PI*1.5)),ang=a+k*Math.PI*2/3;if(a===0)c.moveTo(Math.cos(ang)*rr,Math.sin(ang)*rr);else c.lineTo(Math.cos(ang)*rr,Math.sin(ang)*rr)}c.stroke()}
+  c.restore()}
+/* 소용돌이 켜진 동안 내 주위에 도는 물살 */
+var drawWH=draw;draw=function(){drawWH();try{if(state==='play'&&P&&fxOn('whirl')){var c=ctx,R=(P.s*5.2+120*scaleOf(P.s))*zoom,sx=(P.x-cam.x)*zoom+cw/2,sy=(P.y-cam.y)*zoom+ch/2,a=Math.min(1,P.fx.whirl/.4);c.save();c.setTransform(dpr,0,0,dpr,0,0);c.translate(sx,sy);c.rotate(-t*2.6);c.lineCap='round';
+  for(var k=0;k<4;k++){c.globalAlpha=.32*a;c.strokeStyle=k%2?'#BFF2FF':'#7FD8F5';c.lineWidth=3;c.beginPath();c.arc(0,0,R*(.55+.12*k),k*1.6,k*1.6+1.9);c.stroke()}c.restore()}}catch(e){}};
+/* 황금 물고기 */
+function goldSpawn(){var tm=P.time||0;if(!clockOk()||(P.gdN|0)>=GD_MAX||tm<GD_FIRST||tm-(P.gdAt==null?-99:P.gdAt)<GD_GAP||spBusy())return;
+  var L=byId('goldfish');if(!L)return;var n0=fish.length;try{spawnFish(false,true)}catch(e){return}if(fish.length<=n0)return;var f=fish[fish.length-1];
+  var R=viewR(),dir=Math.random()<.5?-1:1;f.look=L;f.s=Math.max(START_S*.8,P.s*.6);f.x=P.x+dir*(cw/2/zoom)*.8;f.y=clamp(P.y+rnd(-.3,.3)*(ch/2/zoom),H*.02,H*.98);f.gold=1;f.goldT=0;f.bot=null;f.school=0;f.q=null;
+  P.gdN=(P.gdN|0)+1;P.gdAt=tm;P.spAt=tm;crumb('gold');try{banner(T('황금 물고기다!'),T('잡으면 진주를 듬뿍 받아요'))}catch(e){}}
+function goldFx(f,x,y,s){var r=s*2.3;aura(ctx,x,y,r,'255,214,80',.5+.15*Math.sin(t*6));ctx.save();ctx.fillStyle='#FFF6C8';for(var k=0;k<4;k++){var a=t*2.2+k*Math.PI/2,rr=s*(1.3+.25*Math.sin(t*5+k));star4(ctx,x+Math.cos(a)*rr,y+Math.sin(a)*rr*.7,Math.max(1.5,s*.16));ctx.fill()}ctx.restore()}
+var updateGD=update;update=function(dt){var r=updateGD.apply(this,arguments);try{if(state!=='play'||!P||P.dead)return r;
+  if(clockOk()&&Math.random()<dt*.06)goldSpawn();
+  for(var i=fish.length-1;i>=0;i--){var f=fish[i];if(!f.gold)continue;f.goldT+=dt;
+    if(f.goldT>GD_LIFE){fish.splice(i,1);try{banner(T('황금 물고기가 도망갔어요'),'')}catch(e){}continue}
+    if(fxOn('freeze'))continue;var dx=f.x-P.x,dy=f.y-P.y,d=Math.hypot(dx,dy)||1,ref=refSpeed(),hw=cw/2/zoom,run=d<hw*.7;
+    var psp=ref*((P.look&&P.look.speed)||1)*((P.k&&P.k.spd)||1)*1.04,sp=(run?psp*(f.goldT<6?.86:.7):ref*.45)*(fxOn('whirl')&&d<(P.s*5.2+120*scaleOf(P.s))?.35:1),ax=run?dx/d:Math.cos(t*.7+i),ay=run?dy/d:Math.sin(t*.9+i)*.5;
+    if(f.y<H*.03)ay=Math.abs(ay);if(f.y>H*.97)ay=-Math.abs(ay);
+    f.x+=ax*sp*dt;f.y=clamp(f.y+ay*sp*dt,H*.02,H*.98);f.vx=ax*sp;f.vy=ay*sp;f.ang=Math.atan2(ay,ax)}
+  }catch(e){}return r};
+var ateFishGD=ateFish;ateFish=function(f){var r=ateFishGD.apply(this,arguments);try{if(f&&f.gold){P.bonus=(P.bonus||0)+GD_B;var n=Math.round(GD_B*PEARL_K);crumb('goldGot');try{buzz([20,40,60])}catch(e){}
+  texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'+'+n+' '+T('진주'),life:1.8,big:1});try{banner(T('황금 물고기를 잡았어요!'),T('진주 +')+n)}catch(e){}}}catch(e){}return r};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

@@ -13069,7 +13069,7 @@ setTimeout(netCfgLoad,1500);
    들어가면 '3번 채널 · 사람 5명'을 잠깐 보여 줌. 무료 한도를 넘으면 요금 대신 끊김 → 위의 안전장치로 컴퓨터 물고기 바다 */
 abyTr(TRT,{'번 채널':'Channel ','사람 ':'Players ','명과 함께':' with you','컴퓨터 물고기와 함께':'with computer fish'});
 abyTr(TRJ,{'번 채널':'チャンネル','사람 ':'プレイヤー ','명과 함께':'人と一緒','컴퓨터 물고기와 함께':'コンピューターの魚と一緒'});
-function netChanShow(){try{var n=(NET.humans|0),ch=LANG==='ko'?NET.shard+T('번 채널'):T('번 채널')+NET.shard;banner(ch,n>0?(LANG==='en'?n+' other player'+(n>1?'s':'')+' here':LANG==='ja'?'ほかに'+n+'人':'다른 사람 '+n+'명과 함께'):T('컴퓨터 물고기와 함께'))}catch(e){}}
+function netChanShow(){return; /* 1.1.15 종한 요청: 대전 시작할 때 '몇 번 채널 · 컴퓨터 물고기와 함께 / 다른 사람 n명' 알림 안 띄움 */try{var n=(NET.humans|0),ch=LANG==='ko'?NET.shard+T('번 채널'):T('번 채널')+NET.shard;banner(ch,n>0?(LANG==='en'?n+' other player'+(n>1?'s':'')+' here':LANG==='ja'?'ほかに'+n+'人':'다른 사람 '+n+'명과 함께'):T('컴퓨터 물고기와 함께'))}catch(e){}}
 /* 1.1.14 P2P 대전(10/20 종한 '유료로 안 하는 방법'): 서버(DB 함수 gf_p2p)는 '누가 같은 채널인지 + 연결 요청'만 소개하고,
    대전 중 위치(st) · 물기(bite) · 죽음(ded)은 폰끼리 직접(WebRTC) 주고받는다 → 실시간 서버 메시지 · 동시 연결 한도를 안 씀(무료 DB 요청은 횟수 제한 없음).
    원격 설정 gf_cfg 의 p2p=1 일 때만 켜짐(배포 전엔 지금 방식 그대로). 직접 연결이 안 되는 상대는 안 보이고 컴퓨터 물고기가 채움 */

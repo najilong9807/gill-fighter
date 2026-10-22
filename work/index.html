@@ -6265,7 +6265,7 @@ function banFlush(){if(!BAN_Q)return;var q=BAN_Q,bk=0;try{bk=banBlock()}catch(x)
 function banHold(){try{var e=$('banner');if(e&&!e.hidden&&BAN_LAST){clearTimeout(bannerT);e.hidden=true;BAN_Q=[BAN_LAST[0],BAN_LAST[1],Date.now()];clearTimeout(BAN_QT);BAN_QT=setTimeout(banFlush,600)}}catch(x){}}
 var BAN_LAST=null,BAN_AT=0,BAN_NX=[],BAN_NT=0;
 /* 1.1.10(b174) 알림이 0.01초 만에 다른 알림으로 바뀌어 못 읽던 것: 앞 알림이 1.6초는 보이게 하고, 그 사이에 온 알림은 차례로(같은 제목은 하나만, 최대 2개) */
-function banner0(a,b){var now=Date.now(),e0=$('banner');if(e0&&!e0.hidden&&BAN_LAST&&BAN_LAST[0]!==a&&now-BAN_AT<1600){BAN_NX=BAN_NX.filter(function(q){return q[0]!==a});BAN_NX.push([a,b]);if(BAN_NX.length>2)BAN_NX.shift();clearTimeout(BAN_NT);BAN_NT=setTimeout(banNext,1600-(now-BAN_AT));return}banner1(a,b)}
+function banner0(a,b){var now=Date.now(),e0=$('banner'),gap=(typeof state!=='undefined'&&state==='home')?2600:1600;/* 1.1.15: 홈에선 알림 하나를 조금 더 오래 보여 주고 다음 것 */if(e0&&!e0.hidden&&BAN_LAST&&BAN_LAST[0]!==a&&now-BAN_AT<gap){BAN_NX=BAN_NX.filter(function(q){return q[0]!==a});BAN_NX.push([a,b]);if(BAN_NX.length>2)BAN_NX.shift();clearTimeout(BAN_NT);BAN_NT=setTimeout(banNext,gap-(now-BAN_AT));return}banner1(a,b)}
 function banNext(){var q=BAN_NX.shift();if(!q)return;if(state!=='play'&&state!=='pause'&&state!=='home'&&state!=='menu')return;banner(q[0],q[1]);if(BAN_NX.length){clearTimeout(BAN_NT);BAN_NT=setTimeout(banNext,1700)}}
 function banner1(a,b){BAN_LAST=[a,b];BAN_AT=Date.now();TX_BF=0;var e=$('banner');e.textContent='';var s1=document.createElement('b');s1.textContent=a;e.appendChild(s1);if(b){var s2=document.createElement('span');s2.textContent=b;e.appendChild(s2)}
   e.hidden=false;try{var mw=innerWidth-28;[s1,e.querySelector('span')].forEach(function(q,qi){if(!q)return;q.style.fontSize='';var w=q.offsetWidth;if(w>mw)q.style.fontSize=Math.max(qi?12:18,(qi?18:34)*mw/w).toFixed(1)+'px'})}catch(x){}e.classList.remove('go');void e.offsetWidth;e.classList.add('go');clearTimeout(bannerT);bannerT=setTimeout(function(){e.hidden=true},2600)}
@@ -11745,7 +11745,7 @@ function hwAttClaim(){if(!hwAttCan())return;var o=HA(),r=HWATT[o.n],sub='';
   try{refreshHome(true);refreshTank()}catch(e){}hwAttRender();hwBarPaint();
   setTimeout(function(){var el=$('hwAtt');if(el&&!el.hidden&&!hwAttCan())el.hidden=true},900)}
 function hwAttBusy(){if(awayBusy())return true;var ov=document.querySelectorAll('.overlay');for(var i=0;i<ov.length;i++)if(!ov[i].hidden)return true;return !!document.querySelector('.coach')}
-function hwAttCheck(tries){if(!hwAttCan()||(save.runs||0)<1||save.hwAttAuto===today())return;
+function hwAttCheck(tries){if(!hwAttCan()||(save.runs||0)<3||save.hwAttAuto===today())return;/* 1.1.15: 처음 3판까지는 출석 창이 저절로 뜨지 않음(띠로는 받기 가능) */
   /* 새 사용자는 첫 홈에서 수족관 탭 안내를 먼저 보고, 출석 선물 창은 그 뒤(다음 홈 · 3판 이후)부터 저절로 뜬다(띠로는 언제든 받기) */
   if(save.tut===1&&(save.runs||0)<3&&!tipSeen('tankTab'))return;
   if(page!=='home'||hwAttBusy()||save.newsSeen!==APP_VER){if((tries||0)<20)setTimeout(function(){hwAttCheck((tries||0)+1)},1500);return}
@@ -12100,7 +12100,7 @@ abyTr(TRJ,{'이끼 묘비':'苔むしたお墓','호박 무더기':'かぼちゃ
 
 /* ===== 1.1.11 할로윈 선물: 할로윈 기간에 앱을 열면 모든 분 수족관에 「호박 무더기」 하나를 무료로(한 해 한 번). 수족관이 가득이면 보관함으로. 출석 선물 창 위에 안내 ===== */
 var HWGIFT='hw_jackpile';
-function hwGiftCheck(){try{if(!hwSeason())return;if(!((save.runs|0)>0))return;/* 1.1.15: 처음 켠 사람은 닉네임 · 연습 먼저, 선물 알림은 첫 판 뒤 홈에서 */var y=new Date().getFullYear();if(save.hwGift===y)return;if(!(cw>0&&ch>0))return;var D=decoById(HWGIFT);if(!D)return;
+function hwGiftCheck(){try{if(!hwSeason())return;if(!((save.runs|0)>0))return;if(document.querySelector('.coach')||(save.tut===1&&(save.runs|0)<3&&typeof tipSeen==='function'&&!tipSeen('tankTab'))){setTimeout(hwGiftCheck,2500);return}/* 1.1.15: 처음 켠 사람은 닉네임 · 연습 먼저, 선물 알림은 첫 판 뒤 홈에서 */var y=new Date().getFullYear();if(save.hwGift===y)return;if(!(cw>0&&ch>0))return;var D=decoById(HWGIFT);if(!D)return;
   var d=DS(),W=TWW(),put=false;
   if(d.placed.length<DECO_MAX){var nx=decoSpot(D,true);
     d.placed.push({k:HWGIFT,x:nx,y:clamp((floorAt(nx*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95),s:1,f:0});put=true}
@@ -13224,7 +13224,7 @@ function wnBarPaint(){var b=$('wnBar');if(!b)return;b.hidden=!(WN&&!HW&&save.wnS
 /* --- 겨울 출석 선물 5일: 하루에 하나씩(빠진 날은 건너뛰지 않고 이어서) --- */
 var WN_GIFTS=[{d:'wn_tree'},{p:300},{a:'wn_santa'},{g:3},{a:'wn_snow'}];
 function wnAttCheck(tries){try{if(!WN||HW)return;var A=save.wnAtt;if(!A||A.s!==wnSid())A=save.wnAtt={s:wnSid(),n:0,last:''};if(A.n>=WN_GIFTS.length||A.last===today())return;
-  if((save.runs||0)<1||page!=='home'||state!=='home'||document.querySelector('.overlay:not([hidden])')||save.newsSeen!==APP_VER){if((tries||0)<20)setTimeout(function(){wnAttCheck((tries||0)+1)},1500);return}
+  if((save.runs||0)<2||page!=='home'||state!=='home'||document.querySelector('.overlay:not([hidden])')||document.querySelector('.coach')||save.newsSeen!==APP_VER){if((tries||0)<20)setTimeout(function(){wnAttCheck((tries||0)+1)},1500);return}
   var R=WN_GIFTS[A.n],sub='';A.n++;A.last=today();
   if(R.d){var D=decoById(R.d),dd=DS(),W=TWW();if(D&&dd.placed.length<DECO_MAX){var nx=decoSpot(D,true);dd.placed.push({k:R.d,x:nx,y:clamp((floorAt(nx*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95),s:1,f:0});sub=T('수족관에 「산호 트리」를 넣어 드렸어요')}else{dd.inv[R.d]=(dd.inv[R.d]||0)+1;sub=T('수족관 › 꾸미기 › 소품에 넣어 뒀어요')}try{refreshTank()}catch(e){}}
   if(R.p){save.pearls+=R.p;sub=T('진주 +')+R.p}
@@ -13641,6 +13641,31 @@ setInterval(function(){try{if(state==='home')wevBarPaint()}catch(e){}},3000);set
 function graceLeft(){try{if(!P||state!=='play'||!P.grace)return 0;return Math.max(0,P.grace-(P.time||0))}catch(e){return 0}}
 var invulnGR=invuln;invuln=function(){return graceLeft()>0||invulnGR()};
 var startRunGR=startRun;startRun=function(){var r=startRunGR.apply(this,arguments);try{P.grace=(mode==='single'&&!P.surv&&!fair()&&!(typeof TUT!=='undefined'&&TUT&&TUT.on))?((save.runs|0)<6?4:2.5):0}catch(e){}return r};
+abyTr(TRT,{'설명 펼치기':'Show details','설명 접기':'Hide details'});abyTr(TRJ,{'설명 펼치기':'説明をひらく','설명 접기':'説明をとじる'});
+/* ===== 1.1.15 홈 물고기 설명 접기 · 펴기(종한 요청): 카드를 누르거나 오른쪽 ⌄ 버튼으로. 접으면 이름 · 최대 크기 한 줄만, 상태는 저장 */
+(function(){var c=document.querySelector('#homeUI .home-card')||document.querySelector('.home-card');if(!c)return;var hb=c.querySelector('b');if(!hb)return;
+  var st=document.createElement('style');st.textContent='.home-card{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}.home-card .hcf{flex:0 0 auto;width:28px;height:28px;margin:-4px -6px -4px 0;border:0;border-radius:50%;background:rgba(255,255,255,.16);display:inline-grid;place-items:center;padding:0;cursor:pointer}.home-card .hcf svg{width:16px;height:16px;transition:transform .2s}.home-card.fold .hcf svg{transform:rotate(180deg)}.home-card.fold #hmTrait,.home-card.fold #hmSkill{display:none}.home-card.fold{padding-top:7px;padding-bottom:7px}.home-card b .hcr{display:inline-flex;align-items:center;gap:8px;margin-left:auto;font-style:normal}';document.head.appendChild(st);
+  var cap=$('hmCap'),wrap=document.createElement('em');wrap.className='hcr';if(cap){cap.parentNode.insertBefore(wrap,cap);wrap.appendChild(cap)}else hb.appendChild(wrap);
+  var bt=document.createElement('button');bt.type='button';bt.className='hcf';bt.innerHTML='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';wrap.appendChild(bt);
+  function paint(){var f=!!save.hcFold;c.classList.toggle('fold',f);bt.setAttribute('aria-label',f?T('설명 펼치기'):T('설명 접기'));bt.setAttribute('aria-expanded',f?'false':'true')}
+  function tog(e){if(e&&e.target&&e.target.closest&&e.target.closest('button:not(.hcf),a,input'))return;save.hcFold=save.hcFold?0:1;persist();paint();crumb('hcFold'+save.hcFold);try{buzz(8)}catch(_){}}
+  c.addEventListener('click',tog);paint();window.hcFoldPaint=paint})();
+/* ===== 1.1.15 가로 화면 점검(종한 요청): 아이폰 가로에서 결과 창 · 이벤트 창 · 닉네임 창이 화면보다 길어 아래 버튼이 가려졌음
+   → 결과 창은 왼쪽 기록 / 오른쪽 버튼 두 칸, 나머지는 여백 · 글자 크기만 줄여 한 화면에 */
+(function(){var st=document.createElement('style');st.textContent='@media (orientation:landscape) and (max-height:560px){'
+ +'#over .panel{max-width:min(860px,96vw);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);column-gap:16px;row-gap:6px;align-items:start;padding-top:12px;padding-bottom:12px}'
+ +'#over .panel>*{grid-column:1;margin-top:0;margin-bottom:0}'
+ +'#over .panel>.row{grid-column:2;grid-row:1/span 9;align-self:center;margin:0}#over .panel>:not(.row){grid-column:1}'
+ +'#over .panel>.head{grid-column:1}'
+ +'#over h1{font-size:24px;line-height:1.15}'
+ +'#over .stats{gap:6px}#over .stats dd{font-size:20px}'
+ +'#over #oMsg{font-size:12.5px;line-height:1.35;max-height:96px;overflow-y:auto}'
+ +'#over .row #againBtn{font-size:21px!important;padding:11px 8px 13px!important}'
+ +'#wev .panel,#nickFirst .panel{padding-top:10px;padding-bottom:10px;gap:6px}'
+ +'#wev .wevbig{font-size:30px;margin:0}#wev h1,#nickFirst h1{font-size:22px;margin:2px 0}#wev .wevbar{margin:4px 0 2px}#wev .lead,#nickFirst .lead{margin:2px 0;font-size:13px}'
+ +'#wev .row,#nickFirst .row{margin-top:4px}#wev .btn,#nickFirst .btn{padding-top:9px!important;padding-bottom:11px!important;font-size:18px}'
+ +'#wev .panel{max-width:min(600px,94vw)}#wev .wevbig{display:none}'
+ +'}';document.head.appendChild(st)})();
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

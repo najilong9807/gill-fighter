@@ -5,6 +5,7 @@ What's new in 1.1.15:
 (4) Cosmetic placement fixes for rays and mantas.
 (5) Weekly event (date-based, no server): each week Score Challenge gets one of three rule changes (1.5x pearls, bigger fish, more small fish). Playing 3 runs of 20+ seconds that week unlocks a reward of in-game currency (200 pearls + 3 gems). Leaderboard rows for ranks 1-3 show medals and titles. A new winter background track plays during the existing winter season.
 (6) Solo runs start with a short protective bubble (4 seconds for the first 6 runs, then 2.5 seconds) so new players are not eaten instantly.
+(7) Visual clean-up: notices are shown as a small card near the top, the home screen shows one info bar at a time, the shop is grouped into labelled sections, and the daily launch animation was removed.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Backup; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Backup that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

@@ -13605,7 +13605,7 @@ var LB_TTL=['바다의 왕','은빛 지느러미','구릿빛 지느러미'];
 function lbDeco(){try{var box=$('lbList');if(!box)return;Array.prototype.forEach.call(box.querySelectorAll('li'),function(li){if(li.dataset.deco||li.classList.contains('empty')||li.classList.contains('gap'))return;li.dataset.deco=1;var r=+li.dataset.r;if(!(r>0))return;
     var rk=li.querySelector('b');if(rk&&r<=3){rk.textContent=['🥇','🥈','🥉'][r-1];rk.classList.add('lbmd');rk.setAttribute('aria-label',r+T('위'))}
     var nm=li.querySelector('.bnm');if(nm){if(li.classList.contains('me')){var mt=document.createElement('span');mt.className='lbmetag';mt.textContent=T('나');nm.insertBefore(mt,nm.firstChild)}
-      if(r<=10){var sm=nm.querySelector('small');var tt=document.createElement('em');tt.className='lbttl';tt.textContent=(r===1?'👑 ':'')+T(r<=3?LB_TTL[r-1]:'상위 10');nm.appendChild(tt)}}})}catch(e){}}
+      if(r===1){var sm=nm.querySelector('small'); /* 종한 요청: 칭호는 1위 '바다의 왕'만(은빛 · 구릿빛 · 상위 10 뺌) */var tt=document.createElement('em');tt.className='lbttl';tt.textContent=(r===1?'👑 ':'')+T(r<=3?LB_TTL[r-1]:'상위 10');nm.appendChild(tt)}}})}catch(e){}}
 var lbShowDC=lbShow;lbShow=function(){var r=lbShowDC.apply(this,arguments);try{lbDeco();var box=$('lbList');if(box&&!box._dco){box._dco=1;new MutationObserver(function(){lbDeco()}).observe(box,{childList:true})}}catch(e){}return r};
 /* ===== 1.1.15 주간 이벤트 바다(종한 선택): 매주 월요일(한국시간)마다 싱글 '기록 도전'에 특별 규칙이 바뀜 · 서버 없이 날짜로
    보물 바다(진주 1.5배) → 거대 물고기 주간(큰 물고기가 더 크게 · 사냥 진주 2배) → 먹이 풍년(작은 물고기 많이) 순서로 돌아감.

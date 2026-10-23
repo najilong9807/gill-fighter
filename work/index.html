@@ -8848,7 +8848,7 @@ function renderSetPage(){
   var sP=setSec(T('성능'));
   var nb=document.createElement('button');nb.type='button';nb.className='sw';nb.id='sw-noti';var np=function(){var on=save.noti===true;nb.setAttribute('aria-pressed',on?'true':'false');nb.textContent=on?T('켜짐'):T('꺼짐')};np();
   nb.addEventListener('click',function(){notiEnable(save.noti!==true,function(){np()})});
-  if(lnPlug()||dev())sP.appendChild(setRow(T('알림'),T('출석 보상이 기다리거나 수족관 집 진주가 가득 차거나 먹이 줄 시간이 되면 알려 줘요 (밤 0~8시는 보내지 않아요)'),nb));
+  /* 1.1.16 종한: 알림은 '성능' 안에 묻혀 찾기 어려워 → 소리 바로 아래 '알림' 칸으로 따로 */if(lnPlug()||dev()){var sAl=setSec(T('알림'));sAl.appendChild(setRow(T('알림 받기'),T('출석 보상이 기다리거나 수족관 집 진주가 가득 차거나 먹이 줄 시간이 되면 알려 줘요 (밤 0~8시는 보내지 않아요)'),nb));box.appendChild(sAl)}
   sP.appendChild(setRow(T('가벼운 모드'),T('게임이 처음 화면으로 자주 돌아가면 켜 보세요. 배경음악은 지금 곡 하나만 준비하고 화면을 조금 덜 선명하게 그려 메모리를 아껴요'),swBtn('lite',function(){if(!save.lite){save.liteOff=Date.now()}else save.liteOff=0;persist();crumb('lite:'+(save.lite?1:0));try{resize()}catch(e){}})));
   box.appendChild(sP);
   var sN=setSec(T('업데이트 소식'));var nb=document.createElement('button');nb.type='button';nb.className='sw';nb.textContent=T('보기');nb.addEventListener('click',function(){newsOpen(APP_VER)});
@@ -11009,7 +11009,7 @@ function roomInvite(c){if(!/^\d{4}$/.test(c))return;if(state==='play'||state==='
 function appNative(){try{var C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.App?C.Plugins.App:null}catch(e){return null}}
 /* 1.1.5 새 버전 안내: 앱스토어에 올라간 버전이 지금 앱보다 높으면 처음 화면에 띠를 띄우고,
    그 버전을 처음 알게 됐을 때(또는 '나중에' 뒤 3일 지나서) 안내 창을 한 번 보여 준다. 업데이트는 앱스토어로 보낸다 */
-var APP_VER='1.1.15',UPD={v:null,notes:'',at:0,busy:false};
+var APP_VER='1.1.16',UPD={v:null,notes:'',at:0,busy:false};
 function verGt(a,b){a=String(a||'').split('.');b=String(b||'').split('.');for(var i=0;i<4;i++){var x=parseInt(a[i]||0,10)||0,y=parseInt(b[i]||0,10)||0;if(x!==y)return x>y}return false}
 function updCheck(force){
   var C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform())&&location.search.indexOf('updtest')<0)return;
@@ -13834,6 +13834,9 @@ var updateGD=update;update=function(dt){var r=updateGD.apply(this,arguments);try
   }catch(e){}return r};
 var ateFishGD=ateFish;ateFish=function(f){var r=ateFishGD.apply(this,arguments);try{if(f&&f.gold){P.bonus=(P.bonus||0)+GD_B;var n=Math.round(GD_B*PEARL_K);crumb('goldGot');try{buzz([20,40,60])}catch(e){}
   texts.push({x:P.x,y:P.y-P.s*2.6-30/zoom,txt:'+'+n+' '+T('진주'),life:1.8,big:1});try{banner(T('황금 물고기를 잡았어요!'),T('진주 +')+n)}catch(e){}}}catch(e){}return r};
+/* ===== 1.1.16 소식 */
+try{TRT['알림 받기']='Get notifications'}catch(e){}
+abyTr(TRT,{"설정에 '알림' 칸을 따로 만들었어요(소리 바로 아래)":"Settings now has its own Notifications section (right under Sound)","랭킹은 1~3위 메달과 1위 '바다의 왕'만 남겨 더 깔끔하게":"Cleaner rankings: medals for the top 3 and 'King of the Sea' for #1 only","작은 정리 업데이트 🐠":"A small tidy-up update 🐠","알림 받기":"Get notifications"});abyTr(TRJ,{"설정에 '알림' 칸을 따로 만들었어요(소리 바로 아래)":"設定に「通知」の項目を独立させました（サウンドのすぐ下）","랭킹은 1~3위 메달과 1위 '바다의 왕'만 남겨 더 깔끔하게":"ランキングをすっきり：1〜3位のメダルと1位の「海の王」だけに","작은 정리 업데이트 🐠":"ちょっとした整理アップデート 🐠","알림 받기":"通知を受け取る"});NEWS['1.1.16']=[T("설정에 '알림' 칸을 따로 만들었어요(소리 바로 아래)"),T("랭킹은 1~3위 메달과 1위 '바다의 왕'만 남겨 더 깔끔하게")];NEWS_LEAD['1.1.16']=T("작은 정리 업데이트 🐠");
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

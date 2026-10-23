@@ -6,7 +6,8 @@ What's new in 1.1.16 (small tidy-up):
 (5) Settings are grouped into five tabs (General, Graphics, Sound, Data, Info); no settings were added or removed. The duplicate small label above the Settings title was removed.
 (6) Easier start in Solo: for the first 6 seconds of a run no fish bigger than the player spawns and nearby big fish are moved off-screen; when eaten, the result screen names the fish and shows a short tip.
 (7) New players start the practice sea right away with a suggested nickname; the nickname screen (same as before) now appears once on Home after the first run.
-(8) The in-app "What's new" popup describes these changes.
+(8) The result screen shows at most two short info lines (three after a full win). Brand-new players no longer see the "What's new" popup for the version they installed.
+(9) The in-app "What's new" popup describes these changes.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Backup; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Backup that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          python3 store_meta.py 2>&1 | tee out.txt; ec=$?
+          ec=0; python3 store_meta.py 2>&1 | tee out.txt || ec=$?
           # 로그 파일을 못 여는 환경에서도 결과를 보려고 핵심 줄만 알림(annotation)으로 남김 — 키 값은 원래 출력 안 함
           grep -E "VERSION|state|SUBMIT|submit|BUILD|build|NOTES|WHATSNEW|ERR|Error|DRY" out.txt | cut -c1-300 | head -40 | sed 's/^/::notice::/' || true
           if [ "$ec" != "0" ]; then tail -8 out.txt | cut -c1-300 | sed 's/^/::notice::TAIL /' || true; fi

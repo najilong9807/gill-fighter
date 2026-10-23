@@ -13894,6 +13894,21 @@ var overMsgCUT=overMsg;overMsg=function(msg){var m=String(msg||''),lg=T('자라�
   if(lg&&m.indexOf(lg)>=0)m=m.replace(lg,LANG==='en'?'Grow a little to earn pearls. ':LANG==='ja'?'少しでも大きくなると真珠がもらえます。':'조금이라도 커야 진주가 생겨요. ');
   var r=overMsgCUT.call(this,m);try{if(typeof mode!=='undefined'&&mode==='multi')return r;var e=$('oMsg');if(!e)return r;var L=[].slice.call(e.querySelectorAll('.ml')),max=(P&&P.win)||/끝까지 키웠어요|You grew it all the way|最後まで/.test(m)?3:2;
     if(L.length>max){var rank=function(d){return d.classList.contains('hi')?0:d.classList.contains('nx')?2:1};var keep=L.slice().sort(function(a,b){return rank(a)-rank(b)||L.indexOf(a)-L.indexOf(b)}).slice(0,max);L.forEach(function(d){if(keep.indexOf(d)<0)d.remove()})}}catch(x){}return r};
+/* 1.1.16 UI 재점검(종한 '문제점 없어 보여?'): 아이폰 가로에서
+   ① 결과 창 '먹힌 상대 · 안내' 글이 화면 아래로 밀려 안 보였음 → 가로일 때만 오른쪽 버튼 칸 맨 위로 옮김
+   ② 기록 칸(생존 시간 · 큰 물고기 사냥 · 가장 깊이) 이름이 2~3줄로 꺾임 → 두 칸씩, 한 줄
+   ③ 홈 위 띠 글이 '…'로 잘림(알림 버튼이 늘어 자리가 좁아짐) → 가로에선 두 줄까지 */
+var OV_LM=null;function ovPlace(){try{var m=$('oMsg'),row=document.querySelector('#over .panel>.row');if(!m||!row)return;if(!OV_LM){OV_LM=document.createComment('oMsg');m.parentNode.insertBefore(OV_LM,m)}
+  var land=matchMedia('(orientation:landscape) and (max-height:560px)').matches;
+  if(land&&m.parentNode!==row){row.insertBefore(m,row.firstChild);m.classList.add('omland')}else if(!land&&m.parentNode===row){OV_LM.parentNode.insertBefore(m,OV_LM.nextSibling);m.classList.remove('omland')}}catch(e){}}
+var endRunOP=endRun;endRun=function(){var r=endRunOP.apply(this,arguments);ovPlace();return r};
+try{addEventListener('resize',function(){setTimeout(ovPlace,60)});addEventListener('orientationchange',function(){setTimeout(ovPlace,250)})}catch(e){}
+(function(){var st=document.createElement('style');st.textContent='@media (orientation:landscape) and (max-height:560px){'
+ +'#over .row #oMsg.omland{margin:0;padding:6px 10px;max-height:78px;overflow-y:auto;font-size:12px;line-height:1.3;text-align:left}#over .row #oMsg.omland .ml,#over .row #oMsg.omland .oby{font-size:12px!important;line-height:1.3;margin:1px 0}#over .row #oMsg.omland .ml::before{width:6px;height:6px}'
+ +'#over .panel>.row{margin-top:8px!important}'
+ +'#over .recline{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}#over .recline li{white-space:nowrap;padding:5px 9px}#over .recline li small{white-space:nowrap}'
+ +'.updbar span{white-space:normal!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.2;font-size:12.5px;text-overflow:clip}'
+ +'}';document.head.appendChild(st)})();
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

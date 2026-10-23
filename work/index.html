@@ -13594,7 +13594,8 @@ function nickFirstOpen(done){var el=$('nickFirst');if(!el){el=document.createEle
   $('nfH').textContent=T('닉네임을 정해 주세요');$('nfL').textContent=T('랭킹과 대전에서 다른 사람에게 보이는 이름이에요');$('nfOk').textContent=T('이 이름으로 시작');$('nfDice').textContent='🎲 '+T('다른 이름 추천');$('nfNote').textContent=T('나중에 설정에서 바꿀 수 있어요 · 10자까지');
   var inp=$('nfIn');inp.value=(save.nick&&!badName(save.nick))?save.nick:nickSuggest();$('nfErr').hidden=true;el._done=done;el.hidden=false;crumb('nickAsk')}
 var tutBootNK=tutBoot;tutBoot=function(){if($('intro')){setTimeout(tutBoot,500);return}
-  if(state==='home'&&!save.onb&&!(save.runs>0)&&!save.nickSet){if($('nickFirst')&&!$('nickFirst').hidden)return;nickFirstOpen(function(){tutBootNK()});return}return tutBootNK()};
+  /* 1.1.16 종한: 처음 켠 사람이 닉네임 창에서 오래 머물다 떠나는 일이 있어 → 첫 판은 바로 헤엄치고(추천 이름 미리 붙임) 이름은 첫 판 뒤 홈에서 */
+  if(state==='home'&&!save.onb&&!(save.runs>0)&&!save.nickSet){if(!save.nick||badName(save.nick))save.nick=nickSuggest();save.nickLater=1;persist()}return tutBootNK()};
 /* ===== 1.1.15 닉네임 랭킹 꾸미기(종한 선택): 이제 모두 닉네임이 있으니 순위표를 '사람' 중심으로
    1 · 2 · 3위: 금 · 은 · 동 줄 + 메달, 1위 물고기에 왕관 · 이름 밑에 칭호(1위 바다의 왕 · 2위 은빛 지느러미 · 3위 구릿빛 지느러미 · 4~10위 상위 10)
    내 줄: 이름 앞 '나' 표시 + 반짝이는 테두리. 서버 데이터는 그대로(순위 · 이름 · 물고기 · 점수만 씀) */
@@ -13840,7 +13841,7 @@ abyTr(TRT,{"홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 
  "알림 내역":"Notifications","아직 알림이 없어요":"No notifications yet","보상 · 이벤트 · 저장 같은 알림이 여기에 모여요":"Rewards, events, backups and other notices will show up here","방금":"just now","분 전":"m ago","시간 전":"h ago","일 전":"d ago","모두 지우기":"Clear all","닫기":"Close","지나간 알림을 최근 30개까지 보여 줘요":"Shows up to your 30 most recent notices"});
 abyTr(TRJ,{"홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 볼 수 있어요":"ホーム上に🔔通知ボタン — 過去のお知らせをまとめて見返せます","설정을 일반 · 그래픽 · 사운드 · 저장 · 정보 탭으로 나눠 찾기 쉽게(알림 켜기는 '일반')":"設定を 一般 · 画面 · サウンド · データ · 情報 のタブに分けて見やすく（通知は「一般」）","랭킹은 1~3위 메달과 1위 '바다의 왕'만 남겨 더 깔끔하게":"ランキングをすっきり：1〜3位のメダルと1位の「海の王」だけに","작은 정리 업데이트 🐠":"ちょっとした整理アップデート 🐠","알림 받기":"通知を受け取る",
  "알림 내역":"お知らせ","아직 알림이 없어요":"まだお知らせはありません","보상 · 이벤트 · 저장 같은 알림이 여기에 모여요":"報酬・イベント・バックアップなどのお知らせがここに集まります","방금":"たった今","분 전":"分前","시간 전":"時間前","일 전":"日前","모두 지우기":"すべて消す","닫기":"閉じる","지나간 알림을 최근 30개까지 보여 줘요":"最近のお知らせを30件まで表示します"});
-NEWS['1.1.16']=[T("홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 볼 수 있어요"),T("설정을 일반 · 그래픽 · 사운드 · 저장 · 정보 탭으로 나눠 찾기 쉽게(알림 켜기는 '일반')"),T("랭킹은 1~3위 메달과 1위 '바다의 왕'만 남겨 더 깔끔하게")];NEWS_LEAD['1.1.16']=T("작은 정리 업데이트 🐠");
+abyTr(TRT,{"시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요":"Easier starts: big fish stay away for the first 6 seconds, and you see who ate you"});abyTr(TRJ,{"시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요":"はじまりをやさしく：最初の6秒は大きな魚が近づかず、食べられたら相手がわかります"});NEWS['1.1.16']=[T("시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요"),T("홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 볼 수 있어요"),T("설정을 일반 · 그래픽 · 사운드 · 저장 · 정보 탭으로 나눠 찾기 쉽게(알림 켜기는 '일반')"),T("랭킹은 1~3위 메달과 1위 '바다의 왕'만 남겨 더 깔끔하게")];NEWS_LEAD['1.1.16']=T("작은 정리 업데이트 🐠");
 /* 1.1.16 종한: 알림 내역 — 홈 🔔 버튼. 화면에 뜬 알림(게임 중 제외)을 최근 30개까지 저장해 다시 보여 줌 */
 function nlLog(a,b){try{if(!a||(typeof state!=='undefined'&&state==='play'))return;var L=save.nlog||(save.nlog=[]),now=Date.now();
   for(var i=0;i<L.length;i++){if(L[i].a===a&&now-L[i].t<6e5){L[i].t=now;L[i].b=String(b||'').slice(0,120);var x=L.splice(i,1)[0];L.unshift(x);persist();return}}
@@ -13869,6 +13870,24 @@ function setTabsApply(){var box=$('setAll');if(!box)return;var bar=$('setTabs');
   [].forEach.call(box.children,function(s){var h=s.querySelector('h3');var k=h?setTabOf(h.textContent.trim()):'inf';s.style.display=k===SETTAB?'':'none'})}
 var renderSetPageTB=renderSetPage;renderSetPage=function(){var r=renderSetPageTB.apply(this,arguments);try{setTabsApply()}catch(e){}return r};
 try{$('setBtn').addEventListener('click',function(){SETTAB='gen'},true)}catch(e){}
+/* 1.1.16 종한 선택 ①: 닉네임은 첫 판을 마친 뒤 홈에서 한 번 묻는다(기존 사람은 이미 정했거나 안 뜸) */
+function nickLater(k){try{if(save.nickSet||!save.nickLater||!(save.runs>=1)||state!=='home'||page!=='home')return;if(typeof TUT!=='undefined'&&TUT&&TUT.on)return;
+  var busy=[].some.call(document.querySelectorAll('.overlay'),function(o){return !o.hidden})||!$('banner').hidden;if(busy){k=(k|0)+1;if(k<40)setTimeout(function(){nickLater(k)},1500);return}nickFirstOpen(function(){});$('nfOk').textContent=LANG==='en'?'Use this name':LANG==='ja'?'この名前にする':'이 이름으로 정하기'}catch(e){}}
+var showTabNL=showTab;showTab=function(p){var r=showTabNL.apply(this,arguments);if(p==='home'&&!save.nickSet&&save.nickLater&&save.runs>=1)setTimeout(nickLater,900);return r};
+/* 1.1.16 종한 선택 ②: 시작하자마자 먹히는 판 줄이기 — 싱글(기록 도전 · 심해 탐험) 시작 6초 동안
+   나보다 큰 물고기는 새로 안 생기고(먹이 크기로), 시작 때 가까이 있던 큰 물고기는 화면 밖으로 밀어 둠 */
+function calmStart(){try{return state==='play'&&mode==='single'&&!P.surv&&!fair()&&(P.time||0)<6}catch(e){return false}}
+var spawnFishCS=spawnFish;spawnFish=function(initial,prey){if(!prey&&calmStart())prey=true;return spawnFishCS.call(this,initial,prey)};
+var startRunCS=startRun;startRun=function(){var r=startRunCS.apply(this,arguments);try{if(calmStart()){var R=viewR();fish.forEach(function(f){if(!f||f.bot||f.peerEnt||f.s<=P.s*1.02)return;var dx=f.x-P.x,dy=f.y-P.y,d=Math.hypot(dx,dy)||1;if(d<R*1.15){var k=R*1.25/d;f.x=P.x+dx*k;f.y=clamp(P.y+dy*k,H*.004,H*.99)}})}}catch(e){}return r};
+/* 결과 화면: 먹혔을 때 누구에게 먹혔는지 + 짧은 요령(일찍 끝난 판만) */
+var endRunBY=endRun;endRun=function(win,quit,by){var t0=P?P.time:0,r=endRunBY.apply(this,arguments);
+  try{if(!win&&!quit&&by&&!by.bot&&by.look&&mode==='single'&&!P.surv){var nm=by.look.name,e=$('oMsg');if(e&&nm){
+    var who=LANG==='en'?'Eaten by '+nm+'.':LANG==='ja'?nm+'に食べられました。':nm+'에게 먹혔어요.';
+    var TIPS=LANG==='en'?['Fish with a red outline are bigger than you — just stay clear of their mouth.','Cornered? Tap the ability button to slip away.','Eat the small fish first and grow step by step.']
+      :LANG==='ja'?['赤いふちの魚は自分より大きいよ。口の前だけよければ大丈夫。','追いつめられたら特技ボタンで逃げよう。','まずは小さな魚を食べて少しずつ大きく。']
+      :['빨간 테두리 물고기는 나보다 커요. 입 앞만 피하면 돼요.','쫓기면 특수능력 버튼으로 빠져나가요.','작은 물고기부터 먹으며 차근차근 커져요.'];
+    var b=document.createElement('b');b.className='oby';b.textContent=who+((t0<20&&(save.runs|0)<40)?' '+TIPS[(save.runs|0)%TIPS.length]:'');e.insertBefore(b,e.firstChild)}}}catch(x){}return r};
+(function(){var st=document.createElement('style');st.textContent='#oMsg .oby{display:block;font-weight:700;color:#B4233A;margin-bottom:4px}';document.head.appendChild(st)})();
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

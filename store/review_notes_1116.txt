@@ -1,7 +1,7 @@
 What's new in 1.1.16 (small tidy-up):
 (1) No new purchases, accounts, permissions or SDKs. New: a 2-letter country code from the device region setting (no location permission) is stored with the random device ID and shown as a flag by the nickname in the leaderboard; Settings > General can turn it off (clears it).
 (2) Settings: the existing optional notification switch (local reminders only, never sent between 0-8 AM) now has its own "Notifications" section directly under Sound instead of being inside Performance.
-(3) Leaderboard: ranks 1-3 keep their medals; only rank 1 keeps a title ("King of the Sea"). The silver, bronze and top-10 titles were removed.
+(3) Leaderboard: ranks 1-3 keep medals with new playful titles ("Sea Bomber", "Gill Grinder", "Fin Slayer"); the top-10 title was removed.
 (4) Home: a new bell button opens a local list of the last 30 on-screen notices (rewards, events, backups). It is stored only on the device; nothing is sent.
 (5) Settings are grouped into five tabs (General, Graphics, Sound, Data, Info); no settings were added or removed. The duplicate small label above the Settings title was removed.
 (6) Easier start in Solo: for the first 6 seconds of a run no fish bigger than the player spawns and nearby big fish are moved off-screen; when eaten, the result screen names the fish and shows a short tip.

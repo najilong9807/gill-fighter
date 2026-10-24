@@ -4447,7 +4447,7 @@ function svEqCnt(id,r){var Q=svEqS(),n=0;Q.inv.forEach(function(x){if(x.id===id&
 function svEqCanUp(id,r,onSlot){if(r>=3)return 0;var need=onSlot?SV_UPN-1:SV_UPN,c=svEqCnt(id,r);if(c<need)return 1;if(!dev()&&(save.pearls||0)<svUpCost(r))return 2;return 3}
 function svEqMergeable(){var Q=svEqS(),cnt={},m=[];Q.inv.forEach(function(it){if(it.r>=3)return;var k=it.id+'|'+it.r;cnt[k]=(cnt[k]||0)+1});for(var k in cnt)if(cnt[k]>=SV_UPN)m.push(k);return m}
 function svEqMerge(id,r,onSlot){var Q=svEqS();if(svEqCanUp(id,r,onSlot)<3)return null;var need=onSlot?SV_UPN-1:SV_UPN,idx=[];for(var i=0;i<Q.inv.length&&idx.length<need;i++)if(Q.inv[i].id===id&&Q.inv[i].r===r)idx.push(i);
-  for(i=idx.length-1;i>=0;i--)Q.inv.splice(idx[i],1);if(!dev())save.pearls-=svUpCost(r);var it={id:id,r:r+1};if(onSlot){Q.on[onSlot]=it}else Q.inv.push(it);try{if(!SV.eqDry)svStAdd('eqUp',1)}catch(x){}return it}
+  for(i=idx.length-1;i>=0;i--)Q.inv.splice(idx[i],1);if(!dev())save.pearls-=svUpCost(r);try{buzzBuy()}catch(e){}var it={id:id,r:r+1};if(onSlot){Q.on[onSlot]=it}else Q.inv.push(it);try{if(!SV.eqDry)svStAdd('eqUp',1)}catch(x){}return it}
 function svEqMergeAll(){var c=0,k;for(var guard=0;guard<60;guard++){var m=svEqMergeable().filter(function(q){var a=q.split('|');return svEqCanUp(a[0],+a[1])===3});if(!m.length)break;k=m[0].split('|');svEqMerge(k[0],+k[1]);c++}return c}
 function svEqShow(){SV.eqSel=null;svEqS().nw=0;persist();svEqRender();$('svEq').hidden=false}
 function svEqRender(){var Q=svEqS(),B=svEqB();var sl=$('svEqSlots');sl.textContent='';
@@ -13970,6 +13970,10 @@ var renderSetPageCC=renderSetPage;renderSetPage=function(){var r=renderSetPageCC
   var b=document.createElement('button');b.type='button';b.className='sw';b.id='sw-cc';var paint=function(){var on=!save.ccOff;b.setAttribute('aria-pressed',on?'true':'false');b.textContent=on?T('켜짐'):T('꺼짐')};paint();
   b.addEventListener('click',function(){save.ccOff=!save.ccOff;persist();paint();ccSync();try{for(var k in LB.cache)delete LB.cache[k]}catch(e){}});
   var dc=ccDevice(),fl=ccFlag(dc);prof.appendChild(setRow(T('랭킹에 국기 표시')+(fl?' '+fl:''),dc?T('기기 지역 설정의 나라 국기가 랭킹 내 이름 옆에 붙어요'):T('지역을 알 수 없어요'),b))}}catch(e){}return r};
+/* 1.1.16 종한 '상점에서 살 때 햅틱이 없다': 진주 · 보석을 써서 사는 모든 곳(상점 · 물고기 해금 · 레벨 업 · 연구 · 장비 강화)은 pay()를 거침
+   → 결제가 되면 '성공' 진동(아이폰 햅틱 SUCCESS), 진동 끔 설정이면 안 함 */
+function buzzBuy(){try{if(save.vib===false)return;var Hp=hapt();if(Hp){var now=performance.now();if(now-(buzzBuy.t||0)<120)return;buzzBuy.t=now;buzz.t=now;var r=Hp.notification({type:'SUCCESS'});if(r&&r.catch)r.catch(function(){});return}if(navigator.vibrate)navigator.vibrate([18,40,28])}catch(e){}}
+var payHP=pay;pay=function(c){var ok=payHP.apply(this,arguments);if(ok&&c&&c.price>0)buzzBuy();return ok};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;
   var by=-U*.28+Math.sin(t*3)*U*.02,bx=-U*.1;c.save();c.translate(bx,by);var fl=1+.1*Math.sin(t*9);c.scale(fl,1);hwBat(c,0,0,U*.46,'#241536',0);c.restore();

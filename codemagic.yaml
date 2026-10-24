@@ -86,3 +86,36 @@ workflows:
     scripts:
       - name: 스토어 정보 등록
         script: python3 store_meta.py
+
+  # 10/24 GitHub 빌드 시간이 다 떨어져서(11/1 다시 채워짐) Codemagic에서 붙이기 · 제출하는 용도. 수동 시작만(자동 실행 없음)
+  attach-1116:
+    name: 1.1.16 최신 빌드 붙이기 (빌드 없음)
+    max_build_duration: 10
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: asc
+    environment:
+      vars:
+        APP_STORE_APPLE_ID: 6816376999
+        STORE_VERSION: "1.1.16"
+        DRY: "0"
+        STEPS: "build"
+    scripts:
+      - name: 최신 빌드 붙이기
+        script: python3 store_meta.py
+  submit-1116:
+    name: 1.1.16 최신 빌드 붙이고 심사 제출 (빌드 없음)
+    max_build_duration: 10
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: asc
+    environment:
+      vars:
+        APP_STORE_APPLE_ID: 6816376999
+        STORE_VERSION: "1.1.16"
+        DRY: "0"
+        STEPS: "build,submit"
+        SUBMIT_OK: "1.1.16"
+    scripts:
+      - name: 붙이고 제출
+        script: python3 store_meta.py

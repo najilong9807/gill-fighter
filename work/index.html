@@ -13970,9 +13970,25 @@ var renderSetPageCC=renderSetPage;renderSetPage=function(){var r=renderSetPageCC
   var b=document.createElement('button');b.type='button';b.className='sw';b.id='sw-cc';var paint=function(){var on=!save.ccOff;b.setAttribute('aria-pressed',on?'true':'false');b.textContent=on?T('켜짐'):T('꺼짐')};paint();
   b.addEventListener('click',function(){save.ccOff=!save.ccOff;persist();paint();ccSync();try{for(var k in LB.cache)delete LB.cache[k]}catch(e){}});
   var dc=ccDevice(),fl=ccFlag(dc);prof.appendChild(setRow(T('랭킹에 국기 표시')+(fl?' '+fl:''),dc?T('기기 지역 설정의 나라 국기가 랭킹 내 이름 옆에 붙어요'):T('지역을 알 수 없어요'),b))}}catch(e){}return r};
+/* 1.1.16 종한 '관련해서 전체적으로 확인': 햅틱 전체 점검
+   ① 보상 받기: 진주 · 보석이 늘거나 새 물고기가 생기면(게임 중 · 결과 화면 제외) 앞뒤 0.4초 안에 다른 진동이 없을 때 '성공' 햅틱
+      → 탐사선 · 수족관 집 진주 · 보물 상자 · 하트 보상 · 선물 · 백업 불러오기 등 진동이 빠져 있던 받기를 한 번에 메움
+   ② 수족관 소품을 끌어다 놓으면 톡  ③ 설정 켜짐/꺼짐 · 탭 · 고르기 버튼에 가벼운 톡
+   ④ '톡톡톡' 여러 번 진동이 아이폰에선 약한 한 번으로만 나가던 것 → 게임 밖은 '성공', 게임 중은 세기별 약 · 중 · 강 */
+var buzzLA=buzz;buzz=function(p){var now=performance.now();buzz.last=now;
+  /* 여러 번 톡(배열) 진동이 아이폰에선 모두 '약하게 한 번'으로만 나가던 것 → 게임 밖(보상 받기 등)은 '성공' 햅틱, 게임 중은 세기에 따라 약 · 중 · 강 */
+  try{if(Array.isArray(p)&&save.vib!==false){var Hp=hapt();if(Hp){if(now-(buzz.t||0)<60)return;buzz.t=now;var sum=p.reduce(function(a,b){return a+(+b||0)},0);var inPlay=typeof state!=='undefined'&&state==='play';
+    var r=inPlay?Hp.impact({style:sum>=150?'HEAVY':sum>=80?'MEDIUM':'LIGHT'}):Hp.notification({type:'SUCCESS'});if(r&&r.catch)r.catch(function(){});return}}}catch(e){}
+  return buzzLA.apply(this,arguments)};
+function buzzOK(){try{if(save.vib===false)return;var now=performance.now();if(now-(buzz.last||0)<400)return;buzz.last=now;var Hp=hapt();if(Hp){buzz.t=now;var r=Hp.notification({type:'SUCCESS'});if(r&&r.catch)r.catch(function(){});return}if(navigator.vibrate)navigator.vibrate([18,40,28])}catch(e){}}
+var HP_SNAP=null;function hpSnap(){return {p:+save.pearls||0,g:+save.gems||0,o:(save.owned||[]).length}}
+var persistHP=persist;persist=function(){var r=persistHP.apply(this,arguments);try{var n=hpSnap(),o=HP_SNAP;HP_SNAP=n;if(o&&typeof state!=='undefined'&&state!=='play'&&state!=='over'&&state!=='pause'&&(n.p>o.p||n.g>o.g||n.o>o.o))setTimeout(buzzOK,0)}catch(e){}return r};
+setTimeout(function(){try{HP_SNAP=hpSnap()}catch(e){}},0);
+var decoUpHP=decoUp;decoUp=function(e){var g=deco&&deco.drag,mv=g&&g.moved;var r=decoUpHP.apply(this,arguments);if(mv)buzz(10);return r};
+document.addEventListener('click',function(e){try{var b=e.target.closest&&e.target.closest('#setAll .sw:not(.warn), #setAll .dd-seg button, #setTabs button, #achP .ach-seg button, .dmtabs button');if(b&&!b.disabled)buzz(8)}catch(x){}},true);
 /* 1.1.16 종한 '상점에서 살 때 햅틱이 없다': 진주 · 보석을 써서 사는 모든 곳(상점 · 물고기 해금 · 레벨 업 · 연구 · 장비 강화)은 pay()를 거침
    → 결제가 되면 '성공' 진동(아이폰 햅틱 SUCCESS), 진동 끔 설정이면 안 함 */
-function buzzBuy(){try{if(save.vib===false)return;var Hp=hapt();if(Hp){var now=performance.now();if(now-(buzzBuy.t||0)<120)return;buzzBuy.t=now;buzz.t=now;var r=Hp.notification({type:'SUCCESS'});if(r&&r.catch)r.catch(function(){});return}if(navigator.vibrate)navigator.vibrate([18,40,28])}catch(e){}}
+function buzzBuy(){try{if(save.vib===false)return;var Hp=hapt();if(Hp){var now=performance.now();if(now-(buzzBuy.t||0)<120)return;buzzBuy.t=now;buzz.t=now;buzz.last=now;var r=Hp.notification({type:'SUCCESS'});if(r&&r.catch)r.catch(function(){});return}buzz.last=performance.now();if(navigator.vibrate)navigator.vibrate([18,40,28])}catch(e){}}
 var payHP=pay;pay=function(c){var ok=payHP.apply(this,arguments);if(ok&&c&&c.price>0)buzzBuy();return ok};
 /* 1.1.12: 박쥐 머리띠가 박쥐에 가려 띠 끝만 갈고리처럼 보이던 것 → 띠를 넓고 또렷하게, 박쥐는 작게 띠 위 뒤쪽에 앉힘 */
 ACC_HEAD.batband=function(c,U){var lw=Math.max(1.3,U*.05),R=U*.5,cy=U*.4;

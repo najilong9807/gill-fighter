@@ -4321,7 +4321,7 @@ function svTgDraw(){var tt=performance.now()/1000;for(var i=0;i<SV.tg.length;i++
 function svBossDo(e,k,dx,dy,d,p2){var C=SV.C||SV_CH[1],ba=Math.atan2(dy,dx),i;
   if(k==='ring'){var nb=10+(C.n>2?2:0)+(p2?2:0);for(i=0;i<nb;i++)svEB(e.x,e.y,i/nb*Math.PI*2+SV.t,.55,13,3.2)}
   else if(k==='charge'){e.cw=.9;e.ca=ba;if(e.E.fin&&p2){for(i=0;i<12;i++)svEB(e.x,e.y,i/12*Math.PI*2,.45,12,3.5)}}
-  else if(k==='summon'){var ns=4+C.n;for(i=0;i<ns;i++){var m=svSpawn(C.n>=3?'swift':'min');if(m){var sa=i/ns*Math.PI*2;m.x=e.x+Math.cos(sa)*e.s*.9;m.y=clamp(e.y+Math.sin(sa)*e.s*.9,SV.y0,SV.y1);m.inF=!!SV.fence}}rings.push({x:e.x,y:e.y,r:e.s*1.3,life:.5,max:.5,col:'255,200,120'});texts.push({x:e.x,y:e.y-e.s,txt:T('부하를 불렀어요!'),life:1})}
+  else if(k==='summon'){var ns=Math.min(12,4+C.n);for(i=0;i<ns;i++){var m=svSpawn(C.n>=3?'swift':'min');if(m){var sa=i/ns*Math.PI*2;m.x=e.x+Math.cos(sa)*e.s*.9;m.y=clamp(e.y+Math.sin(sa)*e.s*.9,SV.y0,SV.y1);m.inF=!!SV.fence}}rings.push({x:e.x,y:e.y,r:e.s*1.3,life:.5,max:.5,col:'255,200,120'});texts.push({x:e.x,y:e.y-e.s,txt:T('부하를 불렀어요!'),life:1})}
   else if(k==='aim'){e.vol=p2?4:3;e.volT=0}
   else if(k==='spiral'){e.spin=p2?2.6:2;e.spT=0;e.spA=ba}
   else if(k==='zap'){var nz=p2?5:4,a0=ba+Math.PI/nz;for(i=0;i<nz;i++)SV.tg.push({k:'line',x:e.x,y:e.y,a:a0+i/nz*Math.PI*2,len:SV_VIEW*1.1,w:44,t:1,max:1});e.hold=1.05}
@@ -4630,7 +4630,7 @@ function svMsLv(id){var x=svMsS()[id]||0,l=0;while(l<10&&x>=SV_MS[l+1])l++;retur
 function svMsTx(id){var l=svMsLv(id);return T('숙련 Lv ')+l+(l?' · '+T('공격 +')+(l*2)+'%'+(l>=5?' · '+T('하트 +')+(l>=10?2:1):''):'')}
 /* 1.1.8(빌드 100) 보스 러시: 3장 클리어 후 · 클리어한 챕터의 보스와 연달아 싸움(바다가 바뀌어요) · Lv 18 · 무기 3개로 시작 */
 function svBrOpen(){return svChS(3).clear>0}
-function svBrInit(){SV.br=null;if(!SV.brPend)return;var top=0,cn;for(cn=1;cn<SV_CH.length;cn++)if(svChS(cn).clear)top=cn;var L=[];for(cn=1;cn<=Math.max(1,top);cn++){L.push([cn,'boss1']);L.push([cn,'boss2'])}if(SV.wkPend)L=svWkList();SV.br={list:L,i:0,k:0,t:6,wk:!!SV.wkPend,wkK:svWkKey()};
+function svBrInit(){SV.br=null;if(!SV.brPend)return;var top=0,cn;for(cn=1;cn<=SV_LBN;cn++)if(svChS(cn).clear)top=cn;var L=[];for(cn=1;cn<=Math.max(1,top);cn++){L.push([cn,'boss1']);L.push([cn,'boss2'])}if(SV.wkPend)L=svWkList();SV.br={list:L,i:0,k:0,t:6,wk:!!SV.wkPend,wkK:svWkKey()};
   SV.lv=18;SV.need=svNeed(18);svGrow();var wk=Object.keys(SV_W).filter(function(k){return !SV.w[k]&&k!=='shield'});for(var wi=0;wi<2;wi++){var pk=wk.splice(Math.floor(Math.random()*wk.length),1)[0];SV.w[pk]={lv:4,cd:.5}}for(var k0 in SV.w)SV.w[k0].lv=Math.max(SV.w[k0].lv,4);SV.pv.heart=3;SV.pv.dmg=2;SV.maxHp+=3;SV.hp=SV.maxHp;SV.reroll+=2}
 function svBrStep(dt){var B=SV.br;if(SV.boss||B.i>=B.list.length)return;B.t-=dt;if(B.t>2.5&&B.t-dt<=2.5){}if(B.t<=0){var q=B.list[B.i++];SV.C=SV_CH[q[0]];SV.warnT=1.6;var bb=svSpawn(q[1]);B.t=12;if(bb){var hm=B.wk?1.25:.7;bb.hp*=hm;bb.max*=hm}}}
 function svBrCard(box){var open=svBrOpen(),S=svSave(),card=document.createElement('div');card.className='svchc svday svbr'+(open?'':' lock');card.style.setProperty('--c1','#B05CFF');card.style.setProperty('--c2','#5A1E9A');
@@ -4754,7 +4754,7 @@ function svRecDex(box){var S=svSave(),st=svSt(),h=document.createElement('h4');h
 /* 1.1.8(빌드 121) 이번 주의 보스: 주마다 바뀌는 보스 3마리(더 단단함)를 연달아, 처음 다 물리치면 보석 20(주 1회) */
 function svWkKey(){return Math.floor((Date.now()/864e5+3)/7)}
 function svWkS(){var S=svSave(),k=svWkKey();if(!S.wk||S.wk.k!==k)S.wk={k:k,done:0};return S.wk}
-function svWkList(){var top=0,cn;for(cn=1;cn<SV_CH.length;cn++)if(svChS(cn).clear)top=cn;var all=[];for(cn=1;cn<=Math.max(1,top);cn++){all.push([cn,'boss1']);all.push([cn,'boss2'])}var h=(Math.imul(svWkKey()^0x5bd1e995,2654435761)>>>0),L=[];while(L.length<Math.min(3,all.length)){h=(Math.imul(h^(h>>>13),1597334677)+7)>>>0;var j=h%all.length;if(L.indexOf(all[j])<0)L.push(all[j])}L.sort(function(a,b){return a[0]-b[0]||(a[1]>b[1]?1:-1)});return L}
+function svWkList(){var top=0,cn;for(cn=1;cn<=SV_LBN;cn++)if(svChS(cn).clear)top=cn;var all=[];for(cn=1;cn<=Math.max(1,top);cn++){all.push([cn,'boss1']);all.push([cn,'boss2'])}var h=(Math.imul(svWkKey()^0x5bd1e995,2654435761)>>>0),L=[];while(L.length<Math.min(3,all.length)){h=(Math.imul(h^(h>>>13),1597334677)+7)>>>0;var j=h%all.length;if(L.indexOf(all[j])<0)L.push(all[j])}L.sort(function(a,b){return a[0]-b[0]||(a[1]>b[1]?1:-1)});return L}
 function svWkCard(box){if(!svBrOpen())return;var W=svWkS(),L=svWkList(),card=document.createElement('div');card.className='svchc svday svwk';card.style.setProperty('--c1','#FF7A7A');card.style.setProperty('--c2','#7A1E3A');
   var hd=document.createElement('div');hd.className='svch-h';var tt=document.createElement('div');tt.className='svch-t';var b=document.createElement('b');b.textContent=T('이번 주의 보스');var sm=document.createElement('small');sm.textContent=L.map(function(q){var Lk=byId(SV_CH[q[0]].ids[q[1]]);return Lk?Lk.name:'?'}).join(' · ');var sm2=document.createElement('small');sm2.className='svday-ch';sm2.textContent=W.done?T('이번 주 보상 받았어요 · 연습'):T('더 단단한 보스 3마리 · 모두 물리치면 보석 20(주 1회)');tt.appendChild(b);tt.appendChild(sm);tt.appendChild(sm2);hd.appendChild(tt);try{hd.appendChild(campPicEl(byId(SV_CH[L[L.length-1][0]].ids[L[L.length-1][1]]),92,54,'svch-pic'))}catch(x){}card.appendChild(hd);
   var go=document.createElement('button');go.type='button';go.className='btn svch-go';go.textContent=T('도전')+' ⚡1';go.addEventListener('click',function(){svStart(1,false,false,true,null,true)});card.appendChild(go);box.appendChild(card)}
@@ -4836,7 +4836,7 @@ var SV_TR=[{k:'hp',n:T('두꺼운 지느러미'),d:T('시작 하트 +1'),max:3,c
 function svTr(k){var S=svSave();if(!S.tr)S.tr={};return S.tr[k]||0}
 function svTrCost(o,lv){return o.c?pkP(o.c[lv]):pkP(Math.round(o.b*Math.pow(1.9,lv)/10)*10)}
 var SV_BOX=[180,360,0];
-function svBoxRw(n,i){return i===0?{p:60*n}:i===1?{p:120*n,en:1}:{p:150*n,g:5+5*n}}
+function svBoxRw(n,i){return i===0?{p:60*n}:i===1?{p:120*n,en:1}:{p:150*n,g:5+5*Math.min(n,10)}}
 function svBoxTx(r){var a=[];if(r.p)a.push(T('진주 ')+nf(r.p));if(r.g)a.push(T('보석 ')+r.g);if(r.en)a.push('⚡ 1');return a.join(' · ')}
 function svK(k){var v=svK0(k),m=SV.dm,tr=SV.trait;if(tr){if(k==='spd'&&tr==='spd')v*=1.1;else if(k==='mag'&&tr==='mag')v*=1.25;else if(k==='dmg'&&tr==='dmg')v*=1.08;else if(k==='luck'&&tr==='luck')v+=.3;else if(k==='xp'&&tr==='xp')v*=1.05}var q=SV.eqb;if(q){if(k==='cd'){if(q.cd)v*=1-q.cd/100}else if(k==='luck'){if(q.luck)v+=q.luck/100}else if(q[k])v*=1+q[k]/100}if(m){if(k==='xp')v*=m.xk||1;else if(k==='dmg')v*=m.dk||1;else if(k==='luck')v*=m.lk||1}if(k==='xp'&&SV.bud&&SV.bud.k==='mag')v*=1+SV.bud.o.xp[SV.bud.lv-1]/100;if(k==='dmg'&&SV.ms)v*=1+.02*SV.ms;if(k==='cd'&&SV.rush>0)v*=.5;var ar=SV.arc;if(ar){if(k==='cd'&&ar==='storm')v*=.85;else if(k==='dmg'&&ar==='glass')v*=1.4;else if(k==='mag'&&ar==='magnet')v*=2;else if(k==='xp'&&ar==='magnet')v*=1.1;else if(k==='spd'&&ar==='shell')v*=.9}if(k==='spd'&&SV.leechN)v*=Math.max(.5,1-.12*SV.leechN);if(SV.rlB){var rb=SV.rlB;if(k==='mag'&&rb.lamp)v*=1.15;else if(k==='cd'&&rb.crystal)v*=.96;else if(k==='xp'&&rb.coin)v*=1.06;else if(k==='spd'&&rb.shell)v*=1.05}var gp=SV.gp;if(gp){if(gp.k==='speed'){if(k==='spd')v*=1.45;else if(k==='cd')v*=.75}else if(gp.k==='magnet'){if(k==='xp')v*=1.25;else if(k==='mag')v*=2}}return v}
 function svK0(k){var p=SV.pv;return k==='dmg'?(1+.1*(p.dmg||0))*(1+.05*svTr('dmg')):k==='cd'?(1-.07*(p.cd||0))*(1-.025*svTr('cd')):k==='area'?(1+.1*(p.area||0))*(1+((SV.sz||1)-1)*.6)*(1+.04*svTr('area')):k==='mag'?(1+.35*(p.mag||0))*(1+.12*svTr('mag')):k==='xp'?(1+.08*(p.growth||0))*(1+.06*svTr('xp')):k==='luck'?1+.15*(p.luck||0)+.06*svTr('luck'):(1+.08*(p.spd||0))*(1+.03*svTr('spd'))}
@@ -4900,8 +4900,8 @@ function svAchRender(){var S=svSave();svSt();var tb=SV.achTab;if(LANG!=='ko'){tr
         c.innerHTML='<i>'+svIco(on?col:'#C9D2DA',k)+'</i><b></b><small></small>';c.querySelector('b').textContent=on?nm:'???';c.querySelector('small').textContent=on||g[0]==='e'?ds:T('아직 못 만났어요');gr.appendChild(c)});box.appendChild(gr)})}}
 /* 1.1.8(빌드 98) 보스 도감: 챕터마다 중간 · 마지막 보스, 처음 잡으면 보석 2 */
 function svBkS(){var S=svSave();if(!S.bk)S.bk={};return S.bk}
-function svBossDex(box){var B=svBkS(),tot=0,got=0,n,k;for(n=1;n<SV_CH.length;n++)['boss1','boss2'].forEach(function(t){tot++;if(B[n+'_'+t])got++});var h=document.createElement('h4');h.className='svcx-h';h.textContent=T('보스 도감')+' '+got+' / '+tot+' · '+T('처음 잡으면 보석 2');box.appendChild(h);
-  var gr=document.createElement('div');gr.className='svcx svbx';for(n=1;n<SV_CH.length;n++)['boss1','boss2'].forEach(function(t){var C=SV_CH[n],L=byId(C.ids[t]),r=B[n+'_'+t],c=document.createElement('div');c.className='svcx-c svbx-c'+(r?'':' off');
+function svBossDex(box){var B=svBkS(),tot=0,got=0,n,k;for(n=1;n<=SV_LBN;n++)['boss1','boss2'].forEach(function(t){tot++;if(B[n+'_'+t])got++});var h=document.createElement('h4');h.className='svcx-h';h.textContent=T('보스 도감')+' '+got+' / '+tot+' · '+T('처음 잡으면 보석 2');box.appendChild(h);
+  var gr=document.createElement('div');gr.className='svcx svbx';for(n=1;n<=SV_LBN;n++)['boss1','boss2'].forEach(function(t){var C=SV_CH[n],L=byId(C.ids[t]),r=B[n+'_'+t],c=document.createElement('div');c.className='svcx-c svbx-c'+(r?'':' off');
     var pic=document.createElement('i');try{pic.appendChild(campPicEl(L,72,44,'svbx-p'))}catch(x){}c.appendChild(pic);var b=document.createElement('b');b.textContent=r&&L?L.name:'???';var sm=document.createElement('small');sm.textContent=(LANG==='en'?'Ch. '+n:n+T('장'))+' · '+(t==='boss1'?T('중간 보스'):T('마지막 보스'))+(r?' · '+T('처치 ')+r.n+tU(r.n,'번')+' · '+T('최단 ')+fmtTime(r.f):'');c.appendChild(b);c.appendChild(sm);gr.appendChild(c)});box.appendChild(gr)}
 function svTrShow(){svTrRender();$('svTr').hidden=false}
 function svTrRender(){var ul=$('svTrList');if(!ul)return;ul.textContent='';$('svTrPearl').textContent=T('진주 ')+nf(save.pearls||0);
@@ -5572,7 +5572,7 @@ function svDrawUnder(){SV.lod=SV.en.length>140||SV.sh.length>45||SV.pools.length
 }
 /* 1.1.8(빌드 141) 장착한 장비가 물고기에 보이게(심해 생존): 지느러미=등급색 물방울 꼬리 · 갑옷=빛나는 테두리 · 이빨=입가 반짝 · 장신구=머리 위에 둥둥 */
 function svEqLookDraw(){if(P.dead)return;var on;try{on=svEqS().on}catch(x){return}if(!on)return;var a=P.ang||0,ca=Math.cos(a),sa=Math.sin(a),s=P.s,lw=1/zoom,i;
-  function col(r){return SV_RARG[Math.max(0,Math.min(3,r|0))][1]}
+  function col(r){return SV_RARG[Math.max(0,Math.min(SV_RMAX,r|0))][1]}
   var f=on.fin;if(f&&SV_EQ[f.id]){var c=col(f.r),n=3+f.r;ctx.save();for(i=0;i<n;i++){var ph=(t*1.6+i/n)%1,d=s*(1.05+ph*1.3),wob=Math.sin(t*7+i*2)*s*.18*ph,x=P.x-ca*d-sa*wob,y=P.y-sa*d+ca*wob,rr=Math.max(4.5/zoom*(1-ph*.5),s*(.13-.07*ph));ctx.globalAlpha=(1-ph)*.75;ctx.beginPath();ctx.arc(x,y,rr,0,Math.PI*2);ctx.fillStyle=c;ctx.fill();ctx.lineWidth=1.4*lw;ctx.strokeStyle='#fff';ctx.stroke()}ctx.restore()}
   var ar=on.arm;if(ar&&SV_EQ[ar.id]){var c2=col(ar.r);ctx.save();ctx.translate(P.x,P.y);ctx.rotate(a);ctx.globalAlpha=.32+.18*Math.sin(t*3)+ar.r*.08;ctx.beginPath();ctx.ellipse(0,0,s*1.18,s*.68,0,0,Math.PI*2);ctx.lineWidth=(2.6+ar.r*.7)*lw;ctx.strokeStyle=c2;ctx.stroke();if(ar.r>=2){ctx.globalAlpha*=.5;ctx.lineWidth=(6+ar.r*2)*lw;ctx.stroke()}ctx.restore()}
   var fg=on.fang;if(fg&&SV_EQ[fg.id]){var ph2=(t*.9)%1;if(ph2<.35){var k=Math.sin(ph2/.35*Math.PI),mx=P.x+ca*s*1.02,my=P.y+sa*s*1.02,rs=Math.max(9/zoom,s*(.22+fg.r*.05))*k;ctx.save();ctx.globalAlpha=.9*k;ctx.translate(mx,my);ctx.rotate(t*2);ctx.beginPath();for(i=0;i<8;i++){var rd=i%2?rs*.28:rs,an=i*Math.PI/4;ctx.lineTo(Math.cos(an)*rd,Math.sin(an)*rd)}ctx.closePath();ctx.fillStyle='#fff';ctx.fill();ctx.lineWidth=1.5*lw;ctx.strokeStyle=col(fg.r);ctx.stroke();ctx.restore()}}
@@ -10665,7 +10665,8 @@ function lbReq(path,body){var h={apikey:NET.key,Authorization:'Bearer '+NET.key,
 /* 1.2.0 심해 탐험 랭킹: 점수 = 모은 별×100 + 깬 가장 깊은 층 (별이 같으면 더 깊이 간 사람이 위) */
 function campLbScore(){var c=campSave(),st=0,hi=0,k;for(k in c.s){var v=c.s[k]||0,n=+k;if(v>0&&n>=1&&n<=99){st+=Math.min(3,v);if(n>hi)hi=n}}return hi?Math.min(st,hi*3)*100+hi:0}
 /* 1.1.10 심해 생존 랭킹: 점수 = 챕터×1000 + 그 챕터에서 가장 오래 버틴 초(7분 = 420초에서 멈춤). 더 깊은 챕터가 위, 같은 챕터면 오래 버틴 사람이 위. 보통 챕터 기록만(무한 · 어려움 · 시련 · 도전 제외) */
-function svLbScore(){var S=svSave(),hi=0,n,O;for(n=1;n<SV_CH.length;n++){O=S.ch[n];if(O&&O.best>0){var v=n*1000+Math.min(420,Math.floor(O.clear?420:O.best));if(v>hi)hi=v}}return hi}
+var SV_LBN=8; /* 1.1.16: 챕터가 20개로 늘어도 랭킹 점수는 예전 8장 기준 그대로(서버 범위 · 옛 앱과 같은 뜻) */
+function svLbScore(){var S=svSave(),hi=0,n,O;for(n=1;n<=SV_LBN;n++){O=S.ch[n];if(O&&O.best>0){var v=n*1000+Math.min(420,Math.floor(O.clear?420:O.best));if(v>hi)hi=v}}return hi}
 function svLbTxt(v){var n=Math.floor(v/1000),t=Math.round(v%1000);return (LANG==='en'?'Ch '+n:n+T('장'))+' · '+(t>=420?T('클리어'):fmtTime(t))}
 function lbVal(m,v){return m==='camp'?'★'+Math.floor(v/100)+' · '+campFl(Math.round(v%100)):m==='surv'?svLbTxt(v):m==='single'?nf(v)+T('점'):fmt(v)}
 function lbBest(m){if(m==='camp')return campLbScore();if(m==='surv')return svLbScore();if(m==='single')return save.top&&save.top.score>0?Math.round(save.top.score):0;var b=save.mboard&&save.mboard[0];return b&&b.cm>0&&b.cm<=5000?Math.round(b.cm*10)/10:0}
@@ -12696,15 +12697,15 @@ var startRunPB=startRun;startRun=function(){PEERCHK={};try{P.bigRep=0}catch(e){}
 /* ===== 1.1.13 심해 생존 다 깬 뒤에도 랭킹이 이어지게(서버 범위 그대로: 챕터칸 1~20 · 최대 20999)
    보통 1~8장(최대 8420) → 8장까지 다 깨면 '어려움' 기록이 이어짐: (8+어려움 장)×1000 + 초(최대 16420)
    → 어려움 8장까지 다 깨면 '무한 8장' 버틴 시간: 17000 + 초(최대 20999) ===== */
-function svAllClear(){for(var n=1;n<SV_CH.length;n++)if(!svChS(n).clear)return false;return true}
-function svAllHard(){for(var n=1;n<SV_CH.length;n++)if(!svChS(n).hclear)return false;return true}
-var svLbScoreN=svLbScore;svLbScore=function(){var v=svLbScoreN();try{var N=SV_CH.length-1;if(!svAllClear())return v;
+function svAllClear(){for(var n=1;n<=SV_LBN;n++)if(!svChS(n).clear)return false;return true}
+function svAllHard(){for(var n=1;n<=SV_LBN;n++)if(!svChS(n).hclear)return false;return true}
+var svLbScoreN=svLbScore;svLbScore=function(){var v=svLbScoreN();try{var N=SV_LBN;if(!svAllClear())return v;
   for(var n=1;n<=N;n++){var O=svChS(n);if(O.hbest>0){var h=(N+n)*1000+Math.min(420,Math.floor(O.hclear?420:O.hbest));if(h>v)v=h}}
   if(svAllHard()){var I=svChS(N).inf||0;if(I>0)v=Math.max(v,17000+Math.min(3999,Math.floor(I)))}}catch(e){}return Math.min(20999,v)};
-var svLbTxtN=svLbTxt;svLbTxt=function(v){var N=SV_CH.length-1;if(v>=17000)return (LANG==='en'?'Endless Ch '+N:LANG==='ja'?'無限 '+N+'章':'무한 '+N+'장')+' · '+fmtTime(v-17000);
+var svLbTxtN=svLbTxt;svLbTxt=function(v){var N=SV_LBN;if(v>=17000)return (LANG==='en'?'Endless Ch '+N:LANG==='ja'?'無限 '+N+'章':'무한 '+N+'장')+' · '+fmtTime(v-17000);
   if(v>=(N+1)*1000){var c=Math.floor(v/1000)-N,t=Math.round(v%1000);return (LANG==='en'?'Hard Ch '+c:LANG==='ja'?'ハード '+c+'章':'어려움 '+c+'장')+' · '+(t>=420?T('클리어'):fmtTime(t))}return svLbTxtN(v)};
 /* 생존 고르기 카드: 다 깬 사람에게 다음 랭킹 목표를 보여 준다 */
-var modePickOpenSV=modePickOpen;modePickOpen=function(){var r=modePickOpenSV.apply(this,arguments);try{if(svAllClear()){var N=SV_CH.length-1,el=$('mpSurvMeta');if(!el)return r;var g='';
+var modePickOpenSV=modePickOpen;modePickOpen=function(){var r=modePickOpenSV.apply(this,arguments);try{if(svAllClear()){var N=SV_LBN,el=$('mpSurvMeta');if(!el)return r;var g='';
     if(!svAllHard()){var h=1;while(h<=N&&svChS(h).hclear)h++;g=LANG==='en'?'Next: Hard Ch '+h:LANG==='ja'?'次はハード '+h+'章':'다음 목표: 어려움 '+h+'장'}
     else{var I=svChS(N).inf||0;g=LANG==='en'?'Endless Ch '+N+' best '+fmtTime(I):LANG==='ja'?'無限 '+N+'章 最高 '+fmtTime(I):'무한 '+N+'장 최고 '+fmtTime(I)}
     if(!svReadyN())el.textContent=g}}catch(e){}return r};
@@ -13855,7 +13856,7 @@ abyTr(TRT,{"홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 
  "알림 내역":"Notifications","아직 알림이 없어요":"No notifications yet","보상 · 이벤트 · 저장 같은 알림이 여기에 모여요":"Rewards, events, backups and other notices will show up here","방금":"just now","분 전":"m ago","시간 전":"h ago","일 전":"d ago","모두 지우기":"Clear all","닫기":"Close","지나간 알림을 최근 30개까지 보여 줘요":"Shows up to your 30 most recent notices"});
 abyTr(TRJ,{"홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 볼 수 있어요":"ホーム上に🔔通知ボタン — 過去のお知らせをまとめて見返せます","설정을 일반 · 그래픽 · 사운드 · 저장 · 정보 탭으로 나눠 찾기 쉽게(알림 켜기는 '일반')":"設定を 一般 · 画面 · サウンド · データ · 情報 のタブに分けて見やすく（通知は「一般」）","랭킹은 1~3위 메달과 1위 '바다의 왕'만 남겨 더 깔끔하게":"ランキングをすっきり：1〜3位のメダルと1位の「海の王」だけに","작은 정리 업데이트 🐠":"ちょっとした整理アップデート 🐠","알림 받기":"通知を受け取る",
  "알림 내역":"お知らせ","아직 알림이 없어요":"まだお知らせはありません","보상 · 이벤트 · 저장 같은 알림이 여기에 모여요":"報酬・イベント・バックアップなどのお知らせがここに集まります","방금":"たった今","분 전":"分前","시간 전":"時間前","일 전":"日前","모두 지우기":"すべて消す","닫기":"閉じる","지나간 알림을 최근 30개까지 보여 줘요":"最近のお知らせを30件まで表示します"});
-abyTr(TRT,{"시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요":"Easier starts: big fish stay away for the first 6 seconds, and you see who ate you"});abyTr(TRJ,{"시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요":"はじまりをやさしく：最初の6秒は大きな魚が近づかず、食べられたら相手がわかります"});abyTr(TRT,{"도감 '세트 · 업적' 정리 — 지금 단계 목표만 보이고, 받은 보상은 접어 둬요":"Tidier Sets & achievements in the Dex: only your current goal per track, claimed ones folded away"});abyTr(TRJ,{"도감 '세트 · 업적' 정리 — 지금 단계 목표만 보이고, 받은 보상은 접어 둬요":"図鑑の「セット・実績」を整理：今の段階の目標だけ表示、受け取った報酬はたたんでおきます"});abyTr(TRT,{"심해 생존 손맛 업그레이드: 물고기가 더 커지고, 연속으로 잡을수록 진동이 세지고, 각성하면 화면을 싹 쓸어버려요":"Deep Survival feels punchier: bigger fish, stronger vibration as you chain kills, and awakenings sweep the whole screen","꾸미기에 '펫' 칸 — 고래 · 돌고래 · 해달 · 수달 · 잠수부 강아지와 고양이가 내 물고기를 따라 헤엄쳐요":"New Pet slot in Style: a whale, dolphin, sea otter, river otter and diving puppies and kittens swim along with your fish","꾸미기 정리 + 새 보석 꾸미기, 수족관 소품 '진주조개 산호 · 용왕 석상'":"Tidier Style shop with new gem items, plus new aquarium decor: Pearl Clam Coral and Dragon King Statue","심해 생존 손맛 + 펫 업데이트 🐾":"Punchier Deep Survival + Pets 🐾"});abyTr(TRJ,{"심해 생존 손맛 업그레이드: 물고기가 더 커지고, 연속으로 잡을수록 진동이 세지고, 각성하면 화면을 싹 쓸어버려요":"深海サバイバルの手ごたえ強化：魚が大きく、連続で倒すほど振動が強く、覚醒すると画面ごと一掃！","꾸미기에 '펫' 칸 — 고래 · 돌고래 · 해달 · 수달 · 잠수부 강아지와 고양이가 내 물고기를 따라 헤엄쳐요":"着せ替えに「ペット」枠 — クジラ・イルカ・ラッコ・カワウソ・潜水服の子犬や子猫があなたの魚について泳ぎます","꾸미기 정리 + 새 보석 꾸미기, 수족관 소품 '진주조개 산호 · 용왕 석상'":"着せ替えを整理＋新しい宝石アイテム、水槽の飾り「真珠貝サンゴ・竜王の石像」","심해 생존 손맛 + 펫 업데이트 🐾":"深海サバイバル強化＋ペット 🐾"});abyTr(TRT,{"심해 생존 대개편: 챕터 20개(9장부터 새 규칙), 보급 상자 · 이벤트 웨이브, 장비 6등급(고급 · 신화 추가)과 전설 고유 효과":"Deep Survival overhaul: 20 chapters (new rules from Ch. 9), supply drops and event waves, 6 gear grades (new Uncommon and Mythic) with unique Legendary effects","심해 생존 대개편 + 펫 업데이트 🐾":"Deep Survival overhaul + Pets 🐾"});abyTr(TRJ,{"심해 생존 대개편: 챕터 20개(9장부터 새 규칙), 보급 상자 · 이벤트 웨이브, 장비 6등급(고급 · 신화 추가)과 전설 고유 효과":"深海サバイバル大改編：チャプター20個（9章から新ルール）、補給ボックス・イベントウェーブ、装備6等級（上級・神話を追加）と伝説の固有効果","심해 생존 대개편 + 펫 업데이트 🐾":"深海サバイバル大改編＋ペット 🐾"});NEWS['1.1.16']=[T("심해 생존 대개편: 챕터 20개(9장부터 새 규칙), 보급 상자 · 이벤트 웨이브, 장비 6등급(고급 · 신화 추가)과 전설 고유 효과"),T("심해 생존 손맛 업그레이드: 물고기가 더 커지고, 연속으로 잡을수록 진동이 세지고, 각성하면 화면을 싹 쓸어버려요"),T("꾸미기에 '펫' 칸 — 고래 · 돌고래 · 해달 · 수달 · 잠수부 강아지와 고양이가 내 물고기를 따라 헤엄쳐요"),T("꾸미기 정리 + 새 보석 꾸미기, 수족관 소품 '진주조개 산호 · 용왕 석상'"),T("시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요"),T("홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 볼 수 있어요"),T("설정을 일반 · 그래픽 · 사운드 · 저장 · 정보 탭으로 나눠 찾기 쉽게(알림 켜기는 '일반')"),T("랭킹 이름 옆에 나라 국기(설정 › 일반에서 끌 수 있어요), 1~3위 칭호는 바다 폭격기 · 아가미 분쇄기 · 지느러미 살인마"),T("도감 '세트 · 업적' 정리 — 지금 단계 목표만 보이고, 받은 보상은 접어 둬요")];NEWS_LEAD['1.1.16']=T("심해 생존 대개편 + 펫 업데이트 🐾");
+abyTr(TRT,{"시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요":"Easier starts: big fish stay away for the first 6 seconds, and you see who ate you"});abyTr(TRJ,{"시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요":"はじまりをやさしく：最初の6秒は大きな魚が近づかず、食べられたら相手がわかります"});abyTr(TRT,{"도감 '세트 · 업적' 정리 — 지금 단계 목표만 보이고, 받은 보상은 접어 둬요":"Tidier Sets & achievements in the Dex: only your current goal per track, claimed ones folded away"});abyTr(TRJ,{"도감 '세트 · 업적' 정리 — 지금 단계 목표만 보이고, 받은 보상은 접어 둬요":"図鑑の「セット・実績」を整理：今の段階の目標だけ表示、受け取った報酬はたたんでおきます"});abyTr(TRT,{"심해 생존 손맛 업그레이드: 물고기가 더 커지고, 연속으로 잡을수록 진동이 세지고, 각성하면 화면을 싹 쓸어버려요":"Deep Survival feels punchier: bigger fish, stronger vibration as you chain kills, and awakenings sweep the whole screen","꾸미기에 '펫' 칸 — 고래 · 돌고래 · 해달 · 수달 · 잠수부 강아지와 고양이가 내 물고기를 따라 헤엄쳐요":"New Pet slot in Style: a whale, dolphin, sea otter, river otter and diving puppies and kittens swim along with your fish","꾸미기 정리 + 새 보석 꾸미기, 수족관 소품 '진주조개 산호 · 용왕 석상'":"Tidier Style shop with new gem items, plus new aquarium decor: Pearl Clam Coral and Dragon King Statue","심해 생존 손맛 + 펫 업데이트 🐾":"Punchier Deep Survival + Pets 🐾"});abyTr(TRJ,{"심해 생존 손맛 업그레이드: 물고기가 더 커지고, 연속으로 잡을수록 진동이 세지고, 각성하면 화면을 싹 쓸어버려요":"深海サバイバルの手ごたえ強化：魚が大きく、連続で倒すほど振動が強く、覚醒すると画面ごと一掃！","꾸미기에 '펫' 칸 — 고래 · 돌고래 · 해달 · 수달 · 잠수부 강아지와 고양이가 내 물고기를 따라 헤엄쳐요":"着せ替えに「ペット」枠 — クジラ・イルカ・ラッコ・カワウソ・潜水服の子犬や子猫があなたの魚について泳ぎます","꾸미기 정리 + 새 보석 꾸미기, 수족관 소품 '진주조개 산호 · 용왕 석상'":"着せ替えを整理＋新しい宝石アイテム、水槽の飾り「真珠貝サンゴ・竜王の石像」","심해 생존 손맛 + 펫 업데이트 🐾":"深海サバイバル強化＋ペット 🐾"});abyTr(TRT,{"심해 생존 대개편: 챕터 20개(9장부터 새 규칙), 보급 상자 · 이벤트 웨이브, 장비 6등급(고급 · 신화 추가)과 전설 고유 효과":"Deep Survival overhaul: 20 chapters (new rules from Ch. 9), supply drops and event waves, 6 gear grades (new Uncommon and Mythic) with unique Legendary effects","심해 생존 대개편 + 펫 업데이트 🐾":"Deep Survival overhaul + Pets 🐾"});abyTr(TRJ,{"심해 생존 대개편: 챕터 20개(9장부터 새 규칙), 보급 상자 · 이벤트 웨이브, 장비 6등급(고급 · 신화 추가)과 전설 고유 효과":"深海サバイバル大改編：チャプター20個（9章から新ルール）、補給ボックス・イベントウェーブ、装備6等級（上級・神話を追加）と伝説の固有効果","심해 생존 대개편 + 펫 업데이트 🐾":"深海サバイバル大改編＋ペット 🐾"});abyTr(TRT,{"🎁 꾸준히 해 줘서 고마워요 선물: 진주 10,000 · 보석 500 (11월 30일까지, 홈에서 받기)":"🎁 Thanks-for-sticking-with-us gift: 10,000 pearls · 500 gems (until Nov 30, claim on Home)"});abyTr(TRJ,{"🎁 꾸준히 해 줘서 고마워요 선물: 진주 10,000 · 보석 500 (11월 30일까지, 홈에서 받기)":"🎁 続けてくれてありがとうプレゼント：真珠10,000・宝石500（11月30日まで、ホームで受け取り）"});NEWS['1.1.16']=[T("🎁 꾸준히 해 줘서 고마워요 선물: 진주 10,000 · 보석 500 (11월 30일까지, 홈에서 받기)"),T("심해 생존 대개편: 챕터 20개(9장부터 새 규칙), 보급 상자 · 이벤트 웨이브, 장비 6등급(고급 · 신화 추가)과 전설 고유 효과"),T("심해 생존 손맛 업그레이드: 물고기가 더 커지고, 연속으로 잡을수록 진동이 세지고, 각성하면 화면을 싹 쓸어버려요"),T("꾸미기에 '펫' 칸 — 고래 · 돌고래 · 해달 · 수달 · 잠수부 강아지와 고양이가 내 물고기를 따라 헤엄쳐요"),T("꾸미기 정리 + 새 보석 꾸미기, 수족관 소품 '진주조개 산호 · 용왕 석상'"),T("시작이 더 편하게: 처음 6초는 큰 물고기가 안 다가오고, 먹히면 누구에게 먹혔는지 알려 줘요"),T("홈 위 🔔 알림 버튼 — 지나간 알림을 모아서 다시 볼 수 있어요"),T("설정을 일반 · 그래픽 · 사운드 · 저장 · 정보 탭으로 나눠 찾기 쉽게(알림 켜기는 '일반')"),T("랭킹 이름 옆에 나라 국기(설정 › 일반에서 끌 수 있어요), 1~3위 칭호는 바다 폭격기 · 아가미 분쇄기 · 지느러미 살인마"),T("도감 '세트 · 업적' 정리 — 지금 단계 목표만 보이고, 받은 보상은 접어 둬요")];NEWS_LEAD['1.1.16']=T("심해 생존 대개편 + 펫 업데이트 🐾");
 /* 1.1.16 종한: 알림 내역 — 홈 🔔 버튼. 화면에 뜬 알림(게임 중 제외)을 최근 30개까지 저장해 다시 보여 줌 */
 function nlLog(a,b){try{if(!a||(typeof state!=='undefined'&&state==='play'))return;var L=save.nlog||(save.nlog=[]),now=Date.now();
   for(var i=0;i<L.length;i++){if(L[i].a===a&&now-L[i].t<6e5){L[i].t=now;L[i].b=String(b||'').slice(0,120);var x=L.splice(i,1)[0];L.unshift(x);persist();return}}
@@ -14041,11 +14042,11 @@ var svUpdateAW=svUpdate;svUpdate=function(dt,playing){var r=svUpdateAW.apply(thi
   SV.awT=(SV.awT||0)-dt;if(SV.awT<=0){SV.awT=.5;svAwkPanel()}}}catch(x){}return r};
 /* 각성 진행판 */
 function svAwkPanel(){var el=$('svAwk');if(!el){el=document.createElement('div');el.id='svAwk';el.setAttribute('aria-hidden','true');document.body.appendChild(el)}
-  var show=P.surv&&state==='play'&&!$('hud').hidden;if(!show){el.hidden=true;return}var html='',n=0;
+  var show=P.surv&&state==='play'&&!$('hud').hidden;if(!show){el.hidden=true;el.dataset.h='';return}var html='',n=0;
   Object.keys(SV.w).forEach(function(k){var w=SV.w[k],E=SV_EVO[k];if(!w||!E||n>=4)return;n++;var p=SV.pv[E.p]>0,done=w.lv>SV_WMAX,ready=w.lv===SV_WMAX&&p;
     var wn=String(SV_W[k].n).slice(0,6),pn=String(SV_P[E.p].n).slice(0,5);
     html+='<div class="awk'+(done?' done':ready?' ready':'')+'">'+(done?'★ '+E.n:'<b>'+wn+'</b> <i>'+Math.min(w.lv,SV_WMAX)+'/'+SV_WMAX+'</i> + <span class="'+(p?'on':'')+'">'+pn+'</span>'+(ready?'<em>'+T('상자를 열면 각성')+'</em>':''))+'</div>'});
-  el.innerHTML=html;el.hidden=!html}
+  if(el.dataset.h!==html){el.innerHTML=html;el.dataset.h=html}el.hidden=!html}
 var svHudAW=svHud;svHud=function(){var r=svHudAW.apply(this,arguments);try{svAwkPanel()}catch(x){}return r};
 (function(){var st=document.createElement('style');st.textContent='#svAwk{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));top:calc(118px + env(safe-area-inset-top,0px));z-index:6;display:grid;gap:4px;pointer-events:none;max-width:52vw}'
  +'#svAwk .awk{font-size:11px;line-height:1.25;color:#DCEBFA;background:rgba(8,24,44,.55);border-radius:9px;padding:3px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
@@ -14072,6 +14073,7 @@ abyTr(TRJ,{'고급':'上級','신화':'神話','보급 상자!':'補給ボック
 (function(){for(var id in SV_EQ){var E=SV_EQ[id],v=E.v;if(!v||v.length!==4)continue;var a=v[0],b=v[1],c=v[2],d=v[3],intg=v.every(function(x){return x===Math.round(x)}),mid=(a+b)/2,my;
   if(E.st==='regen'){mid=Math.round(mid);my=Math.max(30,Math.round(d-(c-d)*1)) }else{my=d+(d-c)*1.3}
   function rd(x){return intg?Math.round(x):Math.round(x*100)/100}E.v=[a,rd(mid),b,c,d,rd(my)]}})();
+SV_RAR[1].n=T('고급');SV_RAR[5].n=T('신화');
 var SV_LG={silk:['헤엄치는 동안 1.5초마다 몸 주변에 물결 파동','헤엄치는 동안 1초마다 더 넓은 물결 파동'],web:['25초마다 구슬을 모두 끌어와요','15초마다 구슬을 모두 끌어와요'],tail:['특기 게이지가 저절로 차요(초당 1%)','특기 게이지가 저절로 차요(초당 2%)'],
   shell:['20초마다 보호막(한 번 막기)','12초마다 보호막(한 번 막기)'],coral:['공격을 막으면 주변에 가시 폭발','공격을 막으면 큰 가시 폭발'],kelp:['맞으면 주변 적이 3초 얼어요','맞으면 주변 적이 5초 얼어요'],
   shark:['2배 피해가 작은 폭발을 일으켜요','2배 피해가 큰 폭발을 일으켜요'],needle:['12초마다 3초 동안 공격 2배','8초마다 3초 동안 공격 2배'],pfang:['처치하면 12% 확률로 주변 폭발','처치하면 20% 확률로 주변 폭발'],
@@ -14096,9 +14098,9 @@ function svEqReveal(it){if(!it||!SV_EQ[it.id])return;var r=it.r|0,R=SV_RAR[r]||S
  +'body.eqshake{animation:eqShk .5s}@keyframes eqShk{0%,100%{transform:none}20%{transform:translate(-6px,3px)}40%{transform:translate(5px,-4px)}60%{transform:translate(-4px,2px)}80%{transform:translate(3px,-2px)}}'
  +'@media (prefers-reduced-motion:reduce){body.eqshake{animation:none}}';document.head.appendChild(st)})();
 var svEqDropRV=svEqDrop;svEqDrop=function(){var out=svEqDropRV.apply(this,arguments);try{var best=null;(out||[]).forEach(function(x){if(!best||x.r>best.r)best=x});SV.eqRev=best&&best.r>=3?best:null}catch(x){}return out};
-var endRunEQV=endRun;endRun=function(){var r=endRunEQV.apply(this,arguments);try{if(SV.eqRev){var it=SV.eqRev;SV.eqRev=null;setTimeout(function(){if(state==='over')svEqReveal(it)},900)}}catch(x){}return r};
+var endRunEQV=endRun;endRun=function(){var r=endRunEQV.apply(this,arguments);try{var aw=$('svAwk');if(aw){aw.hidden=true;aw.dataset.h=''}}catch(x){}try{if(SV.eqRev){var it=SV.eqRev;SV.eqRev=null;setTimeout(function(){if(state==='over')svEqReveal(it)},900)}}catch(x){}return r};
 /* 전설 · 신화 고유 효과 */
-function svAreaHit(x,y,R,dm,col){if(SV.lgG)return;SV.lgG=1;try{rings.push({x:x,y:y,r:R,life:.45,max:.45,col:col||'255,220,120'});for(var i=0;i<SV.en.length;i++){var e=SV.en[i];if(e.dead||e.hp<=0)continue;var dx=e.x-x,dy=e.y-y;if(Math.hypot(dx,dy)<R+e.s*.5)svHurt(e,e.E.boss?dm*.5:dm,dx,dy,e.E.boss?0:260)}}catch(x){}SV.lgG=0}
+function svAreaHit(x,y,R,dm,col){if(SV.lgG||(SV.lgAH||0)>=6)return;SV.lgAH=(SV.lgAH||0)+1;SV.lgG=1;try{rings.push({x:x,y:y,r:R,life:.45,max:.45,col:col||'255,220,120'});for(var i=0;i<SV.en.length;i++){var e=SV.en[i];if(e.dead||e.hp<=0)continue;var dx=e.x-x,dy=e.y-y;if(Math.hypot(dx,dy)<R+e.s*.5)svHurt(e,e.E.boss?dm*.5:dm,dx,dy,e.E.boss?0:260)}}catch(x){}SV.lgG=0}
 function svLgDm(k){return (22+(SV.lv||1)*4)*(k||1)}
 var svSetupLG=svSetup;svSetup=function(){var r=svSetupLG.apply(this,arguments);try{SV.lg={};SV.lgT={};var Q=svEqS();for(var s in Q.on){var it=Q.on[s];if(it&&it.r>=4&&SV_LG[it.id])SV.lg[it.id]=it.r}SV.lgLv=SV.lv;SV.lgHp=SV.hp;SV.lgBoss=null;SV.lgGp=null;SV.lgPx=null}catch(x){}return r};
 function svLg(id){return SV.lg&&SV.lg[id]?SV.lg[id]:0}
@@ -14122,7 +14124,7 @@ var svKillLG=svKill;svKill=function(e,eat){var r=svKillLG.apply(this,arguments);
   if(e.gx)svDrop(e.x,e.y,4+(SV.lv||1)*.35)}}catch(x){}return r};
 var svPlayerHitLG=svPlayerHit;svPlayerHit=function(dm,from){var hp0=SV.hp,inv0=SV.inv,bg0=SV.bgd;var res=svPlayerHitLG.apply(this,arguments);try{if(SV.lg&&P.surv&&!(inv0>0)){var q;
   if(SV.hp<hp0&&(q=svLg('kelp'))){var fR=viewR()*.6;for(var i=0;i<SV.en.length;i++){var e=SV.en[i];if(Math.hypot(e.x-P.x,e.y-P.y)<fR)e.frz=Math.max(e.frz||0,e.E.boss?1:(q>=5?5:3))}rings.push({x:P.x,y:P.y,r:fR*.8,life:.6,max:.6,col:'190,235,255'})}
-  else if(SV.hp===hp0&&(q=svLg('coral')))svAreaHit(P.x,P.y,P.s*(q>=5?3.2:2.2)+50,svLgDm(q>=5?2.2:1.5),'255,140,140')}}catch(x){}return res};
+  else if(SV.hp===hp0&&SV.inv>0&&!SV.won&&(q=svLg('coral')))svAreaHit(P.x,P.y,P.s*(q>=5?3.2:2.2)+50,svLgDm(q>=5?2.2:1.5),'255,140,140')}}catch(x){}return res};
 var svBurpLG=svBurp;svBurp=function(){var r=svBurpLG.apply(this,arguments);try{var q=svLg('lamp');if(q)svBlast(viewR()*1.05,svLgDm(q>=5?2.4:1.4),svLgDm(q>=5?2.4:1.4)*1.5,'124,255,107')}catch(x){}return r};
 var svGpOnLG=svGpOn;svGpOn=function(k){var r=svGpOnLG.apply(this,arguments);try{var q=svLg('glowfin');if(q&&P.surv){if(SV.hp<SV.maxHp)SV.hp++;if(q>=5)SV.bgd=1}}catch(x){}return r};
 /* ⑤ 보급 상자 · 이벤트 웨이브 */
@@ -14137,6 +14139,7 @@ function svEwFire(k){var R=viewR(),i,n;
   var D=SV_EW[k];banner(T(D[1]),T(D[2]));svHap('big')}
 function svEwStep(dt){var W=SV.ew;if(!W||SV.br||SV.won||P.dead)return;var t=SV.t||0;
   if(W.warn){W.warn.t-=dt;if(W.warn.t<=0){var k=W.warn.k;W.warn=null;svEwFire(k)}return}
+  while(W.i<SV_EWT.length&&t>SV_EWT[W.i]+5)W.i++;
   if(W.i<SV_EWT.length&&t>=SV_EWT[W.i]-3){var k2=W.q[W.i%W.q.length];W.i++;if(SV.boss||SV.fence){return}W.warn={k:k2,t:3};banner(T(SV_EW[k2][0]),T('3초 뒤에 몰려와요'));buzz([30,30,30])}}
 function svSupStep(dt){if(SV.br||P.dead)return;SV.supT-=dt;if(SV.supT<=0&&SV.sup.length<2&&!SV.won){SV.supT=120;var a=Math.random()*6.283,d=viewR()*rnd(.25,.45);SV.sup.push({x:P.x+Math.cos(a)*d,y:clamp(P.y+Math.sin(a)*d,SV.y0+40,SV.y1-40),f:1.6,fm:1.6,t:0});var S1=svSave();if(!S1.supTip){S1.supTip=1;banner(T('보급 상자!'),T('닿으면 열려요'))}}
   for(var i=SV.sup.length-1;i>=0;i--){var c=SV.sup[i];if(c.f>0){c.f-=dt;if(c.f<=0){rings.push({x:c.x,y:c.y,r:70,life:.5,max:.5,col:'255,230,170'});burst(c.x,c.y,30,6);svHap('hit')}continue}c.t+=dt;if(c.t>40){SV.sup.splice(i,1);continue}
@@ -14166,20 +14169,34 @@ function svRuleStep(dt){var C=SV.C;if(!C||!C.rule||SV.br)return;var t=SV.t||0;
   if(svRule('current')&&!SV.fence){SV.curT-=dt;if(SV.curT<=0&&!SV.ev){SV.curT=40;var D=SV_EV.current;SV.ev={k:'current',t:D.t,max:D.t,dir:Math.random()<.5?-1:1};banner(D.n,D.d)}}
   if(svRule('dark')&&(!SV_HZ[C.n]||SV_HZ[C.n].k!=='dark')){if(SV.dk>0)SV.dk-=dt;else{SV.dkT2-=dt;if(SV.dkT2<=0){SV.dkT2=rnd(32,44);SV.dk=7;SV.dkMax=7}}}
   if(svRule('poison')){SV.psT-=dt;if(SV.psT<=0&&!SV.won){SV.psT=rnd(6,8.5);var a=Math.atan2(P.vy||0,P.vx||1)+rnd(-.9,.9),d=viewR()*rnd(.15,.5);SV.psn.push({x:P.x+Math.cos(a)*d,y:clamp(P.y+Math.sin(a)*d,SV.y0+30,SV.y1-30),r:Math.max(80,P.s*2.4)+Math.min(50,t/8),t:0,warn:1.3,life:11});if(!SV.psTip){SV.psTip=1;banner(T('독 웅덩이!'),T('초록 웅덩이를 피해요'))}}
-    for(var i=SV.psn.length-1;i>=0;i--){var p=SV.psn[i];p.t+=dt;if(p.t>p.life){SV.psn.splice(i,1);continue}if(p.t<p.warn)continue;if(Math.hypot(P.x-p.x,P.y-p.y)<p.r+P.s*.3)svPlayerHit(1);for(var q=0;q<SV.en.length;q++){var e=SV.en[q];if(!e.E.boss&&Math.hypot(e.x-p.x,e.y-p.y)<p.r)e.slw=.3}}}}
+    for(var i=SV.psn.length-1;i>=0;i--){var p=SV.psn[i];p.t+=dt;if(p.t>p.life){SV.psn.splice(i,1);continue}if(p.t<p.warn)continue;if(Math.hypot(P.x-p.x,P.y-p.y)<p.r+P.s*.3)svPlayerHit(1);for(var q=0;q<SV.en.length;q++){var e=SV.en[q];if(!e.E.boss&&Math.hypot(e.x-p.x,e.y-p.y)<p.r)e.slow=Math.max(e.slow||0,.3)}}}}
 function svPsnDraw(){if(!SV.psn||!SV.psn.length)return;var tt=performance.now()/1000;for(var i=0;i<SV.psn.length;i++){var p=SV.psn[i],w=p.t<p.warn,fa=Math.min(1,(p.life-p.t)/1);ctx.save();
     if(w){ctx.globalAlpha=.25+.25*Math.sin(tt*14);ctx.strokeStyle='#7CFF6B';ctx.lineWidth=4/zoom;ctx.setLineDash([10/zoom,8/zoom]);ctx.beginPath();ctx.arc(p.x,p.y,p.r*(p.t/p.warn),0,6.283);ctx.stroke();ctx.setLineDash([])}
     else{var g=ctx.createRadialGradient(p.x,p.y,p.r*.2,p.x,p.y,p.r);g.addColorStop(0,'rgba(140,255,70,'+(.6*fa)+')');g.addColorStop(.85,'rgba(80,200,40,'+(.45*fa)+')');g.addColorStop(1,'rgba(80,200,40,.1)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.283);ctx.fill();ctx.globalAlpha=.8*fa;ctx.strokeStyle='#C8FF7A';ctx.lineWidth=4/zoom;ctx.stroke();ctx.globalAlpha=1;
       ctx.globalAlpha=.7*fa;ctx.fillStyle='#B8FF8A';for(var k=0;k<5;k++){var ph=((tt*.6+k/5+i*.13)%1),bx=p.x+Math.sin(k*2.3+i)*p.r*.55,by=p.y+Math.cos(k*1.7+i)*p.r*.45-ph*p.r*.25;ctx.beginPath();ctx.arc(bx,by,(3+ph*4)*p.r/80,0,6.283);ctx.fill()}}
     ctx.restore()}}
 /* 묶기: 진행 · 그리기 · 시작 */
-var svSetupEW=svSetup;svSetup=function(){var r=svSetupEW.apply(this,arguments);try{svEwInit();SV.ruleShown=0;SV.psTip=0}catch(x){}return r};
-var svUpdateEW=svUpdate;svUpdate=function(dt,playing){var r=svUpdateEW.apply(this,arguments);try{if(playing&&P.surv&&state==='play'){var d2=SV.hs>0?dt*.15:dt;if(!SV.sup)svEwInit();svEwStep(d2);svSupStep(d2);svRuleStep(d2);svLgStep(d2)}}catch(x){}return r};
+var svSetupEW=svSetup;svSetup=function(){var r=svSetupEW.apply(this,arguments);try{svEwInit();SV.ruleShown=0;SV.psTip=0;SV.rushAt=0;SV.mk=null;SV.c2T=null;SV.awkPend=null;SV.awkN=0;SV.awT=0;SV.lgAH=0}catch(x){}return r};
+var svResumeEW=svResume;svResume=function(){var r=svResumeEW.apply(this,arguments);try{if(P.surv){SV.lgLv=SV.lv;SV.lgHp=SV.hp;var W=SV.ew;if(W)while(W.i<SV_EWT.length&&SV.t>SV_EWT[W.i]-3)W.i++;SV.supT=Math.max(20,SV.supT);SV.rushAt=0}}catch(x){}return r};
+var svUpdateEW=svUpdate;svUpdate=function(dt,playing){var r=svUpdateEW.apply(this,arguments);try{if(playing&&P.surv&&state==='play'){var d2=SV.hs>0?dt*.15:dt;if(!SV.sup)svEwInit();SV.lgAH=0;svEwStep(d2);svSupStep(d2);svRuleStep(d2);svLgStep(d2)}}catch(x){}return r};
 var svDrawUnderEW=svDrawUnder;svDrawUnder=function(){var r=svDrawUnderEW.apply(this,arguments);try{if(P.surv){svPsnDraw()}}catch(x){}return r};
 var svDrawOverEW=svDrawOver;svDrawOver=function(){var r=svDrawOverEW.apply(this,arguments);try{if(P.surv){svGoldDraw();svSupDraw()}}catch(x){}return r};
 /* 챕터 카드에 규칙 표시(9장부터) */
 var svChRenderRL=svChRender;svChRender=function(){var r=svChRenderRL.apply(this,arguments);try{if(svChTab==='sea'){var cards=document.querySelectorAll('#svChList .svchc');[].forEach.call(cards,function(cd){var b=cd.querySelector('.svch-t b');if(!b)return;for(var n=9;n<SV_CH.length;n++){var C=SV_CH[n];if(C&&C.rule&&b.textContent.indexOf(C.name)>=0&&!cd.querySelector('.svch-rule')){var sp=document.createElement('small');sp.className='svch-rule';sp.textContent='⚠ '+C.rule.map(function(k){return T(SV_RULE[k][0])}).join(' · ');b.parentNode.appendChild(sp);break}}})}}catch(x){}return r};
 (function(){var st=document.createElement('style');st.textContent='.svch-t .svch-rule{display:block;color:#FFD86B;font-weight:700;font-size:11.5px;margin-top:2px}';document.head.appendChild(st)})();
+/* 1.1.16 종한 '진주 1만 · 보석 500 넣어줘', 첫 장 공지(김복영)와 이어서 — '꾸준히 해 줘서 고마워요' 선물: 기기마다 한 번, 11월 30일까지. 홈에서 다른 창이 없을 때 뜸(새로 온 사람은 첫 판 뒤) */
+abyTr(TRT,{'꾸준히 해 줘서 고마워요 선물':'Thanks for Sticking With Us Gift','일등 못해도 꾸준히 하는 김복영처럼, 꾸준히 함께해 준 모두에게 드려요':'Like Kim Bok-young, who keeps playing even without being #1 — a gift for everyone who stuck with us','선물 받기':'Claim gift','선물을 받았어요!':'Gift claimed!','진주 10,000 · 보석 500':'10,000 pearls · 500 gems'});
+abyTr(TRJ,{'꾸준히 해 줘서 고마워요 선물':'続けてくれてありがとうプレゼント','일등 못해도 꾸준히 하는 김복영처럼, 꾸준히 함께해 준 모두에게 드려요':'1位じゃなくてもコツコツ続けるキム・ボクヨンのように、続けてくれたみなさんへ','선물 받기':'受け取る','선물을 받았어요!':'プレゼントを受け取りました！','진주 10,000 · 보석 500':'真珠10,000・宝石500'});
+var GIFT16={k:'g1116',p:10000,g:500,until:new Date(2026,10,30,23,59,59).getTime()};
+function gift16Ok(){try{return !save[GIFT16.k]&&Date.now()<=GIFT16.until&&(save.runs>0||save.onb)}catch(e){return false}}
+function gift16Show(){var el=$('gift16');if(!el){el=document.createElement('div');el.className='overlay';el.id='gift16';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
+    el.innerHTML='<div class="panel aw-panel g16-panel"><div class="g16-ico" aria-hidden="true">🎁</div><h1></h1><p class="lead"></p><p class="g16-n"><span><i class="aw-pearl" aria-hidden="true"></i><b>10,000</b></span><span><i class="g16-gem" aria-hidden="true">💎</i><b>500</b></span></p><button class="btn" type="button" id="g16Get"></button></div>';document.body.appendChild(el);
+    $('g16Get').addEventListener('click',function(){if(save[GIFT16.k])return;save[GIFT16.k]=1;save.pearls=(save.pearls||0)+GIFT16.p;save.gems=(save.gems||0)+GIFT16.g;persist();el.hidden=true;try{buzzBuy()}catch(e){}try{refreshHome(true)}catch(e){}banner(T('선물을 받았어요!'),T('진주 10,000 · 보석 500'));try{crumb('gift1116')}catch(e){}})}
+  el.querySelector('h1').textContent=T('꾸준히 해 줘서 고마워요 선물');el.querySelector('.lead').textContent=T('일등 못해도 꾸준히 하는 김복영처럼, 꾸준히 함께해 준 모두에게 드려요');$('g16Get').textContent=T('선물 받기');el.hidden=false}
+function gift16Check(tries){try{if(!gift16Ok())return;if(state!=='home'||awayBusy()||!$('news').hidden){if((tries||0)<200)setTimeout(function(){gift16Check((tries||0)+1)},2500);return}gift16Show()}catch(e){}}
+(function(){var st=document.createElement('style');st.textContent='#gift16{z-index:46}.g16-panel{text-align:center}.g16-ico{font-size:52px;line-height:1;margin-top:-6px}.g16-n{display:flex;justify-content:center;gap:18px;margin:4px 0 6px}.g16-n span{display:inline-flex;align-items:center;gap:6px;font-family:var(--disp);font-size:24px;color:#0B2C4A}.g16-gem{font-style:normal;font-size:26px}';document.head.appendChild(st)})();
+setTimeout(gift16Check,4200);
+var endRunG16=endRun;endRun=function(){var r=endRunG16.apply(this,arguments);try{setTimeout(gift16Check,3000)}catch(e){}return r};
 /* 1.1.16 실기기 화면 점검(종한 아이폰 화면, 10/24 밤)
    ① 상점 위 탭 줄(꾸미기 · 부스터 …)이 화면 위에서 한참 아래(상태바 + 여백 46px)에 붙어, 그 위로 빈 띠가 보이고 내용이 탭 줄 위로 지나감
       → 탭 줄 · 설정 탭이 상태바 바로 밑에 붙고, 그 위는 같은 색으로 가림
@@ -14233,7 +14250,7 @@ var PRPET_K={pet_whale:['swim',1.2],pet_dolphin:['swim',1.2],pet_seaotter:['swim
   pet_sub:['sub',1.1],ac_pirateship:['ship',1.5],ac_octopal:['pulse',1.3],pet_jelly:['pulse',1.4]};
 var PETST=typeof WeakMap!=='undefined'?new WeakMap():null,PETST2={};
 function petState(pts,id,x,y,s){var o=null,now=(typeof performance!=='undefined'?performance.now():Date.now())/1000;
-  if(pts&&PETST&&typeof pts==='object'){o=PETST.get(pts);if(!o||o.id!==id){o={id:id};PETST.set(pts,o)}}else{var k=id+'|'+Math.round(x/60)+'|'+Math.round(y/60);o=PETST2[k]||(PETST2[k]={id:id})}
+  if(pts&&PETST&&typeof pts==='object'){o=PETST.get(pts);if(!o||o.id!==id){o={id:id};PETST.set(pts,o)}}else{var Lp=PETST2[id]||(PETST2[id]=[]),bd=s*3,j;for(j=Lp.length-1;j>=0;j--){var q=Lp[j];if(now-q.t>2){Lp.splice(j,1);continue}var dd=Math.hypot(q.ax-x,q.ay-y);if(dd<bd&&q.fr!==now){bd=dd;o=q}}if(!o){o={id:id};if(Lp.length<40)Lp.push(o)}o.ax=x;o.ay=y;o.fr=now} /* 1.1.16 수족관 물고기 펫: 칸 대신 가장 가까운 같은 펫 상태를 이어 씀(칸을 넘을 때 펫이 튀던 것) */
   if(o.t==null||now-o.t>.6){o.x=null}var dt=o.t==null?0:Math.min(.05,Math.max(0,now-o.t));o.t=now;return [o,dt,now]}
 function petBubbles(c,x,y,r,now,n,seed){c.save();for(var i=0;i<n;i++){var ph=((now*.7+i/n+seed)%1+1)%1,bx=x+Math.sin(now*3+i*2.1)*r*.25,by=y-ph*r*1.1,br=r*(.05+.06*ph);c.globalAlpha*=1;c.beginPath();c.arc(bx,by,br,0,Math.PI*2);c.fillStyle='rgba(255,255,255,'+(.18*(1-ph))+')';c.fill();c.lineWidth=Math.max(.8,r*.025);c.strokeStyle='rgba(255,255,255,'+(.8*(1-ph))+')';c.stroke()}c.restore()}
 var accBackPR=accBack;accBack=function(c,id,x,y,s,ang,pts){var k=PRPET[id];if(!k)return accBackPR(c,id,x,y,s,ang,pts);var im=hwAcs(k);if(!im)return;
@@ -14268,9 +14285,9 @@ function petDrawAnim(c,k,im,ww,hh,ph,now,seed){var A=PANIM[k];
     var ga=c.globalAlpha;c.drawImage(st,f1*cw,0,cw,ch,-w2/2,-h2/2,w2,h2);if(b>0&&f2!==f1){c.globalAlpha=ga*b;c.drawImage(st,f2*cw,0,cw,ch,-w2/2,-h2/2,w2,h2);c.globalAlpha=ga}return true}
   var W=im.naturalWidth,H=im.naturalHeight,N,j;
   if(k==='pet_whale'||k==='pet_dolphin'){N=Math.max(16,Math.min(40,Math.round(ww/2)));var tf=k==='pet_whale'?4.2:5.6;for(j=0;j<N;j++){var u0=j/N,u=(j+.5)/N,a=Math.max(0,(.58-u)/.58);a=Math.pow(a,1.5);
-      var dy=Math.sin(now*tf+seed*6-u*3.2)*hh*.16*a;c.drawImage(im,u0*W,0,W/N+.6,H,-ww/2+u0*ww,-hh/2+dy,ww/N+.6,hh)}return true}
+      var dy=Math.sin(now*tf+seed*6-u*3.2)*hh*.16*a;c.drawImage(im,u0*W,0,Math.min(W/N+.6,W-u0*W),H,-ww/2+u0*ww,-hh/2+dy,ww/N+.6,hh)}return true}
   if(k==='pet_jelly'){N=Math.max(16,Math.min(44,Math.round(hh/2)));for(j=0;j<N;j++){var v0=j/N,v=(j+.5)/N,e=Math.max(0,(v-.42)/.58);e=Math.pow(e,1.2);
-      var dx=Math.sin(now*3.4+seed*6-v*7)*ww*.13*e;c.drawImage(im,0,v0*H,W,H/N+.6,-ww/2+dx,-hh/2+v0*hh,ww,hh/N+.6)}return true}
+      var dx=Math.sin(now*3.4+seed*6-v*7)*ww*.13*e;c.drawImage(im,0,v0*H,W,Math.min(H/N+.6,H-v0*H),-ww/2+dx,-hh/2+v0*hh,ww,hh/N+.6)}return true}
   if(k==='pet_sub'){c.drawImage(im,-ww/2,-hh/2,ww,hh);var cx=-ww/2+ww*.075,cy=-hh/2+hh*.52,r=hh*.2,sp=now*22;c.save();
     c.fillStyle='rgba(220,230,240,.3)';c.beginPath();c.ellipse(cx,cy,r*.18,r,0,0,Math.PI*2);c.fill();
     for(j=0;j<2;j++){var bh=r*Math.cos(sp+j*Math.PI/2);c.fillStyle='rgba(70,80,95,.85)';c.beginPath();c.ellipse(cx,cy+bh*.5,r*.12,Math.abs(bh)*.5+.5,0,0,Math.PI*2);c.fill()}

@@ -1,14 +1,16 @@
-What's new in 1.1.16 (small tidy-up):
+What's new in 1.1.16:
 (1) No new purchases, accounts, permissions or SDKs. New: a 2-letter country code from the device region setting (no location permission) is stored with the random device ID and shown as a flag by the nickname in the leaderboard; Settings > General can turn it off (clears it).
-(2) Settings: the existing optional notification switch (local reminders only, never sent between 0-8 AM) now has its own "Notifications" section directly under Sound instead of being inside Performance.
+(2) Settings: the existing optional notification switch (local reminders only) moved to its own section.
 (3) Leaderboard: ranks 1-3 keep medals with new playful titles ("Sea Bomber", "Gill Grinder", "Fin Slayer"); the top-10 title was removed.
-(4) Home: a new bell button opens a local list of the last 30 on-screen notices (rewards, events, backups). It is stored only on the device; nothing is sent.
-(5) Settings are grouped into five tabs (General, Graphics, Sound, Data, Info); no settings were added or removed. The duplicate small label above the Settings title was removed.
-(6) Easier start in Solo: for the first 6 seconds of a run no fish bigger than the player spawns and nearby big fish are moved off-screen; when eaten, the result screen names the fish and shows a short tip.
-(7) New players start the practice sea right away with a suggested nickname; the nickname screen (same as before) now appears once on Home after the first run.
-(8) The result screen shows at most two short info lines (three after a full win). Brand-new players no longer see the "What's new" popup for the version they installed.
-(9) Dex > Sets & achievements: tiered goals show only the current tier, achievements are grouped (Collect / Play / Aquarium), and claimed items are folded under a toggle. Rewards are unchanged.
-(10) The in-app "What's new" popup describes these changes.
+(4) Home: a new bell button lists the last 30 on-screen notices, stored only on the device.
+(5) Settings are grouped into five tabs (General, Graphics, Sound, Data, Info); no settings were added or removed.
+(6) Easier start in Solo: no bigger fish spawn in the first 6 seconds; when eaten, the result screen names the fish.
+(7) New players start the practice sea right away; the nickname screen appears once on Home after the first run.
+(8) The result screen shows at most two short info lines.
+(9) Dex > Sets & achievements: only the current tier is shown and claimed items are folded. Rewards are unchanged.
+(10) Deep Survival mode: non-boss enemies are 25% larger; chained kills give stronger haptics, a brief hit-stop and a "xN" popup; awakening a weapon flashes the screen and clears nearby enemies; two awakened weapons add a combo attack every 8 seconds; a small panel shows awakening progress.
+(11) Style: 68 older look-alike items are no longer sold (owners keep them). New items are bought only with in-game gems or pearls (no real money). New "Pet" slot: a small companion follows the player's fish. Two new aquarium decorations.
+(12) The in-app "What's new" popup describes these changes.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

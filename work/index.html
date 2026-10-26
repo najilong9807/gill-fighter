@@ -5635,8 +5635,8 @@ function svEnd0(win,quit){var lb0=svLbScore();
   var sub=SV.br?(newB?T('보스 러시 최고 기록!'):svSave().brBest?T('최고 ')+svSave().brBest+T('마리'):''):SV.hard?(hdG?T('어려움 첫 클리어! 보석 +')+hdG:newB?T('어려움 최고 기록!'):O.hbest?T('어려움 최고 ')+fmtTime(O.hbest):''):SV.inf?(newB?T('무한 최고 기록!'):O.inf?T('무한 최고 ')+fmtTime(O.inf):''):firstClear&&C.n+1<SV_CH.length?SV_CH[C.n+1].name+T(' 챕터가 열렸어요!'):newB?T('최고 기록 경신!'):O.best?T('최고 기록 ')+fmtTime(O.best):'';$('svSub').textContent=sub;$('svSub').hidden=!sub;
   try{var shC=SV.C||SV_CH[1];SV.shareI={win:win,quit:quit,t:SV.t,k:SV.kills,lv:SV.lv,tag:$('svTag').textContent,title:$('svTitle').textContent,br:SV.br?SV.br.k:0};$('svShare').hidden=!!quit||SV.t<30;$('svShareT').textContent=T('자랑하기')}catch(x){}var st=$('svStat');st.textContent='';[[T('버틴 시간'),fmtTime(SV.t)],[T('처치'),nf(SV.kills)],[T('레벨'),'Lv '+SV.lv]].forEach(function(q){var d=document.createElement('div'),a=document.createElement('small'),v=document.createElement('b');a.textContent=q[0];v.textContent=q[1];d.appendChild(a);d.appendChild(v);st.appendChild(d)});
   $('svBuildH').textContent=T('이번 판 무기 · 능력');var bl=$('svBuild');bl.textContent='';Object.keys(SV.w).concat(Object.keys(SV.pv)).forEach(function(k){var W=SV_W[k]||SV_P[k],lv=SV.w[k]?SV.w[k].lv:SV.pv[k],c=document.createElement('span');c.className='svb'+(SV.w[k]&&lv>SV_WMAX?' evo':'');c.innerHTML=svIco(SV.w[k]&&lv>SV_WMAX?'#FFE27A':W.c,k);var b=document.createElement('b');b.textContent=SV.w[k]&&lv>SV_WMAX?'★':lv;c.appendChild(b);c.title=SV.w[k]?svWName(k):W.n;bl.appendChild(c)});
-  var dmE=$('svDmg');if(dmE){dmE.textContent='';var dA=Object.keys(SV.dmgW||{}).filter(function(k){return (SV_W[k]||k==='bud')&&SV.dmgW[k]>0}).map(function(k){return [k,SV.dmgW[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,4),dMx=dA.length?dA[0][1]:1;dmE.hidden=!dA.length;$('svDmgH').hidden=dmE.hidden;$('svDmgH').textContent=T('많이 친 무기');
-    dA.forEach(function(q){var r=document.createElement('div');r.className='svdmg-r';var bd=q[0]==='bud',ev=!bd&&SV.w[q[0]]&&SV.w[q[0]].lv>SV_WMAX;r.innerHTML='<i>'+(bd?'':svIco(ev?'#FFE27A':SV_W[q[0]].c,q[0]))+'</i><span><b></b><u><em></em></u></span><small></small>';if(bd&&SV.bud){try{r.querySelector('i').appendChild(campPicEl(byId(SV.bud.o.id),28,20,'svdmg-bud'))}catch(x){}}r.querySelector('b').textContent=bd?(SV.bud?SV.bud.o.n:T('짝꿍')):svWName(q[0]);r.querySelector('em').style.width=Math.max(4,q[1]/dMx*100).toFixed(1)+'%';r.querySelector('small').textContent=nf(Math.round(q[1]));dmE.appendChild(r)})}
+  var dmE=$('svDmg');if(dmE){dmE.textContent='';var dA=Object.keys(SV.dmgW||{}).filter(function(k){return (SV_W[k]||k==='bud'||k==='pet')&&SV.dmgW[k]>0}).map(function(k){return [k,SV.dmgW[k]]}).sort(function(a,b){return b[1]-a[1]}).slice(0,4),dMx=dA.length?dA[0][1]:1;dmE.hidden=!dA.length;$('svDmgH').hidden=dmE.hidden;$('svDmgH').textContent=T('많이 친 무기');
+    dA.forEach(function(q){var r=document.createElement('div');r.className='svdmg-r';var pt=q[0]==='pet',bd=q[0]==='bud'||pt,ev=!bd&&SV.w[q[0]]&&SV.w[q[0]].lv>SV_WMAX;r.innerHTML='<i>'+(bd?'':svIco(ev?'#FFE27A':SV_W[q[0]].c,q[0]))+'</i><span><b></b><u><em></em></u></span><small></small>';if(pt){try{var pim=document.createElement('img');pim.src='svart/'+PRPET[SV.pet]+'.webp';pim.alt='';pim.style.cssText='width:28px;height:20px;object-fit:contain';r.querySelector('i').appendChild(pim)}catch(x){}}else if(bd&&SV.bud){try{r.querySelector('i').appendChild(campPicEl(byId(SV.bud.o.id),28,20,'svdmg-bud'))}catch(x){}}r.querySelector('b').textContent=pt?(SV.pet?petName(SV.pet):T('펫')):bd?(SV.bud?SV.bud.o.n:T('짝꿍')):svWName(q[0]);r.querySelector('em').style.width=Math.max(4,q[1]/dMx*100).toFixed(1)+'%';r.querySelector('small').textContent=nf(Math.round(q[1]));dmE.appendChild(r)})}
   var rw=$('svRw');rw.textContent='';function chip(cls,tx){var c=document.createElement('span');c.className='crchip '+cls+(tx.length>(LANG==='en'?17:12)?' wide':'');c.textContent=tx;rw.appendChild(c)}
   if(gain)chip('pearl',T('진주 +')+nf(gain));if(trR)chip('gem',T('시련 정복! 보석 +')+trR.g);var rlN=svRlCheck(true);if(rlN.length)chip('gem',T('새 유물 ')+rlN.map(function(r){return T(r.n)}).join(', ')+'!');if(SV.rkG)chip(SV.rkUp?'gem':'box',T('잠수 경험치 +')+nf(SV.rkG)+(SV.rkUp?' · '+T('등급 ')+SV.rkUp+'!':''));if(eqD.filter(function(it){return !it.cut}).length){var eqG={},eqO=[];eqD.forEach(function(it){if(it.cut)return;var k=it.id+'|'+it.r;if(!eqG[k]){eqG[k]={it:it,n:0};eqO.push(k)}eqG[k].n++});chip('box',T('새 장비 ')+eqO.map(function(k){var g=eqG[k];return SV_EQ[g.it.id].n+' ('+SV_RAR[g.it.r].n+')'+(g.n>1?' ×'+g.n:'')}).join(' · ')+(eqD.some(function(it){return it.auto})?' — '+T('빈 칸에 바로 장착'):''))}if(SV.eqAuto&&SV.eqAuto.n)chip('pearl',T('가방이 가득 차서 ')+SV.eqAuto.n+T('개 분해 · 진주 +')+nf(SV.eqAuto.p));if(dyR)chip('gem',T('오늘의 도전 ')+(dyR.p?T('진주 +')+dyR.p:'')+(dyR.p&&dyR.g?' · ':'')+(dyR.g?T('보석 +')+dyR.g:''));if(gem)chip('gem',T('보석 +')+gem);if(SV.gulp)chip('gulp',T('꿀꺽 ')+nf(SV.gulp)+T('마리'));if(SV.arc&&SV_ARCK[SV.arc])chip('box',SV_ARCK[SV.arc].n);if(SV.msUp)chip('box',(P.look?P.look.name+' ':'')+T('숙련 Lv ')+SV.msUp+'!');if(SV.bkNew)chip('gem',T('보스 도감 +')+SV.bkNew+' · '+T('보석 +')+SV.bkNew*2);if(rbN>0)chip('box',T('새 상자 ')+rbN+T('개 · 챕터에서 열기'));var an=svAchReady();if(an)chip('box',T('도전 과제 ')+an+T('개 완료'));rw.hidden=!rw.childNodes.length;$('svRwH').hidden=rw.hidden;$('svRwH').textContent=T('받은 것');$('svChBtn').classList.toggle('dot',svReadyN()+an+svDqReady()>0);
   $('svAgain').textContent=(LANG==='en'?'Again':T('다시 하기'))+' ⚡1';
@@ -8173,9 +8173,9 @@ function drawFishDeco(c,pts,x,y,s,ang,L,o){
   if(q.fx){c.globalAlpha=pa*A;accBack(c,q.fx,x,y,s,ang,pts);c.globalAlpha=pa}
   if(q.pet){c.globalAlpha=pa*A;accBack(c,q.pet,x,y,s,ang,pts);c.globalAlpha=pa}
   /* 1.1.17 몸 흔들림(둥실 · 살랑 · 기울기)을 꾸미기에도 똑같이 → 모자 · 안경이 몸과 따로 놀지 않게 */
-  var swX=swXf(c,x,y,s,ang,o),o2=o;if(swX){o2={};for(var kk in o)o2[kk]=o[kk];o2.swx=1}
+  var swX=swXf(c,x,y,s,ang,o),o2=o;if(swX)o.swx=1;
   drawFish(c,x,y,s,ang,L,o2);
-  c.globalAlpha=pa*A;ACC_Q=q;var gq=accGeom(L,s,o2);ACC_Q=null;accFront(c,q,x,y,s,ang,L,o2,gq);c.globalAlpha=pa;if(swX)c.restore();
+  c.globalAlpha=pa*A;ACC_Q=q;var gq=accGeom(L,s,o2);ACC_Q=null;accFront(c,q,x,y,s,ang,L,o2,gq);c.globalAlpha=pa;if(swX){c.restore();o.swx=0}
 }
 /* 상점 아이콘: 아이템만 따로 그림 */
 function accIcon(A){
@@ -9655,7 +9655,7 @@ function drawFish(c,x,y,s,ang,L,o){
   if(spr&&spr.ok){
     var dm=spriteDims(spr,s*(o.puff?1.2:1)),w=dm[0],h=dm[1],an=spriteAnim(L,o,h);
     c.scale(1,an.fy);
-    if(o.line){var oc=o.line==='#FFFFFF'?spr.white:spr.red,ow=w*oc.width/((oc.__k||1)*spr.img.width),oh=ow*oc.height/oc.width;c.globalAlpha=A*(o.line==='#FFFFFF'?.5:.9);drawWavy(c,oc,ow,oh,o.phase||0,an.amp,1);c.globalAlpha=A}
+    if(o.line){var oc=o.line==='#FFFFFF'?spr.white:spr.red,ow=w*oc.width/((oc.__k||1)*spr.img.width),oh=ow*oc.height/oc.width;c.globalAlpha=A*(o.line==='#FFFFFF'?.5:.9);if(swk>=0)drawWavy(c,oc,ow,oh,o.swp-t*9,an.amp*(.5+.85*swk),1);else drawWavy(c,oc,ow,oh,o.phase||0,an.amp,1);c.globalAlpha=A}
     if(swk>=0)drawWavy(c,spr.lit||spr.img,w,h,o.swp-t*9,an.amp*(.5+.85*swk),o.n||an.n);else drawWavy(c,spr.lit||spr.img,w,h,o.phase||0,an.amp,o.n||an.n);c.restore();return;
   }
   if(L._sh){drawReal(c,L,o,s,A,lw);c.restore();return}
@@ -14301,6 +14301,8 @@ ACC_HEAD.pr_angler=function(c,U){var q=HW2H.pr_angler,im=hwAcs(q[0]);if(!im)retu
   c.save();c.globalCompositeOperation='lighter';c.globalAlpha*=.45+.2*Math.sin(t*3);var gx=-w/2+w*.86+q[3]*U+Math.sin(t*2.6)*U*.03,gy=U*q[2]-h+h*.3,gr=U*.32;c.drawImage(glow('140,230,255'),gx-gr,gy-gr,gr*2,gr*2);c.restore();
   c.drawImage(im,-w/2+q[3]*U,U*q[2]-h,w,h);c.restore()};
 /* 1.1.17 종한 '옆모습인데 이상하게 장착': 앞에서 본 그림(눈 두 개)을 옆모습 물고기에 그대로 붙이던 것 → 가까운 눈 한쪽 + 뒤로 가는 끈만 잘라 씀 [잘라 쓸 왼쪽~오른쪽 비율, 눈 중심 x, 눈 중심 y, 크기] */
+/* 1.1.17 가오리(만타 · 분홍만타 · 독수리가오리 · 노랑가오리): 몸이 넓어 얼굴 꾸미기가 머리보다 크게 붙던 것 → 얼굴 크기 줄임 */
+var accGeomRAY=accGeom;accGeom=function(L,s,o){var g=accGeomRAY(L,s,o);try{if(g&&L&&(L.kind==='manta'||L.id==='stingray')){g.E=Math.min(g.E,s*.13)}}catch(e){}return g};
 var HW2F_SIDE={pr_galaxy:[0,.6,.37,.55,3.5],pr_goggle:[0,.8,.67,.5,3.6],hw_mask:null};
 ['pr_goggle','pr_galaxy'].forEach(function(id){var q=HW2F[id];ACC_FACE[id]=function(c,E){var im=hwAcs(q[0]);if(!im)return;var sw=ACC_SW||{sl:0,r:0},sd=HW2F_SIDE[id];
   c.save();c.rotate(sw.r*.25);
@@ -14322,7 +14324,7 @@ var accBackPR=accBack;accBack=function(c,id,x,y,s,ang,pts){var k=PRPET[id];if(!k
   var back=s*(1.55+.12*Math.sin(now*.8+seed*6)),tx=x-ca*back+Math.sin(now*.9+seed*5)*s*.18,ty=y-sa*back-s*(.72+.12*Math.sin(now*1.3+seed*4));
   /* 펫 움직임 개선: 물고기가 멈추면 주위를 느긋하게 한 바퀴씩 돌고, 다시 헤엄치면 뒤로 따라붙음 */
   /* 1.1.17 종한 '펫 데리고 다닐 때 물고기만 먹어도 움직임 이상': 먹을 때 물고기가 먹이 쪽으로 한 번에 덥석(크기의 1~3배) 옮겨지는데 펫은 제자리에 남아 확 늘어나며 뒤쫓았음 → 순간이동만큼 펫도 같이 옮기고, 속도 계산에선 뺌 */
-  var jmp=o.fx!=null&&o.x!=null?Math.hypot(x-o.fx,y-o.fy):0;if(jmp>s*.35&&jmp<s*9&&dt>0&&dt<.1){o.x+=(x-o.fx)*.9;o.y+=(y-o.fy)*.9;o.fx=x;o.fy=y}
+  var jmp=o.fx!=null&&o.x!=null?Math.hypot(x-o.fx,y-o.fy):0;if(o.x==null||jmp>=s*9){o.fx=x;o.fy=y;o.ovx=o.ovy=o.fv=0;jmp=0}if(jmp>0&&dt>0&&dt<.12){var exx=(x-o.fx)-(o.ovx||0)*dt,exy=(y-o.fy)-(o.ovy||0)*dt;if(Math.hypot(exx,exy)>s*.35){o.x+=exx*.9;o.y+=exy*.9;o.fx+=exx;o.fy+=exy}}
   if(o.fx!=null&&dt>0){var ovx=(x-o.fx)/dt,ovy=(y-o.fy)/dt;o.ovx=(o.ovx||0)+(ovx-(o.ovx||0))*Math.min(1,dt*10);o.ovy=(o.ovy||0)+(ovy-(o.ovy||0))*Math.min(1,dt*10)}
   if(o.fx!=null&&dt>0){var fsp=Math.hypot(x-o.fx,y-o.fy)/dt;o.fv=(o.fv||0)+(fsp-(o.fv||0))*Math.min(1,dt*4)}o.fx=x;o.fy=y;
   var idl=Math.max(0,Math.min(1,1.6-(o.fv||0)/Math.max(8,s*1.4)));o.idl=(o.idl||0)+(idl-(o.idl||0))*Math.min(1,dt*(idl>(o.idl||0)?1.2:4));
@@ -14337,7 +14339,7 @@ var accBackPR=accBack;accBack=function(c,id,x,y,s,ang,pts){var k=PRPET[id];if(!k
   var spd=Math.hypot(o.vx,o.vy);if(Math.abs(o.vx)>s*.6)o.f=o.vx<0?-1:1;else if(spd<s*.25&&o.idl<.3)o.f=dir;else if(o.idl>.5&&Math.abs(o.vx)<s*.5&&Math.abs(x-o.x)>s*.3)o.f=x>o.x?1:-1;
   /* 멀리 처지면 쭉 늘어나며 서둘러 따라붙고, 내 물고기가 먹으면 펫도 깡총 */
   var far=Math.max(0,Math.min(1,(Math.hypot(o.x-tx,o.y-ty)-s*3)/(s*4)));o.far=(o.far||0)+(far-(o.far||0))*Math.min(1,dt*6);
-  var me=typeof P!=='undefined'&&P&&Math.abs(x-P.x)<P.s*.5+4&&Math.abs(y-P.y)<P.s*.5+4;if(me&&P.chomp>.6&&!(o.hop>.4))o.hop=1;if(o.hop>0)o.hop=Math.max(0,o.hop-dt*2.6);
+  var me=typeof trail!=='undefined'&&pts===trail&&typeof P!=='undefined'&&P&&typeof state!=='undefined'&&state==='play';if(me&&P.chomp>.6&&!(o.hop>.4))o.hop=1;if(o.hop>0)o.hop=Math.max(0,o.hop-dt*2.6);
   if(o.fs==null)o.fs=o.f;if(dt>0)o.fs+=(o.f-o.fs)*Math.min(1,dt*9);var fsc=(o.fs<0?-1:1)*(.42+.58*Math.abs(o.fs));
   var tlm=(kind==='dive'||kind==='paddle'?.22:.32)*(1-.4*(o.idl||0)),tl=Math.max(-tlm,Math.min(tlm,Math.atan2(o.vy,Math.abs(o.vx)+s*1.2)*.8));o.tl+=(tl-o.tl)*Math.min(1,dt*6||1);
   var px=o.x,py=o.y,rot=o.tl,sx=1,sy=1,sw=spd/Math.max(1,s);
@@ -14352,7 +14354,7 @@ var accBackPR=accBack;accBack=function(c,id,x,y,s,ang,pts){var k=PRPET[id];if(!k
   if(PANIM[k]&&kind!=='pulse'){sx=1;sy=1}else if(kind==='pulse'&&PANIM[k]){sx=1+(sx-1)*.4;sy=1+(sy-1)*.4}
   if(o.far>.02){sx*=1+.08*o.far;sy*=1-.05*o.far}if(o.hop>0){var hpp=Math.sin((1-o.hop)*Math.PI);py-=hh*.18*hpp;sy*=1+.05*hpp;rot-=.12*hpp}
   o.ph=(o.ph||seed*4)+dt*4*((kind==='pulse'?.55:.95)+Math.min(1.5,sw*.12));
-  if(typeof P!=='undefined'&&P&&Math.abs(x-P.x)<P.s*.5+4&&Math.abs(y-P.y)<P.s*.5+4)PETPOS={x:px,y:py,t:performance.now()/1000,h:hh};c.save();c.translate(px,py);c.scale(fsc,1);c.rotate(rot);c.scale(sx,sy);
+  if(typeof trail!=='undefined'&&pts===trail)PETPOS={x:px,y:py,t:performance.now()/1000,h:hh};c.save();c.translate(px,py);c.scale(fsc,1);c.rotate(rot);c.scale(sx,sy);
   if(!petDrawAnim(c,k,im,ww,hh,o.ph,now,seed))c.drawImage(im,-ww/2,-hh/2,ww,hh);c.restore()};
 /* 1.1.17: 펫 팔다리 헤엄 — 육상동물·거북·수달·문어는 3장(기본·자세A·자세B)을 기본→A→기본→B로 넘기며 짧게 겹쳐 바뀜(헤엄 빠를수록 빨라짐),
    고래·돌고래는 꼬리 쪽을 세로 조각으로 물결치게, 해파리는 촉수를 가로 조각으로 흔들고, 잠수함은 프로펠러가 돎 */

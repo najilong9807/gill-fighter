@@ -3804,7 +3804,7 @@ function refSpeed(){return 135*scaleOf(P.s)*zoomSpdK()}
 function zoomSpdK(){try{if(fair()||P.surv||!P.s)return 1;var m=Math.min(cw,ch),zb=(m/250)/scaleOf(P.s),zt=targetZoom();return zt>0?clamp(zb/zt,1,2.4):1}catch(e){return 1}}
 function fxOn(k){return P.fx[k]>0}
 /* 1.1.8(빌드 125) 사용자 요청: 나보다 작거나 같은 물고기가 '반짝' 부딪히기만 하고 안 먹히던 것(90~106% 구간) → 나만 한 크기까지 먹고(아귀 · 풍선장어는 10% 큰 것까지), 부딪히기만 하는 구간은 100~105%로 좁힘. 대전의 사람 물고기는 그대로 5% 작아야 먹음 */
-function eatRatio(){var r=fair()?1:(P.look.eatBase||1);if(fxOn('bite'))r=Math.max(r,P.look.biteR||1.12);if(fxOn('frenzy'))r=Math.max(r,1);return r}
+function eatRatio(){var r=fair()?1:(P.look.eatBase||1);if(fxOn('bite'))r=Math.max(r,P.look.biteR||1.12);if(fxOn('frenzy'))r=Math.max(r,1.08);return r} /* 1.1.17 스킬 밸런스(싱글 기록 도전 시뮬 2회 모두 꼴찌권): 광란 · 투지 — 나만 한 것 → 나보다 조금 큰 것까지 */
 function sizeNote(L){var sk=L.sk,pct;
   if(sk==='bite'||sk==='ambush')pct=Math.round(((L.biteR||1.12)-1)*100);
   else if(sk==='snap')pct=Math.round(((L.snapR||1.1)-1)*100);
@@ -9063,7 +9063,7 @@ function useSkill(){
   else if(L.sk==='lure'){P.fx.lure=(L.lureT||3.5)*gb;P.pullN=0}
   else if(L.sk==='stalk')P.fx.stalk=5*gb;
   else if(L.sk==='scan'){P.fx.scan=6*gb;rings.push({x:P.x,y:P.y,r:Math.min(cw,ch)/zoom*.6,life:.6,max:.6,col:'140,255,190'})}
-  else if(L.sk==='frenzy')P.fx.frenzy=3.2*gb;
+  else if(L.sk==='frenzy')P.fx.frenzy=3.8*gb;
   else if(L.sk==='ambush'){P.fx.dash=.35*gb;P.fx.bite=1.6*gb}
   else if(L.sk==='decoy'){
     decoy={x:P.x,y:P.y,ang:P.ang+Math.PI,s:P.s,look:L,t:3.5*gb,ph:Math.random()*6};P.fx.decoy=3.5*gb;
@@ -13331,7 +13331,8 @@ var overShare0=overShare;overShare=function(mp,L,cm,sc,quit){var fin=MPW.fin;MPW
 function mpWinTick(){var b=$('mpWin');if(!b)return;var ok=false;try{ok=mode==='multi'&&state==='play'&&!NET.room&&P&&!P.dead&&(P.time||0)>=60&&P.s>=(P.startS||P.s)*3&&bots.length>=3&&mpRank()===1}catch(e){}
   if(ok){if(!MPW.t1)MPW.t1=performance.now();if(performance.now()-MPW.t1>=5000&&b.hidden){b.hidden=false;buzz(18);crumb('mpWinShow');if(!save.mpWinTip){save.mpWinTip=1;persist();banner(T('지금 1등이에요!'),T('1등일 때 마치면 1위로 기록돼요'))}}}
   else{MPW.t1=0;if(!b.hidden)b.hidden=true}}
-setInterval(mpWinTick,250);
+/* 1.1.17 종한 '대전에서 1위로 마치기 없애': 버튼을 띄우지 않음(기존 판 결과 · 기록 방식은 그대로) */
+function mpWinOff(){var b=$('mpWin');if(b)b.hidden=true;MPW.t1=0}setInterval(mpWinOff,500);
 /* ===== 1.1.14 대전 AI 성격: 다 똑같이 움직여서 '봇 티'가 나던 것 → 세 가지 성격
    사냥꾼(hunt): 더 멀리서 알아보고 끈질기게 쫓아옴 · 조심이(shy): 작을 땐 일찍 · 빨리 도망, 클 땐 덜 쫓음 · 보통(calm)
    1등 견제: 내가 1등이고 상대가 나보다 조금 작을 때(0.7~0.95배) 사냥꾼은 먹이를 더 빨리 모아 따라붙는다(크기 차를 좁혀 긴장감). 밸런스는 mpsim으로 기존과 비교 */
@@ -14414,8 +14415,8 @@ function svNearE(R){var b=null,bd=R||1e9;for(var i=0;i<SV.en.length;i++){var e=S
 function svPetOrg(){var q=PETPOS,n=performance.now()/1000;return q&&n-q.t<.3&&Math.hypot(q.x-P.x,q.y-P.y)<viewR()?q:{x:P.x,y:P.y-P.s,h:P.s}}
 function svPetPop(o,col){try{texts.push({x:o.x,y:o.y-(o.h||40)*.8,txt:T(PET_AB[SV.pet].n)+'!',life:.9});rings.push({x:o.x,y:o.y,r:(o.h||40)*.9,life:.4,max:.4,col:col||'255,255,255'})}catch(e){}}
 function svPetFire(){var p=SV.pet,l=SV.petL,dm=(26+(SV.lv||1)*4)*(1+.15*(l-1)),R=viewR(),i,e,O=svPetOrg();
-  if(p==='pr_whale'){WHALE_BIG=performance.now()/1000;svPetPop(O,'160,220,255');for(i=0;i<8;i++)burst(O.x,O.y-(O.h||40)*.5,12,1);svAreaHitP(P.x,P.y,P.s*2.2+90,dm,'160,220,255',700);return 16-l}
-  if(p==='pr_ship'){svPetPop(O,'255,170,90');for(i=0;i<3;i++){e=SV.en[Math.floor(Math.random()*SV.en.length)];if(e&&!e.dead&&Math.hypot(e.x-P.x,e.y-P.y)<R){SV.zap.push({p:[[O.x,O.y],[(O.x+e.x)/2,Math.min(O.y,e.y)-80],[e.x,e.y]],life:.25});svAreaHitP(e.x,e.y,70,dm*1.2,'255,170,90',0)}}return 11-l}
+  if(p==='pr_whale'){WHALE_BIG=performance.now()/1000;svPetPop(O,'160,220,255');for(i=0;i<8;i++)burst(O.x,O.y-(O.h||40)*.5,12,1);svAreaHitP(P.x,P.y,P.s*2.2+90,dm*.3,'160,220,255',700);return 16-l} /* 1.1.17 밸런스(4분 시뮬): 고래 피해가 전체의 54~61% → 주변 밀어내기가 주인공, 피해는 0.3배 */
+  if(p==='pr_ship'){svPetPop(O,'255,170,90');for(i=0;i<3;i++){e=SV.en[Math.floor(Math.random()*SV.en.length)];if(e&&!e.dead&&Math.hypot(e.x-P.x,e.y-P.y)<R){SV.zap.push({p:[[O.x,O.y],[(O.x+e.x)/2,Math.min(O.y,e.y)-80],[e.x,e.y]],life:.25});svAreaHitP(e.x,e.y,70,dm*.6,'255,170,90',0)}}return 11-l} /* 1.1.17 밸런스: 해적선 Lv5 피해 28~46% → 0.6배 */
   if(p==='pr_sub'){e=svNearE(R*.9);if(e){svPetPop(O,'255,230,120');SV.zap.push({p:[[O.x,O.y],[e.x,e.y]],life:.3});svAreaHitP(e.x,e.y,60,dm*2.5,'255,230,120',0)}return 9-l*.8}
   if(p==='pr_octo'){var r2=P.s*2.6+120;for(i=0;i<SV.en.length;i++){e=SV.en[i];if(!e.dead&&!e.E.boss&&Math.hypot(e.x-P.x,e.y-P.y)<r2)e.slow=Math.max(e.slow||0,2.5+.3*l)}rings.push({x:P.x,y:P.y,r:r2,life:.6,max:.6,col:'60,30,90'});svPetPop(O,'120,80,160');return 13-l}
   if(p==='pr_otter'){SV.bonus=(SV.bonus||0)+2+l;texts.push({x:O.x,y:O.y-(O.h||40),txt:T('진주 +')+(2+l),life:.9});return 32-2*l}

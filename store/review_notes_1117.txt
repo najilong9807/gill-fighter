@@ -5,7 +5,8 @@ What's new in 1.1.17:
 (4) Friend aquariums: the Friends button in the Tank now has a label, a one-time tip, and after decorating, a one-time prompt asking whether to share the aquarium (sharing was already available and stays optional).
 (5) UI polish: on-screen notices no longer cover window titles, long chapter names fit on one line, small-screen buttons fit.
 (6) Motion polish: pets follow the player's fish more smoothly, fish tail motion follows speed, and some accessories were re-fitted to the side view (visual only).
-(7) The in-app "What's new" popup describes these changes.
+(7) Balance: small in-game tuning of two fish skills and two pet abilities; the Arena 'Finish as #1' shortcut button was removed (Arena results and records are unchanged).
+(8) The in-app "What's new" popup describes these changes.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

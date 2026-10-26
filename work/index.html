@@ -8138,7 +8138,7 @@ var ACC_FACE={
     c.beginPath();c.ellipse(-E*.4,-E*.35,E*.25,E*.12,-.6,0,Math.PI*2);c.fillStyle='rgba(255,255,255,.7)';c.fill()},
   monocle:function(c,E){var lw=Math.max(1.4,E*.26);c.beginPath();c.moveTo(-E*.3,E*1.2);c.bezierCurveTo(-E*.6,E*2.8,-E*2.4,E*2.4,-E*2.8,E*1.4);c.setLineDash([E*.3,E*.25]);c.lineWidth=Math.max(1,E*.18);c.strokeStyle='#D9A020';c.stroke();c.setLineDash([]);
     c.beginPath();c.arc(0,0,E*1.25,0,Math.PI*2);c.fillStyle='rgba(220,245,255,.25)';c.fill();c.lineWidth=lw*1.9;c.strokeStyle='#0B2C4A';c.stroke();c.lineWidth=lw;c.strokeStyle='#F2C23A';c.stroke()},
-  patch:function(c,E){var lw=Math.max(1.4,E*.24);c.beginPath();c.moveTo(-E*2.4,-E*2.6);c.lineTo(E*1.8,E*2);c.lineWidth=E*.45+lw*2;c.strokeStyle='#0B2C4A';c.stroke();c.lineWidth=E*.45;c.strokeStyle='#23262E';c.stroke();
+  patch:function(c,E){var lw=Math.max(1.4,E*.24);c.beginPath();c.moveTo(-E*1.85,-E*1.95);c.quadraticCurveTo(-E*.2,-E*.6,E*.95,E*1.15);c.lineWidth=E*.45+lw*2;c.strokeStyle='#0B2C4A';c.stroke();c.lineWidth=E*.45;c.strokeStyle='#23262E';c.stroke();
     c.beginPath();c.ellipse(0,0,E*1.15,E*1.0,.3,0,Math.PI*2);c.fillStyle=lg(c,-E,E,'#3A3F4E','#111319');c.fill();ol(c,lw)}
 };
 function accTrailPts(pts,x,y,s,ang){
@@ -13566,7 +13566,7 @@ ACC_FACE.hw_batlens=function(c,E){var U=E*3;c.lineCap='round';c.beginPath();c.mo
   c.lineWidth=Math.max(1.2,E*.3);c.strokeStyle='#120C1A';c.stroke();c.lineWidth=Math.max(.6,E*.08);c.strokeStyle='rgba(220,200,255,.5)';c.beginPath();c.ellipse(0,0,E*1.3,E*1.12,0,Math.PI*1.1,Math.PI*1.55);c.stroke();
   c.save();c.beginPath();c.ellipse(0,0,E*1.2,E*1.02,0,0,Math.PI*2);c.clip();c.fillStyle='rgba(255,255,255,.3)';c.beginPath();c.moveTo(-E*.9,-E*.2);c.lineTo(-E*.3,-E*1);c.lineTo(E*.05,-E*1);c.lineTo(-E*.6,E*.1);c.closePath();c.fill();c.fillStyle='rgba(255,255,255,.15)';c.beginPath();c.moveTo(-E*.2,E*.4);c.lineTo(E*.5,-E*.6);c.lineTo(E*.7,-E*.5);c.lineTo(0,E*.6);c.closePath();c.fill();c.restore()};
 /* 해골 안대: 가죽(바느질) · 그려진 해골 · 가죽 끈 */
-ACC_FACE.hw_patch=function(c,E){var U=E*3;c.lineCap='round';[[-E*.6,-E*.9,-E*2.5,-E*2.4],[-E*1.2,E*.4,-E*3.1,E*.3]].forEach(function(l){c.beginPath();c.moveTo(l[0],l[1]);c.lineTo(l[2],l[3]);c.lineWidth=E*.36;c.strokeStyle='#120E0C';c.stroke();c.lineWidth=E*.24;c.strokeStyle='#3A2E28';c.stroke();c.lineWidth=Math.max(.5,E*.06);c.strokeStyle='rgba(255,230,200,.3)';c.stroke()});
+ACC_FACE.hw_patch=function(c,E){var U=E*3;c.lineCap='round';[[-E*.6,-E*.9,-E*1.85,-E*1.75],[-E*1.2,E*.4,-E*2.3,E*.38]].forEach(function(l){c.beginPath();c.moveTo(l[0],l[1]);c.lineTo(l[2],l[3]);c.lineWidth=E*.36;c.strokeStyle='#120E0C';c.stroke();c.lineWidth=E*.24;c.strokeStyle='#3A2E28';c.stroke();c.lineWidth=Math.max(.5,E*.06);c.strokeStyle='rgba(255,230,200,.3)';c.stroke()});
   var pt=function(c){c.beginPath();c.ellipse(E*.05,0,E*1.35,E*1.2,0,0,Math.PI*2)};
   pPaint(c,pt,'#2A2A30',-E*1.2,E*1.2,{U:U,lt:.25,dk:.45,ol:'#0A0A0E',lw:.03,tex:function(c){c.setLineDash([E*.2,E*.15]);c.strokeStyle='rgba(200,190,170,.55)';c.lineWidth=Math.max(.5,E*.07);c.beginPath();c.ellipse(E*.05,0,E*1.12,E*.98,0,0,Math.PI*2);c.stroke();c.setLineDash([]);pSpec(c,-E*.4,-E*.55,E*.5,E*.25,.25,-.4)}});
   c.fillStyle='#EDE6D6';c.beginPath();c.arc(E*.05,-E*.22,E*.4,0,Math.PI*2);c.fill();c.fillRect(-E*.15,E*.03,E*.4,E*.26);c.fillStyle='#2A2A30';c.beginPath();c.arc(-E*.09,-E*.24,E*.11,0,Math.PI*2);c.arc(E*.19,-E*.24,E*.11,0,Math.PI*2);c.fill();
@@ -14321,6 +14321,9 @@ var accBackPR=accBack;accBack=function(c,id,x,y,s,ang,pts){var k=PRPET[id];if(!k
   /* 자리: 물고기 뒤(헤엄 방향 반대) · 위쪽, 천천히 맴도는 흔들림 */
   var back=s*(1.55+.12*Math.sin(now*.8+seed*6)),tx=x-ca*back+Math.sin(now*.9+seed*5)*s*.18,ty=y-sa*back-s*(.72+.12*Math.sin(now*1.3+seed*4));
   /* 펫 움직임 개선: 물고기가 멈추면 주위를 느긋하게 한 바퀴씩 돌고, 다시 헤엄치면 뒤로 따라붙음 */
+  /* 1.1.17 종한 '펫 데리고 다닐 때 물고기만 먹어도 움직임 이상': 먹을 때 물고기가 먹이 쪽으로 한 번에 덥석(크기의 1~3배) 옮겨지는데 펫은 제자리에 남아 확 늘어나며 뒤쫓았음 → 순간이동만큼 펫도 같이 옮기고, 속도 계산에선 뺌 */
+  var jmp=o.fx!=null&&o.x!=null?Math.hypot(x-o.fx,y-o.fy):0;if(jmp>s*.35&&jmp<s*9&&dt>0&&dt<.1){o.x+=(x-o.fx)*.9;o.y+=(y-o.fy)*.9;o.fx=x;o.fy=y}
+  if(o.fx!=null&&dt>0){var ovx=(x-o.fx)/dt,ovy=(y-o.fy)/dt;o.ovx=(o.ovx||0)+(ovx-(o.ovx||0))*Math.min(1,dt*10);o.ovy=(o.ovy||0)+(ovy-(o.ovy||0))*Math.min(1,dt*10)}
   if(o.fx!=null&&dt>0){var fsp=Math.hypot(x-o.fx,y-o.fy)/dt;o.fv=(o.fv||0)+(fsp-(o.fv||0))*Math.min(1,dt*4)}o.fx=x;o.fy=y;
   var idl=Math.max(0,Math.min(1,1.6-(o.fv||0)/Math.max(8,s*1.4)));o.idl=(o.idl||0)+(idl-(o.idl||0))*Math.min(1,dt*(idl>(o.idl||0)?1.2:4));
   if(o.idl>.01){ /* 멈췄을 때: 물고기 위 뒤쪽 · 앞쪽 두 자리 중 한 곳에 둥실 떠 있다가, 몇 초마다 물고기 '위로' 넘어가 반대편에 자리 잡음(아래 · 몸 뒤로 지나가지 않게) */
@@ -14330,11 +14333,11 @@ var accBackPR=accBack;accBack=function(c,id,x,y,s,ang,pts){var k=PRPET[id];if(!k
     tx+=(orx-tx)*o.idl;ty+=(ory-ty)*o.idl}else{o.isd=null}
   if(o.x==null||Math.hypot(o.x-tx,o.y-ty)>s*9){o.x=tx;o.y=ty;o.vx=0;o.vy=0;o.f=dir;o.fs=dir;o.tl=0}
   else if(dt>0){var kk=kind==='pulse'?14+30*Math.max(0,Math.sin(now*3.2)):kind==='ship'?9:kind==='sub'?12:16,dd=kind==='pulse'?5.5:kind==='ship'?4.2:5.2;
-    o.vx+=((tx-o.x)*kk-o.vx*dd)*dt;o.vy+=((ty-o.y)*kk-o.vy*dd)*dt;o.x+=o.vx*dt;o.y+=o.vy*dt}
+    var fvx=(o.ovx||0)*.85,fvy=(o.ovy||0)*.85;o.vx+=((tx-o.x)*kk-(o.vx-fvx)*dd)*dt;o.vy+=((ty-o.y)*kk-(o.vy-fvy)*dd)*dt;o.x+=o.vx*dt;o.y+=o.vy*dt}
   var spd=Math.hypot(o.vx,o.vy);if(Math.abs(o.vx)>s*.6)o.f=o.vx<0?-1:1;else if(spd<s*.25&&o.idl<.3)o.f=dir;else if(o.idl>.5&&Math.abs(o.vx)<s*.5&&Math.abs(x-o.x)>s*.3)o.f=x>o.x?1:-1;
   /* 멀리 처지면 쭉 늘어나며 서둘러 따라붙고, 내 물고기가 먹으면 펫도 깡총 */
-  var far=Math.max(0,Math.min(1,(Math.hypot(o.x-tx,o.y-ty)-s*1.6)/(s*3)));o.far=(o.far||0)+(far-(o.far||0))*Math.min(1,dt*6);
-  var me=typeof P!=='undefined'&&P&&Math.abs(x-P.x)<P.s*.5+4&&Math.abs(y-P.y)<P.s*.5+4;if(me&&P.chomp>.6&&!(o.hop>0))o.hop=1;if(o.hop>0)o.hop=Math.max(0,o.hop-dt*2.6);
+  var far=Math.max(0,Math.min(1,(Math.hypot(o.x-tx,o.y-ty)-s*3)/(s*4)));o.far=(o.far||0)+(far-(o.far||0))*Math.min(1,dt*6);
+  var me=typeof P!=='undefined'&&P&&Math.abs(x-P.x)<P.s*.5+4&&Math.abs(y-P.y)<P.s*.5+4;if(me&&P.chomp>.6&&!(o.hop>.4))o.hop=1;if(o.hop>0)o.hop=Math.max(0,o.hop-dt*2.6);
   if(o.fs==null)o.fs=o.f;if(dt>0)o.fs+=(o.f-o.fs)*Math.min(1,dt*9);var fsc=(o.fs<0?-1:1)*(.42+.58*Math.abs(o.fs));
   var tlm=(kind==='dive'||kind==='paddle'?.22:.32)*(1-.4*(o.idl||0)),tl=Math.max(-tlm,Math.min(tlm,Math.atan2(o.vy,Math.abs(o.vx)+s*1.2)*.8));o.tl+=(tl-o.tl)*Math.min(1,dt*6||1);
   var px=o.x,py=o.y,rot=o.tl,sx=1,sy=1,sw=spd/Math.max(1,s);
@@ -14347,7 +14350,7 @@ var accBackPR=accBack;accBack=function(c,id,x,y,s,ang,pts){var k=PRPET[id];if(!k
   if(kind==='sub')petBubbles(c,px-o.f*ww*.5,py+hh*.05,hh,now,4,seed);
   if(kind==='dive')petBubbles(c,px+o.f*ww*.25,py-hh*.42,hh*.8,now,3,seed);
   if(PANIM[k]&&kind!=='pulse'){sx=1;sy=1}else if(kind==='pulse'&&PANIM[k]){sx=1+(sx-1)*.4;sy=1+(sy-1)*.4}
-  if(o.far>.02){sx*=1+.14*o.far;sy*=1-.08*o.far}if(o.hop>0){var hpp=Math.sin((1-o.hop)*Math.PI);py-=hh*.35*hpp;sy*=1+.08*hpp;rot-=.25*hpp}
+  if(o.far>.02){sx*=1+.08*o.far;sy*=1-.05*o.far}if(o.hop>0){var hpp=Math.sin((1-o.hop)*Math.PI);py-=hh*.18*hpp;sy*=1+.05*hpp;rot-=.12*hpp}
   o.ph=(o.ph||seed*4)+dt*4*((kind==='pulse'?.55:.95)+Math.min(1.5,sw*.12));
   if(typeof P!=='undefined'&&P&&Math.abs(x-P.x)<P.s*.5+4&&Math.abs(y-P.y)<P.s*.5+4)PETPOS={x:px,y:py,t:performance.now()/1000,h:hh};c.save();c.translate(px,py);c.scale(fsc,1);c.rotate(rot);c.scale(sx,sy);
   if(!petDrawAnim(c,k,im,ww,hh,o.ph,now,seed))c.drawImage(im,-ww/2,-hh/2,ww,hh);c.restore()};
@@ -14438,8 +14441,9 @@ function svPetRender(){var ul=$('svPetList');if(!ul)return;ul.textContent='';$('
     else{var gs=document.createElement('button');gs.type='button';gs.className='btn ghost';gs.textContent=T('상점에서 보기');gs.addEventListener('click',function(){petGoShop(id)});bx.appendChild(gs)}
     li.appendChild(bx);ul.appendChild(li);if(PET_UP===id){li.classList.add('petup');var sp=document.createElement('i');sp.className='petup-fx';li.appendChild(sp);setTimeout(function(){try{li.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}},30)}});PET_UP=null}
 /* 1.1.17 업데이트 소식 */
+abyTr(TRT,{"움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 때 튀지 않게), 물고기는 속도에 맞춰 꼬리를 흔들어요 · 꾸미기 옆모습 맞춤": "Smoother motion: pets follow more naturally (no more jumps when you eat), fish beat their tails with their speed · side-view fit for accessories"});abyTr(TRJ,{"움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 때 튀지 않게), 물고기는 속도에 맞춰 꼬리를 흔들어요 · 꾸미기 옆모습 맞춤": "動きを調整：ペットがより自然について来て（食べた時に跳ねない）、魚はスピードに合わせて尾を振ります・デコの横向きフィット"});
 abyTr(TRT,{"펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등": "Pets fight with you: all 13 pets get a Deep Survival ability — whale water spout, pirate ship cannons, sub torpedo, bunny heals and more", "펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기": "Raise your pets: feed treats (pearls) up to Lv 5 — tap 'Pet' on the Deep Survival screen", "친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000": "Invite gift: when a new friend enters your aquarium code within 3 days, you both get 30 gems and 3,000 pearls", "친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요": "Friend aquariums are easier to find: the 'Friends' button in your tank, and we'll ask if you want to share after decorating", "안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리": "Notices no longer cover window titles; tidier long chapter names and small-screen buttons", "펫이 함께 싸워요 🐾 + 친구 초대 선물": "Pets join the fight 🐾 + invite gifts"});abyTr(TRJ,{"펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등": "ペットが一緒に戦う：13種すべてに深海サバイバルの能力 — クジラの潮吹き・海賊船の大砲・潜水艦の魚雷・ウサギの回復など", "펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기": "ペットを育てる：おやつ（真珠）でLv 5まで — 深海サバイバル画面の「ペット」ボタンから", "친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000": "招待プレゼント：始めたばかりの友だちが3日以内に水族館コードを入れると、2人とも宝石30・真珠3,000", "친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요": "友だちの水族館を見つけやすく：水族館の「友だち」ボタン、デコが終わると公開するか聞きます", "안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리": "お知らせが画面のタイトルを隠さないように、長い章名・小さい画面のボタンを整理", "펫이 함께 싸워요 🐾 + 친구 초대 선물": "ペットが一緒に戦う🐾＋招待プレゼント"});
-NEWS['1.1.17']=[T("펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등"),T("펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기"),T("친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000"),T("친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요"),T("안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리")];NEWS_LEAD['1.1.17']=T("펫이 함께 싸워요 🐾 + 친구 초대 선물");
+NEWS['1.1.17']=[T("펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등"),T("펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기"),T("친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000"),T("친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요"),T("움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 때 튀지 않게), 물고기는 속도에 맞춰 꼬리를 흔들어요 · 꾸미기 옆모습 맞춤"),T("안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리")];NEWS_LEAD['1.1.17']=T("펫이 함께 싸워요 🐾 + 친구 초대 선물");
 var PET_UP=null;
 var renderAccPET=renderAcc;renderAcc=function(){var r=renderAccPET.apply(this,arguments);try{if(accSlot==='pet')Object.keys(PET_AB).forEach(function(id){var g=$('acc-'+id);if(!g||g.querySelector('.accab'))return;var em=g.querySelector('em');var sp=document.createElement('span');sp.className='accab';sp.textContent='🐾 '+T(PET_AB[id].n);g.insertBefore(sp,em)})}catch(e){}return r};
 function petGoShop(id){try{['svPet','svCh'].forEach(function(k){var o=$(k);if(o)o.hidden=true});accSlot='pet';showTab('sea');renderAcc();setTimeout(function(){var g=$('acc-'+id);if(g){g.scrollIntoView({block:'center',behavior:'smooth'});g.click()}},120)}catch(e){}}

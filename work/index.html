@@ -6610,7 +6610,7 @@ var DECOR=[
 DECOR.sort(function(a,b){return (a.c.cur==='gems'?1e6:0)+a.c.price-((b.c.cur==='gems'?1e6:0)+b.c.price)}); /* v1.1 진주 소품 먼저, 보석 전용 소품은 뒤에 */
 
 /* ===== v0.37 보물 상자: 수족관에 놓아 두면 3분마다 진주 1개씩 쌓인다(최대 160개 = 8시간). 눌러서 꺼낸다. 한 번에 3개까지 ===== */
-var CHEST={rate:6*60*1000,cap:80,max:3},tankPops=[],TK_RIP=[],DECO_BT={};
+var CHEST={rate:6*60*1000,cap:120,max:3},tankPops=[],TK_RIP=[],DECO_BT={};
 function chestN(it){var now=Date.now();if(!it.t||it.t>now)it.t=now;return Math.min(CHEST.cap,Math.floor((now-it.t)/CHEST.rate))}
 function chestCollect(it){
   var n=chestN(it);if(n<1)return 0;save.pearls+=n;it.t=n>=CHEST.cap?Date.now():it.t+n*CHEST.rate;persist();
@@ -6631,7 +6631,7 @@ function decoStars(){var k=decoKinds(),s=0;DECO_STEP.forEach(function(v){if(k>=v
 function decoBonus(){return decoStars()*.05}
 function houseRateAt(lv){return lv?Math.max(1,Math.round((HOUSE[lv].rate+Math.min(30,tankIds().length)*.2*lv)*RW_K*(1+decoBonus()))):0}
 function houseRate(){var o=HS();return o.lv?houseRateAt(o.lv):0}
-function houseCap(){return Math.round(houseRate()*8)}
+function houseCap(){return Math.round(houseRate()*12)} /* 1.1.18 종한 '진주 최대 보관 개수 늘리기': 8시간치 → 12시간치 (심해 탐사선과 같게) */
 function houseSettle(){var o=HS(),now=Date.now(),a=Math.min(o.at,now),r=houseRate();if(!r){o.at=now;return o}
   var bEnd=Math.min(now,o.boost||0),bh=Math.max(0,bEnd-a)/3600000,hh=(now-a)/3600000;var cap=houseCap();if(o.acc<cap)o.acc=Math.min(cap,o.acc+r*(hh+.5*bh));o.at=now;return o}
 function houseN(){return Math.floor(houseSettle().acc)}
@@ -11058,7 +11058,7 @@ function roomInvite(c){if(!/^\d{4}$/.test(c))return;if(state==='play'||state==='
 function appNative(){try{var C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.App?C.Plugins.App:null}catch(e){return null}}
 /* 1.1.5 새 버전 안내: 앱스토어에 올라간 버전이 지금 앱보다 높으면 처음 화면에 띠를 띄우고,
    그 버전을 처음 알게 됐을 때(또는 '나중에' 뒤 3일 지나서) 안내 창을 한 번 보여 준다. 업데이트는 앱스토어로 보낸다 */
-var APP_VER='1.1.17',UPD={v:null,notes:'',at:0,busy:false};
+var APP_VER='1.1.18',UPD={v:null,notes:'',at:0,busy:false};
 function verGt(a,b){a=String(a||'').split('.');b=String(b||'').split('.');for(var i=0;i<4;i++){var x=parseInt(a[i]||0,10)||0,y=parseInt(b[i]||0,10)||0;if(x!==y)return x>y}return false}
 function updCheck(force){
   var C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform())&&location.search.indexOf('updtest')<0)return;
@@ -12199,6 +12199,34 @@ function hwGiftCheck(){try{if(!hwSeason())return;if(!((save.runs|0)>0))return;if
   save.hwGift=y;save.hwGiftPut=put?1:0;persist();crumb('hwGift:'+(put?'tank':'inv'));try{refreshTank()}catch(e){}
   setTimeout(function(){try{if(state==='home'||state==='menu')banner(T('할로윈 선물이 도착했어요!'),put?T('수족관에 「호박 무더기」를 넣어 드렸어요'):T('「호박 무더기」를 꾸미기 › 소품에 넣어 드렸어요'))}catch(e){}},400)}catch(e){}}
 setTimeout(hwGiftCheck,3200);
+/* ===== 1.1.18 종한: 할로윈 이벤트가 끝나면(11/22부터) 남은 사탕을 진주로 바꿔 줌. 사탕 1개 = 진주 20.
+   모아 놓고 안 받은 사탕 선물(진주 · 보석 · 왕관)도 같이 넣어 줌. 바꾼 뒤 사탕은 0, 내년 이벤트에서 다시 모음 ===== */
+var HW_SWAP=20;
+function hwSwapCheck(){try{if(hwSeason())return;var n=save.hwCandy|0;if(n<1)return;if(!((save.runs|0)>0))return;
+  if(document.querySelector('.coach')||!(state==='home'||state==='menu')){setTimeout(hwSwapCheck,2500);return}
+  var p=n*HW_SWAP,gp=0,gg=0,crown=false;
+  HWC.forEach(function(m,i){if(hwcGot(i)||n<m.n)return;if(m.p)gp+=m.p;if(m.g)gg+=m.g;if(m.a){var A=AS();if(A.own.indexOf(m.a)<0){A.own.push(m.a);crown=true}}});
+  save.pearls=(save.pearls||0)+p+gp;if(gg)save.gems=(save.gems||0)+gg;
+  save.hwSwap={y:new Date().getFullYear(),n:n,p:p,gp:gp,gg:gg,c:crown?1:0};save.hwCandy=0;save.hwcGot=[];persist();crumb('hwSwap:'+n);
+  try{refreshHome(true)}catch(e){}try{hwBarPaint()}catch(e){}save.hwSwapPend=1;persist();hwSwapWait()}catch(e){}}
+function hwSwapWait(){try{if(!save.hwSwapPend||!save.hwSwap)return;var busy=[].some.call(document.querySelectorAll('.overlay'),function(o){return !o.hidden&&o.id!=='hwSwap'&&getComputedStyle(o).display!=='none'});if(busy||document.querySelector('.coach')||!(state==='home'||state==='menu')){setTimeout(hwSwapWait,1500);return}
+  save.hwSwapPend=0;persist();hwSwapShow(save.hwSwap)}catch(e){}}setTimeout(hwSwapWait,4200);
+var awayBusySW=awayBusy;awayBusy=function(){var e=$('hwSwap');if(e&&!e.hidden)return true;return awayBusySW.apply(this,arguments)}; /* 사탕 교환 창이 떠 있으면 다른 선물 창은 닫힌 뒤에 */
+function hwSwapShow(o){var el=$('hwSwap');if(!el){el=document.createElement('div');el.className='overlay';el.id='hwSwap';el.hidden=true;
+    el.innerHTML='<div class="panel aw-panel"><h1></h1><p class="lead"></p><p class="aw-n"><i class="aw-pearl" aria-hidden="true"></i><b></b></p><p class="hws-x"></p><button class="btn" type="button" id="hwsOk"></button></div>';document.body.appendChild(el);
+    var st=document.createElement('style');st.textContent='.hws-x{margin:0;font-size:14px;opacity:.8;word-break:keep-all}.hws-x:empty{display:none}';document.head.appendChild(st);
+    $('hwsOk').addEventListener('click',function(){el.hidden=true})}
+  el.querySelector('h1').textContent='🎃 '+T('할로윈 이벤트가 끝났어요');
+  el.querySelector('.lead').textContent=T('남은 사탕 ')+nf(o.n)+T('개를 진주로 바꿔 드렸어요');
+  el.querySelector('.aw-n b').textContent=T('진주 ')+'+'+nf(o.p+o.gp);
+  var x=[];if(o.gp||o.gg||o.c){x.push(T('안 받은 사탕 선물도 넣어 드렸어요')+': '+[o.gp?T('진주 ')+'+'+nf(o.gp):'',o.gg?T('보석 ')+'+'+o.gg:'',o.c?T('호박 유령 왕관'):''].filter(Boolean).join(' · '))}
+  el.querySelector('.hws-x').textContent=x.join(' ');$('hwsOk').textContent=T('확인');el.hidden=false;try{svSnd('gem');buzz([20,30,40])}catch(e){}}
+setTimeout(hwSwapCheck,3600);
+var showTabHS=showTab;showTab=function(p){var r=showTabHS.apply(this,arguments);if(p==='home'||p==='tank')setTimeout(hwSwapCheck,700);return r};
+abyTr(TRT,{'할로윈 이벤트가 끝났어요':'The Halloween event has ended','남은 사탕 ':'Your ','개를 진주로 바꿔 드렸어요':' leftover candies were turned into pearls','안 받은 사탕 선물도 넣어 드렸어요':'Unclaimed candy gifts were added too','이벤트가 끝나면 남은 사탕은 진주로 바꿔 드려요 (사탕 1개 = 진주 20)':'When the event ends, leftover candy turns into pearls (1 candy = 20 pearls)'});
+abyTr(TRJ,{'할로윈 이벤트가 끝났어요':'ハロウィンイベントが終わりました','남은 사탕 ':'残ったキャンディ ','개를 진주로 바꿔 드렸어요':'個を真珠に交換しました','안 받은 사탕 선물도 넣어 드렸어요':'受け取っていないキャンディのプレゼントも追加しました','이벤트가 끝나면 남은 사탕은 진주로 바꿔 드려요 (사탕 1개 = 진주 20)':'イベント終了後、残ったキャンディは真珠に交換されます（キャンディ1個＝真珠20）'});
+var hwEvRenderSW=hwEvRender;hwEvRender=function(){var r=hwEvRenderSW.apply(this,arguments);try{var t=$('hweTip');if(t&&!t.querySelector('.hws-tip')){var sm=document.createElement('span');sm.className='hws-tip';sm.style.cssText='display:block;margin-top:4px;opacity:.85';sm.textContent=T('이벤트가 끝나면 남은 사탕은 진주로 바꿔 드려요 (사탕 1개 = 진주 20)');t.appendChild(sm)}}catch(e){}return r};
+
 var showTabHG=showTab;showTab=function(p){var r=showTabHG.apply(this,arguments);if(p==='home'||p==='tank')setTimeout(hwGiftCheck,600);return r};
 var hwAttRenderG=hwAttRender;hwAttRender=function(){hwAttRenderG.apply(this,arguments);try{var el=$('hwAtt');if(!el)return;var g=el.querySelector('.ha-gift');if(!g){g=document.createElement('p');g.className='ha-gift';var ld=el.querySelector('.lead');ld.parentNode.insertBefore(g,ld.nextSibling)}
   g.textContent=T('🎁 할로윈 선물: 모든 분 수족관에 「호박 무더기」 소품을 하나씩 넣어 드려요');g.hidden=!hwSeason()}catch(e){}};
@@ -14473,6 +14501,10 @@ abyTr(TRT,{"밸런스: 광란 · 투지 강화, 부풀기 · 먹물 재사용 �
 abyTr(TRT,{"움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 때 튀지 않게), 물고기는 속도에 맞춰 꼬리를 흔들어요 · 꾸미기 옆모습 맞춤": "Smoother motion: pets follow more naturally (no more jumps when you eat), fish beat their tails with their speed · side-view fit for accessories"});abyTr(TRJ,{"움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 때 튀지 않게), 물고기는 속도에 맞춰 꼬리를 흔들어요 · 꾸미기 옆모습 맞춤": "動きを調整：ペットがより自然について来て（食べた時に跳ねない）、魚はスピードに合わせて尾を振ります・デコの横向きフィット"});
 abyTr(TRT,{"펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등": "Pets fight with you: all 13 pets get a Deep Survival ability — whale water spout, pirate ship cannons, sub torpedo, bunny heals and more", "펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기": "Raise your pets: feed treats (pearls) up to Lv 5 — tap 'Pet' on the Deep Survival screen", "친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000": "Invite gift: when a new friend enters your aquarium code within 3 days, you both get 30 gems and 3,000 pearls", "친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요": "Friend aquariums are easier to find: the 'Friends' button in your tank, and we'll ask if you want to share after decorating", "안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리": "Notices no longer cover window titles; tidier long chapter names and small-screen buttons", "펫이 함께 싸워요 🐾 + 친구 초대 선물": "Pets join the fight 🐾 + invite gifts"});abyTr(TRJ,{"펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등": "ペットが一緒に戦う：13種すべてに深海サバイバルの能力 — クジラの潮吹き・海賊船の大砲・潜水艦の魚雷・ウサギの回復など", "펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기": "ペットを育てる：おやつ（真珠）でLv 5まで — 深海サバイバル画面の「ペット」ボタンから", "친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000": "招待プレゼント：始めたばかりの友だちが3日以内に水族館コードを入れると、2人とも宝石30・真珠3,000", "친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요": "友だちの水族館を見つけやすく：水族館の「友だち」ボタン、デコが終わると公開するか聞きます", "안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리": "お知らせが画面のタイトルを隠さないように、長い章名・小さい画面のボタンを整理", "펫이 함께 싸워요 🐾 + 친구 초대 선물": "ペットが一緒に戦う🐾＋招待プレゼント"});
 NEWS['1.1.17']=[T("겨울 바다 새 물고기 8종: 빙어 · 뚝지 · 북극대구 · 바다천사 클리오네 · 얼음물고기 · 북극곤들매기 · 늑대고기, 보석 전용 오로라 물고기 (세트 '얼음 바다 친구들')"),T("펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등"),T("펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기"),T("친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000"),T("친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요"),T("움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 때 튀지 않게), 물고기는 속도에 맞춰 꼬리를 흔들어요 · 꾸미기 옆모습 맞춤"),T("밸런스: 광란 · 투지 강화, 부풀기 · 먹물 재사용 시간 조금 늘림, 고래 · 해적선 펫 피해 조정, 대전 '1위로 마치기' 버튼 없앰"),T("안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리")];NEWS_LEAD['1.1.17']=T("겨울 바다 새 물고기 8종 ❄️ + 펫이 함께 싸워요 🐾");
+/* 1.1.18 업데이트 소식 */
+abyTr(TRT,{"진주 샘 · 보물 상자에 진주가 더 많이 쌓여요: 최대 8시간치 → 12시간치":"Pearl Spring and treasure chests hold more pearls: up to 12 hours' worth (was 8)","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"When the Halloween event ends (from Nov 22), leftover candy turns into pearls: 1 candy = 20 pearls, plus any unclaimed candy gifts","진주 보관이 12시간치로 늘었어요 🫧":"Pearl storage now holds 12 hours' worth 🫧"});
+abyTr(TRJ,{"진주 샘 · 보물 상자에 진주가 더 많이 쌓여요: 최대 8시간치 → 12시간치":"真珠の泉・宝箱にたまる真珠が増えました：最大8時間分 → 12時間分","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"ハロウィンイベント終了後（11月22日から）、残ったキャンディを真珠に交換：キャンディ1個＝真珠20、受け取っていないキャンディのプレゼントも一緒に","진주 보관이 12시간치로 늘었어요 🫧":"真珠の保管が12時間分に増えました 🫧"});
+NEWS['1.1.18']=[T("진주 샘 · 보물 상자에 진주가 더 많이 쌓여요: 최대 8시간치 → 12시간치"),T("할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께")];NEWS_LEAD['1.1.18']=T("진주 보관이 12시간치로 늘었어요 🫧");
 var PET_UP=null;
 var renderAccPET=renderAcc;renderAcc=function(){var r=renderAccPET.apply(this,arguments);try{if(accSlot==='pet')Object.keys(PET_AB).forEach(function(id){var g=$('acc-'+id);if(!g||g.querySelector('.accab'))return;var em=g.querySelector('em');var sp=document.createElement('span');sp.className='accab';sp.textContent='🐾 '+T(PET_AB[id].n);g.insertBefore(sp,em)})}catch(e){}return r};
 function petGoShop(id){try{['svPet','svCh'].forEach(function(k){var o=$(k);if(o)o.hidden=true});accSlot='pet';showTab('sea');renderAcc();setTimeout(function(){var g=$('acc-'+id);if(g){g.scrollIntoView({block:'center',behavior:'smooth'});g.click()}},120)}catch(e){}}

@@ -3879,7 +3879,7 @@ function populate(){if(mode==='race')return;for(var q=fish.length-1;q>=0;q--)if(
 function runGain(win){var L=P.look,grown=Math.max(0,P.grownW||0);win=win||P.full;var g=Math.floor((grown*(win?1.5:1)+(P.huntPearls||0)*(fair()?1:1+.05*rsLv('hunt')))*(fair()?1:(L.pearlMult||1))*(fair()?1:1+gradeOf(L).bonus)*(x2On()?2:P.boost&&P.boost.double?1.5:1)*(P.k?P.k.pearl:1)*(1+.03*rsLv('pearl'))*(P.mpBonus||1))+(P.bonus||0)+(mode==='single'&&!P.camp?Math.floor(scoreNow()/40):0);
   /* 1.1.1 안전장치: 한 판에 받을 수 있는 진주 상한(정상 플레이로는 닿지 않는 값) — 계산이 어긋나도 경제가 무너지지 않게 */
   g=Math.floor(g*PEARL_K); /* 1.2.0 경제 조정: 판에서 받는 진주 20% 줄임(싱글·대전·심해 탐험 공통) */
-  return Math.min(Math.max(0,g)|0,fair()?600:30000)}
+  return Math.min(Math.max(0,g)|0,fair()?600:100000)} /* 1.1.18 종한: 한 판 최대 3만 → 10만 (판 결과 복구 상한 10만과 같게) */
 
 /* ===== v0.37 싱글 에너지: 한 판에 1개, 20분마다 1개 충전(최대 5개). 멀티는 제한 없음. 시간은 기기 시계 기준 =====
    출시 때는 서버 시간으로 바꿔야 한다(기기 시계를 돌리면 충전됨). */
@@ -12201,6 +12201,21 @@ function hwGiftCheck(){try{if(!hwSeason())return;if(!((save.runs|0)>0))return;if
 setTimeout(hwGiftCheck,3200);
 /* ===== 1.1.18 종한: 할로윈 이벤트가 끝나면(11/22부터) 남은 사탕을 진주로 바꿔 줌. 사탕 1개 = 진주 20.
    모아 놓고 안 받은 사탕 선물(진주 · 보석 · 왕관)도 같이 넣어 줌. 바꾼 뒤 사탕은 0, 내년 이벤트에서 다시 모음 ===== */
+/* ===== 1.1.18 종한 '신규 물고기는 신규라고 표시': 겨울 바다 새 물고기(1.1.17)에 'NEW' 딱지 — 도감 카드 · 홈 물고기 줄 · 물고기 고르기 창 · 홈 이름 옆. 겨울 바다가 끝나는 1/31까지 ===== */
+var NEWF_UNTIL=new Date(2027,1,1).getTime();
+function newFish(L){try{return !!(L&&L.winter)&&Date.now()<NEWF_UNTIL}catch(e){return false}}
+function nwfTag(){var e=document.createElement('em');e.className='nwf';e.textContent='NEW';e.setAttribute('aria-label',T('새 물고기'));return e}
+(function(){var st=document.createElement('style');st.textContent='.nwf{font-style:normal;font-family:var(--disp,inherit);font-size:11px;line-height:1;color:#fff;background:linear-gradient(180deg,#FF6B6B,#E83B4B);padding:3px 7px 4px;border-radius:999px;box-shadow:0 0 0 2px #fff,0 2px 0 rgba(0,0,0,.22);letter-spacing:.04em;pointer-events:none;white-space:nowrap}'+
+ '.pick>.nwf{position:absolute;top:5px;right:6px;z-index:2}'+
+ '#pickbar button{position:relative}#pickbar button>.nwf{position:absolute;top:-4px;right:-2px;font-size:9.5px;padding:2px 5px 3px;z-index:2}'+
+ '.fpk-c{position:relative}.fpk-c>.nwf{position:absolute;top:4px;left:4px;font-size:9.5px;padding:2px 5px 3px;z-index:2}'+
+ '#hmNwf{margin-left:6px;vertical-align:middle;font-size:10.5px;display:inline-block;transform:translateY(-2px)}';document.head.appendChild(st)})();
+function nwfMark(){try{SPECIES.forEach(function(L){if(!newFish(L))return;['pick-','pb-'].forEach(function(px){var b=$(px+L.id);if(b&&!b.querySelector(':scope>.nwf'))b.appendChild(nwfTag())})})}catch(e){}}
+var renderMenuNW=renderMenu;renderMenu=function(){var r=renderMenuNW.apply(this,arguments);nwfMark();return r};
+var renderPickbarNW=renderPickbar;renderPickbar=function(){var r=renderPickbarNW.apply(this,arguments);nwfMark();return r};
+var fpRenderNW=fpRender;fpRender=function(){var r=fpRenderNW.apply(this,arguments);try{var g=$('fpkG');if(g){var nm={};SPECIES.forEach(function(L){if(newFish(L))nm[L.name]=1});Array.prototype.forEach.call(g.querySelectorAll('.fpk-c'),function(c){var b=c.querySelector('b');if(b&&nm[b.textContent]&&!c.querySelector(':scope>.nwf'))c.appendChild(nwfTag())})}}catch(e){}return r};
+var refreshHomeNW=refreshHome;refreshHome=function(keep){var r=refreshHomeNW.apply(this,arguments);try{var n=$('hmName'),t=$('hmNwf');if(t)t.remove();if(n&&newFish(byId(sel))){t=nwfTag();t.id='hmNwf';n.appendChild(t)}nwfMark()}catch(e){}return r};
+abyTr(TRT,{'새 물고기':'New fish'});abyTr(TRJ,{'새 물고기':'新しい魚'});
 var HW_SWAP=20;
 function hwSwapCheck(){try{if(hwSeason())return;var n=save.hwCandy|0;if(n<1)return;if(!((save.runs|0)>0))return;
   if(document.querySelector('.coach')||!(state==='home'||state==='menu')){setTimeout(hwSwapCheck,2500);return}
@@ -14502,9 +14517,9 @@ abyTr(TRT,{"움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 
 abyTr(TRT,{"펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등": "Pets fight with you: all 13 pets get a Deep Survival ability — whale water spout, pirate ship cannons, sub torpedo, bunny heals and more", "펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기": "Raise your pets: feed treats (pearls) up to Lv 5 — tap 'Pet' on the Deep Survival screen", "친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000": "Invite gift: when a new friend enters your aquarium code within 3 days, you both get 30 gems and 3,000 pearls", "친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요": "Friend aquariums are easier to find: the 'Friends' button in your tank, and we'll ask if you want to share after decorating", "안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리": "Notices no longer cover window titles; tidier long chapter names and small-screen buttons", "펫이 함께 싸워요 🐾 + 친구 초대 선물": "Pets join the fight 🐾 + invite gifts"});abyTr(TRJ,{"펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등": "ペットが一緒に戦う：13種すべてに深海サバイバルの能力 — クジラの潮吹き・海賊船の大砲・潜水艦の魚雷・ウサギの回復など", "펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기": "ペットを育てる：おやつ（真珠）でLv 5まで — 深海サバイバル画面の「ペット」ボタンから", "친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000": "招待プレゼント：始めたばかりの友だちが3日以内に水族館コードを入れると、2人とも宝石30・真珠3,000", "친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요": "友だちの水族館を見つけやすく：水族館の「友だち」ボタン、デコが終わると公開するか聞きます", "안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리": "お知らせが画面のタイトルを隠さないように、長い章名・小さい画面のボタンを整理", "펫이 함께 싸워요 🐾 + 친구 초대 선물": "ペットが一緒に戦う🐾＋招待プレゼント"});
 NEWS['1.1.17']=[T("겨울 바다 새 물고기 8종: 빙어 · 뚝지 · 북극대구 · 바다천사 클리오네 · 얼음물고기 · 북극곤들매기 · 늑대고기, 보석 전용 오로라 물고기 (세트 '얼음 바다 친구들')"),T("펫이 함께 싸워요: 펫 13종에 심해 생존 능력 — 고래 물 뿜기 · 해적선 대포 · 잠수함 어뢰 · 토끼 하트 회복 등"),T("펫 키우기: '펫 간식'(진주)으로 Lv 5까지 — 심해 생존 화면 '펫' 버튼에서 데려가기 · 키우기"),T("친구 초대 선물: 새로 시작한 친구가 3일 안에 내 수족관 코드를 넣으면 둘 다 보석 30 · 진주 3,000"),T("친구 수족관 찾기 쉽게: 수족관 오른쪽 '친구' 버튼, 꾸미기를 마치면 공개할지 물어봐요"),T("움직임 다듬기: 펫이 더 자연스럽게 따라오고(먹을 때 튀지 않게), 물고기는 속도에 맞춰 꼬리를 흔들어요 · 꾸미기 옆모습 맞춤"),T("밸런스: 광란 · 투지 강화, 부풀기 · 먹물 재사용 시간 조금 늘림, 고래 · 해적선 펫 피해 조정, 대전 '1위로 마치기' 버튼 없앰"),T("안내가 창 제목을 가리지 않게, 긴 장 이름 · 좁은 화면 버튼 정리")];NEWS_LEAD['1.1.17']=T("겨울 바다 새 물고기 8종 ❄️ + 펫이 함께 싸워요 🐾");
 /* 1.1.18 업데이트 소식 */
-abyTr(TRT,{"진주 샘 · 보물 상자에 진주가 더 많이 쌓여요: 최대 8시간치 → 12시간치":"Pearl Spring and treasure chests hold more pearls: up to 12 hours' worth (was 8)","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"When the Halloween event ends (from Nov 22), leftover candy turns into pearls: 1 candy = 20 pearls, plus any unclaimed candy gifts","진주 보관이 12시간치로 늘었어요 🫧":"Pearl storage now holds 12 hours' worth 🫧"});
-abyTr(TRJ,{"진주 샘 · 보물 상자에 진주가 더 많이 쌓여요: 최대 8시간치 → 12시간치":"真珠の泉・宝箱にたまる真珠が増えました：最大8時間分 → 12時間分","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"ハロウィンイベント終了後（11月22日から）、残ったキャンディを真珠に交換：キャンディ1個＝真珠20、受け取っていないキャンディのプレゼントも一緒に","진주 보관이 12시간치로 늘었어요 🫧":"真珠の保管が12時間分に増えました 🫧"});
-NEWS['1.1.18']=[T("진주 샘 · 보물 상자에 진주가 더 많이 쌓여요: 최대 8시간치 → 12시간치"),T("할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께")];NEWS_LEAD['1.1.18']=T("진주 보관이 12시간치로 늘었어요 🫧");
+abyTr(TRT,{"진주를 더 많이 받아요: 한 판 최대 3만 → 10만 · 진주 샘 · 보물 상자 최대 8시간치 → 12시간치":"More pearls: up to 100,000 per run (was 30,000) · Pearl Spring and treasure chests hold up to 12 hours' worth (was 8)","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"When the Halloween event ends (from Nov 22), leftover candy turns into pearls: 1 candy = 20 pearls, plus any unclaimed candy gifts","진주를 더 많이 모을 수 있어요 🫧":"Collect more pearls 🫧"});
+abyTr(TRJ,{"진주를 더 많이 받아요: 한 판 최대 3만 → 10만 · 진주 샘 · 보물 상자 최대 8시간치 → 12시간치":"真珠がもっともらえる：1回の上限 3万 → 10万 · 真珠の泉・宝箱は最大8時間分 → 12時間分","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"ハロウィンイベント終了後（11月22日から）、残ったキャンディを真珠に交換：キャンディ1個＝真珠20、受け取っていないキャンディのプレゼントも一緒に","진주를 더 많이 모을 수 있어요 🫧":"真珠をもっと集められます 🫧"});
+NEWS['1.1.18']=[T("진주를 더 많이 받아요: 한 판 최대 3만 → 10만 · 진주 샘 · 보물 상자 최대 8시간치 → 12시간치"),T("할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께")];NEWS_LEAD['1.1.18']=T("진주를 더 많이 모을 수 있어요 🫧");
 var PET_UP=null;
 var renderAccPET=renderAcc;renderAcc=function(){var r=renderAccPET.apply(this,arguments);try{if(accSlot==='pet')Object.keys(PET_AB).forEach(function(id){var g=$('acc-'+id);if(!g||g.querySelector('.accab'))return;var em=g.querySelector('em');var sp=document.createElement('span');sp.className='accab';sp.textContent='🐾 '+T(PET_AB[id].n);g.insertBefore(sp,em)})}catch(e){}return r};
 function petGoShop(id){try{['svPet','svCh'].forEach(function(k){var o=$(k);if(o)o.hidden=true});accSlot='pet';showTab('sea');renderAcc();setTimeout(function(){var g=$('acc-'+id);if(g){g.scrollIntoView({block:'center',behavior:'smooth'});g.click()}},120)}catch(e){}}

@@ -1,6 +1,6 @@
 What's new in 1.1.18:
 (1) No new purchases, accounts, permissions or SDKs.
-(2) Aquarium house (Pearl Spring) and treasure chests now store up to 12 hours of in-game pearls instead of 8 hours.
+(2) The safety cap on in-game pearls earned in one run was raised from 30,000 to 100,000. Aquarium house (Pearl Spring) and treasure chests now store up to 12 hours of in-game pearls instead of 8 hours.
 (3) The seasonal Halloween event (Oct 10 - Nov 21) collects in-game candy. When the event ends (from Nov 22), any leftover candy is automatically converted to in-game pearls (1 candy = 20 pearls) and any reached but unclaimed candy rewards are granted. A one-time popup explains this. No real money is involved.
 (4) The in-app "What's new" popup describes these changes.
 

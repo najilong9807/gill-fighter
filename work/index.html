@@ -11058,7 +11058,7 @@ function roomInvite(c){if(!/^\d{4}$/.test(c))return;if(state==='play'||state==='
 function appNative(){try{var C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.App?C.Plugins.App:null}catch(e){return null}}
 /* 1.1.5 새 버전 안내: 앱스토어에 올라간 버전이 지금 앱보다 높으면 처음 화면에 띠를 띄우고,
    그 버전을 처음 알게 됐을 때(또는 '나중에' 뒤 3일 지나서) 안내 창을 한 번 보여 준다. 업데이트는 앱스토어로 보낸다 */
-var APP_VER='1.1.18',UPD={v:null,notes:'',at:0,busy:false};
+var APP_VER='1.1.19',UPD={v:null,notes:'',at:0,busy:false};
 function verGt(a,b){a=String(a||'').split('.');b=String(b||'').split('.');for(var i=0;i<4;i++){var x=parseInt(a[i]||0,10)||0,y=parseInt(b[i]||0,10)||0;if(x!==y)return x>y}return false}
 function updCheck(force){
   var C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform())&&location.search.indexOf('updtest')<0)return;
@@ -14037,6 +14037,14 @@ var OV_LM=null;function ovPlace(){try{var m=$('oMsg'),row=document.querySelector
   var land=matchMedia('(orientation:landscape) and (max-height:560px)').matches;
   if(land&&m.parentNode!==row){row.insertBefore(m,row.firstChild);m.classList.add('omland')}else if(!land&&m.parentNode===row){OV_LM.parentNode.insertBefore(m,OV_LM.nextSibling);m.classList.remove('omland')}}catch(e){}}
 var endRunOP=endRun;endRun=function(){var r=endRunOP.apply(this,arguments);ovPlace();return r};
+/* 1.1.18(10/27 종한 스크린샷: 가로 대전 결과에서 안내 4번째 줄부터 잘림): 가로 화면에서 안내 칸 높이를 오른쪽 남는 자리만큼 늘리고, 그래도 넘치면 아래로 흐려지며 스크롤 */
+function ovFitLand(){try{var m=$('oMsg');if(!m||!m.classList.contains('omland')||$('over').hidden)return;var pn=m.closest('.panel'),row=m.parentNode;if(!pn||!row)return;
+  m.style.maxHeight='none';var pr=pn.getBoundingClientRect(),pad=parseFloat(getComputedStyle(pn).paddingBottom)||12,btnH=0;
+  [].forEach.call(row.children,function(c){if(c!==m&&c.offsetParent){var cs=getComputedStyle(c);btnH+=c.getBoundingClientRect().height+(parseFloat(cs.marginTop)||0)+(parseFloat(cs.marginBottom)||0)}});
+  var gap=parseFloat(getComputedStyle(row).rowGap)||8,avail=pr.bottom-pad-m.getBoundingClientRect().top-btnH-gap*row.children.length-4;
+  m.style.maxHeight=Math.max(78,Math.floor(avail))+'px';m.classList.toggle('omfade',m.scrollHeight>m.clientHeight+2)}catch(e){}}
+var ovPlaceFL=ovPlace;ovPlace=function(){var r=ovPlaceFL.apply(this,arguments);setTimeout(ovFitLand,30);setTimeout(ovFitLand,400);return r};
+(function(){var st=document.createElement('style');st.textContent='#oMsg.omland.omfade{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 18px),transparent)}';document.head.appendChild(st)})();
 try{addEventListener('resize',function(){setTimeout(ovPlace,60)});addEventListener('orientationchange',function(){setTimeout(ovPlace,250)})}catch(e){}
 (function(){var st=document.createElement('style');st.textContent='@media (orientation:landscape) and (max-height:560px){'
  +'#over .row #oMsg.omland{margin:0;padding:6px 10px;max-height:78px;overflow-y:auto;font-size:12px;line-height:1.3;text-align:left}#over .row #oMsg.omland .ml,#over .row #oMsg.omland .oby{font-size:12px!important;line-height:1.3;margin:1px 0}#over .row #oMsg.omland .ml::before{width:6px;height:6px}'

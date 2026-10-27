@@ -147,8 +147,14 @@ def step_previews(api, vid):
                 set_id = sets[pt]['id']; old = [x['id'] for x in api.all('appPreviewSets/%s/appPreviews?limit=10' % set_id)]
             else:
                 set_id = None
-            log('PREVIEW', loc, pt, 'old', len(old), 'new 1')
-            if DRY: continue
+            same = False
+            if set_id and len(old) == 1:
+                try:
+                    at = api.get('appPreviews/%s' % old[0])['data']['attributes']
+                    same = (at.get('sourceFileChecksum') or '') == hashlib.md5(open(f, 'rb').read()).hexdigest() and ((at.get('videoDeliveryState') or {}).get('state')) != 'FAILED'
+                except Exception: same = False
+            log('PREVIEW', loc, pt, 'old', len(old), 'new 1', 'SAME-skip' if same else '')
+            if DRY or same: continue
             if not set_id:
                 set_id = api.req('POST', 'appPreviewSets', {'data': {'type': 'appPreviewSets', 'attributes': {'previewType': pt},
                          'relationships': {'appStoreVersionLocalization': {'data': {'type': 'appStoreVersionLocalizations', 'id': lid}}}}})['data']['id']

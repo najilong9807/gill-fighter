@@ -9,7 +9,7 @@ on:
         default: '1'
         required: true
       steps:
-        description: '단계 (version,whatsnew,shots,gc / 스토어 글: ,listing / 빌드 붙이기 · 심사 메모 · 제출: ,build,notes,submit / 판매 중 홍보 문구만: promo_now)'
+        description: '단계 (version,whatsnew,shots,gc / 스토어 글: ,listing / 빌드 붙이기 · 심사 메모 · 제출: ,build,notes,submit / 미리보기 영상: ,previews / 판매 중 홍보 문구만: promo_now)'
         default: 'version,whatsnew,shots,gc'
         required: true
       submit_ok:
@@ -46,6 +46,6 @@ jobs:
           set -o pipefail
           ec=0; python3 store_meta.py 2>&1 | tee out.txt || ec=$?
           # 로그 파일을 못 여는 환경에서도 결과를 보려고 핵심 줄만 알림(annotation)으로 남김 — 키 값은 원래 출력 안 함
-          grep -E "VERSION|state|SUBMIT|submit|BUILD|build|NOTES|WHATSNEW|ERR|Error|DRY" out.txt | cut -c1-300 | head -40 | sed 's/^/::notice::/' || true
+          grep -E "VERSION|state|SUBMIT|submit|BUILD|build|NOTES|WHATSNEW|SHOTS|uploaded|PREVIEW|preview|ERR|Error|DRY" out.txt | cut -c1-300 | head -40 | sed 's/^/::notice::/' || true
           if [ "$ec" != "0" ]; then tail -8 out.txt | cut -c1-300 | sed 's/^/::notice::TAIL /' || true; fi
           exit $ec

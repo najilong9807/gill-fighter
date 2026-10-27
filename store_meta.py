@@ -26,6 +26,10 @@ SHOT_SETS = [
     ('ja', 'APP_IPHONE_67', '69_ja'), ('ja', 'APP_IPHONE_65', '65_ja'), ('ja', 'APP_IPAD_PRO_3GEN_129', 'ipad13_ja'),
 ]
 def shot_files(prefix):
+    # 1.1.18부터: store/shots_<버전>/ 에 6장이 다 있으면 그 버전 것을 씀
+    vd = os.path.join(ROOT, 'store', 'shots_%s' % VER.replace('.', ''))
+    vf = [os.path.join(vd, '%s_%d.jpg' % (prefix, n)) for n in range(1, 7)]
+    if all(os.path.exists(f) for f in vf): return vf
     out = []
     for n in range(1, 7):
         d = 'shots_1113' if n == 6 else 'shots_1112'
@@ -123,6 +127,53 @@ def wait_done(api, ids, limit=240):
             elif st == 'FAILED': raise RuntimeError('screenshot processing failed ' + sid)
         if left: time.sleep(4)
     return not left
+
+# 1.1.18 앱 미리보기 영상: store/previews_<버전>/preview_<언어>.mp4 (886x1920, 15~30초) → 아이폰 6.9 · 6.5 칸
+PREV_SETS = [('ko', 'ko'), ('en-US', 'en'), ('ja', 'ja')]
+PREV_TYPES = ['IPHONE_67', 'IPHONE_65']
+def step_previews(api, vid):
+    locs = localizations(api, vid)
+    d = os.path.join(ROOT, 'store', 'previews_%s' % VER.replace('.', ''))
+    for loc, lg in PREV_SETS:
+        f = os.path.join(d, 'preview_%s.mp4' % lg)
+        if not os.path.exists(f): raise RuntimeError('missing ' + f)
+        if loc not in locs: log('WARN locale missing in ASC', loc); continue
+        lid = locs[loc]['id']
+        sets = {x['attributes']['previewType']: x for x in api.all('appStoreVersionLocalizations/%s/appPreviewSets?limit=50' % lid)}
+        for pt in PREV_TYPES:
+            old = []
+            if pt in sets:
+                set_id = sets[pt]['id']; old = [x['id'] for x in api.all('appPreviewSets/%s/appPreviews?limit=10' % set_id)]
+            else:
+                set_id = None
+            log('PREVIEW', loc, pt, 'old', len(old), 'new 1')
+            if DRY: continue
+            if not set_id:
+                set_id = api.req('POST', 'appPreviewSets', {'data': {'type': 'appPreviewSets', 'attributes': {'previewType': pt},
+                         'relationships': {'appStoreVersionLocalization': {'data': {'type': 'appStoreVersionLocalizations', 'id': lid}}}}})['data']['id']
+            for pid in old: api.req('DELETE', 'appPreviews/%s' % pid)
+            data = open(f, 'rb').read(); name = os.path.basename(f)
+            j = api.req('POST', 'appPreviews', {'data': {'type': 'appPreviews', 'attributes': {'fileName': name, 'fileSize': len(data), 'mimeType': 'video/mp4', 'previewFrameTimeCode': '00:00:02:00'},
+                    'relationships': {'appPreviewSet': {'data': {'type': 'appPreviewSets', 'id': set_id}}}}})
+            pid = j['data']['id']
+            for op in j['data']['attributes'].get('uploadOperations') or []:
+                h = {x['name']: x['value'] for x in op.get('requestHeaders') or []}
+                chunk = data[op['offset']:op['offset'] + op['length']]
+                for attempt in range(4):
+                    r = api.s.request(op.get('method', 'PUT'), op['url'], headers=h, data=chunk, timeout=300)
+                    if r.status_code < 300: break
+                    time.sleep(3)
+                else:
+                    raise RuntimeError('preview upload part failed %s %d' % (name, r.status_code))
+            api.req('PATCH', 'appPreviews/%s' % pid, {'data': {'type': 'appPreviews', 'id': pid,
+                    'attributes': {'uploaded': True, 'sourceFileChecksum': hashlib.md5(data).hexdigest()}}})
+            st = None
+            for k in range(60):
+                st = ((api.get('appPreviews/%s' % pid)['data']['attributes'].get('videoDeliveryState') or {}).get('state'))
+                if st in ('COMPLETE', 'FAILED'): break
+                time.sleep(5)
+            log('  preview', loc, pt, 'state', st)
+            if st == 'FAILED': raise RuntimeError('preview processing failed ' + loc + ' ' + pt)
 
 def step_shots(api, vid):
     locs = localizations(api, vid)
@@ -275,6 +326,7 @@ def main():
         else:
             if 'whatsnew' in STEPS: step_whatsnew(api, v['id'])
             if 'shots' in STEPS: step_shots(api, v['id'])
+            if 'previews' in STEPS: step_previews(api, v['id'])
             if 'listing' in STEPS: step_listing(api, v['id'])
             if 'build' in STEPS: step_build(api, v)
             if 'notes' in STEPS: step_notes(api, v)

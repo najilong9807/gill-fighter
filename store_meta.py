@@ -134,6 +134,7 @@ PREV_TYPES = ['IPHONE_67', 'IPHONE_65']
 def step_previews(api, vid):
     locs = localizations(api, vid)
     d = os.path.join(ROOT, 'store', 'previews_%s' % VER.replace('.', ''))
+    pend = []
     for loc, lg in PREV_SETS:
         f = os.path.join(d, 'preview_%s.mp4' % lg)
         if not os.path.exists(f): raise RuntimeError('missing ' + f)
@@ -167,13 +168,15 @@ def step_previews(api, vid):
                     raise RuntimeError('preview upload part failed %s %d' % (name, r.status_code))
             api.req('PATCH', 'appPreviews/%s' % pid, {'data': {'type': 'appPreviews', 'id': pid,
                     'attributes': {'uploaded': True, 'sourceFileChecksum': hashlib.md5(data).hexdigest()}}})
-            st = None
-            for k in range(60):
-                st = ((api.get('appPreviews/%s' % pid)['data']['attributes'].get('videoDeliveryState') or {}).get('state'))
-                if st in ('COMPLETE', 'FAILED'): break
-                time.sleep(5)
-            log('  preview', loc, pt, 'state', st)
-            if st == 'FAILED': raise RuntimeError('preview processing failed ' + loc + ' ' + pt)
+            pend.append((loc, pt, pid)); log('  preview uploaded', loc, pt)
+    t0 = time.time(); left = list(pend)
+    while left and time.time() - t0 < 600:
+        for q in list(left):
+            st = ((api.get('appPreviews/%s' % q[2])['data']['attributes'].get('videoDeliveryState') or {}).get('state'))
+            if st == 'COMPLETE': left.remove(q); log('  preview ready', q[0], q[1])
+            elif st == 'FAILED': raise RuntimeError('preview processing failed %s %s' % (q[0], q[1]))
+        if left: time.sleep(8)
+    log('PREVIEWS done', len(pend) - len(left), '/', len(pend), 'ready' + ('' if not left else ' (rest still processing at Apple)'))
 
 def step_shots(api, vid):
     locs = localizations(api, vid)
@@ -189,8 +192,15 @@ def step_shots(api, vid):
             set_id = sets[dtype]['id']; old = [x['id'] for x in api.all('appScreenshotSets/%s/appScreenshots?limit=50' % set_id)]
         else:
             set_id = None
-        log('SHOTS', loc, dtype, 'old', len(old), 'new', len(files))
-        if DRY: continue
+        same = False
+        if set_id and len(old) == len(files):
+            try:
+                have = [((api.get('appScreenshots/%s' % x)['data']['attributes'].get('sourceFileChecksum')) or '') for x in old]
+                want = [hashlib.md5(open(f, 'rb').read()).hexdigest() for f in files]
+                same = have == want
+            except Exception: same = False
+        log('SHOTS', loc, dtype, 'old', len(old), 'new', len(files), 'SAME-skip' if same else '')
+        if DRY or same: continue
         if not set_id:
             set_id = api.req('POST', 'appScreenshotSets', {'data': {'type': 'appScreenshotSets', 'attributes': {'screenshotDisplayType': dtype},
                      'relationships': {'appStoreVersionLocalization': {'data': {'type': 'appStoreVersionLocalizations', 'id': lid}}}}})['data']['id']

@@ -5677,7 +5677,7 @@ function startRun(m){crumb('run:'+m+':'+sel);try{pgImgsFree('')}catch(e){}if(!SV
     if(P.boost.shield)P.fx.ghost=Math.max(P.fx.ghost||0,6)}
   P.full=false;P.hunt=0;P.huntT=0;P.huntPearls=0;P.starGems=0;$('hud').dataset.full='0';
   P.grownW=0;P.deep=0;P.zone=zoneAt(P.y);
-  P.biteCd=0;P.chomp=0;P.nibbles=0;P.cbase={};P.glowR=0;P.glowK=0;PH.length=0;deepReset();P.time=0;P.score0=0;P.newRec=false;P.newRecTime=false;
+  P.biteCd=0;P.chomp=0;P.nibbles=0;P.cbase={};P.glowR=0;P.glowK=0;PH.length=0;P.hook=null;P.hooked=false;deepReset();P.time=0;P.score0=0;P.newRec=false;P.newRecTime=false;
   P.startS=P.s;P.msS=0;P.coachBite=0;P.coachT=0;P.contd=false;P.adContd=false;P.adFail=false;P.quit=false;P.lastGain=0;P.bonus=0;decoy=null;inks.length=0;flashT=0;
   P.mpBonus=1;P.kills=0;P.deaths=0;P.kst=0;P.kstT=0;P.kbest=0;P.rank=0;mpT=mode==='multi'?MP_TIME:0;bots.length=0;letter=null;goalReset();if(mode==='multi'){setupBots();P.fx.ghost=Math.max(P.fx.ghost||0,3.5);NET.shard=1;NET.retry=0;NET.fails=0;NET.rc=0;netStart()}else netStop();
   $('hTime').hidden=mode!=='race';$('hud').dataset.mode=mode;P.peak=99;
@@ -6142,7 +6142,7 @@ var ZFOOD=[.1,.17,.27,.4,.58,.8,1.15],ZFOODA=[2.2,3.2,4.6,6.5,9,12.5,18];
 function deepOn(){return (mode==='single'&&!P.camp&&!P.surv)||mode==='multi'}
 function zoneFoodCap(z){if(!deepOn())return 1e9;return fair()?P.startS*ZFOODA[z]:Math.max(P.capS*ZFOOD[z],P.startS*(1.5+.7*z))}
 function schK(){return fair()?1:(1-.03*rsLv('school'))*(P.boost&&P.boost.school?.7:1)}
-function deepReset(){DPZ.schT=P.boost&&P.boost.school&&!fair()?15:rnd(28,40)*schK();DPZ.school=null;DPZ.gull=null;DPZ.gullT=3;DPZ.tip={};DPZ.hungry=false;DPZ.hT=0}
+function deepReset(){DPZ.schT=P.boost&&P.boost.school&&!fair()?15:rnd(28,40)*schK();DPZ.school=null;DPZ.gull=null;DPZ.gullT=3;DPZ.tip={};DPZ.hungry=false;DPZ.hT=0;baitReset()}
 function deepTick(dt){
   if(!deepOn()||P.dead){DPZ.gull=null;return}
   var z=zoneAt(P.y),R=viewR(),i,f;
@@ -6170,6 +6170,7 @@ function deepTick(dt){
     DPZ.gull={x:P.x+P.vx*.9,y:clamp(P.y+P.vy*.9,H*.005,H*2/ZONES.length),r:P.s*1.5+34*scaleOf(P.s),t:0,warn:1.7,hit:0,dir:Math.random()<.5?1:-1};
     if(!DPZ.tip.gull){DPZ.tip.gull=1;banner(T('갈매기가 노려요!'),T('큰 물고기는 얕은 바다가 위험해요 ↓'))}}}
   else DPZ.gullT=Math.max(DPZ.gullT,2);
+  baitTick(dt,z);
 }
 /* 1.1.9(빌드 156) 갈매기: 내리꽂는 순간 빨간 원 안에서 '가장 큰 물고기' 하나만 쪼인다(나 · 야생 · AI 모두, 다른 사람은 그 사람 화면에서 따로).
    큰 물고기를 원 안으로 끌고 들어오면 그 물고기가 대신 쪼인다. 예고 1.15초 → 1.6초 */
@@ -6237,6 +6238,118 @@ function deepDrawWorld(){
       ctx.save();ctx.translate(rx,ry);ctx.rotate(-dir*.5*(1-u));drawGull(0,0,gs,dir,Math.sin(t*14),0,!!g.got);ctx.restore()}
     ctx.restore()}
 }
+/* ===== 1.1.19 낚시 미끼 (10/27 종한 제안): 싱글 기록 도전 얕은 바다(맨 위 · 그 밑)에 가끔 낚싯줄에 매달린 미끼 물고기가 내려온다.
+   진짜 물고기와 똑같이 생겼지만 자세히 보면 위로 가는 희미한 줄 · 입가 바늘 · 가끔 반짝임이 있다. 모르고 먹으면 물 밖으로 끌려 나가
+   아저씨가 들고 기념사진을 찍고 판이 끝난다(진주 · 기록은 보통 끝과 같음, 이어하기 하면 아저씨가 놓아줌).
+   한 판에 최대 2번, 시작 30초 뒤부터, 연습 바다 · 대전 · 탐험 · 심해 생존에는 없음 */
+var BAIT_MAX=2;
+function baitReset(){DPZ.bait=null;DPZ.baitT=rnd(35,60);DPZ.baitN=0}
+function baitOn(){return mode==='single'&&!P.camp&&!P.surv&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)}
+function baitPos(b){var u=clamp(b.t/1.1,0,1),e=1-(1-u)*(1-u),y=b.y*e+(-b.s*2)*(1-e);
+  if(b.up)y-=b.up*b.up*viewR()*1.6;
+  var jig=b.t>1.1?Math.sin(b.t*1.7+b.ph)*b.s*.22+Math.max(0,Math.sin(b.t*.9+b.ph*2))*Math.max(0,Math.sin(b.t*9))*b.s*.18:0;
+  return [b.x+Math.sin(b.t*.6+b.ph)*b.s*.25,y-jig]}
+function baitTick(dt,z){
+  if(!baitOn()||P.hook){return}
+  var b=DPZ.bait;
+  if(b){b.t+=dt;if(b.t>b.life){b.up=(b.up||0)+dt*1.4;if(b.up>1){DPZ.bait=null;DPZ.baitT=rnd(30,50)}return}
+    if(invuln()||b.t<.9)return;
+    var q=baitPos(b),pm=mouthOf(P.x,P.y,P.s,P.ang,P.look);
+    if(Math.hypot(pm[0]-q[0],pm[1]-q[1])<pm[2]+b.s*.75)hookStart(b,q);
+    return}
+  if(DPZ.baitN>=BAIT_MAX||(P.time||0)<30)return;
+  if(z>1){DPZ.baitT=Math.max(DPZ.baitT,4);return}
+  DPZ.baitT-=dt;if(DPZ.baitT>0)return;
+  var R=viewR(),dir=Math.cos(P.ang)>=0?1:-1,zb=H*2/ZONES.length,pool=HAB[0]&&HAB[0].length?HAB[0]:SPECIES,s=P.s*rnd(.42,.66),
+    x=P.x+dir*R*rnd(.45,.75),y=clamp(P.y+rnd(-.35,.25)*R,Math.max(s*3,H*.02),zb*.92),fd=Math.random()<.5?1:-1;
+  DPZ.bait={x:x,y:y,s:s,look:pool[(Math.random()*pool.length)|0],ang:fd>0?-.18:Math.PI+.18,t:0,life:rnd(13,18),ph:Math.random()*6,up:0};
+  DPZ.baitN++;crumb('bait')}
+/* 미끼 그리기(물고기들과 같은 층, 내 물고기 아래): 몸 · 희미한 낚싯줄 · 입가 바늘 · 가끔 반짝 */
+function baitDraw(){var b=DPZ.bait;if(!b||state!=='play'||!baitOn())return;var q=baitPos(b),mq=mouthOf(q[0],q[1],b.s,b.ang,b.look),topY=cam.y-ch/2/zoom;
+  ctx.save();ctx.globalAlpha=.32;ctx.lineWidth=1.1/zoom;ctx.strokeStyle='#FFFFFF';ctx.beginPath();ctx.moveTo(mq[0],mq[1]);ctx.lineTo(mq[0]+Math.sin(t*.8+b.ph)*4/zoom,Math.min(topY-30/zoom,-40/zoom));ctx.stroke();ctx.restore();
+  drawFish(ctx,q[0],q[1],b.s,b.ang,b.look,{px:b.s*zoom,phase:b.ph,minLw:1.2/zoom});
+  ctx.save();ctx.lineWidth=Math.max(1.4/zoom,b.s*.07);ctx.lineCap='round';ctx.strokeStyle='rgba(225,232,240,.85)';ctx.beginPath();ctx.moveTo(mq[0],mq[1]-b.s*.18);ctx.lineTo(mq[0],mq[1]+b.s*.12);ctx.arc(mq[0]-b.s*.13,mq[1]+b.s*.12,b.s*.13,0,Math.PI*.85);ctx.stroke();ctx.restore();
+  var gl=(b.t*1.0+b.ph)%2.2;if(gl<.35&&!reduce){var ga=Math.sin(gl/.35*Math.PI),gx=q[0]+Math.cos(b.ang)*b.s*.15,gy=q[1]-b.s*.25,gr=b.s*(.35+.25*ga);
+    ctx.save();ctx.globalAlpha=.75*ga;ctx.globalCompositeOperation='lighter';ctx.drawImage(glow('255,255,255'),gx-gr,gy-gr,gr*2,gr*2);ctx.globalCompositeOperation='source-over';
+    ctx.strokeStyle='#FFFFFF';ctx.lineWidth=1.6/zoom;ctx.beginPath();ctx.moveTo(gx-gr*.7,gy);ctx.lineTo(gx+gr*.7,gy);ctx.moveTo(gx,gy-gr*.7);ctx.lineTo(gx,gy+gr*.7);ctx.stroke();ctx.restore()}}
+/* 걸렸을 때: 0.45초 버둥 → 1.2초 동안 물 밖으로 끌려 나감 → 사진 → 판 끝 */
+function hookStart(b,q){P.hook={t:0,x0:P.x,y0:P.y,shot:0};P.hooked=true;DPZ.bait=null;joy=null;keys={};P.vx=P.vy=0;
+  try{bannerOff()}catch(e){}texts.push({x:P.x,y:P.y-P.s*1.8,txt:T('앗! 미끼였어!'),life:1.4,big:1});
+  burst(q[0],q[1],P.s*.6,6);shake=reduce?0:.3;buzz(80);try{MUS.sfx('bite')}catch(e){}crumb('hooked')}
+function hookTick(dt){var h=P.hook;h.t+=dt;
+  if(h.t<.45){P.x=h.x0+Math.sin(h.t*60)*P.s*.12;P.ang=-Math.PI/2+Math.sin(h.t*40)*.6}
+  else if(h.t<1.65){var u=(h.t-.45)/1.2,e=u*u;P.x=h.x0+Math.sin(h.t*25)*P.s*.08*(1-u);P.y=h.y0+(-P.s*5-viewR()*.4-h.y0)*e;P.ang=-Math.PI/2+Math.sin(h.t*22)*.45;
+    if(h.y0+(-h.y0)*e<=0&&!h.spl){h.spl=1;for(var i=0;i<8;i++)fxs.push({x:P.x+rnd(-1,1)*P.s,y:-2,vy:-P.s*rnd(1,2.5),r:P.s*rnd(.08,.18),life:.6,col:'rgba(255,255,255,.85)'})}}
+  else if(!h.shot){h.shot=1;hookShow()}
+  if(h.shot&&h.t>=5.4)hookFinish()}
+function hookFinish(){var h=P.hook;if(!h||h.done)return;h.done=1;var o=$('hookShot');if(o)o.hidden=true;endRun(false,false,null)}
+/* 걸린 내 물고기와 낚싯줄(물고기 위 층) */
+function hookDrawWorld(){var h=P.hook;if(!h||state!=='play'||h.t>=1.65)return;var pm=mouthOf(P.x,P.y,P.s,P.ang,P.look),topY=cam.y-ch/2/zoom;
+  ctx.save();ctx.lineWidth=Math.max(1.6/zoom,P.s*.04);ctx.strokeStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.moveTo(pm[0],pm[1]);ctx.lineTo(pm[0],Math.min(topY-30/zoom,pm[1]-P.s*3));ctx.stroke();ctx.restore()}
+/* 기념사진(폴라로이드): 배 위에서 아저씨가 한 손으로 줄을 들어 올리고, 입에 바늘이 걸린 내 물고기가 매달려 있다 */
+function hookPaint(cv,L,cm){var W=300,Hh=340,d=Math.min(3,window.devicePixelRatio||2);cv.width=W*d;cv.height=Hh*d;cv.style.width=W+'px';cv.style.height=Hh+'px';
+  var c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);
+  var g=c.createLinearGradient(0,0,0,Hh);g.addColorStop(0,'#D5E3EC');g.addColorStop(1,'#F2F6F8');c.fillStyle=g;c.fillRect(0,0,W,Hh);
+  c.fillStyle='#A9BFCC';c.fillRect(0,Hh*.6,W,Hh*.4);c.fillStyle='#93AAB8';c.beginPath();c.ellipse(W*.12,Hh*.6,W*.14,Hh*.018,0,Math.PI,0);c.fill();
+  c.fillStyle='#C9302C';c.beginPath();c.moveTo(W*.44,Hh*.33);c.lineTo(W*1.02,-2);c.lineTo(W*1.02,Hh*.44);c.lineTo(W*.6,Hh*.37);c.closePath();c.fill();
+  c.fillStyle='#A3221F';c.beginPath();c.moveTo(W*.6,Hh*.37);c.lineTo(W*1.02,Hh*.44);c.lineTo(W*1.02,Hh*.47);c.lineTo(W*.6,Hh*.395);c.closePath();c.fill();
+  c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=.8;c.beginPath();c.moveTo(W*.04,Hh*.25);c.lineTo(W*.1,Hh*1.02);c.stroke();
+  c.fillStyle='#E9ECEE';c.fillRect(0,Hh*.79,W*.4,Hh*.21);c.fillStyle='#3C6FB0';c.fillRect(W*.02,Hh*.82,W*.2,Hh*.18);
+  var cx=W*.64,hy=Hh*.37,hr=W*.105;
+  /* 몸: 남색 셔츠 + 검은 구명조끼 */
+  c.fillStyle='#232C44';c.beginPath();c.moveTo(cx-W*.2,Hh*.56);c.quadraticCurveTo(cx,Hh*.48,cx+W*.22,Hh*.55);c.lineTo(cx+W*.3,Hh*1.02);c.lineTo(cx-W*.26,Hh*1.02);c.closePath();c.fill();
+  c.fillStyle='#1B1D22';c.beginPath();c.moveTo(cx-W*.15,Hh*.55);c.lineTo(cx-W*.04,Hh*.53);c.lineTo(cx-W*.02,Hh*1.02);c.lineTo(cx-W*.18,Hh*1.02);c.closePath();c.fill();
+  c.beginPath();c.moveTo(cx+W*.04,Hh*.53);c.lineTo(cx+W*.17,Hh*.55);c.lineTo(cx+W*.21,Hh*1.02);c.lineTo(cx+W*.02,Hh*1.02);c.closePath();c.fill();
+  c.fillStyle='#3B3F47';c.fillRect(cx-W*.2,Hh*.83,W*.42,Hh*.035);c.fillStyle='#9AA1A9';c.fillRect(cx-W*.03,Hh*.825,W*.06,Hh*.045);
+  c.fillStyle='#E0473B';c.beginPath();c.ellipse(cx+W*.13,Hh*.88,W*.016,Hh*.03,0,0,Math.PI*2);c.fill();
+  c.fillStyle='#3A4258';c.beginPath();c.moveTo(cx-W*.05,Hh*.5);c.lineTo(cx+W*.05,Hh*.5);c.lineTo(cx,Hh*.56);c.closePath();c.fill();
+  /* 오른팔(화면 오른쪽)은 내려와 있고, 왼팔(화면 왼쪽)은 번쩍 들어 줄을 잡고 있다 */
+  c.lineCap='round';c.lineJoin='round';c.strokeStyle='#232C44';c.lineWidth=W*.085;
+  c.beginPath();c.moveTo(cx-W*.16,Hh*.57);c.lineTo(W*.2,Hh*.38);c.lineTo(W*.27,Hh*.08);c.stroke();
+  c.fillStyle='#2E3036';c.beginPath();c.ellipse(W*.275,Hh*.06,W*.05,Hh*.045,-.3,0,Math.PI*2);c.fill();c.fillStyle='#C9302C';c.fillRect(W*.24,Hh*.085,W*.07,Hh*.012);
+  /* 얼굴 · 모자 · 선글라스 */
+  c.fillStyle='#D9A27A';c.fillRect(cx-hr*.42,hy+hr*.7,hr*.84,hr*.75);c.fillStyle='#3A4258';c.beginPath();c.moveTo(cx-hr*.55,hy+hr*1.3);c.quadraticCurveTo(cx,hy+hr*1.75,cx+hr*.55,hy+hr*1.3);c.lineTo(cx+hr*.45,hy+hr*1.05);c.quadraticCurveTo(cx,hy+hr*1.35,cx-hr*.45,hy+hr*1.05);c.closePath();c.fill();
+  c.fillStyle='#E7B48C';c.beginPath();c.ellipse(cx,hy,hr,hr*1.12,0,0,Math.PI*2);c.fill();
+  c.fillStyle='#D9A27A';c.beginPath();c.ellipse(cx+hr*.95,hy+hr*.05,hr*.16,hr*.26,0,0,Math.PI*2);c.fill();
+  c.fillStyle='#24262C';c.beginPath();c.moveTo(cx-hr*1.0,hy-hr*.38);c.bezierCurveTo(cx-hr*1.0,hy-hr*1.5,cx+hr*1.0,hy-hr*1.5,cx+hr*1.0,hy-hr*.38);c.closePath();c.fill();
+  c.fillStyle='#C9302C';c.beginPath();c.moveTo(cx+hr*.3,hy-hr*1.18);c.bezierCurveTo(cx+hr*.8,hy-hr*1.1,cx+hr*1.0,hy-hr*.8,cx+hr*1.0,hy-hr*.38);c.lineTo(cx+hr*.5,hy-hr*.38);c.closePath();c.fill();
+  c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=1;c.beginPath();c.moveTo(cx,hy-hr*1.22);c.lineTo(cx,hy-hr*.4);c.stroke();
+  c.fillStyle='#1A1B20';c.beginPath();c.moveTo(cx-hr*1.05,hy-hr*.4);c.quadraticCurveTo(cx-hr*.2,hy-hr*.62,cx+hr*.75,hy-hr*.42);c.quadraticCurveTo(cx+hr*.3,hy-hr*.18,cx-hr*.35,hy-hr*.2);c.quadraticCurveTo(cx-hr*1.0,hy-hr*.2,cx-hr*1.25,hy-hr*.3);c.closePath();c.fill();
+  c.fillStyle='#FFFFFF';c.beginPath();c.ellipse(cx-hr*.05,hy-hr*.78,hr*.3,hr*.12,0,0,Math.PI*2);c.fill();c.fillStyle='#24262C';c.beginPath();c.moveTo(cx+hr*.25,hy-hr*.78);c.lineTo(cx+hr*.38,hy-hr*.86);c.lineTo(cx+hr*.38,hy-hr*.7);c.closePath();c.fill();c.beginPath();c.arc(cx-hr*.2,hy-hr*.8,hr*.035,0,Math.PI*2);c.fill();
+  var lg=c.createLinearGradient(cx-hr,hy-hr*.2,cx+hr,hy+hr*.2);lg.addColorStop(0,'#2A3B52');lg.addColorStop(.45,'#8FB4D8');lg.addColorStop(.55,'#E9F3FF');lg.addColorStop(1,'#33465E');
+  c.fillStyle='#15171B';c.beginPath();c.moveTo(cx-hr*1.0,hy-hr*.22);c.quadraticCurveTo(cx,hy-hr*.42,cx+hr*.98,hy-hr*.22);c.lineTo(cx+hr*.9,hy+hr*.08);c.quadraticCurveTo(cx+hr*.5,hy+hr*.24,cx+hr*.12,hy+hr*.08);c.quadraticCurveTo(cx,hy,cx-hr*.12,hy+hr*.08);c.quadraticCurveTo(cx-hr*.5,hy+hr*.24,cx-hr*.92,hy+hr*.08);c.closePath();c.fill();
+  c.fillStyle=lg;c.beginPath();c.ellipse(cx-hr*.48,hy-hr*.08,hr*.38,hr*.2,0,0,Math.PI*2);c.ellipse(cx+hr*.48,hy-hr*.08,hr*.38,hr*.2,0,0,Math.PI*2);c.fill();
+  c.strokeStyle='#8A5A40';c.lineWidth=2;c.beginPath();c.moveTo(cx-hr*.32,hy+hr*.55);c.quadraticCurveTo(cx+hr*.05,hy+hr*.62,cx+hr*.38,hy+hr*.46);c.stroke();
+  c.fillStyle='#C98F68';c.beginPath();c.ellipse(cx+hr*.02,hy+hr*.28,hr*.12,hr*.09,0,0,Math.PI*2);c.fill();
+  /* 줄 · 매달린 내 물고기(입에 바늘) */
+  var fs=W*.2,mx=W*.28,my=Hh*.3;
+  c.strokeStyle='rgba(255,255,255,.95)';c.lineWidth=1.2;c.beginPath();c.moveTo(W*.275,Hh*.07);c.lineTo(mx,my);c.stroke();
+  c.save();c.translate(mx,my+fs*.95);c.rotate(.06);try{drawFish(c,0,0,fs,-Math.PI/2,L,{px:fs,phase:0,minLw:1.2})}catch(e){}c.restore();
+  c.strokeStyle='#D8DEE4';c.lineWidth=2;c.lineCap='round';c.beginPath();c.moveTo(mx,my-4);c.lineTo(mx,my+5);c.arc(mx-4,my+5,4,0,Math.PI*.9);c.stroke();
+  /* 사진 날짜 도장 */
+  var dt=new Date(),ds="'"+String(dt.getFullYear()).slice(2)+' '+('0'+(dt.getMonth()+1)).slice(-2)+' '+('0'+dt.getDate()).slice(-2);
+  c.font='bold 15px "Courier New", monospace';c.textAlign='right';c.fillStyle='rgba(255,140,40,.92)';c.fillText(ds,W-10,Hh-10)}
+function hookShow(){var o=$('hookShot'),L=P.look,cm=cmOf(P.s);
+  if(!o){var st=document.createElement('style');st.textContent='#hookShot{position:fixed;inset:0;z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(6,22,40,.6);-webkit-user-select:none;user-select:none}#hookShot[hidden]{display:none}'+
+      '#hookShot .hsF{position:absolute;inset:0;background:#fff;pointer-events:none;animation:hsF .55s ease-out forwards}@keyframes hsF{0%{opacity:1}100%{opacity:0}}'+
+      '#hookShot figure{margin:0;background:#FDFCF8;padding:12px 12px 10px;border-radius:4px;box-shadow:0 14px 40px rgba(0,0,0,.45);transform:rotate(-4deg);animation:hsP .6s cubic-bezier(.2,1.4,.4,1) .15s both;max-width:86vw}'+
+      '@keyframes hsP{0%{transform:translateY(40px) rotate(6deg) scale(.85);opacity:0}100%{transform:rotate(-4deg);opacity:1}}#hookShot canvas{display:block;max-width:100%;height:auto!important;background:#ddd}'+
+      '#hookShot figcaption{text-align:center;padding-top:8px;color:#203040;font-family:"Black Han Sans",Jua,sans-serif}#hookShot figcaption b{display:block;font-size:22px;font-weight:400}#hookShot figcaption small{display:block;font-size:14px;opacity:.75;margin-top:2px}'+
+      '#hookShot .hsT{color:#fff;font-family:"Black Han Sans",Jua,sans-serif;font-size:15px;margin-top:18px;opacity:0;animation:hsT .4s 2s forwards}@keyframes hsT{to{opacity:.8}}';
+    document.head.appendChild(st);
+    o=document.createElement('div');o.id='hookShot';o.innerHTML='<div class="hsF"></div><figure><canvas></canvas><figcaption><b></b><small></small></figcaption></figure><p class="hsT"></p>';document.body.appendChild(o);
+    o.addEventListener('click',function(){if(P.hook&&P.hook.t>=3.6)hookFinish()})}
+  var f=o.querySelector('.hsF'),fg=o.querySelector('figure');[f,fg].forEach(function(e){e.style.animation='none';void e.offsetWidth;e.style.animation=''});
+  try{hookPaint(o.querySelector('canvas'),L,cm)}catch(e){crumb('hookPaint')}
+  o.querySelector('figcaption b').textContent=T('오늘의 월척!');o.querySelector('figcaption small').textContent=L.name+' · '+fmt(cm);o.querySelector('.hsT').textContent=T('찰칵! 아저씨 사진첩에 들어갔어요');
+  o.hidden=false;buzz(40)}
+(function(o){for(var k in o){if(!(k in TRT))TRT[k]=o[k][0];if(!(k in TRJ))TRJ[k]=o[k][1]}})({
+  '앗! 미끼였어!':['Oops! It was bait!','あっ！エサだった！'],
+  '오늘의 월척!':["Today's big catch!",'今日の大物！'],
+  '찰칵! 아저씨 사진첩에 들어갔어요':["Snap! You're in the angler's photo album",'パシャ！おじさんのアルバム入り'],
+  '낚였어요!':['Hooked!','釣られた！'],
+  '미끼였어요 — 낚싯줄이 달린 물고기는 먹으면 안 돼요. ':["It was bait — don't eat fish hanging on a fishing line. ",'エサでした — 釣り糸のついた魚は食べちゃダメ。'],
+  '아저씨가 놓아줬어요!':['The angler let you go!','おじさんが逃がしてくれた！']});
 /* 화면 좌표 그리기: 먹이 떼 화살표 · '더 깊이' 안내 */
 function deepDrawHud(){
   if(!deepOn()||state!=='play')return;var sc=DPZ.school;
@@ -6330,7 +6443,7 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(!(save.deep>=P.deep))save.deep=Math.round(P.deep);
   save.pearls+=gain;if(!(save.best[L.id]>=cm))save.best[L.id]=Math.round(cm*10)/10;persist();
   $('oTag').textContent=win?L.name+' '+starText(starsOf(L.id)):T('이번 판 결과');
-  $('oTitle').textContent=mp?T('최종 ')+rk+T('위 / ')+(rm?RR.n:bots.length+1)+T('명'):win?winTitle(P.hunt|0):P.ngGift&&P.ngIdx===0?T('좋은 출발이에요!'):T('뼈도 안 남았어요!');if(mp)$('oTag').textContent=rm?T('친구 바다 ')+NET.room:curSrv.name+(rk<=3?T(' · 상위권!'):'');
+  $('oTitle').textContent=mp?T('최종 ')+rk+T('위 / ')+(rm?RR.n:bots.length+1)+T('명'):win?winTitle(P.hunt|0):P.hooked?T('낚였어요!'):P.ngGift&&P.ngIdx===0?T('좋은 출발이에요!'):T('뼈도 안 남았어요!');if(mp)$('oTag').textContent=rm?T('친구 바다 ')+NET.room:curSrv.name+(rk<=3?T(' · 상위권!'):'');
   $('oL1').textContent=T('끝날 때 크기');$('oL2').textContent=mp?T('잡아먹은 상대'):T('먹은 물고기');$('againBtn').textContent=mp?T('다시 들어가기'):T('다시 하기');if(!mp)energyUI();
   /* 기록 도전: 이번 판과 내 최고 기록을 나란히 보여 준다 */
   var rec=$('oRec');rec.textContent='';rec.hidden=false;if(!save.top)save.top={};
@@ -6357,6 +6470,7 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(P.boost&&P.boost.double&&!x2On())msg+=T('진주 1.5배 부스터가 적용됐어요. ');
   if(n)msg+=save.pearls>=fishPrice(n)?(LANG==='ko'?'지금 ':'')+n.name+josa(n.name,T('을'),T('를'))+T(' 해금할 수 있어요!'):(LANG==='en'?n.name+' needs '+nf(fishPrice(n)-save.pearls)+' more pearls to unlock.':n.name+T(' 해금까지 진주 ')+nf(fishPrice(n)-save.pearls)+T('개 남았어요.'));
   else if(!dev())msg+=T('모든 물고기를 모았어요.');
+  if(!mp&&P.hooked&&!win)msg=T('미끼였어요 — 낚싯줄이 달린 물고기는 먹으면 안 돼요. ')+msg;
   if(!mp)msg=(bRank===1?T('최고 기록 경신! '):'')+msg;
   if(P.ngGift)msg=T('처음 오신 선물로 진주 ')+P.ngGift+T('개를 더 받았어요. ')+msg;
   overMsg(msg);
@@ -7962,6 +8076,7 @@ function continueRun(free){
   if(free!==true){if(P.contd||!(P.adContd||P.adFail)||!pay({cur:'gems',price:CONT_COST}))return;P.contd=true}
   save.pearls-=P.lastGain||0;persist();
   P.dead=false;P.vx=P.vy=0;P.fx={ghost:3};state='play';shake=0;
+  if(P.hooked){P.hooked=false;P.hook=null;var hs0=$('hookShot');if(hs0)hs0.hidden=true;P.y=clamp(H*.5/ZONES.length,P.s*1.5,H*.9);cam.y=P.y;P.ang=0;trail.length=0;DPZ.baitT=rnd(60,90);texts.push({x:P.x,y:P.y-P.s*2.4,txt:T('아저씨가 놓아줬어요!'),life:1.6})} /* 1.1.19 낚인 뒤 이어하기: 바다로 돌려보내 줌 */
   fish.forEach(function(f){if(Math.hypot(f.x-P.x,f.y-P.y)<viewR()*.7)f.stun=2});
   rings.push({x:P.x,y:P.y,r:P.s*5,life:.6,max:.6,col:'120,200,255'});texts.push({x:P.x,y:P.y-P.s*1.6,txt:T('이어하기!'),life:1.2});
   $('over').hidden=true;$('skill').hidden=false;
@@ -9159,7 +9274,7 @@ function rescaleWorld(){
   for(i=0;i<fish.length;i++)fish[i].y+=d;for(i=0;i<plank.length;i++)plank[i].y+=d;
   if(decoy)decoy.y+=d;for(i=0;i<inks.length;i++)inks[i].y+=d;
   for(i=0;i<fxs.length;i++)fxs[i].y+=d;for(i=0;i<texts.length;i++)texts[i].y+=d;for(i=0;i<rings.length;i++)rings[i].y+=d;for(i=0;i<trail.length;i++)trail[i].y+=d;
-  if(letter)letter.y+=d;if(DPZ.gull)DPZ.gull.y+=d;if(DPZ.school&&DPZ.school.y!=null)DPZ.school.y+=d; /* 1.1.9(빌드 156) 갈매기 표적 원이 내가 먹고 커질 때마다 바다와 어긋나던 것 */
+  if(letter)letter.y+=d;if(DPZ.gull)DPZ.gull.y+=d;if(DPZ.bait)DPZ.bait.y+=d;if(P.hook)P.hook.y0+=d;if(DPZ.school&&DPZ.school.y!=null)DPZ.school.y+=d; /* 1.1.9(빌드 156) 갈매기 표적 원이 내가 먹고 커질 때마다 바다와 어긋나던 것 */
 }
 function grow(preyS,x,y){
   var before=P.s,g=fair()?1:P.look.growth*P.k.grow*(fxOn('feast')?2:1)*(P.look.depthBonus&&P.y/H>4/7?P.look.depthBonus:inHome(P.look,P.y)?1.15:1)*(P.look.light&&darkAt(P.y)>.3?1.2:1);
@@ -9185,6 +9300,7 @@ function update(dt){
   if(state==='pause')return;
   t+=dt;
   var playing=state==='play',k;
+  if(playing&&P.hook){hookTick(dt);playing=false} /* 1.1.19 낚였을 때는 조작 · 먹기 · 먹히기 멈춤 */
   if(playing){
     var ix=0,iy=0;
     if(joy){ix=(joy.x-joy.ox)/(joy.pad?PAD_R-14:56);iy=(joy.y-joy.oy)/(joy.pad?PAD_R-14:56)}
@@ -10116,6 +10232,7 @@ function draw(){
   }
   /* 1.1.13 화면을 덮는 큰 위험 물고기가 있으면 그쪽 화면 가장자리에 빨간 빛 경고(몸은 옅게 그리므로 위험을 놓치지 않게) */
   try{for(var hw=0;hw<HUGEW.length&&hw<3;hw++){var W=HUGEW[hw],ex2=cam.x+W[0]*cw/2/zoom*.92,ey2=cam.y+W[1]*ch/2/zoom*.92,rr=Math.min(cw,ch)/zoom*.42;ctx.globalAlpha=(.35+.25*Math.sin(t*6))*Math.max(.4,W[2]);ctx.drawImage(glow('229,56,59'),ex2-rr,ey2-rr,rr*2,rr*2);ctx.globalAlpha=1}}catch(e){}
+  try{baitDraw()}catch(e){}
   svDrawUnder();
   if(mode==='race')drawRace();
   if(!P.dead){
@@ -10157,7 +10274,7 @@ function draw(){
   }
   ctx.globalAlpha=1; /* 물고기 위에는 물결 빛을 덮지 않는다 */
   ctx.globalAlpha=.06+.2*clamp(cam.y/H,0,1);ctx.fillStyle=depthColor(cam.y/H);ctx.fillRect(left,topY,vw,botY-topY);ctx.globalAlpha=1;
-  deepDrawWorld();svDrawOver();
+  deepDrawWorld();try{hookDrawWorld()}catch(e){}svDrawOver();
   ctx.globalAlpha=1;ctx.textAlign='center';ctx.lineJoin='round';
   /* 1.1.10(b174) 떠오르는 글자 자리 잡기: 같은 자리 글자끼리 · 내 아이디 칸과 겹치면 위로 올리고,
      큰 알림(배너) · 왼쪽 위 크기 칸 · 점수 칸 · 대전 순위표와 겹치는 작은 글자는 흐리게, 큰 글자(더블 꺼-억 · N배로 컸어요)는 배너 아래로 */
@@ -10455,7 +10572,7 @@ $('bgPvBuy').addEventListener('click',function(){var B=bgPvB;if(!B)return;var c=
 ['bug','idea','etc'].forEach(function(k){$('inqT-'+k).addEventListener('click',function(){inqType(k)})});$('inqClose').addEventListener('click',function(){$('inq').hidden=true});$('inqSend').addEventListener('click',inqSend);
 /* 1.1.2 대전은 다른 사람과 같은 바다라 멈추지 않는다: 메뉴만 열고 바다는 그대로 흘러간다(그동안 내 물고기는 조작 없이 떠 있음) */
 function pauseLead(){var e=$('pauseLead');if(!e)return;e.textContent=T('조작: 조이스틱이나 화면을 누른 채 끌기')+(fair()?'':' · '+T('특수능력: ')+(lefty()?T('오른쪽 아래 버튼'):T('왼쪽 아래 버튼')))}
-function pauseRun(){if(state!=='play'||P.menu)return;renderSettings('setPause');pauseLead();try{svPauseBuild()}catch(e){}joy=null;keys={};var pz=$('pause');pz.hidden=false;$('skill').hidden=true;
+function pauseRun(){if(state!=='play'||P.menu||P.hook)return;renderSettings('setPause');pauseLead();try{svPauseBuild()}catch(e){}joy=null;keys={};var pz=$('pause');pz.hidden=false;$('skill').hidden=true;
   var live=fair();pz.dataset.live=live?'1':'0';$('pauseTitle').textContent=live?T('메뉴'):T('잠깐 멈춤');$('pauseLive').hidden=!live;try{var pzI=$('pzIt');pzI.hidden=!P.surv;if(P.surv&&!pzI.childNodes.length){var h0=document.createElement('b');h0.textContent=T('바닥 아이템');pzI.appendChild(h0);Object.keys(SV_IT).forEach(function(k){var I=SV_IT[k],r=document.createElement('span');r.className='pzit-r';r.innerHTML='<img alt="" src="svart/it_'+k+'.webp" onerror="this.style.visibility=\'hidden\'">';var tt=document.createElement('em');tt.textContent=I.s;var dd=document.createElement('small');dd.textContent=I.d;r.appendChild(tt);r.appendChild(dd);pzI.appendChild(r)})}}catch(x){}try{$('pauseLead').textContent=P.surv?T('조작: 조이스틱이나 화면을 누른 채 끌기 · 특기: 왼쪽 아래 버튼 · 계속 움직여요'):T('조작: 조이스틱이나 화면을 누른 채 끌기 · 특수능력: 왼쪽 아래 버튼')}catch(e){}if(live){P.menu=true;return}state='pause'}
 function resumeRun(){if(state==='play'&&P.menu){P.menu=false;$('pause').hidden=true;return}if(state!=='pause')return;state='play';$('pause').hidden=true;$('skill').hidden=fair()}
 $('pauseBtn').addEventListener('click',pauseRun);
@@ -12906,7 +13023,7 @@ var endRunNB=endRun;endRun=function(win,quit,by){var r=endRunNB.apply(this,argum
 /* 1.1.13: 처음 8판 동안만 판이 끝날 때 짧은 기록을 남긴다(새로 온 사람이 왜 떠나는지 보려고 · 이름 · 기기 정보 없이 판 결과만, 한 사람당 최대 12번) */
 var endRunEV=endRun;endRun=function(win,quit,by){var t0=P?P.time:0,r=endRunEV.apply(this,arguments);
   try{var n=save.runs|0;if(n>=1&&n<=8&&(save.nbEv|0)<12&&P&&mode!=='multi'){save.nbEv=(save.nbEv|0)+1;
-    var how=win?'win':quit?'quit':'eaten',bl=by&&(by.look||by.L)?String((by.look||by.L).id||'').slice(0,20):'';
+    var how=win?'win':quit?'quit':P.hooked?'hook':'eaten',bl=by&&(by.look||by.L)?String((by.look||by.L).id||'').slice(0,20):'';
     save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:n,m:P.camp?'camp'+(P.camp.n||''):P.surv?'surv':'single',f:String(sel||'').slice(0,20),
       t:Math.round(t0||0),cm:Math.round(cmOf(P.maxS||P.s)*10)/10,e:P.eaten|0,sc:(function(){try{return scoreNow()}catch(x){return 0}})(),how:how,by:bl,nbc:P.nbContd?1:0,
       d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),pages:(CR.bc||[]).filter(function(x){return /^tab:/.test(x)}).length}]).slice(-8);persist();setTimeout(crashSend,1200)}}catch(e){}

@@ -754,7 +754,7 @@ h2.sub{font-family:var(--disp);font-weight:400;font-size:17px;color:#12365A;marg
 @media (orientation:landscape) and (max-height:560px){
   .home-head{flex-direction:row;justify-content:space-between;align-items:center;gap:10px}
   .home-head .home-top{order:2;gap:10px}.home-logo{order:1;align-items:flex-start}.home-logo .home-title{font-size:30px;text-align:left}
-  .boosts{flex:1 0 100%;order:1}.home-bottom .pickbar{order:0}.home-bottom .home-card{order:2}.home-bottom .home-row.modes{order:3}
+  .boosts{flex:1 0 100%;order:1}.home-bottom .pickbar,.home-bottom #pbRow{order:0}#pbRow{flex:1 0 100%}.home-bottom .home-card{order:2}.home-bottom .home-row.modes{order:3}
 }
 
 /* ===== v0.39 물고기 꾸미기 상점 ===== */
@@ -3865,7 +3865,10 @@ function spawnFish(initial,prey){
   var ang=Math.random()<.5?0:Math.PI;
   var lk=pool[(Math.random()*pool.length)|0];if(P.camp&&mode==='single'){if(P.camp.type==='hunt'&&Math.random()<.14){lk=byId(P.camp.tgt);ratio=rnd(.45,.8)}else if(P.camp.type==='survive'&&Math.random()<.18)ratio=rnd(1.15,1.6)} /* 1.1.10 사냥 목표 22% → 14% · 버티기 큰 물고기 30%(1.2~1.9배) → 18%(1.15~1.6배) */ /* 1.2 탐험: 사냥 층은 목표 물고기를 더 자주, 버티기 층은 큰 물고기를 더 많이 */
   var fs=Math.max(5,P.s*ratio*(ratio>=1.15?(fair()?.94+.08*fd:.92+.1*fd):df)),zfc=zoneFoodCap(zi);if(ratio<1.15&&fs>zfc)fs=Math.max(5,zfc*rnd(.55,1),fair()?P.s*rnd(.3,.4):P.s*rnd(.18,.3)); /* 1.1.11 커져도 먹이가 점처럼 작아지지 않게 내 크기의 18~30%는 유지(더 깊은 곳 먹이가 여전히 더 큼) */ /* 1.1.9(빌드 155) 대전 크기 균형: 먹이는 내 0.48~0.88배(전 0.35~0.85) · 큰 물고기는 1.15~1.5배 안팎(전 최대 1.9배) · 구역 먹이 한계에 걸려도 내 0.3배 밑으로는 안 작게 — 작은 건 너무 작고 큰 건 너무 커 보이던 것 */ /* 1.1.7 구역마다 사는 물고기 크기 한계 — 1.1.8(빌드 138) 먹이(나보다 작은 물고기)에만. 큰 물고기는 어느 바다에나 나온다 */
+  /* 1.1.19 종한 '나보다 작은 물고기 크기 좀 키워줘, 먹는 맛이 없대': 싱글 · 탐험에서 나보다 작게 나오는 물고기를 보이는 크기만 키움(내 0.18~0.85배 → 0.43~0.9배). 자라는 양은 예전 크기 그대로(gk)라 성장 속도 · 기록은 안 바뀜 */
+  var fgk=1;if(!fair()&&!P.surv&&ratio<1.15&&fs<P.s*.9&&P.s>8){var rv=fs/P.s,fv=P.s*Math.min(.9,.3+rv*.7);if(fv>fs){fgk=fs/fv;fs=fv}}
   fish.push({x:x,y:y,vx:0,vy:0,s:fs,ang:ang,wa:ang,wt:rnd(.5,3),look:lk,
+    gk:fgk,
     chase:rnd(.55,.8)*(1+.15*hk)*(1+.06*fd)*(dU?1.04:1), /* 1.1.10 깊을수록 빨라지는 폭 12% → 6% */stun:0,phase:Math.random()*6});
 }
 function spawnPlank(initial){
@@ -5677,7 +5680,7 @@ function startRun(m){crumb('run:'+m+':'+sel);try{pgImgsFree('')}catch(e){}if(!SV
     if(P.boost.shield)P.fx.ghost=Math.max(P.fx.ghost||0,6)}
   P.full=false;P.hunt=0;P.huntT=0;P.huntPearls=0;P.starGems=0;$('hud').dataset.full='0';
   P.grownW=0;P.deep=0;P.zone=zoneAt(P.y);
-  P.biteCd=0;P.chomp=0;P.nibbles=0;P.cbase={};P.glowR=0;P.glowK=0;PH.length=0;P.hook=null;P.hooked=false;deepReset();P.time=0;P.score0=0;P.newRec=false;P.newRecTime=false;
+  P.biteCd=0;P.chomp=0;P.nibbles=0;P.cbase={};P.glowR=0;P.glowK=0;PH.length=0;deepReset();P.time=0;P.score0=0;P.newRec=false;P.newRecTime=false;
   P.startS=P.s;P.msS=0;P.coachBite=0;P.coachT=0;P.contd=false;P.adContd=false;P.adFail=false;P.quit=false;P.lastGain=0;P.bonus=0;decoy=null;inks.length=0;flashT=0;
   P.mpBonus=1;P.kills=0;P.deaths=0;P.kst=0;P.kstT=0;P.kbest=0;P.rank=0;mpT=mode==='multi'?MP_TIME:0;bots.length=0;letter=null;goalReset();if(mode==='multi'){setupBots();P.fx.ghost=Math.max(P.fx.ghost||0,3.5);NET.shard=1;NET.retry=0;NET.fails=0;NET.rc=0;netStart()}else netStop();
   $('hTime').hidden=mode!=='race';$('hud').dataset.mode=mode;P.peak=99;
@@ -6142,7 +6145,7 @@ var ZFOOD=[.1,.17,.27,.4,.58,.8,1.15],ZFOODA=[2.2,3.2,4.6,6.5,9,12.5,18];
 function deepOn(){return (mode==='single'&&!P.camp&&!P.surv)||mode==='multi'}
 function zoneFoodCap(z){if(!deepOn())return 1e9;return fair()?P.startS*ZFOODA[z]:Math.max(P.capS*ZFOOD[z],P.startS*(1.5+.7*z))}
 function schK(){return fair()?1:(1-.03*rsLv('school'))*(P.boost&&P.boost.school?.7:1)}
-function deepReset(){DPZ.schT=P.boost&&P.boost.school&&!fair()?15:rnd(28,40)*schK();DPZ.school=null;DPZ.gull=null;DPZ.gullT=3;DPZ.tip={};DPZ.hungry=false;DPZ.hT=0;baitReset()}
+function deepReset(){DPZ.schT=P.boost&&P.boost.school&&!fair()?15:rnd(28,40)*schK();DPZ.school=null;DPZ.gull=null;DPZ.gullT=3;DPZ.tip={};DPZ.hungry=false;DPZ.hT=0}
 function deepTick(dt){
   if(!deepOn()||P.dead){DPZ.gull=null;return}
   var z=zoneAt(P.y),R=viewR(),i,f;
@@ -6170,7 +6173,6 @@ function deepTick(dt){
     DPZ.gull={x:P.x+P.vx*.9,y:clamp(P.y+P.vy*.9,H*.005,H*2/ZONES.length),r:P.s*1.5+34*scaleOf(P.s),t:0,warn:1.7,hit:0,dir:Math.random()<.5?1:-1};
     if(!DPZ.tip.gull){DPZ.tip.gull=1;banner(T('갈매기가 노려요!'),T('큰 물고기는 얕은 바다가 위험해요 ↓'))}}}
   else DPZ.gullT=Math.max(DPZ.gullT,2);
-  baitTick(dt,z);
 }
 /* 1.1.9(빌드 156) 갈매기: 내리꽂는 순간 빨간 원 안에서 '가장 큰 물고기' 하나만 쪼인다(나 · 야생 · AI 모두, 다른 사람은 그 사람 화면에서 따로).
    큰 물고기를 원 안으로 끌고 들어오면 그 물고기가 대신 쪼인다. 예고 1.15초 → 1.6초 */
@@ -6238,118 +6240,6 @@ function deepDrawWorld(){
       ctx.save();ctx.translate(rx,ry);ctx.rotate(-dir*.5*(1-u));drawGull(0,0,gs,dir,Math.sin(t*14),0,!!g.got);ctx.restore()}
     ctx.restore()}
 }
-/* ===== 1.1.19 낚시 미끼 (10/27 종한 제안): 싱글 기록 도전 얕은 바다(맨 위 · 그 밑)에 가끔 낚싯줄에 매달린 미끼 물고기가 내려온다.
-   진짜 물고기와 똑같이 생겼지만 자세히 보면 위로 가는 희미한 줄 · 입가 바늘 · 가끔 반짝임이 있다. 모르고 먹으면 물 밖으로 끌려 나가
-   아저씨가 들고 기념사진을 찍고 판이 끝난다(진주 · 기록은 보통 끝과 같음, 이어하기 하면 아저씨가 놓아줌).
-   한 판에 최대 2번, 시작 30초 뒤부터, 연습 바다 · 대전 · 탐험 · 심해 생존에는 없음 */
-var BAIT_MAX=2;
-function baitReset(){DPZ.bait=null;DPZ.baitT=rnd(35,60);DPZ.baitN=0}
-function baitOn(){return mode==='single'&&!P.camp&&!P.surv&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)}
-function baitPos(b){var u=clamp(b.t/1.1,0,1),e=1-(1-u)*(1-u),y=b.y*e+(-b.s*2)*(1-e);
-  if(b.up)y-=b.up*b.up*viewR()*1.6;
-  var jig=b.t>1.1?Math.sin(b.t*1.7+b.ph)*b.s*.22+Math.max(0,Math.sin(b.t*.9+b.ph*2))*Math.max(0,Math.sin(b.t*9))*b.s*.18:0;
-  return [b.x+Math.sin(b.t*.6+b.ph)*b.s*.25,y-jig]}
-function baitTick(dt,z){
-  if(!baitOn()||P.hook){return}
-  var b=DPZ.bait;
-  if(b){b.t+=dt;if(b.t>b.life){b.up=(b.up||0)+dt*1.4;if(b.up>1){DPZ.bait=null;DPZ.baitT=rnd(30,50)}return}
-    if(invuln()||b.t<.9)return;
-    var q=baitPos(b),pm=mouthOf(P.x,P.y,P.s,P.ang,P.look);
-    if(Math.hypot(pm[0]-q[0],pm[1]-q[1])<pm[2]+b.s*.75)hookStart(b,q);
-    return}
-  if(DPZ.baitN>=BAIT_MAX||(P.time||0)<30)return;
-  if(z>1){DPZ.baitT=Math.max(DPZ.baitT,4);return}
-  DPZ.baitT-=dt;if(DPZ.baitT>0)return;
-  var R=viewR(),dir=Math.cos(P.ang)>=0?1:-1,zb=H*2/ZONES.length,pool=HAB[0]&&HAB[0].length?HAB[0]:SPECIES,s=P.s*rnd(.42,.66),
-    x=P.x+dir*R*rnd(.45,.75),y=clamp(P.y+rnd(-.35,.25)*R,Math.max(s*3,H*.02),zb*.92),fd=Math.random()<.5?1:-1;
-  DPZ.bait={x:x,y:y,s:s,look:pool[(Math.random()*pool.length)|0],ang:fd>0?-.18:Math.PI+.18,t:0,life:rnd(13,18),ph:Math.random()*6,up:0};
-  DPZ.baitN++;crumb('bait')}
-/* 미끼 그리기(물고기들과 같은 층, 내 물고기 아래): 몸 · 희미한 낚싯줄 · 입가 바늘 · 가끔 반짝 */
-function baitDraw(){var b=DPZ.bait;if(!b||state!=='play'||!baitOn())return;var q=baitPos(b),mq=mouthOf(q[0],q[1],b.s,b.ang,b.look),topY=cam.y-ch/2/zoom;
-  ctx.save();ctx.globalAlpha=.32;ctx.lineWidth=1.1/zoom;ctx.strokeStyle='#FFFFFF';ctx.beginPath();ctx.moveTo(mq[0],mq[1]);ctx.lineTo(mq[0]+Math.sin(t*.8+b.ph)*4/zoom,Math.min(topY-30/zoom,-40/zoom));ctx.stroke();ctx.restore();
-  drawFish(ctx,q[0],q[1],b.s,b.ang,b.look,{px:b.s*zoom,phase:b.ph,minLw:1.2/zoom});
-  ctx.save();ctx.lineWidth=Math.max(1.4/zoom,b.s*.07);ctx.lineCap='round';ctx.strokeStyle='rgba(225,232,240,.85)';ctx.beginPath();ctx.moveTo(mq[0],mq[1]-b.s*.18);ctx.lineTo(mq[0],mq[1]+b.s*.12);ctx.arc(mq[0]-b.s*.13,mq[1]+b.s*.12,b.s*.13,0,Math.PI*.85);ctx.stroke();ctx.restore();
-  var gl=(b.t*1.0+b.ph)%2.2;if(gl<.35&&!reduce){var ga=Math.sin(gl/.35*Math.PI),gx=q[0]+Math.cos(b.ang)*b.s*.15,gy=q[1]-b.s*.25,gr=b.s*(.35+.25*ga);
-    ctx.save();ctx.globalAlpha=.75*ga;ctx.globalCompositeOperation='lighter';ctx.drawImage(glow('255,255,255'),gx-gr,gy-gr,gr*2,gr*2);ctx.globalCompositeOperation='source-over';
-    ctx.strokeStyle='#FFFFFF';ctx.lineWidth=1.6/zoom;ctx.beginPath();ctx.moveTo(gx-gr*.7,gy);ctx.lineTo(gx+gr*.7,gy);ctx.moveTo(gx,gy-gr*.7);ctx.lineTo(gx,gy+gr*.7);ctx.stroke();ctx.restore()}}
-/* 걸렸을 때: 0.45초 버둥 → 1.2초 동안 물 밖으로 끌려 나감 → 사진 → 판 끝 */
-function hookStart(b,q){P.hook={t:0,x0:P.x,y0:P.y,shot:0};P.hooked=true;DPZ.bait=null;joy=null;keys={};P.vx=P.vy=0;
-  try{bannerOff()}catch(e){}texts.push({x:P.x,y:P.y-P.s*1.8,txt:T('앗! 미끼였어!'),life:1.4,big:1});
-  burst(q[0],q[1],P.s*.6,6);shake=reduce?0:.3;buzz(80);try{MUS.sfx('bite')}catch(e){}crumb('hooked')}
-function hookTick(dt){var h=P.hook;h.t+=dt;
-  if(h.t<.45){P.x=h.x0+Math.sin(h.t*60)*P.s*.12;P.ang=-Math.PI/2+Math.sin(h.t*40)*.6}
-  else if(h.t<1.65){var u=(h.t-.45)/1.2,e=u*u;P.x=h.x0+Math.sin(h.t*25)*P.s*.08*(1-u);P.y=h.y0+(-P.s*5-viewR()*.4-h.y0)*e;P.ang=-Math.PI/2+Math.sin(h.t*22)*.45;
-    if(h.y0+(-h.y0)*e<=0&&!h.spl){h.spl=1;for(var i=0;i<8;i++)fxs.push({x:P.x+rnd(-1,1)*P.s,y:-2,vy:-P.s*rnd(1,2.5),r:P.s*rnd(.08,.18),life:.6,col:'rgba(255,255,255,.85)'})}}
-  else if(!h.shot){h.shot=1;hookShow()}
-  if(h.shot&&h.t>=5.4)hookFinish()}
-function hookFinish(){var h=P.hook;if(!h||h.done)return;h.done=1;var o=$('hookShot');if(o)o.hidden=true;endRun(false,false,null)}
-/* 걸린 내 물고기와 낚싯줄(물고기 위 층) */
-function hookDrawWorld(){var h=P.hook;if(!h||state!=='play'||h.t>=1.65)return;var pm=mouthOf(P.x,P.y,P.s,P.ang,P.look),topY=cam.y-ch/2/zoom;
-  ctx.save();ctx.lineWidth=Math.max(1.6/zoom,P.s*.04);ctx.strokeStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.moveTo(pm[0],pm[1]);ctx.lineTo(pm[0],Math.min(topY-30/zoom,pm[1]-P.s*3));ctx.stroke();ctx.restore()}
-/* 기념사진(폴라로이드): 배 위에서 아저씨가 한 손으로 줄을 들어 올리고, 입에 바늘이 걸린 내 물고기가 매달려 있다 */
-function hookPaint(cv,L,cm){var W=300,Hh=340,d=Math.min(3,window.devicePixelRatio||2);cv.width=W*d;cv.height=Hh*d;cv.style.width=W+'px';cv.style.height=Hh+'px';
-  var c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);
-  var g=c.createLinearGradient(0,0,0,Hh);g.addColorStop(0,'#D5E3EC');g.addColorStop(1,'#F2F6F8');c.fillStyle=g;c.fillRect(0,0,W,Hh);
-  c.fillStyle='#A9BFCC';c.fillRect(0,Hh*.6,W,Hh*.4);c.fillStyle='#93AAB8';c.beginPath();c.ellipse(W*.12,Hh*.6,W*.14,Hh*.018,0,Math.PI,0);c.fill();
-  c.fillStyle='#C9302C';c.beginPath();c.moveTo(W*.44,Hh*.33);c.lineTo(W*1.02,-2);c.lineTo(W*1.02,Hh*.44);c.lineTo(W*.6,Hh*.37);c.closePath();c.fill();
-  c.fillStyle='#A3221F';c.beginPath();c.moveTo(W*.6,Hh*.37);c.lineTo(W*1.02,Hh*.44);c.lineTo(W*1.02,Hh*.47);c.lineTo(W*.6,Hh*.395);c.closePath();c.fill();
-  c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=.8;c.beginPath();c.moveTo(W*.04,Hh*.25);c.lineTo(W*.1,Hh*1.02);c.stroke();
-  c.fillStyle='#E9ECEE';c.fillRect(0,Hh*.79,W*.4,Hh*.21);c.fillStyle='#3C6FB0';c.fillRect(W*.02,Hh*.82,W*.2,Hh*.18);
-  var cx=W*.64,hy=Hh*.37,hr=W*.105;
-  /* 몸: 남색 셔츠 + 검은 구명조끼 */
-  c.fillStyle='#232C44';c.beginPath();c.moveTo(cx-W*.2,Hh*.56);c.quadraticCurveTo(cx,Hh*.48,cx+W*.22,Hh*.55);c.lineTo(cx+W*.3,Hh*1.02);c.lineTo(cx-W*.26,Hh*1.02);c.closePath();c.fill();
-  c.fillStyle='#1B1D22';c.beginPath();c.moveTo(cx-W*.15,Hh*.55);c.lineTo(cx-W*.04,Hh*.53);c.lineTo(cx-W*.02,Hh*1.02);c.lineTo(cx-W*.18,Hh*1.02);c.closePath();c.fill();
-  c.beginPath();c.moveTo(cx+W*.04,Hh*.53);c.lineTo(cx+W*.17,Hh*.55);c.lineTo(cx+W*.21,Hh*1.02);c.lineTo(cx+W*.02,Hh*1.02);c.closePath();c.fill();
-  c.fillStyle='#3B3F47';c.fillRect(cx-W*.2,Hh*.83,W*.42,Hh*.035);c.fillStyle='#9AA1A9';c.fillRect(cx-W*.03,Hh*.825,W*.06,Hh*.045);
-  c.fillStyle='#E0473B';c.beginPath();c.ellipse(cx+W*.13,Hh*.88,W*.016,Hh*.03,0,0,Math.PI*2);c.fill();
-  c.fillStyle='#3A4258';c.beginPath();c.moveTo(cx-W*.05,Hh*.5);c.lineTo(cx+W*.05,Hh*.5);c.lineTo(cx,Hh*.56);c.closePath();c.fill();
-  /* 오른팔(화면 오른쪽)은 내려와 있고, 왼팔(화면 왼쪽)은 번쩍 들어 줄을 잡고 있다 */
-  c.lineCap='round';c.lineJoin='round';c.strokeStyle='#232C44';c.lineWidth=W*.085;
-  c.beginPath();c.moveTo(cx-W*.16,Hh*.57);c.lineTo(W*.2,Hh*.38);c.lineTo(W*.27,Hh*.08);c.stroke();
-  c.fillStyle='#2E3036';c.beginPath();c.ellipse(W*.275,Hh*.06,W*.05,Hh*.045,-.3,0,Math.PI*2);c.fill();c.fillStyle='#C9302C';c.fillRect(W*.24,Hh*.085,W*.07,Hh*.012);
-  /* 얼굴 · 모자 · 선글라스 */
-  c.fillStyle='#D9A27A';c.fillRect(cx-hr*.42,hy+hr*.7,hr*.84,hr*.75);c.fillStyle='#3A4258';c.beginPath();c.moveTo(cx-hr*.55,hy+hr*1.3);c.quadraticCurveTo(cx,hy+hr*1.75,cx+hr*.55,hy+hr*1.3);c.lineTo(cx+hr*.45,hy+hr*1.05);c.quadraticCurveTo(cx,hy+hr*1.35,cx-hr*.45,hy+hr*1.05);c.closePath();c.fill();
-  c.fillStyle='#E7B48C';c.beginPath();c.ellipse(cx,hy,hr,hr*1.12,0,0,Math.PI*2);c.fill();
-  c.fillStyle='#D9A27A';c.beginPath();c.ellipse(cx+hr*.95,hy+hr*.05,hr*.16,hr*.26,0,0,Math.PI*2);c.fill();
-  c.fillStyle='#24262C';c.beginPath();c.moveTo(cx-hr*1.0,hy-hr*.38);c.bezierCurveTo(cx-hr*1.0,hy-hr*1.5,cx+hr*1.0,hy-hr*1.5,cx+hr*1.0,hy-hr*.38);c.closePath();c.fill();
-  c.fillStyle='#C9302C';c.beginPath();c.moveTo(cx+hr*.3,hy-hr*1.18);c.bezierCurveTo(cx+hr*.8,hy-hr*1.1,cx+hr*1.0,hy-hr*.8,cx+hr*1.0,hy-hr*.38);c.lineTo(cx+hr*.5,hy-hr*.38);c.closePath();c.fill();
-  c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=1;c.beginPath();c.moveTo(cx,hy-hr*1.22);c.lineTo(cx,hy-hr*.4);c.stroke();
-  c.fillStyle='#1A1B20';c.beginPath();c.moveTo(cx-hr*1.05,hy-hr*.4);c.quadraticCurveTo(cx-hr*.2,hy-hr*.62,cx+hr*.75,hy-hr*.42);c.quadraticCurveTo(cx+hr*.3,hy-hr*.18,cx-hr*.35,hy-hr*.2);c.quadraticCurveTo(cx-hr*1.0,hy-hr*.2,cx-hr*1.25,hy-hr*.3);c.closePath();c.fill();
-  c.fillStyle='#FFFFFF';c.beginPath();c.ellipse(cx-hr*.05,hy-hr*.78,hr*.3,hr*.12,0,0,Math.PI*2);c.fill();c.fillStyle='#24262C';c.beginPath();c.moveTo(cx+hr*.25,hy-hr*.78);c.lineTo(cx+hr*.38,hy-hr*.86);c.lineTo(cx+hr*.38,hy-hr*.7);c.closePath();c.fill();c.beginPath();c.arc(cx-hr*.2,hy-hr*.8,hr*.035,0,Math.PI*2);c.fill();
-  var lg=c.createLinearGradient(cx-hr,hy-hr*.2,cx+hr,hy+hr*.2);lg.addColorStop(0,'#2A3B52');lg.addColorStop(.45,'#8FB4D8');lg.addColorStop(.55,'#E9F3FF');lg.addColorStop(1,'#33465E');
-  c.fillStyle='#15171B';c.beginPath();c.moveTo(cx-hr*1.0,hy-hr*.22);c.quadraticCurveTo(cx,hy-hr*.42,cx+hr*.98,hy-hr*.22);c.lineTo(cx+hr*.9,hy+hr*.08);c.quadraticCurveTo(cx+hr*.5,hy+hr*.24,cx+hr*.12,hy+hr*.08);c.quadraticCurveTo(cx,hy,cx-hr*.12,hy+hr*.08);c.quadraticCurveTo(cx-hr*.5,hy+hr*.24,cx-hr*.92,hy+hr*.08);c.closePath();c.fill();
-  c.fillStyle=lg;c.beginPath();c.ellipse(cx-hr*.48,hy-hr*.08,hr*.38,hr*.2,0,0,Math.PI*2);c.ellipse(cx+hr*.48,hy-hr*.08,hr*.38,hr*.2,0,0,Math.PI*2);c.fill();
-  c.strokeStyle='#8A5A40';c.lineWidth=2;c.beginPath();c.moveTo(cx-hr*.32,hy+hr*.55);c.quadraticCurveTo(cx+hr*.05,hy+hr*.62,cx+hr*.38,hy+hr*.46);c.stroke();
-  c.fillStyle='#C98F68';c.beginPath();c.ellipse(cx+hr*.02,hy+hr*.28,hr*.12,hr*.09,0,0,Math.PI*2);c.fill();
-  /* 줄 · 매달린 내 물고기(입에 바늘) */
-  var fs=W*.2,mx=W*.28,my=Hh*.3;
-  c.strokeStyle='rgba(255,255,255,.95)';c.lineWidth=1.2;c.beginPath();c.moveTo(W*.275,Hh*.07);c.lineTo(mx,my);c.stroke();
-  c.save();c.translate(mx,my+fs*.95);c.rotate(.06);try{drawFish(c,0,0,fs,-Math.PI/2,L,{px:fs,phase:0,minLw:1.2})}catch(e){}c.restore();
-  c.strokeStyle='#D8DEE4';c.lineWidth=2;c.lineCap='round';c.beginPath();c.moveTo(mx,my-4);c.lineTo(mx,my+5);c.arc(mx-4,my+5,4,0,Math.PI*.9);c.stroke();
-  /* 사진 날짜 도장 */
-  var dt=new Date(),ds="'"+String(dt.getFullYear()).slice(2)+' '+('0'+(dt.getMonth()+1)).slice(-2)+' '+('0'+dt.getDate()).slice(-2);
-  c.font='bold 15px "Courier New", monospace';c.textAlign='right';c.fillStyle='rgba(255,140,40,.92)';c.fillText(ds,W-10,Hh-10)}
-function hookShow(){var o=$('hookShot'),L=P.look,cm=cmOf(P.s);
-  if(!o){var st=document.createElement('style');st.textContent='#hookShot{position:fixed;inset:0;z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(6,22,40,.6);-webkit-user-select:none;user-select:none}#hookShot[hidden]{display:none}'+
-      '#hookShot .hsF{position:absolute;inset:0;background:#fff;pointer-events:none;animation:hsF .55s ease-out forwards}@keyframes hsF{0%{opacity:1}100%{opacity:0}}'+
-      '#hookShot figure{margin:0;background:#FDFCF8;padding:12px 12px 10px;border-radius:4px;box-shadow:0 14px 40px rgba(0,0,0,.45);transform:rotate(-4deg);animation:hsP .6s cubic-bezier(.2,1.4,.4,1) .15s both;max-width:86vw}'+
-      '@keyframes hsP{0%{transform:translateY(40px) rotate(6deg) scale(.85);opacity:0}100%{transform:rotate(-4deg);opacity:1}}#hookShot canvas{display:block;max-width:100%;height:auto!important;background:#ddd}'+
-      '#hookShot figcaption{text-align:center;padding-top:8px;color:#203040;font-family:"Black Han Sans",Jua,sans-serif}#hookShot figcaption b{display:block;font-size:22px;font-weight:400}#hookShot figcaption small{display:block;font-size:14px;opacity:.75;margin-top:2px}'+
-      '#hookShot .hsT{color:#fff;font-family:"Black Han Sans",Jua,sans-serif;font-size:15px;margin-top:18px;opacity:0;animation:hsT .4s 2s forwards}@keyframes hsT{to{opacity:.8}}';
-    document.head.appendChild(st);
-    o=document.createElement('div');o.id='hookShot';o.innerHTML='<div class="hsF"></div><figure><canvas></canvas><figcaption><b></b><small></small></figcaption></figure><p class="hsT"></p>';document.body.appendChild(o);
-    o.addEventListener('click',function(){if(P.hook&&P.hook.t>=3.6)hookFinish()})}
-  var f=o.querySelector('.hsF'),fg=o.querySelector('figure');[f,fg].forEach(function(e){e.style.animation='none';void e.offsetWidth;e.style.animation=''});
-  try{hookPaint(o.querySelector('canvas'),L,cm)}catch(e){crumb('hookPaint')}
-  o.querySelector('figcaption b').textContent=T('오늘의 월척!');o.querySelector('figcaption small').textContent=L.name+' · '+fmt(cm);o.querySelector('.hsT').textContent=T('찰칵! 아저씨 사진첩에 들어갔어요');
-  o.hidden=false;buzz(40)}
-(function(o){for(var k in o){if(!(k in TRT))TRT[k]=o[k][0];if(!(k in TRJ))TRJ[k]=o[k][1]}})({
-  '앗! 미끼였어!':['Oops! It was bait!','あっ！エサだった！'],
-  '오늘의 월척!':["Today's big catch!",'今日の大物！'],
-  '찰칵! 아저씨 사진첩에 들어갔어요':["Snap! You're in the angler's photo album",'パシャ！おじさんのアルバム入り'],
-  '낚였어요!':['Hooked!','釣られた！'],
-  '미끼였어요 — 낚싯줄이 달린 물고기는 먹으면 안 돼요. ':["It was bait — don't eat fish hanging on a fishing line. ",'エサでした — 釣り糸のついた魚は食べちゃダメ。'],
-  '아저씨가 놓아줬어요!':['The angler let you go!','おじさんが逃がしてくれた！']});
 /* 화면 좌표 그리기: 먹이 떼 화살표 · '더 깊이' 안내 */
 function deepDrawHud(){
   if(!deepOn()||state!=='play')return;var sc=DPZ.school;
@@ -6443,7 +6333,7 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(!(save.deep>=P.deep))save.deep=Math.round(P.deep);
   save.pearls+=gain;if(!(save.best[L.id]>=cm))save.best[L.id]=Math.round(cm*10)/10;persist();
   $('oTag').textContent=win?L.name+' '+starText(starsOf(L.id)):T('이번 판 결과');
-  $('oTitle').textContent=mp?T('최종 ')+rk+T('위 / ')+(rm?RR.n:bots.length+1)+T('명'):win?winTitle(P.hunt|0):P.hooked?T('낚였어요!'):P.ngGift&&P.ngIdx===0?T('좋은 출발이에요!'):T('뼈도 안 남았어요!');if(mp)$('oTag').textContent=rm?T('친구 바다 ')+NET.room:curSrv.name+(rk<=3?T(' · 상위권!'):'');
+  $('oTitle').textContent=mp?T('최종 ')+rk+T('위 / ')+(rm?RR.n:bots.length+1)+T('명'):win?winTitle(P.hunt|0):P.ngGift&&P.ngIdx===0?T('좋은 출발이에요!'):T('뼈도 안 남았어요!');if(mp)$('oTag').textContent=rm?T('친구 바다 ')+NET.room:curSrv.name+(rk<=3?T(' · 상위권!'):'');
   $('oL1').textContent=T('끝날 때 크기');$('oL2').textContent=mp?T('잡아먹은 상대'):T('먹은 물고기');$('againBtn').textContent=mp?T('다시 들어가기'):T('다시 하기');if(!mp)energyUI();
   /* 기록 도전: 이번 판과 내 최고 기록을 나란히 보여 준다 */
   var rec=$('oRec');rec.textContent='';rec.hidden=false;if(!save.top)save.top={};
@@ -6470,7 +6360,6 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(P.boost&&P.boost.double&&!x2On())msg+=T('진주 1.5배 부스터가 적용됐어요. ');
   if(n)msg+=save.pearls>=fishPrice(n)?(LANG==='ko'?'지금 ':'')+n.name+josa(n.name,T('을'),T('를'))+T(' 해금할 수 있어요!'):(LANG==='en'?n.name+' needs '+nf(fishPrice(n)-save.pearls)+' more pearls to unlock.':n.name+T(' 해금까지 진주 ')+nf(fishPrice(n)-save.pearls)+T('개 남았어요.'));
   else if(!dev())msg+=T('모든 물고기를 모았어요.');
-  if(!mp&&P.hooked&&!win)msg=T('미끼였어요 — 낚싯줄이 달린 물고기는 먹으면 안 돼요. ')+msg;
   if(!mp)msg=(bRank===1?T('최고 기록 경신! '):'')+msg;
   if(P.ngGift)msg=T('처음 오신 선물로 진주 ')+P.ngGift+T('개를 더 받았어요. ')+msg;
   overMsg(msg);
@@ -8076,7 +7965,6 @@ function continueRun(free){
   if(free!==true){if(P.contd||!(P.adContd||P.adFail)||!pay({cur:'gems',price:CONT_COST}))return;P.contd=true}
   save.pearls-=P.lastGain||0;persist();
   P.dead=false;P.vx=P.vy=0;P.fx={ghost:3};state='play';shake=0;
-  if(P.hooked){P.hooked=false;P.hook=null;var hs0=$('hookShot');if(hs0)hs0.hidden=true;P.y=clamp(H*.5/ZONES.length,P.s*1.5,H*.9);cam.y=P.y;P.ang=0;trail.length=0;DPZ.baitT=rnd(60,90);texts.push({x:P.x,y:P.y-P.s*2.4,txt:T('아저씨가 놓아줬어요!'),life:1.6})} /* 1.1.19 낚인 뒤 이어하기: 바다로 돌려보내 줌 */
   fish.forEach(function(f){if(Math.hypot(f.x-P.x,f.y-P.y)<viewR()*.7)f.stun=2});
   rings.push({x:P.x,y:P.y,r:P.s*5,life:.6,max:.6,col:'120,200,255'});texts.push({x:P.x,y:P.y-P.s*1.6,txt:T('이어하기!'),life:1.2});
   $('over').hidden=true;$('skill').hidden=false;
@@ -9253,9 +9141,9 @@ function consume(f,i){
   /* 1.1.4: 흡입·유인 한 번에 먹을 수 있는 수는 6마리까지 — 넘으면 효과가 바로 끝난다 */
   if(fxOn('whirl')){P.whirlN=(P.whirlN|0)+1;if(P.whirlN>=12)P.fx.whirl=0}else if(fxOn('suck')||fxOn('lure')){P.pullN=(P.pullN||0)+1;if(P.pullN>=6){P.fx.suck=0;P.fx.lure=0}}
   /* 1.1.7 나보다 훨씬 작은 먹이(내 크기의 40% 미만)는 덜 자란다 — 얕은 바다에서 작은 물고기만 먹으며 계속 크는 것 막기 */
-  var rl=f.s/P.s,pk=deepOn()&&!f.school&&!f.bot&&rl<.4?Math.max(.12,Math.pow(rl/.4,2)):1;
+  var rl=f.s*(f.gk||1)/P.s,pk=deepOn()&&!f.school&&!f.bot&&rl<.4?Math.max(.12,Math.pow(rl/.4,2)):1;
   if(f.nb&&!f.school){for(var j0=texts.length-1;j0>=0;j0--)if(texts[j0].big)texts.splice(j0,1);texts.push({x:P.x,y:P.y-P.s*2.4-40/zoom,txt:T('역전 꺼-억!'),life:1.6,big:1});shake=reduce?0:Math.max(shake,.14);buzz([20,30,45])} /* 1.1.10 물어뜯어 작게 만든 물고기를 결국 먹으면 '역전' */
-  grow((f.school?f.s*1.6:f.s)*Math.sqrt(pk),f.x,f.y);P.eaten++;ateFish(f); /* 1.1.7 먹이 떼 물고기는 2.5배로 자란다 */burst(f.x,f.y,f.s,6);MUS.sfx(f.bot?'big':'gulp',f.s/P.s);buzz(f.bot?30:10);rings.push({x:f.x,y:f.y,r:f.s*2.4,life:.3,max:.3,col:f.look._rgb});
+  grow((f.school?f.s*1.6:f.s)*Math.sqrt(pk)*(f.gk||1),f.x,f.y);P.eaten++;ateFish(f); /* 1.1.7 먹이 떼 물고기는 2.5배로 자란다 */burst(f.x,f.y,f.s,6);MUS.sfx(f.bot?'big':'gulp',f.s/P.s);buzz(f.bot?30:10);rings.push({x:f.x,y:f.y,r:f.s*2.4,life:.3,max:.3,col:f.look._rgb});
   if(P.camp&&P.camp.tgt&&f.look&&f.look.id===P.camp.tgt)CAMP.hunt++;
   if(f.boss){CAMP.bossDown=true;texts.push({x:P.x,y:P.y-P.s*2.4,txt:T('보스 꺼-억!'),life:1.6})}else if(f.bot){botDown(f.bot,true);if(mode==='multi')mpKill(f.x,f.y,f.s,!!f.peerEnt)}
   fish.splice(i,1);
@@ -9274,7 +9162,7 @@ function rescaleWorld(){
   for(i=0;i<fish.length;i++)fish[i].y+=d;for(i=0;i<plank.length;i++)plank[i].y+=d;
   if(decoy)decoy.y+=d;for(i=0;i<inks.length;i++)inks[i].y+=d;
   for(i=0;i<fxs.length;i++)fxs[i].y+=d;for(i=0;i<texts.length;i++)texts[i].y+=d;for(i=0;i<rings.length;i++)rings[i].y+=d;for(i=0;i<trail.length;i++)trail[i].y+=d;
-  if(letter)letter.y+=d;if(DPZ.gull)DPZ.gull.y+=d;if(DPZ.bait)DPZ.bait.y+=d;if(P.hook)P.hook.y0+=d;if(DPZ.school&&DPZ.school.y!=null)DPZ.school.y+=d; /* 1.1.9(빌드 156) 갈매기 표적 원이 내가 먹고 커질 때마다 바다와 어긋나던 것 */
+  if(letter)letter.y+=d;if(DPZ.gull)DPZ.gull.y+=d;if(DPZ.school&&DPZ.school.y!=null)DPZ.school.y+=d; /* 1.1.9(빌드 156) 갈매기 표적 원이 내가 먹고 커질 때마다 바다와 어긋나던 것 */
 }
 function grow(preyS,x,y){
   var before=P.s,g=fair()?1:P.look.growth*P.k.grow*(fxOn('feast')?2:1)*(P.look.depthBonus&&P.y/H>4/7?P.look.depthBonus:inHome(P.look,P.y)?1.15:1)*(P.look.light&&darkAt(P.y)>.3?1.2:1);
@@ -9300,7 +9188,6 @@ function update(dt){
   if(state==='pause')return;
   t+=dt;
   var playing=state==='play',k;
-  if(playing&&P.hook){hookTick(dt);playing=false} /* 1.1.19 낚였을 때는 조작 · 먹기 · 먹히기 멈춤 */
   if(playing){
     var ix=0,iy=0;
     if(joy){ix=(joy.x-joy.ox)/(joy.pad?PAD_R-14:56);iy=(joy.y-joy.oy)/(joy.pad?PAD_R-14:56)}
@@ -10232,7 +10119,6 @@ function draw(){
   }
   /* 1.1.13 화면을 덮는 큰 위험 물고기가 있으면 그쪽 화면 가장자리에 빨간 빛 경고(몸은 옅게 그리므로 위험을 놓치지 않게) */
   try{for(var hw=0;hw<HUGEW.length&&hw<3;hw++){var W=HUGEW[hw],ex2=cam.x+W[0]*cw/2/zoom*.92,ey2=cam.y+W[1]*ch/2/zoom*.92,rr=Math.min(cw,ch)/zoom*.42;ctx.globalAlpha=(.35+.25*Math.sin(t*6))*Math.max(.4,W[2]);ctx.drawImage(glow('229,56,59'),ex2-rr,ey2-rr,rr*2,rr*2);ctx.globalAlpha=1}}catch(e){}
-  try{baitDraw()}catch(e){}
   svDrawUnder();
   if(mode==='race')drawRace();
   if(!P.dead){
@@ -10274,7 +10160,7 @@ function draw(){
   }
   ctx.globalAlpha=1; /* 물고기 위에는 물결 빛을 덮지 않는다 */
   ctx.globalAlpha=.06+.2*clamp(cam.y/H,0,1);ctx.fillStyle=depthColor(cam.y/H);ctx.fillRect(left,topY,vw,botY-topY);ctx.globalAlpha=1;
-  deepDrawWorld();try{hookDrawWorld()}catch(e){}svDrawOver();
+  deepDrawWorld();svDrawOver();
   ctx.globalAlpha=1;ctx.textAlign='center';ctx.lineJoin='round';
   /* 1.1.10(b174) 떠오르는 글자 자리 잡기: 같은 자리 글자끼리 · 내 아이디 칸과 겹치면 위로 올리고,
      큰 알림(배너) · 왼쪽 위 크기 칸 · 점수 칸 · 대전 순위표와 겹치는 작은 글자는 흐리게, 큰 글자(더블 꺼-억 · N배로 컸어요)는 배너 아래로 */
@@ -10572,7 +10458,7 @@ $('bgPvBuy').addEventListener('click',function(){var B=bgPvB;if(!B)return;var c=
 ['bug','idea','etc'].forEach(function(k){$('inqT-'+k).addEventListener('click',function(){inqType(k)})});$('inqClose').addEventListener('click',function(){$('inq').hidden=true});$('inqSend').addEventListener('click',inqSend);
 /* 1.1.2 대전은 다른 사람과 같은 바다라 멈추지 않는다: 메뉴만 열고 바다는 그대로 흘러간다(그동안 내 물고기는 조작 없이 떠 있음) */
 function pauseLead(){var e=$('pauseLead');if(!e)return;e.textContent=T('조작: 조이스틱이나 화면을 누른 채 끌기')+(fair()?'':' · '+T('특수능력: ')+(lefty()?T('오른쪽 아래 버튼'):T('왼쪽 아래 버튼')))}
-function pauseRun(){if(state!=='play'||P.menu||P.hook)return;renderSettings('setPause');pauseLead();try{svPauseBuild()}catch(e){}joy=null;keys={};var pz=$('pause');pz.hidden=false;$('skill').hidden=true;
+function pauseRun(){if(state!=='play'||P.menu)return;renderSettings('setPause');pauseLead();try{svPauseBuild()}catch(e){}joy=null;keys={};var pz=$('pause');pz.hidden=false;$('skill').hidden=true;
   var live=fair();pz.dataset.live=live?'1':'0';$('pauseTitle').textContent=live?T('메뉴'):T('잠깐 멈춤');$('pauseLive').hidden=!live;try{var pzI=$('pzIt');pzI.hidden=!P.surv;if(P.surv&&!pzI.childNodes.length){var h0=document.createElement('b');h0.textContent=T('바닥 아이템');pzI.appendChild(h0);Object.keys(SV_IT).forEach(function(k){var I=SV_IT[k],r=document.createElement('span');r.className='pzit-r';r.innerHTML='<img alt="" src="svart/it_'+k+'.webp" onerror="this.style.visibility=\'hidden\'">';var tt=document.createElement('em');tt.textContent=I.s;var dd=document.createElement('small');dd.textContent=I.d;r.appendChild(tt);r.appendChild(dd);pzI.appendChild(r)})}}catch(x){}try{$('pauseLead').textContent=P.surv?T('조작: 조이스틱이나 화면을 누른 채 끌기 · 특기: 왼쪽 아래 버튼 · 계속 움직여요'):T('조작: 조이스틱이나 화면을 누른 채 끌기 · 특수능력: 왼쪽 아래 버튼')}catch(e){}if(live){P.menu=true;return}state='pause'}
 function resumeRun(){if(state==='play'&&P.menu){P.menu=false;$('pause').hidden=true;return}if(state!=='pause')return;state='play';$('pause').hidden=true;$('skill').hidden=fair()}
 $('pauseBtn').addEventListener('click',pauseRun);
@@ -10808,7 +10694,7 @@ $('onbSkip').addEventListener('click',function(){if(onbI)onbGo(-1);else onbClose
   pn.addEventListener('pointerup',function(e){if(sx==null)return;var dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3)onbGo(dx<0?1:-1)})})();
 /* ===== 1.1.2 전체 랭킹: 기기마다 무작위 번호(save.pid)로 싱글 최고 점수·대전 최고 크기를 서버(gf_scores)에 올리고 상위 30명을 보여 준다.
    올리기는 gf_submit RPC로만(서버가 값 상한·잦은 요청·더 좋은 기록만 반영을 확인), 기기 번호는 다른 사람에게 보이지 않는다 ===== */
-var RB_T=0,TX_Y=[],TX_R=[],TX_BLK=[],TX_BF=0,TX_O=[],FL_R=[];var LB={api:'https://tfkdcguuuuwocshascat.supabase.co/rest/v1/',cache:{},busy:{}},lbMode='single',lbPer='week';
+var RB_T=0,TX_Y=[],TX_R=[],TX_BLK=[],TX_BF=0,TX_O=[],FL_R=[];var LB={fix:{},api:'https://tfkdcguuuuwocshascat.supabase.co/rest/v1/',cache:{},busy:{}},lbMode='single',lbPer='week';
 function lbPid(){if(!save.pid||!/^[a-z0-9]{12,40}$/.test(save.pid)){var a='abcdefghijklmnopqrstuvwxyz0123456789',r='';for(var i=0;i<20;i++)r+=a[(Math.random()*36)|0];save.pid=r;persist()}return save.pid}
 function lbReq(path,body){var h={apikey:NET.key,Authorization:'Bearer '+NET.key,'Content-Type':'application/json'};
   var ctl=window.AbortController?new AbortController():null,tm=setTimeout(function(){try{ctl&&ctl.abort()}catch(e){}},8000);
@@ -10859,7 +10745,7 @@ function lbShow(m){lbMode=m;['single','multi','camp','surv'].forEach(function(k)
   if(c)draw(c.rows,LB.cache[key+'_me']);else{box.textContent='';var ld=document.createElement('li');ld.className='empty';ld.textContent=T('랭킹 불러오는 중…');box.appendChild(ld)}
   if(LB.busy[key])return;LB.busy[key]=1;
   Promise.all([wk?lbReq('rpc/gf_top_week',{p_mode:m}):lbReq('gf_scores?select=nick,fish,score&mode=eq.'+m+'&order=score.desc,updated_at.asc&limit=30'),save.pid?lbReq(wk?'rpc/gf_rank_week':'rpc/gf_rank',{p_pid:save.pid,p_mode:m}).catch(function(){return []}):Promise.resolve([])])
-    .then(function(res){LB.busy[key]=0;LB.cache[key]={rows:res[0],at:Date.now()};if(res[1]&&res[1][0])LB.cache[key+'_me']=res[1][0];if(lbMode===m&&(cp||(lbPer==='week')===wk)&&!$('rec').hidden)draw(res[0],LB.cache[key+'_me'])})
+    .then(function(res){LB.busy[key]=0;LB.cache[key]={rows:res[0],at:Date.now()};if(res[1]&&res[1][0])LB.cache[key+'_me']=res[1][0];/* 1.1.19 '내 기록이 사라져요': 서버에 내 역대 기록이 없거나 내 기기 최고보다 낮으면 '보냄' 표시를 지우고 다시 올린다(전엔 한 번 보냈으면 다시 안 보내서 서버에서 빠지면 영영 안 돌아왔음) */try{if(!wk&&save.pid&&!LB.fix[m]){var mb=lbBest(m),me0=res[1]&&res[1][0];if(mb>0&&(!me0||+me0.best<mb-.05)){LB.fix[m]=1;if(save.lbSent)delete save.lbSent[m];setTimeout(lbSync,300)}}}catch(_){}if(lbMode===m&&(cp||(lbPer==='week')===wk)&&!$('rec').hidden)draw(res[0],LB.cache[key+'_me'])})
     .catch(function(){LB.busy[key]=0;if(lbMode===m&&(cp||(lbPer==='week')===wk)&&!$('rec').hidden)draw(c?c.rows:null,LB.cache[key+'_me'])})}
 /* 지난주 1~3위: 주간 랭킹을 볼 때만 한 줄로 */
 function lbPrevShow(m){var el=$('lbPrev');if(!el)return;if(lbPer!=='week'){el.hidden=true;return}var k=m+'_prev',c=LB.cache[k];
@@ -12579,7 +12465,7 @@ ACC_HEAD.hw_pumpcrown=function(c,U){var q=HW2H.hw_pumpcrown,im=hwAcs(q[0]);if(!i
 setTimeout(function(){try{if(hwSeason()||ownsAcc('hw_pumpcrown'))hwAcs('ac_pumpcrown')}catch(e){}},2000);var hwListEx=hwList;hwList=function(arr,own){return hwListEx(arr,own).filter(function(o){return !o.ex||own(o)})};
 
 /* --- 사탕 모으기 --- */
-var HWC=[{n:30,p:1000},{n:80,g:20},{n:150,a:'hw_pumpcrown'}];
+var HWC=[{n:30,p:1000},{n:80,g:20},{n:150,a:'hw_pumpcrown'},{n:250,p:3000},{n:350,g:30},{n:500,p:10000}]; /* 1.1.19 종한: 이벤트가 길어서 사탕 모으기 150 → 500까지 */
 function hwcN(){return save.hwCandy|0}
 function hwCandyAdd(n){if(!(n>0))return;var b=hwcN();save.hwCandy=b+n;persist();
   HWC.forEach(function(m){if(b<m.n&&b+n>=m.n)setTimeout(function(){banner(T('사탕 모으기'),nf(m.n)+T('개')+T(' · 할로윈 이벤트에서 받아요'))},1400)});try{hwBarPaint()}catch(e){}}
@@ -12626,9 +12512,9 @@ function hwEvRender(){var el=$('hwEv');if(!el)return;var M=HM();
   var n=hwcN(),top=HWC[HWC.length-1].n;$('hweCH').textContent=T('사탕 모으기');$('hweCnt').textContent=nf(Math.min(n,999))+' / '+top;$('hweFill').style.width=Math.min(100,n/top*100)+'%';$('hweTip').textContent=T('싱글에서 떠다니는 사탕을 먹거나 미션을 깨면 모여요');
   var ms=$('hweMs');ms.textContent='';HWC.forEach(function(m,i){var got=hwcGot(i),rd=!got&&n>=m.n,c=document.createElement('div');c.className='hwe-m'+(got?' got':rd?' rd':'');
     var ic=document.createElement('i');if(m.a){var im=hwAcs('ac_pumpcrown');if(im){var e=new Image();e.alt='';e.src=im.src;ic.appendChild(e)}else{ic.innerHTML=HWE_SVG.ghost;try{HWACS.ac_pumpcrown.addEventListener('load',function(){var o=$('hwEv');if(o&&!o.hidden)hwEvRender()},{once:true})}catch(_){}}}else ic.innerHTML=HWE_SVG[m.p?'pearl':'gem'];c.appendChild(ic);
-    var lb=document.createElement('b');lb.textContent=m.a?T('호박 유령 왕관'):m.p?T('진주 ')+nf(m.p):T('보석 ')+m.g;c.appendChild(lb);
+    var lb=document.createElement('b');/* 1.1.19 종한 '칸 안 맞음': 이름 · 개수를 두 줄로 고정해 칸마다 높이가 같게 */if(m.a)lb.textContent=T('호박 유령 왕관');else{lb.appendChild(document.createTextNode(T(m.p?'진주 ':'보석 ').trim()));lb.appendChild(document.createElement('br'));lb.appendChild(document.createTextNode(nf(m.p||m.g)))}c.appendChild(lb);
     var k=document.createElement('small');k.innerHTML=HWE_SVG.candy;k.appendChild(document.createTextNode(' '+m.n));c.appendChild(k);
-    var b=document.createElement('button');b.type='button';b.className='buy'+(rd?'':' off');b.disabled=!rd;b.textContent=got?'✓':T('받기');if(got)b.setAttribute('aria-label',T('받았어요'));b.addEventListener('click',function(){hwcClaim(i)});c.appendChild(b);ms.appendChild(c)});
+    var b=document.createElement('button');b.type='button';b.className='buy'+(rd?'':' off');b.disabled=!rd;b.textContent=got?'✓':T('받기');if(got)b.setAttribute('aria-label',T('받았어요'));b.addEventListener('click',function(){hwcClaim(i)});c.appendChild(b);ms.appendChild(c)});var hwcFit=function(){try{ms.querySelectorAll('.hwe-m b').forEach(function(x){if(!x.clientHeight)return;var f=x.textContent.length>12?11.5:13;x.style.fontSize=f+'px';while(x.scrollHeight>x.clientHeight+1&&f>8.5){f-=.5;x.style.fontSize=f+'px'}})}catch(e){}};ms.querySelectorAll('.hwe-m b').forEach(function(x){if(x.textContent.length>12)x.style.fontSize='11.5px'});hwcFit();setTimeout(hwcFit,0);setTimeout(hwcFit,120);
   $('hweAtt').textContent='🎁 '+T('출석 선물');$('hweShop').textContent='🎩 '+T('한정 꾸미기');$('hweX').textContent=T('닫기')}
 (function(){var st=document.createElement('style');st.textContent=
  '#hwEv{z-index:60}.hwe-panel{max-height:calc(100vh - 60px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));max-height:calc(100dvh - 60px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow-y:auto;gap:10px;background:linear-gradient(180deg,#FFF6E8,#FFE9CC)!important}'+
@@ -12642,9 +12528,9 @@ function hwEvRender(){var el=$('hwEv');if(!el)return;var M=HM();
  '.hwe-row .buy,.hwe-m .buy{flex:none;min-width:64px;padding:7px 10px 8px!important;font-size:14px!important;margin:0!important}.hwe-row .buy{width:auto!important;max-width:96px}.hwe-row.got .buy,.hwe-m.got .buy{font-size:17px!important}.hwe-row .buy.off,.hwe-m .buy.off{filter:grayscale(.75);opacity:.7}'+
  '.hwe-bar{position:relative;height:18px;border-radius:10px;background:#E5DCF5;box-shadow:inset 0 0 0 2px #0B2C4A;overflow:hidden}.hwe-bar u{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#C9A2FF,#8F4FE8);border-radius:10px;box-shadow:inset 0 -3px 0 rgba(40,0,90,.25)}'+
  '.hwe-ms{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.hwe-m{display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:14px;background:#F4F8FC;box-shadow:inset 0 0 0 2px #D5E2EC;padding:7px 4px 8px;min-width:0}'+
- '.hwe-m.rd{background:#FFF4D6;box-shadow:inset 0 0 0 2px #FFB648}.hwe-m.got{opacity:.6}.hwe-m i{width:42px;height:42px;display:grid;place-items:center}.hwe-m i svg{width:30px;height:30px}.hwe-m i img{max-width:42px;max-height:42px}'+
- '.hwe-m b{font-family:var(--disp);font-weight:400;font-size:13px;color:#0B2C4A;text-align:center;line-height:1.1;max-width:100%;overflow-wrap:anywhere}.hwe-m small{display:flex;align-items:center;gap:2px;font-size:12px;color:#5B3A8A;font-weight:700}.hwe-m small svg{width:15px;height:15px}'+
- '.hwe-m .buy{min-width:0;width:100%}.hwe-tip{margin:0;font-size:12px;color:#7A6A88;text-align:center}'+
+ '.hwe-m.rd{background:#FFF4D6;box-shadow:inset 0 0 0 2px #FFB648}.hwe-m.got{opacity:.6}.hwe-m i{width:42px;height:42px;display:grid;place-items:center}.hwe-m i svg{width:30px;height:30px}.hwe-m i img{max-width:36px;max-height:36px}'+
+ '.hwe-m b{font-family:var(--disp);font-weight:400;font-size:13px;color:#0B2C4A;text-align:center;line-height:1.12;max-width:100%;word-break:keep-all;height:2.3em;display:flex;align-items:center;justify-content:center;overflow:hidden}.hwe-m small{display:flex;align-items:center;gap:2px;font-size:12px;color:#5B3A8A;font-weight:700}.hwe-m small svg{width:15px;height:15px}'+
+ '.hwe-m .buy{min-width:0;width:100%;margin-top:auto!important;line-height:20px!important}.hwe-tip{margin:0;font-size:12px;color:#7A6A88;text-align:center}'+
  '.hwe-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.hwe-panel .btn{min-height:0!important;height:auto!important;flex:none!important;padding:11px 12px 13px!important;font-size:16px!important}';
  document.head.appendChild(st)})();
 
@@ -12757,12 +12643,14 @@ function isFav(id){return favs().indexOf(id)>=0}
 function favToggle(id){var f=favs(),i=f.indexOf(id);if(i>=0)f.splice(i,1);else f.unshift(id);persist();buzz(10);try{favCardStar();renderPickbar()}catch(e){}var fe=$('fpk');if(fe&&!fe.hidden)fpRender();banner(i>=0?fpL3('즐겨찾기에서 뺐어요','Removed from favorites','お気に入りから外しました'):fpL3('즐겨찾기에 넣었어요 ★','Added to favorites ★','お気に入りに追加 ★'),byId(id).name)}
 function recents(){if(!Array.isArray(save.recent))save.recent=[];return save.recent}
 function recentPush(id){var r=recents(),i=r.indexOf(id);if(i>=0)r.splice(i,1);r.unshift(id);if(r.length>8)r.length=8}
+/* 1.1.19 종한 '전체 버튼 고정 · 겹치는 것 같다': 전체 버튼을 넘기는 줄 밖 왼쪽 칸으로 빼서 물고기 카드가 그 밑으로 지나가지 않게 */
+function pbFixBox(box){var w=$('pbRow');if(!w){w=document.createElement('div');w.id='pbRow';box.parentNode.insertBefore(w,box);var f=document.createElement('div');f.className='pickbar pbFix';f.id='pbFix';w.appendChild(f);w.appendChild(box)}var fx=$('pbFix');fx.textContent='';var o=$('pbAll');if(o&&o.parentNode)o.parentNode.removeChild(o);return fx}
 /* 홈 줄 순서: 즐겨찾기 → 최근 → 나머지(비싼 순) */
 function fpOrder(list){var f=favs(),r=recents();return list.slice().sort(function(a,b){var fa=f.indexOf(a.id),fb=f.indexOf(b.id);if((fa>=0)!==(fb>=0))return fa>=0?-1:1;if(fa>=0)return fa-fb;var ra=r.indexOf(a.id),rb=r.indexOf(b.id);if((ra>=0)!==(rb>=0))return ra>=0?-1:1;if(ra>=0)return ra-rb;return (b.price||0)-(a.price||0)})}
-var renderPickbarFP=renderPickbar;renderPickbar=function(){var r=renderPickbarFP.apply(this,arguments);try{var box=$('pickbar'),ids=SPECIES.filter(function(L){return owns(L.id)}),ord=fpOrder(ids),cur=null;
+var renderPickbarFP=renderPickbar;renderPickbar=function(){var r=renderPickbarFP.apply(this,arguments);try{var box=$('pickbar'),fx=pbFixBox(box),ids=SPECIES.filter(function(L){return owns(L.id)}),ord=fpOrder(ids),cur=null;
   ord.forEach(function(L){var b=$('pb-'+L.id);if(!b)return;box.appendChild(b);b.classList.toggle('fav',isFav(L.id));if(L.id===sel)cur=b});
   if(ids.length>=6){var all=document.createElement('button');all.type='button';all.id='pbAll';all.className='pball';all.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="#fff" stroke="#0B2C4A" stroke-width="1.8"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="#fff" stroke="#0B2C4A" stroke-width="1.8"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="#fff" stroke="#0B2C4A" stroke-width="1.8"/><circle cx="17.2" cy="17.2" r="3.4" fill="none" stroke="#0B2C4A" stroke-width="2"/><path d="M19.6 19.6l2 2" stroke="#0B2C4A" stroke-width="2.2" stroke-linecap="round"/></svg><span></span>';
-    all.querySelector('span').textContent=fpL3('전체 ','All ','すべて ')+ids.length;all.addEventListener('click',fpOpen);box.insertBefore(all,box.firstChild)}
+    all.querySelector('span').textContent=fpL3('전체 ','All ','すべて ')+ids.length;all.addEventListener('click',fpOpen);fx.appendChild(all)}fx.hidden=!fx.firstChild;
   if(cur)setTimeout(function(){try{box.scrollLeft=cur.offsetLeft-box.clientWidth/2+cur.offsetWidth/2}catch(e){}},0)}catch(e){}return r};
 /* 홈 카드 이름 옆 ☆ */
 function favCardStar(){var nm=$('hmName');if(!nm)return;var s=$('hmFav');if(!s){s=document.createElement('button');s.type='button';s.id='hmFav';s.className='hmfav';s.addEventListener('click',function(e){e.stopPropagation();favToggle(sel)});var b=nm.parentNode;b.insertBefore(s,nm)}
@@ -12798,7 +12686,7 @@ function fpRender(){var el=$('fpk');if(!el)return;var own=SPECIES.filter(functio
     c.addEventListener('click',function(){sel=L.id;save.pick=sel;persist();el.hidden=true;try{refreshHome(false)}catch(e){}buzz(8)});g.appendChild(c)})}
 (function(){var st=document.createElement('style');st.textContent=
  '.pickbar button.fav::after{content:"★";position:absolute;top:1px;right:4px;font-size:11px;color:#FFC62E;-webkit-text-stroke:.6px #5A3300}.pickbar button{position:relative}'+
- '.pickbar button.pball{background:linear-gradient(180deg,#E6F4FC,#BFDDF1);color:#0B2C4A;box-shadow:0 0 0 2.5px #0B2C4A,0 3px 0 2.5px #0B2C4A;justify-content:center}.pickbar button.pball svg{width:30px;height:30px;display:block}.pickbar button.pball span{font-weight:700}'+
+ '.pickbar button.pball{background:linear-gradient(180deg,#E6F4FC,#BFDDF1);color:#0B2C4A;box-shadow:0 0 0 2.5px #0B2C4A,0 3px 0 2.5px #0B2C4A;justify-content:center}.pickbar button.pball svg{width:30px;height:30px;display:block}.pickbar button.pball span{font-weight:700}/* 1.1.19 종한: 전체 버튼 고정 — 넘기는 줄 밖 왼쪽 칸 */#pbRow{display:flex;align-items:stretch;gap:7px;min-width:0;max-width:100%}#pbRow>.pbFix{flex:none!important;overflow:visible;padding-right:0;scroll-snap-type:none}#pbRow>#pickbar{flex:1 1 auto!important;min-width:0}#pbRow>.pbFix[hidden]{display:none}'+
  '.hmfav{border:0;background:none;cursor:pointer;font-size:21px;line-height:1;padding:9px 8px 9px 9px;margin:-9px -3px -9px -9px;min-width:40px;min-height:40px;color:#DDEBF5;-webkit-text-stroke:1.2px #0B2C4A;vertical-align:-2px}.hmfav.on{color:#FFC62E}.hmfav:active{transform:scale(.88)}'+
  '#fpk{z-index:60}.fpk-panel{max-height:calc(100dvh - 60px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));overflow:hidden;display:flex;flex-direction:column;gap:8px;}'+
  '.fpk-panel h1{margin:0;font-family:var(--disp);font-weight:400;color:#0B2C4A}.fpk-search{display:flex;align-items:center;gap:6px;background:#fff;border-radius:14px;padding:6px 10px;box-shadow:0 0 0 2.5px #0B2C4A}.fpk-search svg{width:20px;height:20px;flex:none}'+
@@ -13023,7 +12911,7 @@ var endRunNB=endRun;endRun=function(win,quit,by){var r=endRunNB.apply(this,argum
 /* 1.1.13: 처음 8판 동안만 판이 끝날 때 짧은 기록을 남긴다(새로 온 사람이 왜 떠나는지 보려고 · 이름 · 기기 정보 없이 판 결과만, 한 사람당 최대 12번) */
 var endRunEV=endRun;endRun=function(win,quit,by){var t0=P?P.time:0,r=endRunEV.apply(this,arguments);
   try{var n=save.runs|0;if(n>=1&&n<=8&&(save.nbEv|0)<12&&P&&mode!=='multi'){save.nbEv=(save.nbEv|0)+1;
-    var how=win?'win':quit?'quit':P.hooked?'hook':'eaten',bl=by&&(by.look||by.L)?String((by.look||by.L).id||'').slice(0,20):'';
+    var how=win?'win':quit?'quit':'eaten',bl=by&&(by.look||by.L)?String((by.look||by.L).id||'').slice(0,20):'';
     save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:n,m:P.camp?'camp'+(P.camp.n||''):P.surv?'surv':'single',f:String(sel||'').slice(0,20),
       t:Math.round(t0||0),cm:Math.round(cmOf(P.maxS||P.s)*10)/10,e:P.eaten|0,sc:(function(){try{return scoreNow()}catch(x){return 0}})(),how:how,by:bl,nbc:P.nbContd?1:0,
       d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),pages:(CR.bc||[]).filter(function(x){return /^tab:/.test(x)}).length}]).slice(-8);persist();setTimeout(crashSend,1200)}}catch(e){}
@@ -14642,10 +14530,143 @@ NEWS['1.1.17']=[T("겨울 바다 새 물고기 8종: 빙어 · 뚝지 · 북극�
 abyTr(TRT,{"진주를 더 많이 받아요: 한 판 최대 3만 → 10만 · 진주 샘 · 보물 상자 최대 8시간치 → 12시간치":"More pearls: up to 100,000 per run (was 30,000) · Pearl Spring and treasure chests hold up to 12 hours' worth (was 8)","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"When the Halloween event ends (from Nov 22), leftover candy turns into pearls: 1 candy = 20 pearls, plus any unclaimed candy gifts","진주를 더 많이 모을 수 있어요 🫧":"Collect more pearls 🫧"});
 abyTr(TRJ,{"진주를 더 많이 받아요: 한 판 최대 3만 → 10만 · 진주 샘 · 보물 상자 최대 8시간치 → 12시간치":"真珠がもっともらえる：1回の上限 3万 → 10万 · 真珠の泉・宝箱は最大8時間分 → 12時間分","할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께":"ハロウィンイベント終了後（11月22日から）、残ったキャンディを真珠に交換：キャンディ1個＝真珠20、受け取っていないキャンディのプレゼントも一緒に","진주를 더 많이 모을 수 있어요 🫧":"真珠をもっと集められます 🫧"});
 NEWS['1.1.18']=[T("진주를 더 많이 받아요: 한 판 최대 3만 → 10만 · 진주 샘 · 보물 상자 최대 8시간치 → 12시간치"),T("할로윈 이벤트가 끝나면(11월 22일부터) 남은 사탕을 진주로 바꿔 드려요: 사탕 1개 = 진주 20, 안 받은 사탕 선물도 함께")];NEWS_LEAD['1.1.18']=T("진주를 더 많이 모을 수 있어요 🫧");
+/* ===== 1.1.19 종한(10/27 23:11): 낚싯바늘 — 싱글(기록 도전)에서 가끔 미끼 달린 바늘이 내려옴.
+   미끼를 먹으면 낚임 → 힘겨루기 3번(움직이는 표시를 초록 칸에서 탭으로 멈추기, 점점 좁고 빠르게). 한 번이라도 놓치면 끌려 올라감:
+   잡힌 자리부터 수면까지 줌인하며 따라 올라가고 진동이 계속 → '낚였어요!' 사진(가상의 낚시꾼 아저씨, 바늘에 내 물고기만 그림) → 결과 화면.
+   세 번 다 맞추면 줄을 끊고 도망 + 미끼는 덤으로 먹음 ===== */
+var HK={on:null,t:0,next:0,tip:0,img:null,meta:{hx:.583,hy:.423,s:.30,tx:.599,ty:.404}};
+var HK_ZONE=[.17,.13,.10],HK_SPD=[1.05,1.4,1.75],HK_LIM=3.2; /* 칸 폭(바 전체 대비) · 1초에 끝까지 가는 횟수 · 한 판 제한 시간 */
+function hkOk(){try{return state==='play'&&(mode==='single'||mode==='multi')&&!P.camp&&!P.surv&&!P.dead&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)&&(save.runs|0)>=3}catch(e){return false}}
+function hkImg(){if(!HK.img){HK.img=new Image();HK.img.decoding='async';HK.img.src='svart/hook_man.webp'}return HK.img}
+function hkReset(){HK.on=null;HK.t=0;HK.next=rnd(28,45);var u=$('hookUI');if(u)u.hidden=true}
+function hkSpawn(){var R=viewR(),x=P.x+rnd(-.45,.45)*R*.8,y=clamp(P.y+rnd(-.25,.25)*R,H*.02,H*.97);
+  var pool=(HAB[zoneAt(y)]&&HAB[zoneAt(y)].length?HAB[zoneAt(y)]:SPECIES).filter(function(L){return L&&!L.gem&&(L.cap||99)<=60});HK.on={st:'dangle',x:x,y:y,y0:y,cy:y,t:0,sw:Math.random()*6,br:Math.max(P.s*.55,8/zoom),lk:pool.length?pool[(Math.random()*pool.length)|0]:byId('anchovy'),fa:Math.random()<.5?0:Math.PI};
+  crumb('hook:spawn');hkImg()}
+function hkBait(h){return {x:h.x+Math.sin(t*.6+h.sw)*h.br*.05,y:h.cy+h.br*.4}}
+/* 매 프레임: 바늘 내려오기 · 흔들기 · 미끼 먹었는지 */
+function hkTick(dt){var h=HK.on;
+  if(!h){if(!hkOk())return;HK.t+=dt;if(HK.t>=HK.next){HK.t=0;HK.next=rnd(55,85);hkSpawn()}return}
+  h.t+=dt;if(h.st==='drop'){h.cy+=(h.y-h.cy)*Math.min(1,dt*2.2);if(h.t>2.2)h.st='dangle'}
+  else if(h.st==='dangle'){/* 1.1.19 종한 '미끼니까 움직임이 거의 없어야': 줄에 매달려 물살에 아주 살짝만 흔들림 */h.cy=h.y+Math.sin(t*.9+h.sw)*h.br*.08;if(h.t>16){h.st='up';h.t=0}}
+  else if(h.st==='up'){h.cy-=dt*(ch/zoom)*.9;if(h.cy<cam.y-ch/zoom){HK.on=null;return}}
+  if(h.st!=='up'&&!invuln()&&!P.dead){var b=hkBait(h);if(Math.hypot(P.x-b.x,P.y-b.y)<P.s*.75+Math.max(P.s*.78,h.br*.85)*.6)hkBite(h)}}
+function hkBite(h){h.st='fight';h.round=0;h.mk=0;h.dir=1;h.rt=0;h.ok=0;h.pull=0;hkZone(h);P.vx=0;P.vy=0;joy=null;crumb('hook:bite');
+  buzz([40,30,60]);shake=reduce?0:.4;try{svSnd&&svSnd('hit')}catch(e){}
+  var u=hkUI();u.hidden=false;hkUIPaint(h)}
+function hkZone(h){var w=HK_ZONE[h.round];h.z0=rnd(.08,.92-w);h.z1=h.z0+w;h.mk=Math.random()<.5?0:1;h.dir=h.mk?-1:1;h.rt=0}
+function hkUI(){var u=$('hookUI');if(u)return u;u=document.createElement('div');u.id='hookUI';u.hidden=true;
+  u.innerHTML='<div class="hk-box"><b class="hk-t"></b><div class="hk-dots"><i></i><i></i><i></i></div><div class="hk-bar"><u class="hk-z"></u><s class="hk-m"></s></div><small class="hk-s"></small></div>';document.body.appendChild(u);
+  var st=document.createElement('style');st.textContent='#hookUI{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;padding:0 16px calc(28px + env(safe-area-inset-bottom,0px));touch-action:none;background:radial-gradient(ellipse at 50% 40%,rgba(0,0,0,0) 40%,rgba(3,18,38,.45))}#hookUI[hidden]{display:none}'+
+   '.hk-box{width:min(440px,100%);background:rgba(11,44,74,.88);border-radius:22px;padding:14px 16px 16px;box-shadow:0 0 0 3px #FFE27A,0 8px 24px rgba(0,0,0,.4);text-align:center;color:#fff;font-family:var(--disp,inherit)}'+
+   '.hk-t{display:block;font-size:22px;color:#FFE27A;text-shadow:0 2px 0 #0B2C4A}.hk-dots{display:flex;gap:8px;justify-content:center;margin:6px 0 10px}.hk-dots i{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.25);box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}.hk-dots i.ok{background:#3DDC84}.hk-dots i.no{background:#FF5A5A}'+
+   '.hk-bar{position:relative;height:34px;border-radius:17px;background:linear-gradient(180deg,#2B4A68,#16324A);box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 0 0 2.5px #fff;overflow:hidden}.hk-z{position:absolute;top:0;bottom:0;background:linear-gradient(180deg,#7CF2A8,#22B865);box-shadow:inset 0 0 0 2px #E9FFF1}'+
+   '.hk-m{position:absolute;top:-4px;bottom:-4px;width:8px;margin-left:-4px;border-radius:4px;background:#FFE27A;box-shadow:0 0 0 2px #0B2C4A,0 0 10px #FFE27A}.hk-s{display:block;margin-top:8px;font-size:14px;opacity:.9;font-family:inherit}'+
+   '#hookUI.hit .hk-bar{box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 0 0 3px #3DDC84,0 0 16px #3DDC84}#hookUI.miss .hk-bar{box-shadow:inset 0 2px 6px rgba(0,0,0,.5),0 0 0 3px #FF5A5A,0 0 16px #FF5A5A}';document.head.appendChild(st);
+  u.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();hkTap()},true);return u}
+function hkUIPaint(h){var u=$('hookUI');if(!u)return;u.querySelector('.hk-t').textContent=T('낚였어요! 버텨요')+' '+(Math.min(3,h.round+1))+'/3';
+  var d=u.querySelectorAll('.hk-dots i');for(var i=0;i<3;i++)d[i].className=i<h.ok?'ok':(h.miss&&i===h.round?'no':'');
+  var z=u.querySelector('.hk-z');z.style.left=(h.z0*100)+'%';z.style.width=((h.z1-h.z0)*100)+'%';u.querySelector('.hk-m').style.left=(h.mk*100)+'%';
+  u.querySelector('.hk-s').textContent=(h.round===0&&!h.ok&&!h.miss?T('미끼였어요! ')+' ':'')+T('노란 표시가 초록 칸에 왔을 때 화면을 톡!')}
+function hkTap(){var h=HK.on;if(!h||h.st!=='fight'||h.lock)return;var hit=h.mk>=h.z0-.01&&h.mk<=h.z1+.01,u=$('hookUI');
+  h.lock=1;u.classList.remove('hit','miss');void u.offsetWidth;u.classList.add(hit?'hit':'miss');
+  if(hit){h.ok++;buzz([25,20,25]);P.x+=rnd(-1,1)*P.s*.2;shake=reduce?0:.25;
+    if(h.ok>=3){hkUIPaint(h);setTimeout(function(){hkEscape(h)},350);return}
+    setTimeout(function(){if(HK.on!==h)return;h.round++;hkZone(h);h.lock=0;u.classList.remove('hit');hkUIPaint(h)},380)}
+  else{h.miss=1;hkUIPaint(h);buzz(120);setTimeout(function(){hkCaught(h)},420)}}
+function hkEscape(h){var u=$('hookUI');if(u){u.hidden=true;u.classList.remove('hit','miss')}crumb('hook:escape');
+  h.st='snap';h.t=0;P.fx.ghost=Math.max(P.fx.ghost||0,1.6);try{grow(h.br*1.2,P.x,P.y)}catch(e){}
+  var pb=Math.round(40*(typeof PEARL_K!=='undefined'?PEARL_K:1));P.bonus=(P.bonus||0)+40;
+  banner(T('줄을 끊고 도망쳤어요!'),T('미끼는 덤으로 꿀꺽 · 진주 +')+pb);rings.push({x:P.x,y:P.y,r:P.s*2.4,life:.6,max:.6,col:'255,255,255'});burst(P.x,P.y,P.s,10);
+  setTimeout(function(){if(HK.on===h)HK.on=null},900)}
+function hkCaught(h){var u=$('hookUI');if(u){u.hidden=true;u.classList.remove('hit','miss')}crumb('hook:caught');
+  h.st='reel';h.t=0;h.ry0=P.y;h.z0z=zoom;try{MUS&&MUS.stop&&MUS.stop()}catch(e){}}
+/* 끌려 올라가기: 잡힌 자리부터 수면까지, 카메라가 따라가며 점점 가까이(줌인) · 진동 계속 */
+var HK_REEL=2.6;
+function hkReelTick(dt){var h=HK.on;h.t+=dt;var k=Math.min(1,h.t/HK_REEL),e=k*k*(3-2*k);
+  P.y=h.ry0+(-P.s*1.2-h.ry0)*e;P.x+=Math.sin(t*22)*P.s*.04;P.ang=-Math.PI/2+Math.sin(t*18)*.35;h.cy=P.y-P.s*.9;h.x=P.x;
+  zoom=h.z0z*(1+1.1*e);cam.x=P.x;cam.y=P.y+ch*.1/zoom;
+  h.bz=(h.bz||0)-dt;if(h.bz<=0){h.bz=.11;buzz(k<.85?35:60)}shake=reduce?0:.12+.25*e;
+  if(k>=1&&!h.done){h.done=1;shake=reduce?0:.6;buzz([80,40,120]);for(var i=0;i<3;i++)burst(P.x+rnd(-1,1)*P.s,0,P.s,12);setTimeout(hkShow,350)}}
+function hkLand(){try{return matchMedia('(orientation:landscape) and (max-height:560px)').matches}catch(e){return false}}
+function hkShow(){var h=HK.on;crumb('hook:photo');var o=$('hookCatch');
+  if(!o){o=document.createElement('div');o.id='hookCatch';o.className='overlay';o.hidden=true;
+    o.innerHTML='<div class="panel hc-panel"><h1></h1><div class="hc-ph"><canvas></canvas></div><div class="hc-tx"><p class="hc-l1"></p><p class="hc-l2"></p></div><button class="btn" type="button" id="hcOk"></button></div>';document.body.appendChild(o);
+    var st=document.createElement('style');st.textContent='#hookCatch{z-index:41}'+
+     '.hc-panel{max-width:380px;width:100%;text-align:center;display:flex;flex-direction:column;gap:0;animation:hcIn .45s cubic-bezier(.2,1.4,.4,1)}.hc-panel h1{margin-bottom:10px}'+
+     '.hc-ph{border-radius:16px;overflow:hidden;box-shadow:0 0 0 4px #fff,0 0 0 7px #0B2C4A,0 10px 20px rgba(0,0,0,.35);background:#cde}.hc-ph canvas{display:block;width:100%;height:auto}'+
+     '.hc-tx{margin:22px 0 14px}.hc-tx p{margin:0;word-break:keep-all;font-family:var(--disp,inherit);color:#16324A;line-height:1.35}.hc-l1{font-size:19px}.hc-l1 .nw{display:block;white-space:nowrap}.hc-l2{font-size:17px;margin-top:6px!important;color:#B85C00!important;white-space:nowrap}'+
+     '#hookCatch .hc-panel{width:min(380px,calc((100dvh - 250px) * .75 + 40px),100%)}#hookCatch #hcOk{flex:0 0 auto!important;height:auto!important;min-height:46px!important;max-height:56px;font-size:19px!important;padding:6px 18px 8px!important;width:78%!important;align-self:center;margin:0!important}@keyframes hcIn{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}'+
+     '@media (orientation:landscape) and (max-height:560px){#hookCatch{padding:10px 14px}#hookCatch .hc-panel{width:min(94vw,860px)!important;max-width:none!important;height:calc(100dvh - 24px)!important;display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-rows:.7fr auto auto auto 1fr;grid-template-areas:"ph ." "ph t" "ph l" "ph b" "ph .";column-gap:28px;align-items:center;padding:14px 26px 14px 14px!important;box-sizing:border-box}.hc-panel h1{grid-area:t;position:static!important;transform:none!important;margin:0 auto 30px!important;justify-self:center;font-size:30px!important;padding:8px 26px 10px!important}.hc-ph{grid-area:ph;height:100%;aspect-ratio:1.06/1;max-width:52vw;justify-self:start}.hc-ph canvas{width:100%!important;height:100%!important}.hc-tx{grid-area:l;margin:0 0 16px!important;text-align:center}.hc-l1{font-size:20px}.hc-l2{font-size:18px}#hookCatch #hcOk{grid-area:b;justify-self:center;width:min(78%,280px)!important}}';document.head.appendChild(st);
+    $('hcOk').addEventListener('click',function(){o.hidden=true;hkFinish()})}
+  var L=P.look,nm=L.name,land=hkLand();o.querySelector('h1').textContent=T('낚였어요!');
+  /* 줄바뀜을 직접 정함: 한 덩어리(span.nw)는 줄 안에서 안 끊김 */
+  var L1=LANG==='ko'?['낚시꾼 아저씨가 '+nm+josa(nm,'을','를'),'번쩍 들어 올렸어요.']:LANG==='ja'?['釣り人のおじさんが',nm+'を釣り上げました。']:['A fisherman reeled in','your '+nm+'!'];
+  var l1=o.querySelector('.hc-l1');l1.textContent='';L1.forEach(function(x){var sp=document.createElement('span');sp.className='nw';sp.textContent=x;l1.appendChild(sp)});
+  o.querySelector('.hc-l2').textContent=LANG==='ko'?'다음엔 꼭 버텨요!':LANG==='ja'?'次はがんばって耐えよう！':'Hold on tighter next time.';
+  $('hcOk').textContent=T('결과 보기');var c=o.querySelector('canvas');o.hidden=false;
+  if(land){var bx=o.querySelector('.hc-ph').getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);c.width=Math.max(200,Math.round(bx.width*d));c.height=Math.max(200,Math.round(bx.height*d))}else{c.width=600;c.height=800}
+  hkPhoto(c,L,land);try{state='over'}catch(e){}setTimeout(function(){try{o.querySelectorAll('.hc-l1 .nw,.hc-l2').forEach(function(e){e.style.overflow='hidden';fitTx(e,12)})}catch(e){}},30)}
+/* 사진 위에 물고기: 입이 바늘 굽은 곳에 꿰이고, 바늘 끝이 입술 위로 살짝 나오게. land=가로면 물고기 쪽을 중심으로 사진을 꽉 채워 자름 */
+function hkPhoto(c,L,land){var g=c.getContext('2d'),W=c.width,Hh=c.height,im=hkImg(),m=HK.meta;
+  function paint(){g.clearRect(0,0,W,Hh);var iw0=im.naturalWidth||900,ih0=im.naturalHeight||1205,r,ox,oy;
+    var ok=im.complete&&im.naturalWidth;
+    if(land){var top=.07,bot=.76,rh=(bot-top)*ih0;r=Math.max(W/iw0,Hh/rh);ox=(W-iw0*r)/2+(.5-m.hx)*iw0*r*.35;ox=clamp(ox,W-iw0*r,0);oy=-top*ih0*r+(Hh-rh*r)/2;if(ok)g.drawImage(im,ox,oy,iw0*r,ih0*r);else{g.fillStyle='#8EC5E8';g.fillRect(0,0,W,Hh)}}
+    else{r=Math.max(W/iw0,Hh/ih0);ox=(W-iw0*r)/2;oy=(Hh-ih0*r)/2;if(ok)g.drawImage(im,ox,oy,iw0*r,ih0*r);else{g.fillStyle='#8EC5E8';g.fillRect(0,0,W,Hh)}}
+    var hx=ox+m.hx*iw0*r,hy=oy+m.hy*ih0*r,fl=m.s*ih0*r*(L.ratio>.6?.85:1),sp=SRC_IMG(L);
+    var a=sp&&sp.naturalWidth?sp.naturalHeight/sp.naturalWidth:.5,fh=fl*a,an=ANCH&&ANCH['_'+L.id],my=an?an[1]:.45;
+    /* 스프라이트는 오른쪽을 봄. -90도 돌리면 입(오른쪽 끝, 눈 높이 근처)이 맨 위로. 입이 (hx,hy)에 오도록 중심을 옮김 */
+    var mouthY=(Math.min(.7,my+.08)-.5)*fh,cx=hx-mouthY,cy=hy+fl/2-fl*.03,sw=.06*Math.sin(Date.now()/400);
+    g.save();g.translate(hx,hy);g.rotate(sw);g.translate(cx-hx,cy-hy);g.rotate(-Math.PI/2);g.shadowColor='rgba(0,0,0,.35)';g.shadowBlur=14*r/.667;g.shadowOffsetY=6;
+    if(sp&&sp.complete&&sp.naturalWidth)g.drawImage(sp,-fl/2,-fh/2,fl,fh);else{try{drawFish(g,0,0,fl*.45,0,L,{px:fl,minLw:2})}catch(e){}}
+    g.restore();
+    /* 바늘 끝: 굽은 곳에서 입술을 뚫고 위로 살짝 */
+    var u=r*1.5,tx=ox+m.tx*iw0*r,ty=oy+m.ty*ih0*r;g.save();g.lineCap='round';
+    g.strokeStyle='rgba(60,70,80,.55)';g.lineWidth=4.2*u;g.beginPath();g.moveTo(hx-2*u,hy-1*u);g.quadraticCurveTo(hx+3*u,hy+5*u,tx,ty);g.stroke();
+    g.strokeStyle='#D9E1E8';g.lineWidth=2.6*u;g.beginPath();g.moveTo(hx-2*u,hy-1*u);g.quadraticCurveTo(hx+3*u,hy+5*u,tx,ty);g.stroke();
+    g.strokeStyle='#FFFFFF';g.lineWidth=1*u;g.beginPath();g.moveTo(hx-1*u,hy-1.5*u);g.quadraticCurveTo(hx+3*u,hy+3.5*u,tx-.5*u,ty+.5*u);g.stroke();g.restore()}
+  paint();if(!(im.complete&&im.naturalWidth))im.onload=paint;var sp=SRC_IMG(L);if(sp&&!sp.complete)sp.onload=paint}
+var SRC_IMGS={};function SRC_IMG(L){var k=L.id,s=SPRITE_SRC[k];if(!s)return null;var o=SRC_IMGS[k];if(!o){o=SRC_IMGS[k]=new Image();o.src=s}return o}
+function hkFinish(){var h=HK.on;HK.on=null;state='play';P.hookBy=1;endRun(false,false,null);P.hookBy=0}
+/* 결과 화면 문구: '○○에게 먹혔어요' 대신 '낚시꾼에게 낚였어요' */
+var invHK=invuln;invuln=function(){var h=HK.on;if(h&&(h.st==='fight'||h.st==='reel'||h.st==='snap'))return true;return invHK.apply(this,arguments)};
+var endRunHK=endRun;endRun=function(win,quit,by){var hk=!!P.hookBy;if(!hk&&HK.on){HK.on=null;var hu=$('hookUI');if(hu)hu.hidden=true}var r=endRunHK.apply(this,arguments);if(hk){try{$('oTitle').textContent=T('낚였어요!');var m=$('oMsg'),f=document.createElement('span');f.className='ml hi';f.textContent=T('낚시꾼에게 낚여 끌려 올라갔어요.');m.insertBefore(f,m.firstChild)}catch(e){}}return r};
+/* 게임 루프: 낚인 동안은 바다가 멈추고 힘겨루기 · 끌려 올라가기만 */
+var updateHK=update;update=function(dt){var h=HK.on;
+  /* 1.1.19 대전: 다른 사람 · 바다는 멈추지 않음 — 바다는 그대로 돌리고, 나만 바늘에 묶여 있게(그동안 안 먹힘) */
+  if(h&&mode==='multi'&&state==='play'&&(h.st==='fight'||h.st==='reel'||h.st==='snap')){var px=P.x,py=P.y,pa=P.ang,cx=cam.x,cy=cam.y,zz=zoom;joy=null;
+    updateHK.apply(this,arguments);if(state!=='play'||HK.on!==h)return;P.x=px;P.y=py;P.ang=pa;P.vx=0;P.vy=0;cam.x=cx;cam.y=cy;zoom=zz;t-=dt}
+  if(h&&state==='play'&&(h.st==='fight'||h.st==='reel'||h.st==='snap')){t+=dt;
+    if(h.st==='fight'){if(!h.lock){h.mk+=h.dir*dt*HK_SPD[h.round];if(h.mk>=1){h.mk=1;h.dir=-1}else if(h.mk<=0){h.mk=0;h.dir=1}h.rt+=dt;
+        if(h.rt>HK_LIM){h.lock=1;h.miss=1;hkUIPaint(h);buzz(120);setTimeout(function(){hkCaught(h)},420)}
+        var u=$('hookUI');if(u)u.querySelector('.hk-m').style.left=(h.mk*100)+'%'}
+      h.pz=(h.pz||0)-dt;if(h.pz<=0){h.pz=.3;buzz(12)}P.ang=-Math.PI/2+.5+Math.sin(t*14)*.3;P.y-=dt*P.s*.15;h.cy=P.y-P.s*.9;h.x=P.x;
+      cam.x+=(P.x-cam.x)*Math.min(1,dt*4);cam.y+=(P.y-cam.y)*Math.min(1,dt*4);return}
+    if(h.st==='reel'){hkReelTick(dt);return}
+    if(h.st==='snap'){h.t+=dt;h.cy-=dt*ch/zoom*1.4;if(h.t>.6)HK.on=null}}
+  var r=updateHK.apply(this,arguments);try{if(state==='play')hkTick(dt)}catch(e){}return r};
+/* 그리기: 줄 · 바늘 · 미끼 */
+var drawHK=draw;draw=function(){var r=drawHK.apply(this,arguments);var h=HK.on;if(!h||state!=='play'&&!(h.st==='reel'))return r;
+  try{ctx.save();ctx.setTransform(dpr,0,0,dpr,0,0);ctx.translate(cw/2,ch/2);ctx.scale(zoom,zoom);ctx.translate(-cam.x,-cam.y);
+    var hid=h.st==='dangle'||h.st==='up',top=Math.min(cam.y-ch/2/zoom-20,0),hx=h.x,hy=h.cy,lw=Math.max(.8,1.1/zoom);
+    /* 1.1.19 종한 '미끼인 거 10%만 티 나게': 기다릴 땐 줄은 거의 안 보이게(물빛에 묻힘), 바늘은 먹이 물고기 입 속에 숨김. 낚인 뒤에야 또렷하게 */
+    var fadeIn=Math.min(1,h.t/1.2);
+    ctx.globalAlpha=hid?.11*fadeIn:.85;ctx.strokeStyle='rgb(235,245,255)';ctx.lineWidth=hid?lw*.8:lw*1.4;ctx.beginPath();ctx.moveTo(hx+(h.st==='fight'?Math.sin(t*30)*2/zoom:0),top);
+    if(hid){var b0=hkBait(h);ctx.lineTo(b0.x,b0.y)}else ctx.lineTo(hx,hy);ctx.stroke();ctx.globalAlpha=1;
+    if(hid){var b=hkBait(h),fs=Math.max(P.s*.78,h.br*.85),ang=h.fa+Math.sin(t*.7+h.sw)*.04;ctx.globalAlpha=fadeIn;
+      try{drawFish(ctx,b.x,b.y,fs,ang,h.lk,{px:fs*zoom,phase:h.sw+Math.sin(t*.5+h.sw)*.15,minLw:Math.max(1,1.2/zoom)})}catch(e){}
+      /* 입가에 아주 작은 은빛 점 하나(눈 밝은 사람만 알아채게) */
+      var mx=b.x+Math.cos(ang)*fs*.95,my=b.y+Math.sin(ang)*fs*.95;ctx.globalAlpha=.22*fadeIn;ctx.fillStyle='#E6EEF5';ctx.beginPath();ctx.arc(mx,my-fs*.12,Math.max(.8,fs*.07),0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
+    else{var s=Math.max(6,h.br*1.1);ctx.strokeStyle='#C9D3DC';ctx.lineWidth=Math.max(2,s*.16);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(hx,hy+s*.9);ctx.arc(hx-s*.38,hy+s*.9,s*.38,0,Math.PI,false);ctx.lineTo(hx-s*.76,hy+s*.55);ctx.stroke();
+      ctx.fillStyle='#6B7C8C';ctx.beginPath();ctx.arc(hx,hy-s*.15,s*.18,0,Math.PI*2);ctx.fill()}
+    ctx.restore()}catch(e){try{ctx.restore()}catch(_){}}return r};
+var startRunHK=startRun;startRun=function(){hkReset();P.hookBy=0;return startRunHK.apply(this,arguments)};
+abyTr(TRT,{'미끼였어요! ':'It was bait! ','낚싯바늘이 내려와요!':'A fishing hook is coming down!','미끼를 먹으면 낚여요 · 낚이면 정확히 멈춰서 버텨요':'Eat the bait and you get hooked — tap right on time to hold on','낚였어요! 버텨요':'Hooked! Hold on','노란 표시가 초록 칸에 왔을 때 화면을 톡!':'Tap when the yellow marker is in the green zone!','줄을 끊고 도망쳤어요!':'You snapped the line and got away!','미끼는 덤으로 꿀꺽 · 진주 +':'Bait gulped as a bonus · Pearls +','낚였어요!':'Caught!','결과 보기':'See results','낚시꾼에게 낚여 끌려 올라갔어요.':'A fisherman reeled you up.'});
+abyTr(TRJ,{'미끼였어요! ':'エサだった！','낚싯바늘이 내려와요!':'釣り針が下りてきた！','미끼를 먹으면 낚여요 · 낚이면 정확히 멈춰서 버텨요':'エサを食べると釣られます · タイミングよく止めて耐えよう','낚였어요! 버텨요':'釣られた！耐えろ','노란 표시가 초록 칸에 왔을 때 화면을 톡!':'黄色のマークが緑に来たらタップ！','줄을 끊고 도망쳤어요!':'糸を切って逃げ切った！','미끼는 덤으로 꿀꺽 · 진주 +':'エサはおまけでパクッ · 真珠 +','낚였어요!':'釣られた！','결과 보기':'結果を見る','낚시꾼에게 낚여 끌려 올라갔어요.':'釣り人に釣り上げられました。'});
+
 /* 1.1.19 업데이트 소식 */
-abyTr(TRT,{"가로 화면 결과 창: 오른쪽 안내가 잘리지 않고 끝까지 보여요":"Landscape results screen: the notes on the right now show in full, nothing cut off","화면 다듬기 ✨":"Screen polish ✨"});
-abyTr(TRJ,{"가로 화면 결과 창: 오른쪽 안내가 잘리지 않고 끝까지 보여요":"横画面の結果画面：右側のお知らせが途中で切れずに全部表示されます","화면 다듬기 ✨":"画面を調整しました ✨"});
-NEWS['1.1.19']=[T("가로 화면 결과 창: 오른쪽 안내가 잘리지 않고 끝까지 보여요")];NEWS_LEAD['1.1.19']=T("화면 다듬기 ✨");
+abyTr(TRT,{"할로윈 사탕 모으기가 500개까지 늘었어요: 250개 진주 3,000 · 350개 보석 30 · 500개 진주 10,000 🎃":"Halloween candy collection now goes up to 500: 250 = 3,000 pearls · 350 = 30 gems · 500 = 10,000 pearls 🎃","바다에 낚시꾼이 나타났다는 소문이… 맛있어 보인다고 다 먹진 마세요 🎣":"Rumor has it a fisherman is out on the sea… not everything tasty is safe to eat 🎣","수상한 먹이를 조심해요 🎣":"Watch out for suspicious snacks 🎣","가로 화면 결과 창: 오른쪽 안내가 잘리지 않고 끝까지 보여요":"Landscape results screen: the notes on the right now show in full, nothing cut off","화면 다듬기 ✨":"Screen polish ✨"});
+abyTr(TRJ,{"할로윈 사탕 모으기가 500개까지 늘었어요: 250개 진주 3,000 · 350개 보석 30 · 500개 진주 10,000 🎃":"ハロウィンキャンディ集めが500個まで：250個 真珠3,000 · 350個 ジェム30 · 500個 真珠10,000 🎃","바다에 낚시꾼이 나타났다는 소문이… 맛있어 보인다고 다 먹진 마세요 🎣":"海に釣り人が現れたというウワサが…おいしそうでも何でも食べちゃダメかも 🎣","수상한 먹이를 조심해요 🎣":"あやしいエサに気をつけて 🎣","가로 화면 결과 창: 오른쪽 안내가 잘리지 않고 끝까지 보여요":"横画面の結果画面：右側のお知らせが途中で切れずに全部表示されます","화면 다듬기 ✨":"画面を調整しました ✨"});
+NEWS['1.1.19']=[T("바다에 낚시꾼이 나타났다는 소문이… 맛있어 보인다고 다 먹진 마세요 🎣"),T("할로윈 사탕 모으기가 500개까지 늘었어요: 250개 진주 3,000 · 350개 보석 30 · 500개 진주 10,000 🎃"),T("가로 화면 결과 창: 오른쪽 안내가 잘리지 않고 끝까지 보여요")];NEWS_LEAD['1.1.19']=T("수상한 먹이를 조심해요 🎣");
 var PET_UP=null;
 /* ===== 1.1.18 종한 '짜치는 아이콘은 힉스필드로': 모드 고르기 3 · 오늘의 미션 10 · 심해 생존 버튼 5 · 탐사선 → 같은 화풍 3D 아이콘(svart/ic_*.webp) ===== */
 function icImg(k){var im=document.createElement('img');im.src='svart/ic_'+k+'.webp';im.alt='';im.decoding='async';im.draggable=false;im.className='ic3d';im.setAttribute('aria-hidden','true');return im}

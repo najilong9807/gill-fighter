@@ -345,6 +345,19 @@ def step_cancel(api):
         time.sleep(10)
     log('CANCEL done, still open', len(left))
 
+def step_inspect(api, vid):
+    """모든 화면 크기별 스크린샷 · 미리보기 칸 현황(읽기만)"""
+    locs = localizations(api, vid)
+    for loc in ('ko', 'en-US', 'ja'):
+        if loc not in locs: continue
+        lid = locs[loc]['id']
+        for st in api.all('appStoreVersionLocalizations/%s/appScreenshotSets?limit=50' % lid):
+            n = len(api.all('appScreenshotSets/%s/appScreenshots?limit=50' % st['id']))
+            log('INSPECT shots', loc, st['attributes']['screenshotDisplayType'], n)
+        for st in api.all('appStoreVersionLocalizations/%s/appPreviewSets?limit=50' % lid):
+            ps = api.all('appPreviewSets/%s/appPreviews?limit=10' % st['id'])
+            log('INSPECT preview', loc, st['attributes']['previewType'], len(ps), [((x['attributes'].get('videoDeliveryState') or {}).get('state')) for x in ps])
+
 def main():
     if not os.environ.get('APP_STORE_CONNECT_PRIVATE_KEY'):
         log('no ASC key env; stop'); return
@@ -356,7 +369,9 @@ def main():
         st = v['attributes'].get('appStoreState') or ''
         if st in ('READY_FOR_SALE', 'PROCESSING_FOR_APP_STORE', 'PENDING_DEVELOPER_RELEASE', 'IN_REVIEW', 'WAITING_FOR_REVIEW'):
             log('version not editable (%s) -> skip text/shots' % st)
+            if 'inspect' in STEPS: step_inspect(api, v['id'])
         else:
+            if 'inspect' in STEPS: step_inspect(api, v['id'])
             if 'whatsnew' in STEPS: step_whatsnew(api, v['id'])
             if 'shots' in STEPS: step_shots(api, v['id'])
             if 'previews' in STEPS: step_previews(api, v['id'])

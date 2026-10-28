@@ -345,6 +345,24 @@ def step_cancel(api):
         time.sleep(10)
     log('CANCEL done, still open', len(left))
 
+def step_drop61(api, vid):
+    """1.1.20(10/29 종한 '미리보기 안 바뀌었다'): 6.1형(APP_IPHONE_61) 칸에 남은 예전 스크린샷 8장 때문에 6.1 · 6.3형 아이폰에서 옛 화면이 보임 → 이 버전의 6.1형 칸을 비워서 6.9형 새 스크린샷 · 미리보기 영상이 대신 보이게"""
+    locs = localizations(api, vid)
+    for loc, L in locs.items():
+        lid = L['id']
+        for st in api.all('appStoreVersionLocalizations/%s/appScreenshotSets?limit=50' % lid):
+            if st['attributes']['screenshotDisplayType'] != 'APP_IPHONE_61': continue
+            xs = api.all('appScreenshotSets/%s/appScreenshots?limit=50' % st['id'])
+            log('DROP61', loc, len(xs))
+            if DRY: continue
+            for x in xs: api.req('DELETE', 'appScreenshots/%s' % x['id'])
+        for st in api.all('appStoreVersionLocalizations/%s/appPreviewSets?limit=50' % lid):
+            if st['attributes']['previewType'] != 'IPHONE_61': continue
+            xs = api.all('appPreviewSets/%s/appPreviews?limit=10' % st['id'])
+            log('DROP61 preview', loc, len(xs))
+            if DRY: continue
+            for x in xs: api.req('DELETE', 'appPreviews/%s' % x['id'])
+
 def step_inspect(api, vid):
     """모든 화면 크기별 스크린샷 · 미리보기 칸 현황(읽기만)"""
     locs = localizations(api, vid)
@@ -371,6 +389,7 @@ def main():
             log('version not editable (%s) -> skip text/shots' % st)
             if 'inspect' in STEPS: step_inspect(api, v['id'])
         else:
+            if 'drop61' in STEPS: step_drop61(api, v['id'])
             if 'inspect' in STEPS: step_inspect(api, v['id'])
             if 'whatsnew' in STEPS: step_whatsnew(api, v['id'])
             if 'shots' in STEPS: step_shots(api, v['id'])

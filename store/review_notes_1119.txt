@@ -4,7 +4,8 @@ What's new in 1.1.19:
 (3) Edible (smaller) fish are drawn somewhat larger; growth per bite is unchanged.
 (4) The seasonal Halloween candy collection (Oct 10 - Nov 21) now has 3 more in-game rewards at 250 / 350 / 500 candy (pearls / gems). No real money is involved.
 (5) UI fixes: candy reward grid alignment, the "All fish" button on the home screen stays pinned, landscape layout polish. Leaderboard fix: if the player's best record is missing on our score server, the app re-sends it when the ranking screen is opened.
-(6) The in-app "What's new" popup describes these changes.
+(6) Deep Survival gear screen has a new 'Auto equip' button (equips the highest-rarity owned item per slot; in-game items only). Tapping an entry in the in-app notification history now opens the related screen. One rotating weekly in-game event ("Giant Fish Week") was removed.
+(7) The in-app "What's new" popup describes these changes.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

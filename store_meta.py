@@ -329,11 +329,28 @@ def step_submit(api, v):
     api.req('PATCH', 'reviewSubmissions/%s' % sid, {'data': {'type': 'reviewSubmissions', 'id': sid, 'attributes': {'submitted': True}}})
     log('SUBMITTED', VER, 'submission', sid); return True
 
+def step_cancel(api):
+    """1.1.19(10/28 종한 '지금 업데이트한 거 취소하고 다시 올려'): 심사 대기 중인 제출을 취소해서 버전을 다시 고칠 수 있게 함. DRY=0 + CANCEL_OK=<버전> 일 때만"""
+    subs = []
+    for st in ('WAITING_FOR_REVIEW', 'IN_REVIEW', 'UNRESOLVED_ISSUES'):
+        subs += api.all('reviewSubmissions?filter[app]=%s&filter[platform]=IOS&filter[state]=%s&limit=10' % (APP, st))
+    log('CANCEL found', len(subs), [x['attributes'].get('state') for x in subs])
+    if DRY or (os.environ.get('CANCEL_OK') or SUBMIT_OK) != VER: log('CANCEL skip (dry or CANCEL_OK mismatch)'); return
+    for x in subs:
+        api.req('PATCH', 'reviewSubmissions/%s' % x['id'], {'data': {'type': 'reviewSubmissions', 'id': x['id'], 'attributes': {'canceled': True}}})
+        log('CANCELED submission', x['id'])
+    for _ in range(30):
+        left = [y for st in ('WAITING_FOR_REVIEW', 'IN_REVIEW', 'CANCELING') for y in api.all('reviewSubmissions?filter[app]=%s&filter[platform]=IOS&filter[state]=%s&limit=10' % (APP, st))]
+        if not left: break
+        time.sleep(10)
+    log('CANCEL done, still open', len(left))
+
 def main():
     if not os.environ.get('APP_STORE_CONNECT_PRIVATE_KEY'):
         log('no ASC key env; stop'); return
     api = Api()
     log('MODE', 'DRY' if DRY else 'WRITE', 'steps', sorted(STEPS))
+    if 'cancel' in STEPS: step_cancel(api)
     v = find_version(api, create='version' in STEPS)
     if v:
         st = v['attributes'].get('appStoreState') or ''

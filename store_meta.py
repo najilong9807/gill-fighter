@@ -377,17 +377,19 @@ def step_inspect(api, vid):
             ps = api.all('appPreviewSets/%s/appPreviews?limit=10' % st['id'])
             log('INSPECT preview', loc, st['attributes']['previewType'], len(ps), [((x['attributes'].get('videoDeliveryState') or {}).get('state')) for x in ps])
 
-OLD_NAME = 'Gulp Deep'
+OLD_NAME = 'Gulp Deep'; NEW_NAME = 'Gill Fighter'
 def step_name(api):
     """앱 이름(appInfo) 바꾸기 — 판매 중 쪽은 못 바꾸고, 새 버전과 함께 준비 중인 appInfo만.
-    listing_1113.json 의 'name'(ko · en-US · ja)을 쓰고, 그 밖의 언어는 지금 이름이 옛 영어 이름(Gulp Deep)일 때만 en-US 이름으로."""
+    listing_1113.json 의 'name'(ko · en-US · ja)을 쓰고, en-* 는 en-US 이름, 그 밖의 언어는 'Gulp Deep: …' 앞부분만 'Gill Fighter' 로 바꾸고 뒤 설명은 그대로(30자 넘으면 건너뜀)."""
     lt = json.load(open(os.path.join(ROOT, 'store', 'listing_1113.json'), encoding='utf-8'))
-    en = (lt.get('en-US') or {}).get('name'); done = 0
+    done = 0
     for info in api.all('apps/%s/appInfos?limit=10' % APP):
         st = info['attributes'].get('appStoreState') or info['attributes'].get('state') or ''
+        if st in ('READY_FOR_SALE',): log('NAME live appInfo (read only)', info['id']); continue
         for l in api.all('appInfos/%s/appInfoLocalizations?limit=50' % info['id']):
             loc = l['attributes']['locale']; cur = l['attributes'].get('name') or ''
-            t = (lt.get(loc) or {}).get('name') or (en if cur == OLD_NAME else None)
+            t = (listing_text(lt, loc) or {}).get('name') or (cur.replace(OLD_NAME, NEW_NAME, 1) if cur.startswith(OLD_NAME) else None)
+            if t and len(t) > 30: log('NAME too long (>30) skip', loc, repr(t)); continue
             log('NAME', st, loc, repr(cur), '->', repr(t) if t and t != cur else '(same)')
             if not t or t == cur or st in ('READY_FOR_SALE',): continue
             if DRY: continue

@@ -48,8 +48,8 @@ jobs:
           python3 -m pip install --quiet --break-system-packages pyjwt cryptography || python3 -m pip install --quiet pyjwt cryptography
       - name: 팀 ID · 빌드 번호
         run: |
-          TEAM=$(python3 ci/asc.py team); echo "TEAM_ID=$TEAM" >> $GITHUB_ENV; echo "team $TEAM"
-          NEXT=$(python3 ci/asc.py next-build "$APP_STORE_APPLE_ID"); echo "build number $NEXT"
+          TEAM=$(python3 ci/asc.py team 2>team.err) || { echo "::error title=team::$(tail -c 600 team.err | tr '\n' ' ')"; exit 1; }; echo "TEAM_ID=$TEAM" >> $GITHUB_ENV; echo "team $TEAM"
+          NEXT=$(python3 ci/asc.py next-build "$APP_STORE_APPLE_ID" 2>nb.err) || { echo "::error title=next-build::$(tail -c 600 nb.err | tr '\n' ' ')"; exit 1; }; echo "build number $NEXT"
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $NEXT;/g" "$XCODE_PROJECT/project.pbxproj"
           grep -m2 "MARKETING_VERSION" "$XCODE_PROJECT/project.pbxproj"
       - name: 아카이브 (서명 없이 — 등록된 기기가 없어 개발용 자동 서명이 안 됨, 서명은 내보낼 때 App Store용으로)

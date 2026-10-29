@@ -3,6 +3,7 @@
 #   2) 업데이트 문구(What's New) 39개 언어 → store/whatsnew_1113.json
 #   3) 스크린샷 교체: 한·영·일 아이폰 6.9/6.5형 + 아이패드 13형 (1~5번 shots_1112, 6번 shots_1113) = 54장
 #   5) [STEPS에 'listing'을 넣을 때만] 키워드·홍보 문구(1.1.13용)·부제목 → store/listing_1113.json (ko · en-* · ja, 종한이 확인한 뒤에만)
+#   7) [STEPS에 'name'을 넣을 때만] 앱 이름(언어별) → store/listing_1113.json 'name' (준비 중인 appInfo만, 판매 중은 읽기만)
 #   6) [STEPS에 'promo_now'를 넣을 때만] 지금 판매 중인 버전의 홍보 문구만 바꿈(심사 없이 바로 반영)
 #   4) Game Center 순위표 점수 범위 보고 (바꾸지는 않음)
 # 환경변수: DRY=1 이면 읽기만 하고 아무것도 바꾸지 않음. STEPS=version,whatsnew,shots,gc (기본: 전부)
@@ -376,6 +377,23 @@ def step_inspect(api, vid):
             ps = api.all('appPreviewSets/%s/appPreviews?limit=10' % st['id'])
             log('INSPECT preview', loc, st['attributes']['previewType'], len(ps), [((x['attributes'].get('videoDeliveryState') or {}).get('state')) for x in ps])
 
+OLD_NAME = 'Gulp Deep'
+def step_name(api):
+    """앱 이름(appInfo) 바꾸기 — 판매 중 쪽은 못 바꾸고, 새 버전과 함께 준비 중인 appInfo만.
+    listing_1113.json 의 'name'(ko · en-US · ja)을 쓰고, 그 밖의 언어는 지금 이름이 옛 영어 이름(Gulp Deep)일 때만 en-US 이름으로."""
+    lt = json.load(open(os.path.join(ROOT, 'store', 'listing_1113.json'), encoding='utf-8'))
+    en = (lt.get('en-US') or {}).get('name'); done = 0
+    for info in api.all('apps/%s/appInfos?limit=10' % APP):
+        st = info['attributes'].get('appStoreState') or info['attributes'].get('state') or ''
+        for l in api.all('appInfos/%s/appInfoLocalizations?limit=50' % info['id']):
+            loc = l['attributes']['locale']; cur = l['attributes'].get('name') or ''
+            t = (lt.get(loc) or {}).get('name') or (en if cur == OLD_NAME else None)
+            log('NAME', st, loc, repr(cur), '->', repr(t) if t and t != cur else '(same)')
+            if not t or t == cur or st in ('READY_FOR_SALE',): continue
+            if DRY: continue
+            api.req('PATCH', 'appInfoLocalizations/%s' % l['id'], {'data': {'type': 'appInfoLocalizations', 'id': l['id'], 'attributes': {'name': t}}}); done += 1
+    log('NAME updated', done)
+
 def main():
     if not os.environ.get('APP_STORE_CONNECT_PRIVATE_KEY'):
         log('no ASC key env; stop'); return
@@ -400,6 +418,7 @@ def main():
             if 'submit' in STEPS: step_submit(api, v)
     if 'gc' in STEPS: step_gc(api)
     if 'promo_now' in STEPS: step_promo_now(api)
+    if 'name' in STEPS: step_name(api)
     log('DONE')
 
 if __name__ == '__main__':

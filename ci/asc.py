@@ -9,8 +9,14 @@ def token():
     return jwt.encode({'iss':ISS,'iat':now,'exp':now+1100,'aud':'appstoreconnect-v1'},P8,algorithm='ES256',headers={'kid':KID,'typ':'JWT'})
 def get(path,params=None):
     u='https://api.appstoreconnect.apple.com'+path+('?'+urllib.parse.urlencode(params) if params else '')
-    r=urllib.request.Request(u,headers={'Authorization':'Bearer '+token()})
-    with urllib.request.urlopen(r,timeout=60) as f:return json.load(f)
+    last=None
+    for i in range(5):  # 애플 API가 잠깐 막히면(5xx · 시간 초과) 다시 시도
+        try:
+            r=urllib.request.Request(u,headers={'Authorization':'Bearer '+token()})
+            with urllib.request.urlopen(r,timeout=60) as f:return json.load(f)
+        except Exception as e:
+            last=e;print('retry',i+1,type(e).__name__,getattr(e,'code',''),file=sys.stderr);time.sleep(10*(i+1))
+    raise last
 cmd=sys.argv[1]
 if cmd=='team':
     bid=os.environ.get('BUNDLE_ID','com.gillfighter.game')

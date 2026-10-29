@@ -15,7 +15,10 @@ def get(path,params=None):
             r=urllib.request.Request(u,headers={'Authorization':'Bearer '+token()})
             with urllib.request.urlopen(r,timeout=60) as f:return json.load(f)
         except Exception as e:
-            last=e;print('retry',i+1,type(e).__name__,getattr(e,'code',''),file=sys.stderr);time.sleep(10*(i+1))
+            last=e;body=''
+            try:body=e.read().decode()[:300]
+            except Exception:pass
+            print('retry',i+1,type(e).__name__,getattr(e,'code',''),path,body.replace(chr(10),' '),file=sys.stderr);time.sleep(10*(i+1))
     raise last
 cmd=sys.argv[1]
 if cmd=='team':

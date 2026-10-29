@@ -6041,7 +6041,7 @@ function netTick(dt){
     /* 1.1.5: 나보다 훨씬 큰 사람 물고기는 원래 속도대로 그리면 내 화면에선 '휙휙' 순간이동처럼 보인다 → 내 화면에서 움직이는 속도를 내 기준 속도의 2.2배로 제한.
        뒤처진 만큼은 조금씩 더 빨리 따라가고, 아주 멀어지면(화면 6배) 바로 옮긴다. 먹고 먹히는 판정도 이 그려진 자리로 한다 */
     var kx=(tx-e.x)*Math.min(1,dt*6),ky=(ty-e.y)*Math.min(1,dt*6),stp=Math.hypot(kx,ky),lag=Math.hypot(tx-e.x,ty-e.y),cap=Math.min(refSpeed()*1.7+lag*.55,135*scaleOf(e.s)*Math.pow(Math.max(1,e.s/START_S),.08)*1.04*1.4+lag*.5)*dt; /* 1.1.13 상대가 실제로 낼 수 있는 속도(같은 크기 규칙)의 1.4배까지만 그려서, 렉으로 밀린 걸 따라잡을 때 '너무 빠르게' 보이지 않게 */
-    if(lag>viewR()*4.5){e.x=tx;e.y=ty;kx=ky=0;crumb('peerSnap')}else if(b.clk&&NETI&&NETI.on){/* 1.1.21 종한 '상대 움직임이 너무 부자연스럽다': 이미 매끈하게 이어 그린(보간) 자리를 한 번 더 늦게 쫓아가며 속도 제한까지 걸어 고무줄처럼 늘어졌다 붙었다 했음 → 보간된 자리를 거의 그대로(아주 살짝만 부드럽게) */var kk=Math.min(1,dt*11);kx=(tx-e.x)*kk;ky=(ty-e.y)*kk}else if(stp>cap&&stp>0){kx*=cap/stp;ky*=cap/stp}
+    if(lag>Math.max(viewR()*4.5,e.s*8)){e.x=tx;e.y=ty;kx=ky=0;crumb('peerSnap')} /* 1.1.21 점검(오류 기록: 아주 큰 상대가 계속 순간 이동 peerSnap): 큰 상대는 몸이 크고 빨라서 조금만 밀려도 '멀다'로 잡혔음 → 상대 크기의 8배까지는 이어서 그림 */else if(b.clk&&NETI&&NETI.on){/* 1.1.21 종한 '상대 움직임이 너무 부자연스럽다': 이미 매끈하게 이어 그린(보간) 자리를 한 번 더 늦게 쫓아가며 속도 제한까지 걸어 고무줄처럼 늘어졌다 붙었다 했음 → 보간된 자리를 거의 그대로(아주 살짝만 부드럽게) */var kk=Math.min(1,dt*11);kx=(tx-e.x)*kk;ky=(ty-e.y)*kk}else if(stp>cap&&stp>0){kx*=cap/stp;ky*=cap/stp}
     e.vx=kx/Math.max(dt,1e-3);e.vy=ky/Math.max(dt,1e-3);e.x+=kx;e.y+=ky;e.s+=(b.size-e.s)*Math.min(1,dt*5);var mv=Math.hypot(e.vx,e.vy),ta2=mv>refSpeed()*.25?Math.atan2(e.vy,e.vx):b.ta;e.ang=lerpAng(e.ang,ta2,dt*7); /* 1.1.21: 실제로 움직이는 쪽을 보게(받은 각도만 쓰면 옆으로 미끄러지듯 보였음) */
     try{var pm=mouthOf(e.x,e.y,e.s,e.ang,e.look),scT=scaleOf(P.s);if(Math.hypot(pm[0]-P.x,pm[1]-P.y)<P.s*1.3+pm[2]+50*scT||Math.hypot(e.x-P.x,e.y-P.y)<e.s*1.0+P.s*1.0)b.touchAt=performance.now()}catch(_){}
     if(e.chomp>0)e.chomp=Math.max(0,e.chomp-dt*3.6);
@@ -6056,6 +6056,8 @@ function netBite(p){
   if(s<P.s*(nw?1:1.05)){crumb('bite:small');return}
   /* 1.1.21 종한 '부딪히지도 않았는데 죽음': 내 화면에서 그 상대의 입이 최근 0.8초 안에 나에게 닿을 만큼 온 적이 없으면 안 먹힘(먹히는 쪽 화면 기준) */
   if(now-(b.touchAt||0)>800){crumb('bite:notouch');return}
+  /* 1.1.21 점검(오류 기록 peerBig 95건: 오래 키운 36~48배 상대가 막 들어온 사람을 10초 안에 먹음): 들어온 지 15초 안에는 나보다 8배 넘게 큰 사람에게 안 먹힘 */
+  if((P.time||0)<15&&s>P.s*8){crumb('bite:newbie');return}
   if(nw){var ex=+p.ex,ey=(+p.ef)*H;if(!isFinite(ex)||!isFinite(ey))return;
     if(phNear(ex,ey,now)>P.s*1.4+s*.3+70*sc||phNear(x,y,now)>s*2.8+P.s*2.2+160*sc){crumb('bite:far');return}}
   else{var tol=s*1.6+P.s*1.2+Math.hypot(P.vx,P.vy)*.6+40*sc;
@@ -9244,7 +9246,7 @@ function update(dt){
     f=fish[i];
     /* 1.1 사람 물고기: 움직임은 netTick이 맡고, 여기서는 '나를 먹었는지'만 본다(먹히는 쪽이 판정) */
     if(f.peerEnt){
-      if(playing&&f.s>=P.s*dangerThr(f)&&!invuln()){var fmq=mouthOf(f.x,f.y,f.s,f.ang,f.look);if(Math.hypot(P.x-fmq[0],P.y-fmq[1])<fmq[2]+P.s*.6){f.chomp=1;burst(P.x,P.y,P.s,10);endRun(false,false,f);playing=false}}
+      if(playing&&f.s>=P.s*dangerThr(f)&&!invuln()&&!((P.time||0)<15&&f.s>P.s*8)){var fmq=mouthOf(f.x,f.y,f.s,f.ang,f.look);if(Math.hypot(P.x-fmq[0],P.y-fmq[1])<fmq[2]+P.s*.6){f.chomp=1;burst(P.x,P.y,P.s,10);endRun(false,false,f);playing=false}}
       /* 1.1.5: 내가 더 크면 '내 화면에서' 입에 닿았을 때 상대에게 '먹었다'고 알린다. 상대 화면에선 나를 조금 늦게 보기 때문에
          전에는 먹히는 쪽 판정만 써서 분명히 닿았는데도 안 먹히는 일이 잦았다. 상대가 크기·거리를 다시 확인하고 먹힘 처리 */
       else if(playing&&f.s<=P.s*eatThr(f)&&NET.live&&f.bot&&f.bot.peer){var pmq=mouthOf(P.x,P.y,P.s,P.ang,P.look),nowB=performance.now();

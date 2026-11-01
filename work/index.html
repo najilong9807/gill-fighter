@@ -7959,6 +7959,9 @@ function showRewarded(cb){crumb('ad');
 $('adSkip').addEventListener('click',function(){clearInterval(ADS.iv);$('adSim').hidden=true;adDone(false)});
 setTimeout(adInit,1500);
 var SHARE_ICO='<svg class="shico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10M6 6.2 10 2.5l4 3.7M4.5 10v6.2h11V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+/* 1.1.22 종한 '공유 내용 수정': 초대 글 — 이벤트 기간엔 보석 1,000개 이벤트를 함께 알림 */function shareInvite(){var t=T('작은 물고기로 시작해 바다의 왕까지! 아가미 파이터 같이 해요 🐟');try{if(c1On())t+='\n'+T('지금 시작하면 100명 감사 이벤트로 보석 1,000개를 받아요 💎')}catch(e){}return t}
+abyTr(TRT,{'작은 물고기로 시작해 바다의 왕까지! 아가미 파이터 같이 해요 🐟':'Start as a tiny fish and become king of the sea! Play Gulp Deep with me 🐟','지금 시작하면 100명 감사 이벤트로 보석 1,000개를 받아요 💎':'Join now and get 1,000 gems in the thank-you event 💎','나보다 크게 클 수 있어? 🐟':'Can you grow bigger than me? 🐟'});
+abyTr(TRJ,{'작은 물고기로 시작해 바다의 왕까지! 아가미 파이터 같이 해요 🐟':'小さな魚から海の王様へ！Gulp Deepを一緒にやろう 🐟','지금 시작하면 100명 감사 이벤트로 보석 1,000개를 받아요 💎':'今はじめると感謝イベントで宝石1,000個もらえます 💎','나보다 크게 클 수 있어? 🐟':'わたしより大きくなれる？🐟'});
 /* 1.1.10 공유하면 보상: 공유 창에서 실제로 보내기를 끝냈을 때만(취소하면 없음). 공유 기능이 없는 웹에서는 글을 복사하면 인정 */
 function shareForReward(text,cb){crumb('shareRw');var S=shareNative(),fin=false,f=function(ok){if(fin)return;fin=true;crumb('shareRw:'+(ok?1:0));cb(ok)};
   try{if(S){S.share({title:T('아가미 파이터'),text:text,url:storeUrl(),dialogTitle:T('공유하기')}).then(function(){f(true)},function(){f(false)});return}
@@ -7966,10 +7969,10 @@ function shareForReward(text,cb){crumb('shareRw');var S=shareNative(),fin=false,
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text+'\n'+storeUrl()).then(function(){banner(T('복사했어요'),T('붙여 넣어 친구에게 보내 주세요'));f(true)},function(){f(false)});return}}catch(e){}
   f(false)}
 function shareContinue(){
-  if(state!=='over'||P.adContd||mode==='multi'||ADS.busy)return;var b=$('shareContBtn');if(b.dataset.busy)return;b.dataset.busy='1';b.disabled=true;
-  var I=shareInfo||{},t=I.name?(T('아가미 파이터에서 ')+I.name+(LANG==='en'?T('까지 컸어요!')+fmt(I.cm||0)+'!':' '+fmt(I.cm||0)+T('까지 컸어요!'))):T('아가미 파이터 같이 해요! 작은 물고기를 먹고 커지는 바다 게임');
+  if(state!=='over'||P.adContd||mode==='multi'||ADS.busy||save.shareContD===today())return;var b=$('shareContBtn');if(b.dataset.busy)return;b.dataset.busy='1';b.disabled=true;
+  var I=shareInfo||{},t=I.name?(T('아가미 파이터에서 ')+I.name+(LANG==='en'?T('까지 컸어요!')+fmt(I.cm||0)+'!':' '+fmt(I.cm||0)+T('까지 컸어요!'))+' '+T('나보다 크게 클 수 있어? 🐟')):shareInvite();
   shareForReward(t,function(ok){delete b.dataset.busy;b.disabled=false;
-    if(ok&&state==='over'&&!P.adContd){P.adContd=true;P.shareContd=true;continueRun(true);return}
+    if(ok&&state==='over'&&!P.adContd){P.adContd=true;P.shareContd=true;save.shareContD=today();persist();continueRun(true);return}
     if(!ok)$('oMsg').textContent=T('공유를 끝까지 하면 이어할 수 있어요')})}
 function adContinue(){
   if(state!=='over'||P.adContd||mode==='multi'||ADS.busy)return;var b=$('adContBtn');b.disabled=true;b.textContent=T('광고 불러오는 중…');
@@ -7984,7 +7987,7 @@ function contUI(){
   var adOk=can&&!P.adContd&&!P.adFail,gemOk=can&&!P.contd&&(P.adContd||P.adFail);
   /* 1.1.10 사용자 요청: 이어하기는 한 칸에 '광고 보고' · '공유하고' 두 가지 중 하나(한 판에 한 번 무료) */
   $('contBox').hidden=!adOk;$('contLab').textContent=T('이어하기 · 한 판에 한 번 무료');
-  if(adOk){ab.disabled=false;ab.innerHTML='<i class="adtag">AD</i> ';ab.appendChild(document.createTextNode(T('광고 보고')));var sb=$('shareContBtn');sb.disabled=false;sb.innerHTML=SHARE_ICO;sb.appendChild(document.createTextNode(T('공유하고')))}
+  if(adOk){ab.disabled=false;ab.innerHTML='<i class="adtag">AD</i> ';ab.appendChild(document.createTextNode(T('광고 보고')));var sb=$('shareContBtn');sb.disabled=false;sb.innerHTML=SHARE_ICO;sb.appendChild(document.createTextNode(T('공유하고')));/* 1.1.22 종한 '같은 사람한테 하루 한 번만': 공유 창은 누구에게 보냈는지 알 수 없어서, 공유로 이어하기를 하루 한 번으로(그 뒤엔 광고만) */sb.hidden=save.shareContD===today()}
   cb.hidden=!gemOk;cb.disabled=!canPay({cur:'gems',price:CONT_COST});cb.textContent=cb.disabled?T('이어하기 · 보석 ')+CONT_COST+T('개 필요'):T('보석 ')+CONT_COST+T('개로 이어하기');
 }
 /* 보석 이어하기: 한 판에 한 번. 방금 받은 진주는 돌려놓고(끝날 때 다시 계산) 그 자리에서 3초 무적으로 되살아난다 */
@@ -8818,7 +8821,7 @@ function renderSea(){if(page!=='sea')accPv=null;
   var fb=document.createElement('button');fb.type='button';fb.className='buy';fb.id='giftBtn';var got=save.gift===today();if(got)fb.textContent=T('내일 다시');else{fb.innerHTML=SHARE_ICO;fb.appendChild(document.createTextNode(T('공유하고 받기')))}fb.disabled=got;
   /* 1.1.8(빌드 137) 무료 보석은 광고를 끝까지 보면 하루 한 번 10개 */
   /* 1.1.10 사용자 요청: 무료 보석은 광고 대신 공유하면 하루 한 번 10개 */
-  fb.addEventListener('click',function(){if(save.gift===today()||fb.dataset.busy)return;fb.dataset.busy='1';fb.disabled=true;shareForReward(T('아가미 파이터 같이 해요! 작은 물고기를 먹고 커지는 바다 게임'),function(ok){delete fb.dataset.busy;if(ok&&save.gift!==today()){save.gift=today();save.gems=(save.gems||0)+10;persist();buzz([20,30,40]);banner(T('오늘의 무료 보석'),T('보석 +')+10)}else if(!ok)banner(T('공유를 끝까지 하면 받을 수 있어요'),'');renderSea()})});
+  fb.addEventListener('click',function(){if(save.gift===today()||fb.dataset.busy)return;fb.dataset.busy='1';fb.disabled=true;shareForReward(shareInvite(),function(ok){delete fb.dataset.busy;if(ok&&save.gift!==today()){save.gift=today();save.gems=(save.gems||0)+10;persist();buzz([20,30,40]);banner(T('오늘의 무료 보석'),T('보석 +')+10)}else if(!ok)banner(T('공유를 끝까지 하면 받을 수 있어요'),'');renderSea()})});
   fg.appendChild(fi);fg.appendChild(fn);fg.appendChild(fd);fg.appendChild(fb);box.appendChild(fg);
   /* 1.1.5 보석 묶음(앱에서만, 애플에서 상품 정보를 받아온 것만 판다) */
   var NP=iapNative();if(NP||BUILD!=='release'){iapInit();IAP_PACKS.forEach(function(pk){var pr=IAP.prod[pk.id];if(NP&&!pr)return; /* 1.1.5: 스토어에서 받아온 상품만 보인다(불러오기 전·상품 없음이면 숨김) */
@@ -13937,7 +13940,7 @@ abyTr(TRT,{'설명 펼치기':'Show details','설명 접기':'Hide details'});ab
 (function(){var st=document.createElement('style');st.textContent='@media (orientation:landscape) and (max-height:560px){'
  +'#over .panel{max-width:min(860px,96vw);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);column-gap:16px;row-gap:6px;align-items:start;padding-top:12px;padding-bottom:12px}'
  +'#over .panel>*{grid-column:1;margin-top:0;margin-bottom:0}'
- +'#over .panel>.row{grid-column:2;grid-row:1/span 9;align-self:start;margin:52px 0 0;position:sticky;top:0}#over .panel>:not(.row){grid-column:1;min-width:0}#over .recline{grid-template-columns:repeat(auto-fit,minmax(92px,1fr))!important}#over .recline>*{min-width:0}#over .panel>.row{min-width:0}#over .row .contbtns .btn{font-size:15px!important;padding-left:6px!important;padding-right:6px!important;min-width:0}#over .row .contbox{min-width:0;box-sizing:border-box}#over .row .contlab{white-space:normal!important;font-size:12.5px}#over .row .contbtns{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}#over .row .contbtns .btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px!important}'+'#over .row #adContBtn,#over .row #shareContBtn{font-size:13.5px!important;padding:7px 4px 8px!important;gap:4px!important}#over .row #adContBtn small{font-size:10px!important}#over .row{gap:7px!important}#over .row #swapBtn{padding-top:9px!important;padding-bottom:10px!important;font-size:17px!important}#over .row #againBtn{padding-top:9px!important;padding-bottom:11px!important}'
+ +'#over .panel>.row{grid-column:2;grid-row:1/span 9;align-self:start;margin:52px 0 0;position:sticky;top:0}#over .panel>:not(.row){grid-column:1;min-width:0}#over .recline{grid-template-columns:repeat(auto-fit,minmax(92px,1fr))!important}#over .recline>*{min-width:0}#over .panel>.row{min-width:0}#over .row .contbtns .btn{font-size:15px!important;padding-left:6px!important;padding-right:6px!important;min-width:0}#over .row .contbox{min-width:0;box-sizing:border-box}#over .row .contlab{white-space:normal!important;font-size:12.5px}#over .row .contbtns{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px}#over .row .contbtns .btn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px!important}'+'#over .row .contbtns:has(#shareContBtn[hidden]){grid-template-columns:minmax(0,1fr)!important}#over .row #shareContBtn[hidden]{display:none!important}'+'#over .row #adContBtn,#over .row #shareContBtn{font-size:13.5px!important;padding:7px 4px 8px!important;gap:4px!important}#over .row #adContBtn small{font-size:10px!important}#over .row{gap:7px!important}#over .row #swapBtn{padding-top:9px!important;padding-bottom:10px!important;font-size:17px!important}#over .row #againBtn{padding-top:9px!important;padding-bottom:11px!important}'
  +'#over .panel>.head{grid-column:1}'
  +'#over h1{font-size:24px;line-height:1.15}'
  +'#over .stats{gap:6px}#over .stats dd{font-size:20px}'

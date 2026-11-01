@@ -7959,6 +7959,7 @@ function showRewarded(cb){crumb('ad');
 $('adSkip').addEventListener('click',function(){clearInterval(ADS.iv);$('adSim').hidden=true;adDone(false)});
 setTimeout(adInit,1500);
 var SHARE_ICO='<svg class="shico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10M6 6.2 10 2.5l4 3.7M4.5 10v6.2h11V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+/* 1.1.22 종한 '공유하기는 하루 열 번': 공유로 이어하기는 하루 10번까지(그 뒤엔 광고만) */var SHARE_CONT_MAX=10;function shareContN(){var o=save.shareCont;return o&&o.d===today()?o.n|0:0}function shareContOk(){return shareContN()<SHARE_CONT_MAX}function shareContUse(){save.shareCont={d:today(),n:shareContN()+1}}
 /* 1.1.22 종한 '공유 내용 수정': 초대 글 — 이벤트 기간엔 보석 1,000개 이벤트를 함께 알림 */function shareInvite(){var t=T('작은 물고기로 시작해 바다의 왕까지! 아가미 파이터 같이 해요 🐟');try{if(c1On())t+='\n'+T('지금 시작하면 100명 감사 이벤트로 보석 1,000개를 받아요 💎')}catch(e){}return t}
 abyTr(TRT,{'작은 물고기로 시작해 바다의 왕까지! 아가미 파이터 같이 해요 🐟':'Start as a tiny fish and become king of the sea! Play Gulp Deep with me 🐟','지금 시작하면 100명 감사 이벤트로 보석 1,000개를 받아요 💎':'Join now and get 1,000 gems in the thank-you event 💎','나보다 크게 클 수 있어? 🐟':'Can you grow bigger than me? 🐟'});
 abyTr(TRJ,{'작은 물고기로 시작해 바다의 왕까지! 아가미 파이터 같이 해요 🐟':'小さな魚から海の王様へ！Gulp Deepを一緒にやろう 🐟','지금 시작하면 100명 감사 이벤트로 보석 1,000개를 받아요 💎':'今はじめると感謝イベントで宝石1,000個もらえます 💎','나보다 크게 클 수 있어? 🐟':'わたしより大きくなれる？🐟'});
@@ -7969,10 +7970,10 @@ function shareForReward(text,cb){crumb('shareRw');var S=shareNative(),fin=false,
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text+'\n'+storeUrl()).then(function(){banner(T('복사했어요'),T('붙여 넣어 친구에게 보내 주세요'));f(true)},function(){f(false)});return}}catch(e){}
   f(false)}
 function shareContinue(){
-  if(state!=='over'||P.adContd||mode==='multi'||ADS.busy||save.shareContD===today())return;var b=$('shareContBtn');if(b.dataset.busy)return;b.dataset.busy='1';b.disabled=true;
+  if(state!=='over'||P.adContd||mode==='multi'||ADS.busy||!shareContOk())return;var b=$('shareContBtn');if(b.dataset.busy)return;b.dataset.busy='1';b.disabled=true;
   var I=shareInfo||{},t=I.name?(T('아가미 파이터에서 ')+I.name+(LANG==='en'?T('까지 컸어요!')+fmt(I.cm||0)+'!':' '+fmt(I.cm||0)+T('까지 컸어요!'))+' '+T('나보다 크게 클 수 있어? 🐟')):shareInvite();
   shareForReward(t,function(ok){delete b.dataset.busy;b.disabled=false;
-    if(ok&&state==='over'&&!P.adContd){P.adContd=true;P.shareContd=true;save.shareContD=today();persist();continueRun(true);return}
+    if(ok&&state==='over'&&!P.adContd){P.adContd=true;P.shareContd=true;shareContUse();persist();continueRun(true);return}
     if(!ok)$('oMsg').textContent=T('공유를 끝까지 하면 이어할 수 있어요')})}
 function adContinue(){
   if(state!=='over'||P.adContd||mode==='multi'||ADS.busy)return;var b=$('adContBtn');b.disabled=true;b.textContent=T('광고 불러오는 중…');
@@ -7987,7 +7988,7 @@ function contUI(){
   var adOk=can&&!P.adContd&&!P.adFail,gemOk=can&&!P.contd&&(P.adContd||P.adFail);
   /* 1.1.10 사용자 요청: 이어하기는 한 칸에 '광고 보고' · '공유하고' 두 가지 중 하나(한 판에 한 번 무료) */
   $('contBox').hidden=!adOk;$('contLab').textContent=T('이어하기 · 한 판에 한 번 무료');
-  if(adOk){ab.disabled=false;ab.innerHTML='<i class="adtag">AD</i> ';ab.appendChild(document.createTextNode(T('광고 보고')));var sb=$('shareContBtn');sb.disabled=false;sb.innerHTML=SHARE_ICO;sb.appendChild(document.createTextNode(T('공유하고')));/* 1.1.22 종한 '같은 사람한테 하루 한 번만': 공유 창은 누구에게 보냈는지 알 수 없어서, 공유로 이어하기를 하루 한 번으로(그 뒤엔 광고만) */sb.hidden=save.shareContD===today()}
+  if(adOk){ab.disabled=false;ab.innerHTML='<i class="adtag">AD</i> ';ab.appendChild(document.createTextNode(T('광고 보고')));var sb=$('shareContBtn');sb.disabled=false;sb.innerHTML=SHARE_ICO;sb.appendChild(document.createTextNode(T('공유하고')));/* 1.1.22 종한 '같은 사람한테 하루 한 번만': 공유 창은 누구에게 보냈는지 알 수 없어서, 공유로 이어하기를 하루 한 번으로(그 뒤엔 광고만) */sb.hidden=!shareContOk()}
   cb.hidden=!gemOk;cb.disabled=!canPay({cur:'gems',price:CONT_COST});cb.textContent=cb.disabled?T('이어하기 · 보석 ')+CONT_COST+T('개 필요'):T('보석 ')+CONT_COST+T('개로 이어하기');
 }
 /* 보석 이어하기: 한 판에 한 번. 방금 받은 진주는 돌려놓고(끝날 때 다시 계산) 그 자리에서 3초 무적으로 되살아난다 */

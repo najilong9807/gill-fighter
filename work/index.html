@@ -14692,6 +14692,7 @@ ACC_HEAD.pr_angler=function(c,U){var q=HW2H.pr_angler,im=hwAcs(q[0]);if(!im)retu
 /* 1.1.17 종한 '옆모습인데 이상하게 장착': 앞에서 본 그림(눈 두 개)을 옆모습 물고기에 그대로 붙이던 것 → 가까운 눈 한쪽 + 뒤로 가는 끈만 잘라 씀 [잘라 쓸 왼쪽~오른쪽 비율, 눈 중심 x, 눈 중심 y, 크기] */
 /* 1.1.17 가오리(만타 · 분홍만타 · 독수리가오리 · 노랑가오리): 몸이 넓어 얼굴 꾸미기가 머리보다 크게 붙던 것 → 얼굴 크기 줄임 */
 var accGeomRAY=accGeom;accGeom=function(L,s,o){var g=accGeomRAY(L,s,o);try{if(g&&L&&(L.kind==='manta'||L.id==='stingray')){g.E=Math.min(g.E,s*.13)}if(g&&L&&L.id==='seaangel'){g.E=Math.min(g.E,s*.1)}}catch(e){}return g};
+/* 1.1.22 종한 '꾸미기 핏하게': 몸이 높은 산호초 물고기(빨간씬벵이 · 혹돔)는 머리 높이로 잡은 눈 크기가 실제 눈보다 커서 안경 · 안대가 얼굴을 덮음 → 눈 아이템만 줄임 */var ACC_ESC={frogfish:.58,bumphead:.62};var accGeomESC=accGeom;accGeom=function(L,s,o){var g=accGeomESC(L,s,o);try{var k=g&&L&&ACC_ESC[L.id];if(k)g.E*=k}catch(e){}return g};
 /* 1.1.17 스킬 밸런스(종한 '늘려줘'): 싱글 시뮬에서 확실히 센 부풀기(복어류) · 먹물 → 재사용 시간 15% 늘림 */
 var balanceSkillsCD=balanceSkills;balanceSkills=function(){var r=balanceSkillsCD.apply(this,arguments);try{SPECIES.forEach(function(L){if((L.sk==='puff'||L.sk==='ink')&&!L._cd117){L.cd=Math.round(L.cd*1.15*10)/10;L._cd117=1}})}catch(e){}return r};
 /* 1.1.17 새 겨울 물고기가 같은 능력 계열의 기존 물고기 수치(재사용 시간 등)를 바꾸지 않게: 기존 물고기만으로 맞춘 뒤, 새 물고기는 가격이 가장 가까운 같은 계열 물고기의 재사용 시간을 씀 */

@@ -1,7 +1,8 @@
 What's new in 1.1.22:
 (1) No new purchases, accounts, permissions or SDKs.
 (2) A limited-time in-game "thank-you" event (until Dec 6): players earn in-game gems (virtual currency only, no real-money value) for daily check-ins and simple gameplay missions (play Solo/Deep Survival/Arena, place an aquarium item, share the game via the iOS share sheet, etc.). Rewards are not tied to ratings or reviews, and sharing is optional (one of eight missions).
-(3) 8 new fish species for the in-game collection, Deep Survival runs shortened from 7 to 5 minutes, and shared links now point to the country-neutral App Store URL for English users.
+(3) Deep Expedition floors no longer have a star time limit; each floor ends with a floor boss. The aquarium gains feeding-based fish growth stages, eggs that hatch into baby fish, an aquarium level with in-game currency rewards, 6 coral decorations and a new background (all in-game currency only).
+(4) 8 new fish species for the in-game collection, Deep Survival runs shortened from 7 to 5 minutes, and shared links now point to the country-neutral App Store URL for English users.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

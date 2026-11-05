@@ -15294,7 +15294,7 @@ function boot(){
   requestAnimationFrame(function(n){last=n;frame(n)});
 }
 /* ===== 1.1.25 종한 '수족관 더 디벨롭': ① 매일 돌보기 — 시간이 지나면 유리에 이끼가 끼고(20시간이면 가득) 물고기가 시무룩해짐 → 「유리 닦기」로 깨끗이 하면 진주 · 수족관 경험치,
-   날마다 이어서 돌보면 3일째 · 7일째 보석. 이끼가 가득 찰 즈음 알림(알림을 켠 사람만) ② 물고기 이름 짓기 — 수족관에서 고른 물고기를 한 번 더 누르면 이름(8자까지, 금칙어 막음) ===== */
+   날마다 첫 닦기에 보석(이어서 할수록 늘고 7일째마다 15). 이끼가 가득 찰 즈음 알림(알림을 켠 사람만) ② 물고기 이름 짓기 — 수족관에서 고른 물고기를 한 번 더 누르면 이름(8자까지, 금칙어 막음) ===== */
 var TKC_FULL=20*3600e3;
 function TKC(){var o=save.tkc;if(!o||typeof o!=='object'){o=save.tkc={clean:Date.now()-16*3600e3,str:0,last:'',n:0}}return o}
 function tkDirt(){if(VISIT)return 0;return clamp((Date.now()-(TKC().clean||0))/TKC_FULL,0,1)}
@@ -15302,7 +15302,7 @@ function tkYmd(ms){var d=new Date(ms);return d.getFullYear()+'-'+(d.getMonth()+1
 var TKW={t:0,on:0,lit:[]};
 function tkClean(){var d=tkDirt();if(d<.25||TKW.on)return;var o=TKC(),td=today(),yd=tkYmd(Date.now()-864e5);
   if(o.last!==td){o.str=o.last===yd?(o.str|0)+1:1;o.last=td}o.clean=Date.now();o.n=(o.n|0)+1;
-  var lv=0;try{lv=TKX().lv|0}catch(e){}var g=Math.max(10,Math.round((30+12*lv)*d*RW_K*2));save.pearls+=g;var gem=0;if(o.str>0&&(o.str%7===0))gem=15;else if(o.str%7===3)gem=5;if(gem&&o.gd!==td){save.gems=(save.gems||0)+gem;o.gd=td}else gem=0;
+  var lv=0;try{lv=TKX().lv|0}catch(e){}var g=Math.max(10,Math.round((30+12*lv)*d*RW_K*2));save.pearls+=g;var gem=0;if(o.gd!==td&&o.str>0){gem=o.str%7===0?15:Math.min(2+o.str%7,8);save.gems=(save.gems||0)+gem;o.gd=td} /* 종한 '계속 닦으면 계속 보상': 날마다 첫 닦기에 보석(1일째 3 → 6일째 8 · 7일째마다 15), 그 뒤로도 계속 이어짐. 닦을 때마다 진주는 늘 줌 */
   persist();try{tkXp(Math.round(6+8*d),'clean')}catch(e){}try{msEv('clean')}catch(e){}crumb('tkClean:'+Math.round(d*100)+':'+o.str);
   TKW.on=1;TKW.t=0;try{svSnd('bub',1.1);setTimeout(function(){svSnd('bub',1.4)},180);buzz([15,20,15])}catch(e){}
   try{tank.forEach(function(f,i){if(i<14&&!f.baby)tankPops.push({x:f.x,y:f.y-tankSize(f.L)*1.2,txt:'♥',life:1.2+Math.random()*.6})})}catch(e){}

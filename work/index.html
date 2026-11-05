@@ -3427,9 +3427,9 @@ function trDOM(){
 }
 
 var cv=$('game'),ctx=cv.getContext('2d');gfxWatch(cv);
-var cw=1,ch=1,dpr=1;
+var cw=1,ch=1,dpr=1,DPRC=0;
 function resize(){
-  dpr=Math.min(window.devicePixelRatio||1,save&&save.lite?1.5:2);
+  dpr=Math.min(window.devicePixelRatio||1,save&&save.lite?1.5:2,DPRC||9);
   cw=Math.max(1,cv.clientWidth);ch=Math.max(1,cv.clientHeight);
   cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
 }
@@ -15293,6 +15293,38 @@ function boot(){
   else if(recG)setTimeout(function(){banner(T('지난 판을 챙겼어요'),T('중간에 끊긴 판 · 진주 +')+recG)},2400);
   requestAnimationFrame(function(n){last=n;frame(n)});
 }
+/* ===== 1.1.25 심해 생존 후반 버벅임(11/5 점검: 19~25장까지 간 사람의 5~6분째 느린 장면 7%): 생존 판에서 3초 동안 느린 장면이 30%를 넘으면
+   그 판만 화면 선명도를 한 단계 낮추고(2 → 1.5 → 1.25배) 그림 줄이기(lod2)를 켬. 판이 끝나면 원래대로 ===== */
+var SVLAG={n:0,s:0,t:0,on:0};
+var svDrawUnderLG=svDrawUnder;svDrawUnder=function(){var r=svDrawUnderLG.apply(this,arguments);if(SVLAG.on){SV.lod=true;SV.lod2=true}return r};
+var updateLG=update;update=function(dt){updateLG(dt);try{var inSv=P&&P.surv&&(state==='play'||state==='pause'||state==='over');
+  if(!inSv){if(SVLAG.on||DPRC){SVLAG.on=0;DPRC=0;resize()}SVLAG.n=SVLAG.s=SVLAG.t=0;return}
+  if(state!=='play')return;SVLAG.n++;if(dt>.034)SVLAG.s++;SVLAG.t+=dt;
+  if(SVLAG.t>=3){var r=SVLAG.n?SVLAG.s/SVLAG.n:0;if(r>.3&&SVLAG.on<2){SVLAG.on++;DPRC=SVLAG.on===1?1.5:1.25;if(dpr>DPRC)resize();crumb('svLag'+SVLAG.on+':'+Math.round(r*100))}SVLAG.n=SVLAG.s=SVLAG.t=0}}catch(e){}};
+/* ===== 1.1.25 종한 '첫 판 도움'(11/5 점검: 새 이용자 51명 중 27명이 첫 판 뒤 떠남 · 첫 판에 한 마리도 못 먹은 16명 중 14명이 떠남 · 연습 중 그만둔 11명 중 10명이 떠남)
+   처음 3판(싱글 · 연습 바다)만: ① 화면을 안 끌거나 한동안 못 먹으면 손가락이 '끌어서 저 물고기에게' 길을 보여 줌 + 먹을 물고기에 초록 고리
+   ② 가까이 먹을 게 없으면 작은 물고기를 옆에 데려옴 ③ 처음 15초는 큰 물고기에게 안 먹힘(반짝이는 보호막) ===== */
+var NUH={el:null,ring:null,tgt:null,ph:0,idle:0,last:0,food:0,done:0,on:0};
+function nuhOk(){return state==='play'&&mode==='single'&&!P.surv&&!P.camp&&(save.runs|0)<=3}
+function nuhInit(){if(NUH.el)return;var h=document.createElement('div');h.id='nuHand';h.textContent='👆';h.hidden=true;var r=document.createElement('div');r.id='nuRing';r.hidden=true;document.body.appendChild(r);document.body.appendChild(h);NUH.el=h;NUH.ring=r;
+  var st=document.createElement('style');st.textContent='#nuHand{position:fixed;left:0;top:0;z-index:25;font-size:46px;line-height:1;pointer-events:none;filter:drop-shadow(0 3px 2px rgba(0,0,0,.45));will-change:transform}#nuHand[hidden],#nuRing[hidden]{display:none}#nuRing{position:fixed;left:0;top:0;z-index:24;pointer-events:none;border-radius:50%;border:4px solid #7CFF6B;box-shadow:0 0 12px #7CFF6B;will-change:transform;animation:nuRing 1s ease-in-out infinite}@keyframes nuRing{0%,100%{opacity:.95}50%{opacity:.45}}';document.head.appendChild(st)}
+function nuhScr(x,y){return [(x-cam.x)*zoom+cw/2,(y-cam.y)*zoom+ch/2]}
+function nuhHide(){if(NUH.el){NUH.el.hidden=true;NUH.ring.hidden=true}NUH.on=0}
+function nuhTick(dt){if(!nuhOk()){if(NUH.on)nuhHide();return}nuhInit();
+  if(P.time<.2){NUH.idle=0;NUH.last=0;NUH.food=0;NUH.done=0;NUH.e0=P.eaten|0}
+  var ate=(P.eaten|0)-(NUH.e0|0);if(ate>=3)NUH.done=1;if(NUH.done){if(NUH.on)nuhHide();return}
+  if((P.eaten|0)!==NUH.le){NUH.le=P.eaten|0;NUH.last=0}else NUH.last+=dt;
+  NUH.idle=joy?0:NUH.idle+dt;
+  var R=viewR(),best=null,bd=1e9,i;for(i=0;i<fish.length;i++){var f=fish[i];if(f.dead||!(f.s<P.s*.9))continue;var d=Math.hypot(f.x-P.x,f.y-P.y);if(d<bd&&d<R*.85){bd=d;best=f}}
+  NUH.food+=dt;if(!best&&NUH.food>4&&typeof tutNear==='function'){NUH.food=0;for(i=0;i<3;i++)tutNear(.55,.22,.38);crumb('nuhFood')}
+  var show=best&&P.time>1.2&&(NUH.idle>1.8||NUH.last>6||(ate===0&&P.time>4));
+  if(!show){if(NUH.on)nuhHide();return}
+  if(!NUH.on){NUH.on=1;NUH.ph=0;crumb('nuhShow:'+ate)}NUH.ph=(NUH.ph+dt/1.6)%1;
+  var a=nuhScr(P.x,P.y),b=nuhScr(best.x,best.y),k=NUH.ph<.75?NUH.ph/.75:1,e=k*k*(3-2*k),hx=a[0]+(b[0]-a[0])*e,hy=a[1]+(b[1]-a[1])*e;
+  NUH.el.hidden=false;NUH.el.style.opacity=NUH.ph>.85?String((1-NUH.ph)/.15):'1';NUH.el.style.transform='translate('+(hx-14)+'px,'+(hy-4)+'px)';
+  var rr=Math.max(26,best.s*zoom*1.1);NUH.ring.hidden=false;NUH.ring.style.width=NUH.ring.style.height=(rr*2)+'px';NUH.ring.style.transform='translate('+(b[0]-rr-4)+'px,'+(b[1]-rr-4)+'px)'}
+var updateNUH=update;update=function(dt){updateNUH(dt);try{nuhTick(dt)}catch(e){}};
+var invulnNUH=invuln;invuln=function(){return invulnNUH()||(state==='play'&&mode==='single'&&!P.surv&&!P.camp&&(save.runs|0)<=3&&(P.time||0)<15)};
 /* ===== 1.1.25 크리스마스 소품 6가지(svart/dc_xm_*.webp) + 「눈 내리는 산호초」 배경(svart/bg_xmasreef.webp). 소품은 겨울 바다(11/22~1/31) 동안만 상점에 나오고 산 것은 계속 씀 ===== */
 DECOR.push(
  {id:'xm_tree',name:T('다시마 크리스마스 트리'),w:.25,ar:1.35,draw:'xm_tree',c:{cur:'pearls',price:1100},wn:1},

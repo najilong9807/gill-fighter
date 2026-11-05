@@ -1,6 +1,6 @@
 What's new in 1.1.24:
 (1) No new purchases, accounts, permissions or SDKs.
-(2) Localized app display names for Japanese and Chinese (Simplified/Traditional) devices and store listings.
+(2) Localized app display names for Japanese and Chinese (Simplified/Traditional) language devices and store listings (the app is not offered on the China mainland storefront).
 (3) Stability: the existing anonymous crash and first-session record channel (random device ID only, no name or contact info) now also sends daily gameplay counters (number of runs, missions completed, decorations placed) so mission and leaderboard bugs can be detected and fixed faster.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.

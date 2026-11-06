@@ -5640,7 +5640,7 @@ function svEnd(win,quit){bannerOff();try{svEnd0(win,quit)}catch(e){var em=String
   setTimeout(function(){if(state==='over'&&P.surv){['svUp','svBox','svRev'].forEach(function(id){var o=$(id);if(o)o.hidden=true});$('svRes').hidden=false}},300)}}
 function svOvOpen(){var o=document.querySelectorAll('.overlay');for(var i=0;i<o.length;i++){if(!o[i].hidden&&getComputedStyle(o[i]).display!=='none')return o[i].id||'ov'}return ''}
 function svStuckRep(k,x){try{SV.stk=SV.stk||{};if(SV.stk[k])return;SV.stk[k]=1;var a={stuck:k,x:x||'',s:state,v:APP_VER,at:Date.now(),hp:SV.hp,lv:SV.lv,t:Math.round(SV.t||0),ov:svOvOpen(),bc:CR.bc.slice(-14),m:SV.inf?'inf':SV.br?'br':SV.dm?'dm':SV.hard?'hard':'n',ch:SV.chN,ad:ADS.busy?1:0,err:GFX.lastErr||'',en:SV.en.length};
-  save.crashQ=(save.crashQ||[]).concat([a]).slice(-8);persist();setTimeout(crashSend,1500)}catch(e){}}
+  save.crashQ=(save.crashQ||[]).concat([a]).slice(-40);persist();setTimeout(crashSend,1500)}catch(e){}}
 /* 지킴이: 0.5초마다 살펴서 '멈춘 채 아무 창도 없는' 상태가 1.5초 넘게 이어지면 스스로 풀어준다 */
 var SVW={k:'',t:0,fe:0};
 function svWatch(){try{if(!P.surv||document.hidden){SVW.k='';return}var k='',ov=svOvOpen(),fe=(CR.fe||0)-SVW.fe;SVW.fe=CR.fe||0;
@@ -10887,7 +10887,7 @@ function liteAuto(){var now=Date.now(),n=(save.crashLog||[]).filter(function(c){
 function crDev(){var ua=navigator.userAgent||'',d=(/iPad/.test(ua)?'iPad':/iPhone/.test(ua)?'iPhone':/Android/.test(ua)?'Android':'Web')+' '+((ua.match(/(OS|Android) [\d_.]+/)||[''])[0]).replace(/_/g,'.');
   try{d+=' '+screen.width+'x'+screen.height+'@'+(window.devicePixelRatio||1)}catch(e){}return d}
 /* 1.1.8(빌드 135) 화면 그리기 중 오류가 나면(튕김·멈춤의 씨앗) 한 판에 3번까지 기록을 보낸다(비정상 동작 기록) */
-function errRep(m,e){try{CR.er=(CR.er||0)+1;if(CR.er>3)return;var st='';try{st=String(e&&e.stack||'').split('\n').slice(0,3).join(' | ').slice(0,300)}catch(x){}save.crashQ=(save.crashQ||[]).concat([{kind:'err',m:m,st:st,v:APP_VER,s:state,md:mode,at:Date.now(),bc:CR.bc.slice(-10),su:P.surv&&typeof SV!=='undefined'?[Math.round(SV.t||0),SV.en.length,SV.lv,Object.keys(SV.w).join(',')]:0}]).slice(-8);persist();setTimeout(crashSend,2000)}catch(x){}}
+function errRep(m,e){try{CR.er=(CR.er||0)+1;if(CR.er>3)return;var st='';try{st=String(e&&e.stack||'').split('\n').slice(0,3).join(' | ').slice(0,300)}catch(x){}save.crashQ=(save.crashQ||[]).concat([{kind:'err',m:m,st:st,v:APP_VER,s:state,md:mode,at:Date.now(),bc:CR.bc.slice(-10),su:P.surv&&typeof SV!=='undefined'?[Math.round(SV.t||0),SV.en.length,SV.lv,Object.keys(SV.w).join(',')]:0}]).slice(-40);persist();setTimeout(crashSend,2000)}catch(x){}}
 function crashSend(){var C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform())&&location.search.indexOf('crtest')<0)return;
   var q=save.crashQ||[];if(!q.length)return;var a=q[0];
   lbReq('rpc/gf_crash_log',{p_pid:lbPid(),p_v:String(a.v||''),p_dev:crDev(),p_info:a}).then(function(){save.crashQ=(save.crashQ||[]).slice(1);persist();if(save.crashQ.length)setTimeout(crashSend,1500)}).catch(function(){})}
@@ -10895,7 +10895,7 @@ function aliveCheck(){var a=null;try{a=JSON.parse(localStorage.getItem(ALK)||'nu
   /* 1.1.6(빌드 68) 끊긴 종류 구분: 웹 화면만 정리돼 앱이 다시 불러온 것(reload, 같은 세션 저장소 남음)인지, 앱이 통째로 꺼졌다 켜진 것(navigate, 새 세션)인지 */
   var rk='';try{var ne=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];rk=ne&&ne.type||'?'}catch(e){rk='?'}
   try{rk+=sessionStorage.getItem('gfS')?':ss':':new';sessionStorage.setItem('gfS','1')}catch(e){}
-  if(a&&!a.h&&a.at){CR.crashed=true;a.rk=rk;save.crashLog=(save.crashLog||[]).concat([{at:a.at,s:a.s,m:a.m,t:a.t,up:a.up,v:a.v}]).slice(-5);save.crashQ=(save.crashQ||[]).concat([a]).slice(-8);persist()}
+  if(a&&!a.h&&a.at){CR.crashed=true;a.rk=rk;save.crashLog=(save.crashLog||[]).concat([{at:a.at,s:a.s,m:a.m,t:a.t,up:a.up,v:a.v}]).slice(-5);save.crashQ=(save.crashQ||[]).concat([a]).slice(-40);persist()}
   setTimeout(crashSend,6000)}
 setInterval(function(){aliveSnap()},3000);
 document.addEventListener('visibilitychange',function(){crumb(document.hidden?'bg':'fg');if(document.hidden){try{crumb('bgFree:'+memFree(60000))}catch(e){}}aliveSnap()}); /* 1.1.9(빌드 155) 앱을 내리면 1분 넘게 안 쓴 그림·도감 그림·흐린 배경을 비운다(돌아와서 대전 시작 때 메모리 몰림 줄이기 · 튕김 기록 135: 백그라운드 66초 뒤 대전에서 꺼짐) */
@@ -12953,7 +12953,7 @@ var netStatePB=netState;netState=function(p){try{if(p&&p.i&&mode==='multi'){var 
     if(k&&isFinite(sv)&&sv>k.s*4&&now-k.t<1500){crumb('peerJump:'+(sv/k.s).toFixed(1));p.s=k.s*1.3;sv=p.s}
     if(isFinite(sv))PEERCHK[p.i]={s:sv,t:now};
     var r=P.s>0?sv/P.s:0;if(r>=12&&!P.bigRep&&state==='play'){P.bigRep=1;crumb('peerBig:'+r.toFixed(1)+':'+p.l);
-      save.crashQ=(save.crashQ||[]).concat([{kind:'peerBig',v:APP_VER,at:Date.now(),m:'multi',r:Math.round(r*10)/10,s:Math.round(sv*10)/10,ps:Math.round(P.s*10)/10,l:String(p.l||'').slice(0,24),pv:String(p.v||'').slice(0,12),cm:Math.round(cmRel(sv)*10)/10,t:Math.round(P.time||0),zm:Math.round(zoom*100)/100,bc:(CR.bc||[]).slice(-8)}]).slice(-6);persist();setTimeout(crashSend,800)}}}catch(e){}
+      save.crashQ=(save.crashQ||[]).concat([{kind:'peerBig',v:APP_VER,at:Date.now(),m:'multi',r:Math.round(r*10)/10,s:Math.round(sv*10)/10,ps:Math.round(P.s*10)/10,l:String(p.l||'').slice(0,24),pv:String(p.v||'').slice(0,12),cm:Math.round(cmRel(sv)*10)/10,t:Math.round(P.time||0),zm:Math.round(zoom*100)/100,bc:(CR.bc||[]).slice(-40)}]).slice(-6);persist();setTimeout(crashSend,800)}}}catch(e){}
   return netStatePB.apply(this,arguments)};
 var startRunPB=startRun;startRun=function(){PEERCHK={};try{P.bigRep=0}catch(e){}return startRunPB.apply(this,arguments)};
 /* ===== 1.1.13 심해 생존 다 깬 뒤에도 랭킹이 이어지게(서버 범위 그대로: 챕터칸 1~20 · 최대 20999)
@@ -13063,7 +13063,7 @@ var endRunEV=endRun;endRun=function(win,quit,by){var t0=P?P.time:0,r=endRunEV.ap
     var how=win?'win':quit?'quit':'eaten',bl=by&&(by.look||by.L)?String((by.look||by.L).id||'').slice(0,20):'';
     save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:n,m:P.camp?'camp'+(P.camp.n||''):P.surv?'surv':'single',f:String(sel||'').slice(0,20),
       t:Math.round(t0||0),cm:Math.round(cmOf(P.maxS||P.s)*10)/10,e:P.eaten|0,sc:(function(){try{return scoreNow()}catch(x){return 0}})(),how:how,by:bl,nbc:P.nbContd?1:0,
-      d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),pages:(CR.bc||[]).filter(function(x){return /^tab:/.test(x)}).length}]).slice(-8);persist();setTimeout(crashSend,1200)}}catch(e){}
+      d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),pages:(CR.bc||[]).filter(function(x){return /^tab:/.test(x)}).length}]).slice(-40);persist();setTimeout(crashSend,1200)}}catch(e){}
   return r};
 /* 1.1.13 대전 연결 안정화 (10/16 종한: 인터넷 속도에 따라 보이는 게 다름)
    전엔 상대 위치가 올 때마다(초당 5번) 그 자리로 끌려가서, 패킷이 들쭉날쭉 오면(흔들림 · 유실) 상대가 멈칫 · 휙 하고 움직였다.
@@ -13307,7 +13307,7 @@ var volcDrawOLD=volcDraw;volcDraw=function(){if(state!=='play'||(!VOLC.ev&&!VOLC
   ctx.restore()};
 /* 1.1.14 ① 신규 유저 흐름(퍼널): 처음 열기 → 연습 바다 끝 → 다음 날 다시 옴, 세 번만 짧게 남긴다(이름 · 기기 정보 없이, 판 기록 nb와 같은 통로)
    설치하고 한 판도 안 끝낸 채 떠난 사람이 지금은 안 보여서 */
-function nfEv(ev){try{save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:0,ev:ev,runs:save.runs|0,d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),lang:LANG}]).slice(-8);persist();if(typeof crashSend==='function')setTimeout(crashSend,2500)}catch(e){}}
+function nfEv(ev){try{save.crashQ=(save.crashQ||[]).concat([{kind:'nb',v:APP_VER,at:Date.now(),n:0,ev:ev,runs:save.runs|0,d:Math.floor((Date.now()-(save.firstAt||Date.now()))/864e5),lang:LANG}]).slice(-40);persist();if(typeof crashSend==='function')setTimeout(crashSend,2500)}catch(e){}}
 var bootNF=boot;boot=function(){var fresh=!save.firstAt&&!(save.runs>0)&&!(save.mp&&save.mp.games>0)&&!Object.keys(save.best||{}).length&&!(save.camp&&save.camp.s&&Object.keys(save.camp.s).length),r=bootNF.apply(this,arguments);
   try{if(fresh&&!save.nfOpen){save.nfOpen=1;nfEv('open')}
     else if(!save.nfRet&&save.firstAt){var dd=Math.floor((Date.now()-save.firstAt)/864e5);if(dd>=1&&dd<=7){save.nfRet=1;nfEv('ret'+dd)}}}catch(e){}
@@ -13840,7 +13840,7 @@ var resizeAQ=resize;resize=function(){var r=resizeAQ.apply(this,arguments);if(AQ
   if(state==='play'&&AQ.on&&vis&&d>0&&d<500){AQ.n++;if(d>34)AQ.s++;if(d>AQ.w)AQ.w=d;AQ.ema=AQ.ema*.95+Math.min(d,100)*.05;
     if(AQ.lv===0&&!save.lite){if(AQ.ema>24)AQ.slowT+=d/1000;else AQ.slowT=Math.max(0,AQ.slowT-d/2000);if(AQ.slowT>2.5&&AQ.n>120)aqSet(1)}}}catch(e){}requestAnimationFrame(aqLoop)})(0);
 var drawWavyAQ=drawWavy;drawWavy=function(c,img,w,h,ph,amp,n){if(AQ.lv&&(!n||n>4))n=4;return drawWavyAQ.call(this,c,img,w,h,ph,amp,n)};
-function aqReport(){try{if(!AQ.on)return;AQ.on=false;if(AQ.n>900&&AQ.s/AQ.n>.06){save.crashQ=(save.crashQ||[]).concat([{kind:'lag',v:APP_VER,md:P&&P.surv?'surv':P&&P.camp?'camp':mode,t:Math.round(P&&P.time||0),sr:Math.round(AQ.s/AQ.n*100),n:AQ.n,w:Math.round(AQ.w),aq:AQ.lv,lt:save.lite?1:0,dpr:window.devicePixelRatio||1,fi:(typeof fish!=='undefined'&&fish)?fish.length:0,at:Date.now()}]).slice(-8);persist();setTimeout(function(){try{crashSend()}catch(e){}},3000)}}catch(e){}if(AQ.lv)aqSet(0)}
+function aqReport(){try{if(!AQ.on)return;AQ.on=false;if(AQ.n>900&&AQ.s/AQ.n>.06){save.crashQ=(save.crashQ||[]).concat([{kind:'lag',v:APP_VER,md:P&&P.surv?'surv':P&&P.camp?'camp':mode,t:Math.round(P&&P.time||0),sr:Math.round(AQ.s/AQ.n*100),n:AQ.n,w:Math.round(AQ.w),aq:AQ.lv,lt:save.lite?1:0,dpr:window.devicePixelRatio||1,fi:(typeof fish!=='undefined'&&fish)?fish.length:0,at:Date.now()}]).slice(-40);persist();setTimeout(function(){try{crashSend()}catch(e){}},3000)}}catch(e){}if(AQ.lv)aqSet(0)}
 var startRunAQ=startRun;startRun=function(){aqReset();return startRunAQ.apply(this,arguments)};
 var svStartAQ=svStart;svStart=function(){aqReset();return svStartAQ.apply(this,arguments)};
 var endRunAQ=endRun;endRun=function(){var st=state,r=endRunAQ.apply(this,arguments);if(st==='play'&&state!=='play')aqReport();return r};
@@ -14813,7 +14813,7 @@ abyTr(TRT,{'전체':'All','보유':'Owned','미보유':'Not owned','내 물고�
 function msS(){var d=today(),o=save.msDay;if(!o||o.d!==d){if(o&&o.d&&o.c&&Object.keys(o.c).length&&!o.sent2)msFlush(o,true);o=save.msDay={d:d,c:{},t:0}}return o}
 function msEv(k,n){try{var o=msS();o.c[k]=(o.c[k]|0)+(n||1);persist();if(Date.now()-(o.t||0)>3*3600e3){clearTimeout(msEv.tm);msEv.tm=setTimeout(function(){msFlush(msS())},8000)}}catch(e){}}
 function msFlush(o,last){try{if(!o||!o.c)return;var c={};for(var k in o.c)c[k]=o.c[k];var ev=null;try{ev=c1On()?(function(){var C=C1(),g=[];C1M.forEach(function(m){if(C.got[m.k])g.push(m.k)});return {att:C.d.length,got:g,done:C1M.filter(function(m){return c1Val(m)>=m.goal}).map(function(m){return m.k})}})():null}catch(x){}
-  save.crashQ=(save.crashQ||[]).concat([{kind:'ms',v:APP_VER,at:Date.now(),day:o.d,c:c,ev:ev,runs:save.runs|0,lang:LANG,own:(save.owned||[]).length}]).slice(-8);o.t=Date.now();if(last)o.sent2=1;persist();if(typeof crashSend==='function')setTimeout(crashSend,2500)}catch(e){}}
+  save.crashQ=(save.crashQ||[]).concat([{kind:'ms',v:APP_VER,at:Date.now(),day:o.d,c:c,ev:ev,runs:save.runs|0,lang:LANG,own:(save.owned||[]).length}]).slice(-40);o.t=Date.now();if(last)o.sent2=1;persist();if(typeof crashSend==='function')setTimeout(crashSend,2500)}catch(e){}}
 setTimeout(function(){try{msS()}catch(e){}},6000);
 /* 무엇을 세나: 소품 사기(어느 길이든) · 물고기 해금 · 레벨 업 · 이벤트 미션 완료/받기 · 출석 · 공유 · 판 수 */
 var decoBuyPvMS=decoBuyPv;decoBuyPv=function(){var g0=save.pearls+(save.gems||0)*1e6,r=decoBuyPvMS.apply(this,arguments);try{if(save.pearls+(save.gems||0)*1e6<g0)msEv('decoBuy')}catch(e){}return r};
@@ -15463,6 +15463,12 @@ abyTr(TRJ,{'판이 끝나면 자동으로 받기':'プレイ後に自動で受�
 /* 1.1.26 종한 '심해축복에서 하트랑 스틱 안 뜸': 심해 생존 중 알림(축복 이름 등)이 왼쪽 위 하트 줄을 덮던 것 → 생존 판에선 알림을 하트 · 꺼-억 줄 아래로 */
 var banner1SVP=banner1;banner1=function(a,b){var r=banner1SVP.apply(this,arguments);try{$('banner').classList.toggle('svp',!!(P&&P.surv&&(state==='play'||state==='pause')))}catch(e){}return r};
 (function(){var st=document.createElement('style');st.textContent='html body #banner.svp{top:calc(env(safe-area-inset-top,0px) + 150px)!important}@media (orientation:landscape) and (max-height:560px){html body #banner.svp{top:calc(env(safe-area-inset-top,0px) + 96px)!important}}';document.head.appendChild(st)})();
+/* ===== 1.1.26 서버가 잠깐 멈춰도 기록이 덜 사라지게: 못 보낸 기록 보관 8개 → 40개, 인터넷이 다시 되거나 앱으로 돌아오거나 1분마다 남은 걸 다시 보냄(게임 중엔 안 보냄) ===== */
+var CRQR={t:0};
+function crqRetry(force){try{if(!(save.crashQ&&save.crashQ.length))return;if(navigator.onLine===false)return;if(!force&&typeof state!=='undefined'&&state==='play')return;var now=Date.now();if(now-CRQR.t<45000)return;CRQR.t=now;crashSend()}catch(e){}}
+setInterval(function(){crqRetry(false)},60000);
+window.addEventListener('online',function(){setTimeout(function(){crqRetry(true)},3000)});
+document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(function(){crqRetry(false)},4000)});
 /* ===== 1.1.25 심해 생존 후반 버벅임(11/5 점검: 19~25장까지 간 사람의 5~6분째 느린 장면 7%): 생존 판에서 3초 동안 느린 장면이 30%를 넘으면
    그 판만 화면 선명도를 한 단계 낮추고(2 → 1.5 → 1.25배) 그림 줄이기(lod2)를 켬. 판이 끝나면 원래대로 ===== */
 var SVLAG={n:0,s:0,t:0,on:0};

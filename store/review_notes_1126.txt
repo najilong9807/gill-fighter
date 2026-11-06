@@ -2,6 +2,7 @@ What's new in 1.1.26:
 (1) No new purchases, accounts, permissions, SDKs or data collection.
 (2) A single in-game "Rewards" box (home screen) that lists every reward the player has already earned (Deep Survival chests, missions, achievements, event check-ins) with a "Collect all" button. Rewards are in-game pearls/gems only.
 (3) Aquarium glass cleaning is now interactive: the player rubs the glass with a finger to wipe off the algae.
+(4) Convenience: when the app opens, check-in gifts, gifts and update news are shown together in one window instead of several pop-ups; already-earned in-game rewards are collected automatically after each run (can be turned off in the Rewards box); a Continue button in mode select restarts the last Deep Survival chapter or Expedition floor; Upgrade all also auto-equips better gear.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
 

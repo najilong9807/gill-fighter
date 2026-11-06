@@ -12998,7 +12998,7 @@ function rdPaint(){try{var tb=$('tab-home');if(!tb)return;var d=$('playDot');if(
   var pb=$('playBtn');if(pb){var sOn=rdSingle()>0;if(pb.classList.contains('rdot')!==sOn)pb.classList.toggle('rdot',sOn)}
   var svn=0;try{svn=svReadyN()+svAchReadyAll()+svDqReady()}catch(e){}
   if(state==='play'&&svn>RD.sv&&RD.sv>=0){}else{if(RD.sv>=0&&svn>RD.sv)banner(T('심해 생존 보상 달성!'),rbxAutoOn()?T('판이 끝나면 자동으로 받아요'):T('홈 위 🎁 보상함에서 한 번에 받아요'));RD.sv=svn}
-  var ovOpen=function(){return [].some.call(document.querySelectorAll('.overlay'),function(o){return !o.hidden&&o.getClientRects().length>0})};if(!RD.boot&&state==='home'&&page==='home'&&APPACT&&!ovOpen()){RD.boot=true;if(all>0)setTimeout(function(){if(state==='home'&&page==='home'&&!ovOpen()&&!$('intro'))banner(T('받을 보상이 있어요'),T('빨간 점이 있는 곳을 눌러 받아요'))},4800)}}catch(e){}}
+  var ovOpen=function(){return [].some.call(document.querySelectorAll('.overlay'),function(o){return !o.hidden&&o.getClientRects().length>0})};if(!RD.boot&&state==='home'&&page==='home'&&APPACT&&!ovOpen()){RD.boot=true;if(all>0&&!rbxAutoOn())setTimeout(function(){if(state==='home'&&page==='home'&&!ovOpen()&&!$('intro'))banner(T('받을 보상이 있어요'),T('홈 위 🎁 보상함에서 한 번에 받아요'))},4800)}}catch(e){}}
 (function(){var st=document.createElement('style');st.textContent='#playBtn.rdot::before{content:"";position:absolute;top:-4px;left:-4px;width:15px;height:15px;border-radius:50%;background:#FF4D5E;box-shadow:0 0 0 2.5px #0B2C4A;animation:dotp 1.2s ease-in-out infinite;z-index:2}';document.head.appendChild(st)})();
 var startRunRD=startRun;startRun=function(){try{var bl=BAN_LAST&&BAN_LAST[0];if(bl===T('받을 보상이 있어요')||bl===T('심해 생존 보상 달성!')){var be=$('banner');if(be){be.hidden=true;be.classList.remove('go')}}}catch(e){}return startRunRD.apply(this,arguments)};
 var chestDotRD=chestDot;chestDot=function(){var r=chestDotRD.apply(this,arguments);rdPaint();return r};
@@ -15415,7 +15415,7 @@ abyTr(TRJ,{'보상함':'報酬BOX','심해 생존':'深海サバイバル','출�
 function rbxAutoOn(){return save.autoRw!==0}
 function rbxHint(){return rbxAutoOn()?T(' · 판이 끝나면 자동으로 받아요'):T(' · 🎁 보상함에서 받아요')}
 var RBX_T0=Date.now();setTimeout(function(){rbxAuto('boot')},9000);
-function rbxAuto(why){try{if(!rbxAutoOn()||RBX.busy||state==='play'||state==='pause')return;if(why==='home'&&Date.now()-RBX_T0<7000)return;if(why==='boot'&&$('welP')&&!$('welP').hidden){setTimeout(function(){rbxAuto('boot')},4000);return}var L=rbxItems();if(!L.length)return;crumb('rbxAuto:'+why+':'+L.length);rbxRun(L,true)}catch(e){}}
+function rbxAuto(why){try{if(!rbxAutoOn()||RBX.busy||(state!=='home'&&state!=='over'&&state!=='menu'))return;if(why==='home'&&Date.now()-RBX_T0<7000)return;if(why==='boot'&&$('welP')&&!$('welP').hidden){setTimeout(function(){rbxAuto('boot')},4000);return}var L=rbxItems();if(!L.length)return;crumb('rbxAuto:'+why+':'+L.length);rbxRun(L,true)}catch(e){}}
 var endRunRBX=endRun;endRun=function(){var r=endRunRBX.apply(this,arguments);setTimeout(function(){rbxAuto('end')},1600);return r};
 var toHomeRBX=toHome;toHome=function(){var r=toHomeRBX.apply(this,arguments);setTimeout(function(){rbxAuto('home')},900);return r};
 /* ① 환영 한 장 */

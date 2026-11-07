@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 import sys,os,json
-D='file:///tmp/claude-0/-home-claude/e922937a-9a51-5144-b16c-c7a7a3d12de9/scratchpad/w/'
+D='file:///tmp/claude-0/-home-claude/fec2cc06-1f22-5412-8890-a2fe8d321545/scratchpad/w/'
 TAG,L,VW,VH=sys.argv[1],sys.argv[2],int(sys.argv[3]),int(sys.argv[4])
 ONLY=sys.argv[5].split(',') if len(sys.argv)>5 else None
 LINT=r"""(function(){var W=innerWidth,H=innerHeight,out={clip:[],off:[],ovl:[],tiny:[],ko:[]};
@@ -25,7 +25,7 @@ os.makedirs('W',exist_ok=True);res={}
 with sync_playwright() as p:
     b=p.chromium.launch(executable_path='/opt/pw-browsers/chromium')
     pg=b.new_page(viewport={'width':VW,'height':VH},device_scale_factor=2);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)[:160]))
-    pg.goto(D+'t2e.html?lang=%s&build=release'%L);pg.add_style_tag(content=':root{--sat:47px;--sab:34px}');pg.wait_for_timeout(2600)
+    pg.goto(D+'t2e.html?lang=%s&build=release'%L);pg.add_style_tag(content=os.environ.get('INSETCSS',':root{--sat:47px;--sab:34px}'));pg.wait_for_timeout(2600)
     ev=lambda c:pg.evaluate("c=>__ev(c)",c)
     def hide(): ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});document.querySelectorAll('.coach').forEach(function(x){x.remove()});bannerOff();1")
     ev("save.onb=1;save.runs=40;save.nick='늑구';save.pearls=4280;save.gems=37;save.newsSeen=APP_VER;save.owned=SPECIES.slice(0,24).map(function(x){return x.id});var S=svSave();S.guide=1;S.gpTip=1;S.plays=8;[1,2,3].forEach(function(n){var O=svChS(n);O.best=n<3?420:255;O.clear=n<3?1:0});svRlCheck(true);var c=campSave();for(var i=1;i<=7;i++)c.s[i]=2;save.mp.games=12;save.mp.wins=2;persist();1")
@@ -50,6 +50,7 @@ with sync_playwright() as p:
     go('dexcard',"var c=document.querySelector('#dexDock .dexcard,#dexDock button,#dexDock [data-id]')||document.querySelector('.dex .card,.dexgrid > *');c&&c.click();1")
     go('shop',"showTab('shop');1")
     go('tank',"showTab('tank');1")
+    go('sea',"showTab('sea');1")
     go('camp',"campOpen();1")
     go('svch',"svChShow();1")
     for t in ['chal','rw']:

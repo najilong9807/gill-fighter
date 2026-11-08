@@ -25,6 +25,7 @@ os.makedirs('W',exist_ok=True);res={}
 with sync_playwright() as p:
     b=p.chromium.launch(executable_path='/opt/pw-browsers/chromium')
     pg=b.new_page(viewport={'width':VW,'height':VH},device_scale_factor=2);errs=[];pg.on('pageerror',lambda e:errs.append(str(e)[:160]))
+    pg.route(lambda u:'supabase' in u or 'google' in u, lambda r:r.abort())  # 11/8: 막지 않아서 실제 랭킹에 '늑구' 시험 기록 86개가 올라갔음
     pg.goto(D+'t2e.html?lang=%s&build=release'%L);pg.add_style_tag(content=os.environ.get('INSETCSS',':root{--sat:47px;--sab:34px}'));pg.wait_for_timeout(2600)
     ev=lambda c:pg.evaluate("c=>__ev(c)",c)
     def hide(): ev("document.querySelectorAll('.overlay').forEach(function(o){o.hidden=true});document.querySelectorAll('.coach').forEach(function(x){x.remove()});bannerOff();1")

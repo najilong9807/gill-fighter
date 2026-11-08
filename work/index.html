@@ -15514,6 +15514,30 @@ var rbxRenderIC=rbxRender;rbxRender=function(){var r=rbxRenderIC.apply(this,argu
   var G={};G[T('심해 생존')]='survfish';G[T('출석 · 미션')]='chal';G[T('세트 · 업적')]='trophy';G[T('이벤트')]='gift';var cur='gift';
   el.querySelectorAll('.rbx-scroll>*').forEach(function(n){if(n.classList.contains('rbx-g')){cur=G[n.textContent]||rwIcon(n.textContent);n.insertBefore(icImg(cur),n.firstChild)}else if(n.classList.contains('rbx-r')){var b=n.querySelector('b'),k=rwIcon(b&&b.textContent);n.insertBefore(icImg(k==='gift'?cur:k),n.firstChild)}else if(n.classList.contains('rbx-none')){n.insertBefore(icImg('gift'),n.firstChild)}})}catch(e){}return r};
 var welShowIC=welShow;welShow=function(news,away,got,rows){var r=welShowIC.apply(this,arguments);try{document.querySelectorAll('#welP .wel-got li').forEach(function(li){li.insertBefore(icImg(rwIcon(li.textContent)),li.firstChild)});document.querySelectorAll('#welP .wel-row').forEach(function(rw){var sp=rw.querySelector('span');rw.insertBefore(icImg(rwIcon(sp&&sp.textContent)),rw.firstChild)})}catch(e){}return r};
+/* ===== 1.1.27 늑구 '보상함 창이 조잡하고 너무 커서 부담' + '이벤트 미션 중 다 끝난 건 없애기'
+   ① 보상함: 세로로 늘어나는 구조(flex) 대신 내용 높이만큼만 · 버튼 높이 고정(아이폰에서 '모두 받기'·'닫기'가 화면 절반을 차지하던 것) · 받을 게 없으면 '모두 받기' 숨김, 빈 그림 작게
+   ② 100명 감사 이벤트: 받은 미션 줄 숨김 · 출석 7일 다 받으면 출석 칸 숨김 · 완주 선물 받으면 그 줄 숨김 · 완주까지 받았으면 홈 띠 자체를 숨김
+   ③ 할로윈 오늘의 미션: 받은 미션 줄 숨김(다 받으면 한 줄 안내) ===== */
+(function(){var st=document.createElement('style');st.textContent=
+ '#rbxP .panel.rbx-panel{display:block!important;height:auto!important;min-height:0!important;max-height:none!important;padding-bottom:14px}#rbxP .rbx-panel>h1{margin:0 0 10px!important}'+
+ '#rbxP .rbx-panel>p,#rbxP .rbx-panel>label,#rbxP .rbx-panel>div,#rbxP .rbx-panel>button{margin:0 0 8px}'+
+ '#rbxP .rbx-lead{font-size:13px;text-align:center}'+
+ '#rbxP .rbx-all{display:block;width:100%;height:46px!important;min-height:0!important;max-height:46px!important;padding:0 14px!important;font-size:17px;line-height:46px}'+
+ '#rbxP .rbx-x{display:block;width:100%;height:42px!important;min-height:0!important;max-height:42px!important;padding:0 14px!important;font-size:15px;line-height:42px;margin:4px 0 0!important}'+
+ '#rbxP .rbx-scroll{flex:none;max-height:min(46vh,380px);min-height:0;overflow:auto}'+
+ '#rbxP.rbx-empty .rbx-all{display:none}'+
+ '#rbxP .rbx-none{padding:4px 0 2px;font-size:13px}#rbxP .rbx-none .ic3d{width:48px!important;height:48px!important;margin:0 auto 4px}'+
+ '#rbxP .rbx-auto{justify-content:center;font-size:13px}#rbxP .rbx-auto input{width:18px;height:18px}';
+ document.head.appendChild(st)})();
+var rbxRenderSM=rbxRender;rbxRender=function(){var r=rbxRenderSM.apply(this,arguments);try{var el=$('rbxP');if(el)el.classList.toggle('rbx-empty',!rbxItems().length)}catch(e){}return r};
+function c1Hide(n,on){if(n)n.style.display=on?'none':''}
+var c1RenderSM=c1Render;c1Render=function(){var r=c1RenderSM.apply(this,arguments);try{var el=$('c1Ev');if(!el)return r;var c=C1(),box=$('c1M');
+  box.querySelectorAll('.hwe-row.got').forEach(function(n){n.parentNode.removeChild(n)});c1Hide(box.closest('.hwe-sec'),!box.children.length);
+  c1Hide($('c1A').closest('.hwe-sec'),c.d.length>=C1_ATT.length);c1Hide($('c1F').closest('.hwe-sec'),!!c.fin)}catch(e){}return r};
+var c1BarPaintSM=c1BarPaint;c1BarPaint=function(){var r=c1BarPaintSM.apply(this,arguments);try{var b=$('c1Bar');if(b&&c1On()&&C1().fin)b.hidden=true}catch(e){}return r};
+var hwEvRenderSM=hwEvRender;hwEvRender=function(){var r=hwEvRenderSM.apply(this,arguments);try{var box=$('hweMis');if(!box)return r;box.querySelectorAll('.hwe-row.got').forEach(function(n){n.parentNode.removeChild(n)});
+  if(!box.children.length){var p=document.createElement('p');p.className='hwe-tip';p.textContent=T('오늘 미션을 모두 끝냈어요 · 내일 새 미션이 나와요');box.appendChild(p)}}catch(e){}return r};
+abyTr(TRT,{'오늘 미션을 모두 끝냈어요 · 내일 새 미션이 나와요':'All of today\'s missions done · new ones tomorrow'});abyTr(TRJ,{'오늘 미션을 모두 끝냈어요 · 내일 새 미션이 나와요':'今日のミッションはすべて完了 · 明日また新しいミッション'});
 /* ===== 1.1.26 결과 화면 '받은 것'에도 아이콘 (경험치 · 장비 · 꿀꺽 · 도전 · 상자 · 보석) + 장비 줄의 '— 빈 칸에 바로 장착'은 아랫줄 작은 글씨로 ===== */
 (function(){var st=document.createElement('style');st.textContent='#svRw .crchip{display:flex;align-items:center;gap:6px;text-align:left}#svRw .crchip>.ic3d{width:24px;height:24px;flex:none;object-fit:contain}#svRw .crchip small{display:block;font-size:12px;opacity:.75;line-height:1.2}#svRw .crchip>span{min-width:0}';document.head.appendChild(st)})();
 function svRwIcons(){try{var rw=$('svRw');if(!rw)return;[].forEach.call(rw.querySelectorAll('.crchip'),function(c){if(c.querySelector('.ic3d'))return;var tx=c.textContent,k=c.classList.contains('pearl')?'':c.classList.contains('gulp')?'gulp':/경험치|XP|経験値/.test(tx)?'star':/장비|gear|Gear|装備/.test(tx)?'bag':/상자|chest|Chest|box|Box|箱/.test(tx)?'gift':/도전|challenge|Challenge|Achiev|チャレンジ|実績/.test(tx)?'chal':/보석|gem|Gem|ジェム/.test(tx)?'gem':/유물|relic|Relic|遺物/.test(tx)?'crown':'';if(!k)return;

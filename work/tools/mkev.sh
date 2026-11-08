@@ -4,6 +4,7 @@ python3 mkdbg.py
 python3 - <<'P'
 h=open('t2.html').read()
 h=h.replace('function boot(){','window.__ev=function(c){return eval(c)};function boot(){',1)
+h=h.replace('tfkdcguuuuwocshascat.supabase.co','blocked.invalid')  # 시험 페이지는 실제 서버(랭킹·기록)에 절대 안 보냄
 open('t2e.html','w').write(h)
 P
 python3 - <<'P'

@@ -72,13 +72,13 @@ function xmmClaim(k){var M=XMD(),o=null;XMM.forEach(function(x){if(x.k===k)o=x})
   banner(T('미션 보상을 받았어요!'),T('진주 ')+'+'+nf(o.p)+' · '+T('선물 상자 ')+'+'+o.c);xmBoxAdd(o.c);try{refreshHome(true)}catch(e){}xmRender()}
 
 /* --- 선물 상자 모으기 --- */
-var XMC=[{n:30,p:1000},{n:80,g:20},{n:150,a:'xm_holly'},{n:250,p:3000},{n:350,g:30},{n:500,p:10000}];
+var XMC=[{n:30,p:1000},{n:80,g:20},{n:150,a:'xm_holly'},{n:250,p:3000},{n:350,a:'pr_snowman'},{n:500,p:10000}]; /* 1.1.28: 350개 = 눈사람 짝꿍(펫) */
 function xmBoxN(){return XM().box}
 function xmBoxAdd(n){if(!(n>0)||!xmSeason())return;var o=XM(),b=o.box;o.box=b+n;persist();
   XMC.forEach(function(m){if(b<m.n&&b+n>=m.n)setTimeout(function(){banner(T('선물 상자 모으기'),nf(m.n)+T('개')+T(' · 크리스마스 이벤트에서 받아요'))},1400)});try{xmBarPaint()}catch(e){}}
 function xmcGot(i){return XM().cg.indexOf(i)>=0}
 function xmcClaim(i){var m=XMC[i];if(!m||xmcGot(i)||xmBoxN()<m.n)return;XM().cg.push(i);var sub=xmGive(m);crumb('xmc:'+i);try{svSnd('gem');buzz([20,30,40])}catch(e){}
-  banner(m.a?T('왕관을 받았어요!'):T('선물 상자 선물을 받았어요!'),m.a?T('호랑가시 왕관'):sub);if(m.a)setTimeout(function(){banner(T('호랑가시 왕관'),T('상점 › 꾸미기 › 모자에서 입혀요'))},1800);
+  var an=m.a?(accById(m.a)||{name:''}).name:'';banner(m.a==='xm_holly'?T('왕관을 받았어요!'):T('선물 상자 선물을 받았어요!'),m.a?an:sub);if(m.a)setTimeout(function(){banner(an,m.a==='pr_snowman'?T('상점 › 꾸미기 › 펫에서 데려가요'):T('상점 › 꾸미기 › 모자에서 입혀요'))},1800);
   try{refreshHome(true)}catch(e){}xmRender();xmBarPaint()}
 function xmAny(){if(!xmSeason())return false;if(xmAttCan())return true;for(var i=0;i<XMM.length;i++)if(xmmReady(XMM[i]))return true;for(var j=0;j<XMC.length;j++)if(!xmcGot(j)&&xmBoxN()>=XMC[j].n)return true;return false}
 
@@ -119,7 +119,7 @@ function xmRender(){var el=$('xmEv');if(!el)return;var o=XM();
   var n=xmBoxN(),top=XMC[XMC.length-1].n;$('xmCH').textContent=T('선물 상자 모으기');$('xmCnt').textContent=nf(Math.min(n,999))+' / '+top;$('xmFill').style.width=Math.min(100,n/top*100)+'%';$('xmTip').textContent=T('싱글에서 떠다니는 선물 상자를 먹거나 미션을 깨면 모여요');
   var ms=$('xmMs');ms.textContent='';XMC.forEach(function(m,i){var got=xmcGot(i),rd=!got&&n>=m.n,c=document.createElement('div');c.className='hwe-m'+(got?' got':rd?' rd':'');
     var ic=document.createElement('i');ic.appendChild(xmRwIc(m));c.appendChild(ic);
-    var lb=document.createElement('b');if(m.a)lb.textContent=T('호랑가시 왕관');else{lb.appendChild(document.createTextNode(T(m.p?'진주 ':'보석 ').trim()));lb.appendChild(document.createElement('br'));lb.appendChild(document.createTextNode(nf(m.p||m.g)))}c.appendChild(lb);
+    var lb=document.createElement('b');if(m.a)lb.textContent=(accById(m.a)||{name:T('호랑가시 왕관')}).name;else{lb.appendChild(document.createTextNode(T(m.p?'진주 ':'보석 ').trim()));lb.appendChild(document.createElement('br'));lb.appendChild(document.createTextNode(nf(m.p||m.g)))}c.appendChild(lb);
     var k=document.createElement('small');k.innerHTML=XM_SVG.box;k.appendChild(document.createTextNode(' '+m.n));c.appendChild(k);
     c.appendChild(xmBtn(rd,got,function(){xmcClaim(i)}));ms.appendChild(c)});
   var sb=$('xmShop');sb.textContent='';var im=icImg('deco');im.className='ic3d btnic';sb.appendChild(im);sb.appendChild(document.createTextNode(T('한정 꾸미기')));$('xmX').textContent=T('닫기')}
@@ -368,3 +368,106 @@ var xmRenderAD=xmRender;xmRender=function(){var r=xmRenderAD.apply(this,argument
     if(!box.children.length)sec.style.display='none'}
   clearTimeout(XMTT);XMTT=setTimeout(xmTreeLoop,30)}catch(e){}return r};
 (function(){var st=document.createElement('style');st.textContent='.xm-tree{border-radius:18px;overflow:hidden;box-shadow:0 0 0 2.5px #0B2C4A,0 4px 0 2.5px #0B2C4A;flex:none}.xm-tree canvas{display:block;width:100%;height:150px}@media (orientation:landscape) and (max-height:500px){.xm-tree canvas{height:96px}}';document.head.appendChild(st)})();
+/* ===== 1.1.28 늑구 '루돌프 · 산타는 짜치지 않게 앱 그림 결로 · 물속에 눈 내리는 것 · 보류한 것 적극 반영 · 수족관 트리 꾸미기'
+   힉스필드(GPT Image 2.6)로 기존 svart 그림을 참고해 같은 결로 그림(크레딧 7, 11/8 사용자 허락):
+   xm_santa(산타+루돌프 썰매) · bg_xmhome(북극 밤바다 홈 배경) · xm_boss(루돌프 아귀) · xm_gift(선물 상자) · ac_holly · ac_xmsanta · ac_xmantler(꾸미기) ·
+   pet_snowman(눈사람 짝꿍) · dc_xm_mytree(장식 없는 트리) · orn_*(장식 8가지)
+   ① 홈: 크리스마스 동안 홈 배경을 북극 밤바다 그림으로 · 산타 썰매는 그림으로 · 바다눈을 더 많이 · 크게(앞 · 뒤 두 겹)
+   ② 판: 선물 상자 · 루돌프 아귀 그림 · 바다눈 더 보이게
+   ③ 꾸미기: 산타 모자 · 루돌프 뿔 · 호랑가시 왕관을 그림으로(없으면 예전 코드 그림)
+   ④ 눈사람 짝꿍(펫): 선물 상자 350개 보상 · 심해 생존 특기 '눈보라'(주변 적 느리게 + 약한 피해)
+   ⑤ 내 트리 꾸미기: 크리스마스 첫 접속에 수족관에 장식 없는 트리 + 장식 3개 · 장식은 오늘의 미션 · 산타 선물 · 출석 7일째(별)로 모음 · 이벤트 창에서 자리에 달기/떼기 ===== */
+abyTr(TRT,{'내 크리스마스 트리':'My Christmas Tree','내 트리 꾸미기':'Decorate my tree','장식을 고르고 트리의 빈 자리를 눌러 달아요 · 단 장식을 누르면 떼요':'Pick an ornament, then tap an empty spot on the tree · tap a hung ornament to take it off',
+ '장식 ':'Ornaments ','가진 장식이 없어요 · 오늘의 미션과 산타 선물로 모아요':'No ornaments yet · get them from daily missions and Santa\'s presents','꼭대기 별은 맨 위 자리에만 달 수 있어요':'The star goes only on the top spot',
+ '장식을 받았어요!':'You got an ornament!','수족관 트리에 달아 보세요':'Hang it on your aquarium tree','크리스마스 이벤트 › 내 트리에서 달아요':'Hang it from Christmas Event › My tree','꾸미기':'Decorate','눈사람 짝꿍':'Snowman Buddy','상점 › 꾸미기 › 펫에서 데려가요':'Bring it along from Shop › Accessories › Pets','눈보라':'Blizzard','초마다 주변 적을 얼려 느리게':'s: freezes nearby enemies (slow)',
+ '금빛 별':'Gold star','빨간 방울':'Red bauble','파란 방울':'Blue bauble','지팡이 사탕':'Candy cane','금방울':'Jingle bell','작은 선물':'Little present','눈꽃':'Snowflake','진주 조개':'Pearl shell','크리스마스 선물이 도착했어요! 🎄':'A Christmas present arrived! 🎄','수족관에 내 트리와 장식 3개를 넣어 드렸어요':'Your own tree and 3 ornaments are in your aquarium'});
+abyTr(TRJ,{'내 크리스마스 트리':'マイクリスマスツリー','내 트리 꾸미기':'マイツリーかざり','장식을 고르고 트리의 빈 자리를 눌러 달아요 · 단 장식을 누르면 떼요':'かざりを選んでツリーの空いた所をタップ · つけたかざりをタップで外せます',
+ '장식 ':'かざり ','가진 장식이 없어요 · 오늘의 미션과 산타 선물로 모아요':'かざりがありません · 今日のミッションとサンタのプレゼントで集めよう','꼭대기 별은 맨 위 자리에만 달 수 있어요':'星はてっぺんだけにつけられます',
+ '장식을 받았어요!':'かざりをもらいました！','수족관 트리에 달아 보세요':'水族館のツリーにつけてみよう','크리스마스 이벤트 › 내 트리에서 달아요':'クリスマスイベント › マイツリーでつけられます','꾸미기':'かざる','눈사람 짝꿍':'ゆきだるまの相棒','상점 › 꾸미기 › 펫에서 데려가요':'ショップ › きせかえ › ペットで連れていけます','눈보라':'ふぶき','초마다 주변 적을 얼려 느리게':'秒ごとに周りの敵をこおらせて遅くする',
+ '금빛 별':'金の星','빨간 방울':'赤いボール','파란 방울':'青いボール','지팡이 사탕':'キャンディケイン','금방울':'金のすず','작은 선물':'小さなプレゼント','눈꽃':'雪の結晶','진주 조개':'真珠の貝','크리스마스 선물이 도착했어요! 🎄':'クリスマスプレゼントが届きました！🎄','수족관에 내 트리와 장식 3개를 넣어 드렸어요':'水族館にマイツリーとかざり3個を置きました'});
+['xm_santa','bg_xmhome','xm_gift','ac_holly','ac_xmsanta','ac_xmantler','dc_xm_mytree','xm_boss','pet_snowman'].forEach(function(k){try{if(xmSeason())xmSpr(k)}catch(e){}});
+/* --- ① 홈 배경 · 산타 그림 --- */
+var xmHomeFxPB=xmHomeFx;xmHomeFx=function(){try{var bg=page!=='tank'&&xmSpr('bg_xmhome');if(bg){var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);var k=Math.max(cw/bg.naturalWidth,ch/bg.naturalHeight),w=bg.naturalWidth*k,hh=bg.naturalHeight*k;
+    c.drawImage(bg,(cw-w)/2+Math.sin(t*.12)*4,(ch-hh)/2,w,hh);
+    var g=c.createLinearGradient(0,0,0,ch*.3);g.addColorStop(0,'rgba(255,255,240,'+(.05+.03*Math.sin(t*.8))+')');g.addColorStop(1,'rgba(255,255,240,0)');c.fillStyle=g;c.fillRect(0,0,cw,ch*.3);
+    xmSnowBig(c,cw,ch,0);c.restore();if(page==='home'){c.save();c.setTransform(dpr,0,0,dpr,0,0);xmHomeSanta(c);c.restore()}return}}catch(e){}return xmHomeFxPB.apply(this,arguments)};
+var xmSantaCD=xmSanta;xmSanta=function(c,x,y,s,dir,tt){var im=xmSpr('xm_santa');if(!im)return xmSantaCD.apply(this,arguments);var w=150*s,hh=w*im.naturalHeight/im.naturalWidth;
+  c.save();c.translate(x,y);c.scale(dir,1);c.rotate(Math.sin(tt*1.6)*.05);c.drawImage(im,-w*.62,-hh*.62+Math.sin(tt*3)*2,w,hh);
+  c.globalCompositeOperation='lighter';c.globalAlpha=.55+.35*Math.sin(tt*5);c.drawImage(glow('255,60,50'),w*.3,-hh*.26,w*.13,w*.13);c.restore()};
+/* --- 바다눈: 앞 · 뒤 두 겹, 크고 부드러운 송이가 흔들리며 내려옴 --- */
+var XSN=null;function xmFlakeImg(){if(XSN)return XSN;var cv=document.createElement('canvas'),S=32;cv.width=cv.height=S;var x=cv.getContext('2d'),g=x.createRadialGradient(S/2,S/2,0,S/2,S/2,S/2);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.45,'rgba(235,248,255,.85)');g.addColorStop(1,'rgba(220,240,255,0)');x.fillStyle=g;x.fillRect(0,0,S,S);return XSN=cv}
+function xmSnowBig(c,W,H,par){var im=xmFlakeImg(),sm=Math.min(W,H),n=reduce?14:46,i;for(i=0;i<n;i++){var z=.35+.65*h2(i,97,3),sp=(10+22*z)*(sm/400),r=(2.2+5.5*z)*(sm/400),sw=Math.sin(t*(.5+.4*h2(i,97,5))+i)*14*z;
+    var x=((h2(i,97,1)*W*1.2+sw-par*z)%(W*1.2)+W*1.2)%(W*1.2)-W*.1,y=((h2(i,97,2)*H*1.2+t*sp)%(H*1.2))-H*.1;c.globalAlpha=.35+.5*z;c.drawImage(im,x-r,y-r,r*2,r*2)}c.globalAlpha=1}
+var drawXSN=draw;draw=function(){drawXSN();try{if(WN&&!HW&&!reduce&&(state==='play'||state==='pause')&&!P.surv){var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);var im=xmFlakeImg(),sm=Math.min(cw,ch),n=26;
+  for(var i=0;i<n;i++){var z=.3+.7*h2(i,131,3),r=(1.6+3.2*z)*(sm/400),px=cam.x*zoom*.2*z,py=cam.y*zoom*.2*z,sw=Math.sin(t*.6+i*1.7)*10*z,x=((h2(i,131,1)*cw*1.2+sw-px)%(cw*1.2)+cw*1.2)%(cw*1.2)-cw*.1,y=((h2(i,131,2)*ch*1.2+t*(8+16*z)*(sm/400)-py)%(ch*1.2)+ch*1.2)%(ch*1.2)-ch*.1;c.globalAlpha=.22+.35*z;c.drawImage(im,x-r,y-r,r*2,r*2)}c.restore()}}catch(e){}};
+/* --- ② 판: 선물 상자 그림 · 루돌프 아귀 그림 --- */
+var drawCandyPG=drawCandy;drawCandy=function(p,pr,py){var im=!HW&&xmSpr('xm_gift');if(!im)return drawCandyPG.apply(this,arguments);var r=Math.max(pr*1.25,7),c=ctx,w=r*2.3,hh=w*im.naturalHeight/im.naturalWidth;
+  c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.5+.25*Math.sin(t*4+p.ph);c.drawImage(glow('255,215,110'),p.x-r*3,py-r*3,r*6,r*6);c.restore();
+  c.save();c.translate(p.x,py);c.rotate(Math.sin(t*2+p.ph)*.15);c.drawImage(im,-w/2,-hh/2,w,hh);c.restore()};
+function xmRegSprite(k,src){if(SPRITES[k])return SPRITES[k];var im=new Image(),o={img:im,ok:false,pad:44};im.onload=function(){try{o.lit=litCanvas(im);o.shadow=tintCanvas(im,10,'#08344E',0);o.white=glowCanvas(im,44,'#E8FDFF');o.red=glowCanvas(im,44,'#FF2424');o.ok=true}catch(e){}};im.src=src;SPRITES[k]=o;return o}
+var XMBL=null;function xmBossLook(){if(XMBL)return XMBL;var A=byId('angler');XMBL={};for(var q in A)XMBL[q]=A[q];XMBL.id='xmboss';XMBL.name=T('루돌프 아귀');xmRegSprite('xmboss','svart/xm_boss.webp');return XMBL}
+var xmbSpawnPG=xmbSpawn;xmbSpawn=function(){var r=xmbSpawnPG.apply(this,arguments);try{var f=XMB.f,L=xmBossLook();if(f&&SPRITES.xmboss&&SPRITES.xmboss.ok){f.look=L;f.q=null}}catch(e){}return r};
+setTimeout(function(){try{if(xmSeason())xmBossLook()}catch(e){}},2500);
+/* --- ③ 꾸미기 그림(산타 모자 · 루돌프 뿔 · 호랑가시 왕관) --- */
+var XM2H={wn_santa:['ac_xmsanta',1.18,.24,.05],wn_antler:['ac_xmantler',1.2,.2,0],xm_holly:['ac_holly',1.1,.16,0]};
+Object.keys(XM2H).forEach(function(id){var old=ACC_HEAD[id];ACC_HEAD[id]=function(c,U){var q=XM2H[id],im=xmSpr(q[0]);if(!im)return old&&old.apply(this,arguments);var w=U*q[1],hh=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-hh,w,hh)}});
+setTimeout(function(){try{['ac_xmsanta','ac_xmantler','ac_holly'].forEach(function(k){xmSpr(k)})}catch(e){}},1500);
+/* --- ④ 눈사람 짝꿍(펫) --- */
+ACC.push({id:'pr_snowman',slot:'pet',name:T('눈사람 짝꿍'),c:{cur:'gems',price:0},wn:1,ex:1});PRPET.pr_snowman='pet_snowman';PRPET_K.pet_snowman=['swim',1.1];
+PET_AB.pr_snowman={n:'눈보라',d:function(l){return (12-l)+T('초마다 주변 적을 얼려 느리게')}};
+var svPetFireSN=svPetFire;svPetFire=function(){if(SV.pet!=='pr_snowman')return svPetFireSN.apply(this,arguments);var l=SV.petL,O=svPetOrg(),r2=P.s*2.4+110,dm=(26+(SV.lv||1)*4)*(1+.15*(l-1))*.35,i,e;
+  for(i=0;i<SV.en.length;i++){e=SV.en[i];if(!e.dead&&Math.hypot(e.x-P.x,e.y-P.y)<r2)e.slow=Math.max(e.slow||0,e.E.boss?1.2:2.2+.3*l)}svAreaHitP(P.x,P.y,r2,dm,'200,235,255',60);svPetPop(O,'200,235,255');return 12-l};
+var hwListPS=hwList;hwList=function(arr,own){var r=hwListPS.apply(this,arguments);try{if(arr===ACC)r=r.filter(function(o){return o.id!=='pr_snowman'||own(o)});if(arr===DECOR)r=r.filter(function(o){return o.id!=='xm_mytree'||own(o)})}catch(e){}return r};
+var xmRwIcPS=xmRwIc;xmRwIc=function(R){var k=R.a==='pr_snowman'?'pet_snowman':R.a==='xm_holly'?'ac_holly':null;if(k){var im=new Image();im.src='svart/'+k+'.webp';im.alt='';im.className='ic3d';return im}return xmRwIcPS.apply(this,arguments)};
+/* --- ⑤ 내 트리 꾸미기 --- */
+var XORN=[['star','금빛 별'],['red','빨간 방울'],['blue','파란 방울'],['cane','지팡이 사탕'],['bell','금방울'],['present','작은 선물'],['flake','눈꽃'],['shell','진주 조개']];
+var XSLOT=[[.5,.05],[.40,.2],[.60,.2],[.30,.34],[.50,.30],[.70,.34],[.24,.47],[.42,.45],[.60,.46],[.77,.47],[.20,.6],[.36,.62],[.52,.6],[.68,.62],[.82,.6]];
+DECOR.push({id:'xm_mytree',name:T('내 크리스마스 트리'),w:.3,ar:1.32,draw:'xm_mytree',c:{cur:'pearls',price:0},wn:1,ex:1});DART.xm_mytree={kw:1.0};DECO_DRAW.xm_mytree=function(w,h,sd){decoShadow(h*.44,w*.42,h*.07)};
+function XT(){var o=save.xmTree;if(!o||typeof o!=='object')o=save.xmTree={s:[],inv:{}};if(!Array.isArray(o.s))o.s=[];if(!o.inv||typeof o.inv!=='object')o.inv={};return o}
+function xmOrnAdd(k,n,quiet){var o=XT();o.inv[k]=(o.inv[k]|0)+(n||1);persist();if(!quiet){var nm=(XORN.filter(function(q){return q[0]===k})[0]||[,''])[1];setTimeout(function(){banner(T('장식을 받았어요!'),T(nm)+' · '+T('크리스마스 이벤트 › 내 트리에서 달아요'))},900)}}
+function xmOrnRand(){var k=XORN[1+Math.floor(Math.random()*(XORN.length-1))][0];return k}
+function xmOrnN(){var o=XT(),n=0;for(var k in o.inv)n+=o.inv[k]|0;return n}
+function xmOrnDraw(c,k,x,y,sz){var im=xmSpr('orn_'+k);if(!im)return;var hh=sz,w=hh*im.naturalWidth/im.naturalHeight;c.drawImage(im,x-w/2,y-hh*.18,w,hh)}
+var drawDecoItemXT=drawDecoItem;drawDecoItem=function(D,x,y,w,flip,dim,sd){var r=drawDecoItemXT.apply(this,arguments);try{if(D&&D.id==='xm_mytree'){var o=decoArt(D);if(!o)return r;var c=DART[D.draw],hh=w*(D.ar||1),ai=o.h/o.w,iw=w*(c.kw||1),ih=iw*ai;var hk=c.hk||1.3;if(ih>hh*hk){ih=hh*hk;iw=ih/ai}var by=hh*.47,T0=XT();
+    ctx.save();ctx.translate(x,y);if(flip)ctx.scale(-1,1);if(dim)ctx.globalAlpha*=.7;
+    XSLOT.forEach(function(s,i){var k=T0.s[i];if(!k)return;var sx=(s[0]-.5)*iw,sy=by-ih+s[1]*ih,sz=i===0?iw*.2:iw*.13;if(i===0)sy-=sz*.35;
+      if(k==='star'||k==='bell'){ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha*=.4+.25*Math.sin(t*3+i);ctx.drawImage(glow('255,220,120'),sx-sz,sy-sz*.6,sz*2,sz*2);ctx.restore()}xmOrnDraw(ctx,k,sx,sy,sz)});ctx.restore()}}catch(e){}return r};
+setTimeout(function(){try{XORN.forEach(function(q){xmSpr('orn_'+q[0])})}catch(e){}},2200);
+/* 크리스마스 첫 선물: 리본 선물 상자 대신 내 트리 + 장식 3개 */
+xmGiftCheck=function(tries){try{if(!xmSeason())return;var o=XM();if(o.g0)return;if(!((save.runs|0)>0))return;
+  if(page!=='home'||state!=='home'||document.querySelector('.overlay:not([hidden])')||document.querySelector('.coach')||save.newsSeen!==APP_VER){if((tries||0)<30)setTimeout(function(){xmGiftCheck((tries||0)+1)},2000);return}
+  o.g0=1;xmGive({d:'xm_mytree'});xmOrnAdd('red',1,1);xmOrnAdd('blue',1,1);xmOrnAdd('bell',1,1);crumb('xmGift');try{buzz([20,30,20])}catch(e){}banner(T('크리스마스 선물이 도착했어요! 🎄'),T('수족관에 내 트리와 장식 3개를 넣어 드렸어요'))}catch(e){}};
+/* 장식 얻기: 오늘의 미션 받을 때 1개 · 산타가 떨어뜨린 선물 먹으면 30% · 출석 7일째 금빛 별 */
+var xmmClaimOR=xmmClaim;xmmClaim=function(k){var M=XMD(),was=!!M.got[k],r=xmmClaimOR.apply(this,arguments);try{if(!was&&M.got[k])xmOrnAdd(xmOrnRand())}catch(e){}return r};
+var xmAttClaimOR=xmAttClaim;xmAttClaim=function(){var o=XM(),was=o.an,r=xmAttClaimOR.apply(this,arguments);try{if(o.an===XM_ATT.length&&was===XM_ATT.length-1)xmOrnAdd('star')}catch(e){}return r};
+var candyEatOR=candyEat;candyEat=function(p){var r=candyEatOR.apply(this,arguments);try{if(!HW&&p&&p.xmDrop&&Math.random()<.3)xmOrnAdd(xmOrnRand())}catch(e){}return r};
+/* 꾸미기 창 */
+var XTD={sel:null};
+function xmTreeOpen(){var el=$('xmTreeP');if(!el){el=document.createElement('div');el.className='overlay';el.id='xmTreeP';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
+    el.innerHTML='<div class="panel xmt-panel"><h1></h1><p class="lead xmt-lead"></p><div class="xmt-stage"><canvas id="xmtCv"></canvas></div><div class="xmt-inv" id="xmtInv"></div><button type="button" class="btn" id="xmtX"></button></div>';document.body.appendChild(el);
+    $('xmtX').addEventListener('click',function(){el.hidden=true;try{xmRender()}catch(e){}});el.addEventListener('click',function(e){if(e.target===el){el.hidden=true}});
+    $('xmtCv').addEventListener('click',function(ev){var cv=this,rc=cv.getBoundingClientRect(),px=ev.clientX-rc.left,py=ev.clientY-rc.top,G=cv._g;if(!G)return;var best=-1,bd=1e9;
+      XSLOT.forEach(function(s,i){var sx=G.x+s[0]*G.w,sy=G.y+s[1]*G.h,d=Math.hypot(px-sx,py-sy);if(d<bd){bd=d;best=i}});if(best<0||bd>G.w*.11)return;var T0=XT();
+      if(T0.s[best]){var k0=T0.s[best];T0.s[best]=null;T0.inv[k0]=(T0.inv[k0]|0)+1;persist();try{svSnd('bub')}catch(e){}xmTreeRender();return}
+      var k=XTD.sel;if(!k||!(T0.inv[k]>0))return;if((best===0)!==(k==='star')){banner(T('꼭대기 별은 맨 위 자리에만 달 수 있어요'),'');return}
+      T0.s[best]=k;T0.inv[k]--;if(!(T0.inv[k]>0))XTD.sel=null;persist();crumb('xmOrn:'+k);try{svSnd('gem')}catch(e){}xmTreeRender()})}
+  xmTreeRender();el.hidden=false;crumb('xmTree')}
+function xmTreeRender(){var el=$('xmTreeP');if(!el)return;var T0=XT();el.querySelector('h1').textContent=T('내 트리 꾸미기');el.querySelector('.xmt-lead').textContent=T('장식을 고르고 트리의 빈 자리를 눌러 달아요 · 단 장식을 누르면 떼요');$('xmtX').textContent=T('닫기');
+  var inv=$('xmtInv');inv.textContent='';var any=0;XORN.forEach(function(q){var n=T0.inv[q[0]]|0;if(n<=0)return;any=1;if(!XTD.sel)XTD.sel=q[0];var b=document.createElement('button');b.type='button';b.className='xmt-o'+(XTD.sel===q[0]?' on':'');
+    var im=new Image();im.src='svart/orn_'+q[0]+'.webp';im.alt='';b.appendChild(im);var s=document.createElement('small');s.textContent='×'+n;b.appendChild(s);b.setAttribute('aria-label',T(q[1])+' '+n);b.addEventListener('click',function(){XTD.sel=q[0];xmTreeRender()});inv.appendChild(b)});
+  if(XTD.sel&&!(T0.inv[XTD.sel]>0))XTD.sel=null;if(!any){var p0=document.createElement('p');p0.className='xmt-none';p0.textContent=T('가진 장식이 없어요 · 오늘의 미션과 산타 선물로 모아요');inv.appendChild(p0)}xmTreeCvDraw()}
+function xmTreeCvDraw(){var cv=$('xmtCv');if(!cv)return;var W=cv.clientWidth||300,Hh=cv.clientHeight||300,d=Math.min(2,window.devicePixelRatio||1);if(cv.width!==Math.round(W*d)||cv.height!==Math.round(Hh*d)){cv.width=Math.round(W*d);cv.height=Math.round(Hh*d)}
+  var c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,W,Hh);var bg=xmSpr('bg_xmhome');if(bg){var k=Math.max(W/bg.naturalWidth,Hh/bg.naturalHeight);c.globalAlpha=.9;c.drawImage(bg,(W-bg.naturalWidth*k)/2,(Hh-bg.naturalHeight*k)*.6,bg.naturalWidth*k,bg.naturalHeight*k);c.globalAlpha=1}else{c.fillStyle='#123A6E';c.fillRect(0,0,W,Hh)}
+  var im=xmSpr('dc_xm_mytree');if(!im){setTimeout(xmTreeCvDraw,200);return}var th=Hh*.92,tw=th*im.naturalWidth/im.naturalHeight,tx=W/2-tw/2,ty=Hh-th-4;cv._g={x:tx,y:ty,w:tw,h:th};c.drawImage(im,tx,ty,tw,th);
+  var T0=XT();XSLOT.forEach(function(s,i){var sx=tx+s[0]*tw,sy=ty+s[1]*th,k=T0.s[i],sz=i===0?tw*.2:tw*.13;if(k){if(i===0)sy-=sz*.35;xmOrnDraw(c,k,sx,sy,sz)}else{c.save();c.setLineDash([3,3]);c.lineWidth=1.6;c.strokeStyle=i===0?'rgba(255,220,120,.9)':'rgba(255,255,255,.75)';c.beginPath();c.arc(sx,sy+sz*.3,sz*.32,0,Math.PI*2);c.stroke();c.restore()}})}
+/* 이벤트 창 맨 위: 내 트리 미리보기 + 꾸미기 버튼 (예전 '불 켜지는 트리' 대신) */
+xmTreeDraw=function(cv){if(!cv||!cv.getContext)return;var W=cv.clientWidth||300,Hh=cv.clientHeight||150,d=Math.min(2,window.devicePixelRatio||1);if(cv.width!==Math.round(W*d)){cv.width=Math.round(W*d);cv.height=Math.round(Hh*d)}
+  var c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,W,Hh);var bg=xmSpr('bg_xmhome');if(bg){var k=W/bg.naturalWidth;c.drawImage(bg,0,(Hh-bg.naturalHeight*k)*.55,W,bg.naturalHeight*k)}else{c.fillStyle='#123A6E';c.fillRect(0,0,W,Hh)}
+  var im=xmSpr('dc_xm_mytree'),T0=XT(),hung=0;T0.s.forEach(function(k){if(k)hung++});if(im){var th=Hh*.94,tw=th*im.naturalWidth/im.naturalHeight,tx=W*.7-tw/2,ty=Hh-th;c.drawImage(im,tx,ty,tw,th);
+    XSLOT.forEach(function(s,i){var k=T0.s[i];if(!k)return;var sz=i===0?tw*.2:tw*.13,sx=tx+s[0]*tw,sy=ty+s[1]*th-(i===0?sz*.35:0);xmOrnDraw(c,k,sx,sy,sz)})}
+  c.font='700 13px sans-serif';c.fillStyle='#FFE27A';c.textAlign='left';c.fillText(T('내 크리스마스 트리'),12,22);c.font='12px sans-serif';c.fillStyle='rgba(255,255,255,.9)';c.fillText(T('장식 ')+hung+' / '+XSLOT.length,12,40);c.fillText('🎁 '+xmOrnN(),12,58)};
+var xmRenderTB=xmRender;xmRender=function(){var r=xmRenderTB.apply(this,arguments);try{var sec=$('xmTreeSec');if(sec&&!$('xmTreeBtn')){var b=document.createElement('button');b.type='button';b.className='btn ghost xmt-go';b.id='xmTreeBtn';b.addEventListener('click',function(){xmTreeOpen()});sec.appendChild(b)}var tb=$('xmTreeBtn');if(tb){tb.textContent=T('꾸미기');tb.classList.toggle('ha',xmOrnN()>0)}}catch(e){}return r};
+var xmAnyTR=xmAny;xmAny=function(){return xmAnyTR()};
+(function(){var st=document.createElement('style');st.textContent='#xmTreeP{z-index:61}.xm-tree{position:relative}.xmt-go{position:absolute;left:10px;bottom:10px;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;padding:7px 14px!important;font-size:14px!important;margin:0!important}'+
+ '.xmt-panel{display:block!important;height:auto!important;max-height:none!important}.xmt-panel>*{margin:0 0 10px}.xmt-panel #xmtX{display:block;width:100%;height:46px!important;min-height:0!important;max-height:46px!important;padding:0!important;line-height:46px;margin:4px 0 0}'+'.xmt-panel>h1{margin:0 0 12px!important}.xmt-lead{margin:0 0 10px!important;font-size:12.5px;text-align:center;line-height:1.35}.xmt-stage{border-radius:18px;overflow:hidden;box-shadow:0 0 0 2.5px #0B2C4A,0 4px 0 2.5px #0B2C4A}.xmt-stage canvas{display:block;width:100%;height:min(48vh,360px);touch-action:manipulation}'+
+ '.xmt-inv{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.xmt-o{position:relative;width:52px;height:56px;border-radius:14px;border:0;background:#F4F8FC;box-shadow:inset 0 0 0 2px #D5E2EC;display:grid;place-items:center;padding:4px}.xmt-o img{max-width:34px;max-height:36px}.xmt-o.on{background:#FFF4D6;box-shadow:inset 0 0 0 3px #E3B95A}.xmt-o small{position:absolute;right:3px;bottom:1px;font:700 11px sans-serif;color:#0B2C4A}.xmt-none{margin:4px 0;font-size:13px;color:#5C7C95;text-align:center}';document.head.appendChild(st)})();

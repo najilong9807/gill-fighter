@@ -471,3 +471,44 @@ var xmAnyTR=xmAny;xmAny=function(){return xmAnyTR()};
 (function(){var st=document.createElement('style');st.textContent='#xmTreeP{z-index:61}.xm-tree{position:relative}.xmt-go{position:absolute;left:10px;bottom:10px;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;padding:7px 14px!important;font-size:14px!important;margin:0!important}'+
  '.xmt-panel{display:block!important;height:auto!important;max-height:none!important}.xmt-panel>*{margin:0 0 10px}.xmt-panel #xmtX{display:block;width:100%;height:46px!important;min-height:0!important;max-height:46px!important;padding:0!important;line-height:46px;margin:4px 0 0}'+'.xmt-panel>h1{margin:0 0 12px!important}.xmt-lead{margin:0 0 10px!important;font-size:12.5px;text-align:center;line-height:1.35}.xmt-stage{border-radius:18px;overflow:hidden;box-shadow:0 0 0 2.5px #0B2C4A,0 4px 0 2.5px #0B2C4A}.xmt-stage canvas{display:block;width:100%;height:min(48vh,360px);touch-action:manipulation}'+
  '.xmt-inv{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.xmt-o{position:relative;width:52px;height:56px;border-radius:14px;border:0;background:#F4F8FC;box-shadow:inset 0 0 0 2px #D5E2EC;display:grid;place-items:center;padding:4px}.xmt-o img{max-width:34px;max-height:36px}.xmt-o.on{background:#FFF4D6;box-shadow:inset 0 0 0 3px #E3B95A}.xmt-o small{position:absolute;right:3px;bottom:1px;font:700 11px sans-serif;color:#0B2C4A}.xmt-none{margin:4px 0;font-size:13px;color:#5C7C95;text-align:center}';document.head.appendChild(st)})();
+/* ===== 1.1.28 늑구 '게임 안 배경에 효과 좀 더' + '수족관도 더 꾸미고 즐길거리'
+   판(싱글 · 대전 · 탐험) 배경: 얼음 수면 빛 · 북극 오로라(얕은 곳에서만, 깊어지면 사라짐) · 물속 반짝이 · 천천히 도는 큰 눈 결정 · 바닥 쪽 따뜻한 빛
+   수족관: 산타가 2시간마다(하루 3번) 모래 위에 선물을 두고 감 → 눌러서 열기(진주 · 40% 장식) /
+           내 트리 밑 선물: 하루 한 번, 단 장식 수만큼 진주가 커짐(30 + 장식 1개당 10, 최대 180) → 꾸밀수록 이득 /
+           수족관 물속에도 큰 눈 · 반짝이 · 위쪽 전구 줄 ===== */
+abyTr(TRT,{'산타가 수족관에 선물을 두고 갔어요!':'Santa left a present in your aquarium!','모래 위 선물을 눌러 열어요':'Tap the present on the sand to open it','트리 밑 선물':'Present under the tree','장식을 많이 달수록 선물이 커져요':'More ornaments, bigger present','선물을 열었어요!':'Present opened!'});
+abyTr(TRJ,{'산타가 수족관에 선물을 두고 갔어요!':'サンタが水族館にプレゼントを置いていきました！','모래 위 선물을 눌러 열어요':'砂の上のプレゼントをタップして開けよう','트리 밑 선물':'ツリーの下のプレゼント','장식을 많이 달수록 선물이 커져요':'かざりが多いほどプレゼントが大きくなります','선물을 열었어요!':'プレゼントを開けました！'});
+/* --- 판 배경 --- */
+function xmPlayBg(c,W,H,dk){var sh=1-dk,i;if(sh<=.02)return;
+  var g=c.createLinearGradient(0,0,0,H*.4);g.addColorStop(0,'rgba(190,235,255,'+(.3*sh)+')');g.addColorStop(1,'rgba(190,235,255,0)');c.fillStyle=g;c.fillRect(0,0,W,H*.4);
+  c.save();c.globalCompositeOperation='lighter';
+  var AC=[[90,255,190],[120,200,255],[190,120,255]];for(i=0;i<3;i++){var col=AC[i],y0=H*(.05+.05*i),amp=H*.03,a=(.2+.06*Math.sin(t*.7+i))*sh;c.beginPath();c.moveTo(-10,y0);
+    for(var x=0;x<=W+20;x+=20){c.lineTo(x,y0+Math.sin(x*.012+t*(.35+.1*i)+i*2)*amp+Math.sin(x*.031-t*.5)*amp*.4)}
+    c.lineTo(W+20,y0+H*.12);for(var x2=W+20;x2>=-10;x2-=20){c.lineTo(x2,y0+H*.12+Math.sin(x2*.01+t*.3+i)*amp*1.4)}c.closePath();
+    var ag=c.createLinearGradient(0,y0-amp,0,y0+H*.14);ag.addColorStop(0,'rgba('+col+','+a+')');ag.addColorStop(1,'rgba('+col+',0)');c.fillStyle=ag;c.fill()}
+  for(i=0;i<52;i++){var sx=h2(i,211,1)*W,sy=h2(i,211,2)*H*.85,tw=Math.max(0,Math.sin(t*(1.5+2*h2(i,211,3))+i*2.1)),r=1.2+2.2*h2(i,211,4);if(tw<.55)continue;c.globalAlpha=(tw-.55)*1.6*sh;c.drawImage(glow('255,255,240'),sx-r*3,sy-r*3,r*6,r*6)}
+  c.globalAlpha=.16*sh;var g2=c.createLinearGradient(0,H*.7,0,H);g2.addColorStop(0,'rgba(255,190,100,0)');g2.addColorStop(1,'rgba(255,190,100,1)');c.fillStyle=g2;c.fillRect(0,H*.7,W,H*.3);c.restore();
+  c.save();for(i=0;i<3;i++){var fx=((h2(i,223,1)*W*1.3+t*(6+4*i)*(i%2?1:-1))%(W*1.3)+W*1.3)%(W*1.3)-W*.15,fy=H*(.25+.45*h2(i,223,2))+Math.sin(t*.5+i)*14,fr=Math.min(W,H)*(.03+.015*i);c.globalAlpha=.22*sh;c.translate(fx,fy);c.rotate(t*.2*(i%2?1:-1));wnFlake(c,0,0,fr,'#FFFFFF',Math.max(1,fr*.12));c.setTransform(dpr,0,0,dpr,0,0)}c.restore()}
+var drawFarPB=drawFar;drawFar=function(dx,dy){drawFarPB(dx,dy);try{if(WN&&!HW&&!reduce&&(state==='play'||state==='pause'||state==='over')&&!P.surv){var dk=0;try{dk=mode==='single'?darkAt(P.y):clamp(cam.y/H,0,1)*.6}catch(e){}var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);xmPlayBg(c,cw,ch,dk);c.restore()}}catch(e){}};
+/* --- 수족관: 산타 선물 · 트리 밑 선물 --- */
+function XG(){var o=XM();if(!o.tg||typeof o.tg!=='object')o.tg={d:'',n:0,at:0,g:[],tree:''};if(!Array.isArray(o.tg.g))o.tg.g=[];return o.tg}
+function xmTankGiftTick(){try{if(!xmSeason()||VISIT)return;var G=XG(),d=today();if(G.d!==d){G.d=d;G.n=0}if(G.g.length>=2||G.n>=3)return;if(Date.now()-(G.at||0)<2*3600e3)return;
+  G.at=Date.now();G.n++;G.g.push({x:rnd(.18,.82),t:Date.now()});persist();if(page==='tank')banner(T('산타가 수족관에 선물을 두고 갔어요!'),T('모래 위 선물을 눌러 열어요'))}catch(e){}}
+setInterval(xmTankGiftTick,60000);setTimeout(xmTankGiftTick,7000);
+function xmTreeIt(){try{var pl=DS().placed;for(var i=0;i<pl.length;i++)if(pl[i].k==='xm_mytree')return pl[i]}catch(e){}return null}
+function xmTreeGiftCan(){if(!xmSeason())return false;var it=xmTreeIt();return !!it&&XG().tree!==today()}
+function xmTreeGiftAmt(){var n=0;XT().s.forEach(function(k){if(k)n++});return Math.min(180,30+10*n)}
+function xmGiftDraw(x,y,r,sd){var im=xmSpr('xm_gift'),bob=Math.sin(t*2.4+sd)*r*.08;ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.45+.25*Math.sin(t*3+sd);ctx.drawImage(glow('255,215,110'),x-r*2,y-r*2.4,r*4,r*4);ctx.restore();
+  if(im){var w=r*2,hh=w*im.naturalHeight/im.naturalWidth;ctx.save();ctx.translate(x,y+bob);ctx.rotate(Math.sin(t*1.7+sd)*.06);ctx.drawImage(im,-w/2,-hh,w,hh);ctx.restore()}}
+var drawHouseXG=drawHouse;drawHouse=function(){var r=drawHouseXG.apply(this,arguments);try{if(VISIT||!xmSeason())return r;var W=TWW(),R=decoU()*.07,G=XG();
+  G.g.forEach(function(g,i){var x=g.x*W;xmGiftDraw(x,floorAt(x)-2,R,i*2.3)});
+  if(xmTreeGiftCan()){var it=xmTreeIt(),tx=it.x*W+R*2.2;xmGiftDraw(tx,floorAt(tx)-2,R*.9,7)}}catch(e){}return r};
+var tankTapXG=tankTap;tankTap=function(wx,wy){try{if(!VISIT&&!deco.on&&xmSeason()){var W=TWW(),R=decoU()*.07,G=XG(),i;
+  for(i=0;i<G.g.length;i++){var x=G.g[i].x*W,y=floorAt(x)-2;if(Math.hypot(wx-x,wy-(y-R))<R*1.8){var g=G.g.splice(i,1)[0],orn=Math.random()<.4,pr=Math.round((60+Math.random()*60)*(typeof RW_K==='number'?RW_K:1));save.pearls+=pr;persist();
+      tankPops.push({x:x,y:y-R*2.4,txt:T('진주 +')+pr,life:1.4});try{abyFxPush(x,y-R,'spark',10)}catch(e){}try{svSnd('chest')}catch(e){}if(orn)xmOrnAdd(xmOrnRand());else banner(T('선물을 열었어요!'),T('진주 +')+pr);try{refreshTank()}catch(e){}return}}
+  if(xmTreeGiftCan()){var it=xmTreeIt(),tx=it.x*W+R*2.2,ty=floorAt(tx)-2;if(Math.hypot(wx-tx,wy-(ty-R))<R*1.8){var a=xmTreeGiftAmt();XG().tree=today();save.pearls+=a;persist();tankPops.push({x:tx,y:ty-R*2.4,txt:T('진주 +')+a,life:1.4});try{svSnd('chest')}catch(e){}banner(T('트리 밑 선물'),T('진주 +')+a+' · '+T('장식을 많이 달수록 선물이 커져요'));try{refreshTank()}catch(e){}return}}}}catch(e){}return tankTapXG.apply(this,arguments)};
+/* 수족관 물속: 큰 눈 · 반짝이 · 위쪽 전구 줄 */
+var drawTankFxXN=drawTankFx;drawTankFx=function(B,W,H,cm){drawTankFxXN.apply(this,arguments);try{if(WN&&!HW&&!reduce&&page==='tank'){var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);xmSnowBig(c,cw,ch,(cm||0)*.2);
+  c.globalCompositeOperation='lighter';for(var i=0;i<18;i++){var tw=Math.max(0,Math.sin(t*(1.4+h2(i,241,3))+i*1.9));if(tw<.6)continue;var sx=h2(i,241,1)*cw,sy=ch*(.18+.55*h2(i,241,2)),r=1.5+2*h2(i,241,4);c.globalAlpha=(tw-.6)*1.8;c.drawImage(glow('255,250,220'),sx-r*3,sy-r*3,r*6,r*6)}c.restore();
+  c.save();c.setTransform(dpr,0,0,dpr,0,0);var n=Math.max(7,Math.round(cw/58)),y0=ch*.155,sag=ch*.02;c.strokeStyle='rgba(20,40,60,.7)';c.lineWidth=1.6;c.beginPath();for(var k=0;k<=n;k++){var x0=cw*k/n,x1=cw*(k+1)/n;if(k===0)c.moveTo(x0,y0);if(k<n)c.quadraticCurveTo((x0+x1)/2,y0+sag*2,x1,y0)}c.stroke();
+  for(var b=0;b<n;b++){var bx=cw*(b+.5)/n;wnBulb(c,bx,y0+sag+5,Math.min(cw,ch)*.012,b,1)}c.restore()}}catch(e){}};

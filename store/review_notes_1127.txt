@@ -3,6 +3,7 @@ What's new in 1.1.27:
 (2) Deep Survival balance changes (weapon, ability and fish numbers only).
 (3) A first-time Deep Survival player now sees a simplified chapter screen (Chapter 1 and Start only); "Show all menus" opens the full screen.
 (4) Layout fixes for English and Japanese text on small screens and in the fish picker.
+(4a) Bug fix: restoring a save with an existing backup code (Settings > Save backup & account > Load from backup code) could silently keep the current save; it now restores correctly. Tidier home screen and rewards box.
 (5) When a Solo run ends, the game adds one anonymous gameplay record (fish, special skill, number of uses, run time, score) to the existing anonymous play records on Supabase, keyed by the same random device ID. No name, email or device details are sent; at most 6 records per device per day. It is used only to balance special skills.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.

@@ -1,8 +1,9 @@
 What's new in 1.1.27:
 (1) No new purchases, accounts, permissions or SDKs.
+(1a) Seasonal theme: the Halloween season ends and a Christmas season runs until December 30 (decided by the device date). It changes colors and decorations, adds a Christmas event window (7 daily gifts, 3 daily missions, collectible gift boxes that unlock in-game pearls, gems and a cosmetic crown), floating gift boxes and a boss fish in Solo. All rewards are in-game items only; nothing is sold. Players who turned on reminders in Settings may get one local notification at 7 PM about the daily gift (same opt-in notification setting as before).
 (2) Deep Survival balance changes (weapon, ability and fish numbers only).
 (3) A first-time Deep Survival player now sees a simplified chapter screen (Chapter 1 and Start only); "Show all menus" opens the full screen.
-(4) Layout fixes for English and Japanese text on small screens and in the fish picker.
+(4) Layout fixes for English and Japanese text on small screens and in the fish picker; a tidier home screen and rewards box.
 (5) When a Solo run ends, the game adds one anonymous gameplay record (fish, special skill, number of uses, run time, score) to the existing anonymous play records on Supabase, keyed by the same random device ID. No name, email or device details are sent; at most 6 records per device per day. It is used only to balance special skills.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.

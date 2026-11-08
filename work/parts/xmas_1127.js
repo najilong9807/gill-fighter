@@ -3,7 +3,7 @@
    - 크리스마스 이벤트 창: 출석 7일(예전 겨울 출석 5일을 넓힘) · 오늘의 미션 3개 · 선물 상자 모으기 6단계(150개 = 전용 「호랑가시 왕관」)
    - 싱글: 떠다니는 선물 상자(할로윈 사탕 자리) · 보스 「루돌프 아귀」(호박 유령 아귀 자리) · 바다 물고기 산타 모자 · 루돌프 뿔
    - 분위기: 밤바다 색 + 홈 트리 · 앱 전체 빨강 · 초록 · 금색 테마(body.wn) · 저녁 7시 출석 알림 ===== */
-abyTr(TRT,{'크리스마스 분위기':'Christmas theme','크리스마스 한정':'Christmas only','12월 30일까지 바다에 눈이 내리고 트리 전구가 반짝여요':'Until December 30, snow falls in the sea and tree lights twinkle',
+abyTr(TRT,{'크리스마스 분위기':'Christmas theme','트리':'Tree','눈 꼬리':'Snow trail','크리스마스 한정':'Christmas only','12월 30일까지 바다에 눈이 내리고 트리 전구가 반짝여요':'Until December 30, snow falls in the sea and tree lights twinkle',
  '크리스마스가 찾아왔어요! 🎄':'Christmas is here! 🎄','크리스마스 출석 선물':'Christmas daily gift','크리스마스 한정 아이템이 나왔어요!':'Christmas items are here!','내일 또 오면 크리스마스 선물이 이어져요':'Come back tomorrow for the next Christmas gift',
  '크리스마스 이벤트':'Christmas Event','12월 30일까지 · 선물 상자를 모아 선물을 받아요':'Until Dec 30 · collect gift boxes for presents','오늘의 크리스마스 미션':"Today's Christmas missions",
  '선물 상자 4개 먹기':'Eat 4 gift boxes','루돌프 아귀 물리치기':'Defeat the Rudolph Anglerfish','싱글 3판 하기':'Play 3 solo runs','선물 상자 모으기':'Collect gift boxes',
@@ -16,7 +16,7 @@ abyTr(TRT,{'크리스마스 분위기':'Christmas theme','크리스마스 한정
  '루돌프 아귀에게 물렸어요!':'Bitten by the Rudolph Anglerfish!','한 번은 버텼어요!':'You held on once!','다음에 또 물리면 먹혀요 · 돌진 뒤 멈출 때 몸통을 물어요':'Next bite eats you · bite its body when it stops after a dash',
  '루돌프 아귀':'Rudolph Anglerfish','오늘의 크리스마스 선물이 기다려요 🎄 들러서 받아 가요':"Today's Christmas gift is waiting 🎄 Come grab it!",'일째':'','받기':'Claim','받았어요':'Received','내일 또 와요':'Come back tomorrow',
  '산타 모자':'Santa Hat','눈송이 꼬리':'Snowflake Trail','산호 트리':'Coral Christmas Tree','진주 ':'Pearls ','보석 ':'Gems ','닫기':'Close','한정 꾸미기':'Limited cosmetics','출석 선물':'Daily gift'});
-abyTr(TRJ,{'크리스마스 분위기':'クリスマスの演出','크리스마스 한정':'クリスマス限定','12월 30일까지 바다에 눈이 내리고 트리 전구가 반짝여요':'12月30日まで海に雪が降り、ツリーの電球がきらめきます',
+abyTr(TRJ,{'크리스마스 분위기':'クリスマスの演出','트리':'ツリー','눈 꼬리':'雪のしっぽ','크리스마스 한정':'クリスマス限定','12월 30일까지 바다에 눈이 내리고 트리 전구가 반짝여요':'12月30日まで海に雪が降り、ツリーの電球がきらめきます',
  '크리스마스가 찾아왔어요! 🎄':'クリスマスがやってきた！🎄','크리스마스 출석 선물':'クリスマスログインボーナス','크리스마스 한정 아이템이 나왔어요!':'クリスマス限定アイテム登場！','내일 또 오면 크리스마스 선물이 이어져요':'明日も来るとクリスマスプレゼントが続きます',
  '크리스마스 이벤트':'クリスマスイベント','12월 30일까지 · 선물 상자를 모아 선물을 받아요':'12月30日まで · プレゼント箱を集めてごほうび','오늘의 크리스마스 미션':'今日のクリスマスミッション',
  '선물 상자 4개 먹기':'プレゼント箱を4個食べる','루돌프 아귀 물리치기':'ルドルフアンコウをたおす','싱글 3판 하기':'ソロを3回プレイ','선물 상자 모으기':'プレゼント箱あつめ',
@@ -56,7 +56,7 @@ function xmGive(R){var sub='';
   persist();return sub}
 
 /* --- 출석 7일(빠진 날은 건너뛰지 않고 이어서) --- */
-var XM_ATT=[{d:'wn_tree'},{p:300},{a:'wn_santa'},{g:5},{a:'wn_snow'},{p:800},{g:15}];
+var XM_ATT=[{d:'wn_tree'},{p:300},{a:'wn_santa'},{g:5},{a:'wn_snow'},{p:800},{g:15}];var XM_ATT_LB={wn_tree:'트리',wn_santa:'산타 모자',wn_snow:'눈 꼬리'}; /* 좁은 폰(320)에서 칸 안에 들어가게 짧은 이름 */
 function xmAttCan(){if(!xmSeason())return false;var o=XM();return o.an<XM_ATT.length&&o.ad!==today()}
 function xmAttClaim(){if(!xmAttCan())return;var o=XM(),i=o.an,R=XM_ATT[i];o.an++;o.ad=today();var sub=xmGive(R);crumb('xmAtt:'+o.an);try{svSnd('gem');buzz([20,30,40])}catch(e){}
   banner(o.an===1?T('크리스마스가 찾아왔어요! 🎄'):T('크리스마스 출석 선물')+' '+(LANG==='en'?'Day '+o.an:o.an+T('일째')),sub+(o.an<XM_ATT.length?' · '+T('내일 또 오면 크리스마스 선물이 이어져요'):''));
@@ -104,7 +104,7 @@ function xmRender(){var el=$('xmEv');if(!el)return;var o=XM();
   $('xmAH').textContent=T('크리스마스 출석 선물');$('xmAC').textContent=o.an+' / '+XM_ATT.length;var A=$('xmA');A.textContent='';
   XM_ATT.forEach(function(R,i){var got=i<o.an,rd=i===o.an&&xmAttCan(),d=document.createElement('div');d.className='hwe-m'+(got?' got':rd?' rd':'')+(i===6?' big':'');
     var h=document.createElement('em');h.textContent=LANG==='en'?'Day '+(i+1):(i+1)+T('일째');d.appendChild(h);var ic=document.createElement('i');ic.appendChild(xmRwIc(R));d.appendChild(ic);
-    var lb=document.createElement('b');lb.textContent=R.p?nf(R.p):R.g?nf(R.g):R.a?(accById(R.a)||{name:''}).name:T('산호 트리');d.appendChild(lb);d.appendChild(xmBtn(rd,got,xmAttClaim));A.appendChild(d)});
+    var lb=document.createElement('b');lb.textContent=R.p?nf(R.p):R.g?nf(R.g):T(XM_ATT_LB[R.a||R.d]||'');d.appendChild(lb);d.appendChild(xmBtn(rd,got,xmAttClaim));A.appendChild(d)});
   A.closest('.hwe-sec').style.display=o.an>=XM_ATT.length?'none':'';
   /* 오늘의 미션: 받은 줄은 숨김 */
   $('xmMH').textContent=T('오늘의 크리스마스 미션');var box=$('xmM'),M=XMD();box.textContent='';
@@ -232,6 +232,7 @@ function xmHomeFx(){var c=ctx,sm=Math.min(cw,ch);c.save();c.setTransform(dpr,0,0
  '.xm-panel .hwe-tx small img{width:15px;height:15px}.xm-bi{display:inline-flex;width:16px;height:16px;flex:none}.xm-bi svg{width:100%;height:100%}.xm-panel .hwe-m small svg{width:14px;height:14px;vertical-align:-2px}'+
  '.xm-att .hwe-m i img,.xm-att .hwe-m i canvas{max-width:28px;max-height:28px}.xm-att .hwe-m b{font-size:13px!important;line-height:1.1;overflow-wrap:anywhere;word-break:keep-all}.xm-att .hwe-m.big{background:#FFF1C9;box-shadow:inset 0 0 0 2px #E3B95A}'+
  '.xm-panel .hwe-ms .hwe-m i img,.xm-panel .hwe-ms .hwe-m i canvas{max-width:30px;max-height:30px}'+
+ '@media (orientation:landscape) and (max-height:500px){#xmEv .xm-panel .lead,#xmEv .hwe-btns{display:none!important}}'+
  '.xmbar{background:linear-gradient(180deg,#FFF3F0,#FFC9C4);color:#5A0A12;max-width:100%}.xmbar .xm-bi{width:24px;height:24px}.xmbar b{background:linear-gradient(180deg,#FF8A8A,#D82E38);box-shadow:0 0 0 2px #3A0A10;-webkit-text-stroke:2px #7A0A14}.xmbar.ha-on b{animation:haPulse 1s ease-in-out infinite}';
  document.head.appendChild(st)})();
 setTimeout(function(){try{if(xmSeason()){XM();xmBarPaint()}}catch(e){}},600);
@@ -241,6 +242,8 @@ setTimeout(function(){try{if(xmSeason()){XM();xmBarPaint()}}catch(e){}},600);
    ③ 물고기 칸 줄 간격 · 그림자 정리 ===== */
 (function(){var st=document.createElement('style');st.textContent=
  '.home-wallet{gap:7px!important}.home-wallet>span{height:31px!important;font-size:15.5px!important;padding:0 12px 0 8px!important}'+
+ '@media (min-width:360px) and (max-width:399px){.home-top{gap:8px!important}.home-icons{gap:5px!important;flex-wrap:nowrap!important;margin-left:auto}.home-icons .iconbtn{width:43px!important;height:43px!important;min-width:0!important}.home-icons .iconbtn img{max-width:31px;max-height:31px}.home-icons .iconbtn::after{font-size:10px!important;letter-spacing:-.3px}}'+
+ '@media (max-width:359px){.home-top{gap:6px!important}.home-wallet>span{padding:0 8px 0 6px!important;font-size:14px!important}.home-icons{gap:3px!important;flex-wrap:nowrap!important;margin-left:auto}.home-icons .iconbtn{width:37px!important;height:37px!important;min-width:0!important}.home-icons .iconbtn img{max-width:27px;max-height:27px}.home-icons .iconbtn::after{font-size:9px!important}}'+
  '.hcr #boosts{display:inline-flex!important;margin:0;flex:none}.hcr #boosts[hidden]{display:none!important}'+
  '.hcr .boostbar{width:auto!important;min-width:0!important;height:30px!important;min-height:0!important;margin:0!important;padding:0 9px 0 4px!important;border-radius:15px!important;gap:2px!important;font-size:13px}'+
  '.hcr .boostbar .bb-l,.hcr .boostbar .bb-on{display:none!important}.hcr .boostbar .bb-ic{width:22px;height:22px}.hcr .boostbar .bb-st{font-size:12.5px!important}.hcr .boostbar.hb-off{display:none!important}';

@@ -11649,7 +11649,8 @@ function cloudAsk(){gfDlg({title:T('백업 코드로 불러오기'),text:T('다�
 function cloudLoad(code,done){lbReq('rpc/gf_cloud_get',{p_code:code}).then(function(r){done&&done();var row=r&&r[0];if(!row||!row.data||!row.data.owned){banner(T('그 코드로 맡긴 저장이 없어요'),'');return}cloudConfirm(code,row)}).catch(function(){done&&done();banner(T('인터넷 연결을 확인해 주세요'),'')})}
 function cloudConfirm(code,row){var d=row.data,sum=T('물고기 ')+((d.owned||[]).length)+T('종')+' · '+T('진주 ')+nf(d.pearls||0)+' · '+T('보석 ')+nf(d.gems||0)+(d.nick?' · '+d.nick:'')+'\n'+T('마지막 백업: ')+gfAgo(new Date(row.updated_at).getTime());
   gfDlg({title:T('이 저장으로 바꿀까요?'),text:T('지금 이 폰의 저장은 사라지고 아래 저장으로 바뀌어요.'),code:sum,btns:[{t:T('바꾸기'),fn:function(){cloudApply(code,d)}},{t:T('취소'),ghost:1}]})}
-function cloudApply(code,d){d.cloud={code:code,at:Date.now(),h:''};d.lang=LANG;if(save.acct)d.acct=save.acct;crumb('cloudLoad');try{localStorage.setItem('fishproto.save2',JSON.stringify(d))}catch(e){}banner(T('불러왔어요! 다시 시작할게요'),'');CLOUD_LOCK=1;setTimeout(function(){location.reload()},900)}
+/* 1.1.27 늑구 '춘맘 백업 코드가 안 불러와짐': 저장을 쓴 바로 뒤 알림(banner)이 알림 내역(nlLog)을 저장하면서 persist()로 지금 폰 저장을 다시 덮어썼음(잠금이 알림 뒤에 걸려서) → 잠금을 맨 먼저 · 다시 켜기 직전에 한 번 더 씀 */
+function cloudApply(code,d){CLOUD_LOCK=1;d.cloud={code:code,at:Date.now(),h:''};d.lang=LANG;if(save.acct)d.acct=save.acct;crumb('cloudLoad');var s=JSON.stringify(d);try{localStorage.setItem('fishproto.save2',s)}catch(e){}banner(T('불러왔어요! 다시 시작할게요'),'');setTimeout(function(){try{localStorage.setItem('fishproto.save2',s)}catch(e){}location.reload()},900)}
 var CLOUD_LOCK=0,CLOUD_T=0;
 document.addEventListener('visibilitychange',function(){if(document.hidden&&!CLOUD_LOCK&&CL().code&&Date.now()-CLOUD_T>10*60000){CLOUD_T=Date.now();cloudPut(false)}});
 /* 불러온 직후엔 persist가 새 저장을 옛 값으로 덮지 않게 막는다 */

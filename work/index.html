@@ -7922,11 +7922,12 @@ var MUS=(function(){
     var keep=name?[name]:['home','play','lagoon','tide','deep','abyss','arena','spooky','winter'];Object.keys(M.buf).forEach(function(k){if(keep.indexOf(k)<0){delete M.buf[k];M.rq[k]=0;if(M.src[k]&&k!==M.cur){try{M.src[k].stop()}catch(e){}M.src[k]=null}}});
     if(M.ac&&!M.busy)setTimeout(bgmNext,300)};
   /* 1.1.8(빌드 130) 심해 생존 효과음: 구슬(연속으로 먹으면 음이 올라감) · 맞힘 · 처치 · 폭발 · 번개 · 휘두르기 · 레벨업 · 상자 · 다침. 소리 조각은 숫자로 한 번만 만든다 */
-  function sfx2Buf(ac,kind){var sr=22050,L={gem:.11,hit:.045,kill:.12,boom:.42,zap:.16,whoosh:.2,lvl:.62,chest:.7,hurt:.3,evo:1,bub:.07,hiss:.55}[kind]||.1,n=Math.round(sr*L),b=ac.createBuffer(1,n,sr),d=b.getChannelData(0),i,ph=0,seed=7;
+  function sfx2Buf(ac,kind){var sr=22050,L={jingle:1.05,gem:.11,hit:.045,kill:.12,boom:.42,zap:.16,whoosh:.2,lvl:.62,chest:.7,hurt:.3,evo:1,bub:.07,hiss:.55}[kind]||.1,n=Math.round(sr*L),b=ac.createBuffer(1,n,sr),d=b.getChannelData(0),i,ph=0,seed=7;
     function rn(){seed=(seed*16807)%2147483647;return seed/1073741823.5-1}
     function tone(at,f0,f1,len,vol,wave){var s0=Math.round(at*sr),m=Math.round(len*sr),p2=0;for(var j=0;j<m&&s0+j<n;j++){var u=j/m,f=f0+(f1-f0)*u;p2+=2*Math.PI*f/sr;var w=wave==='tri'?(2/Math.PI)*Math.asin(Math.sin(p2)):wave==='sq'?(Math.sin(p2)>0?.6:-.6):Math.sin(p2),env=Math.min(1,j/(sr*.004))*Math.pow(1-u,1.8);d[s0+j]+=w*env*vol}}
     function noise(at,len,vol,lp){var s0=Math.round(at*sr),m=Math.round(len*sr),y=0;for(var j=0;j<m&&s0+j<n;j++){var u=j/m;y+=(rn()-y)*(lp||.3);d[s0+j]+=y*vol*Math.min(1,j/(sr*.002))*Math.pow(1-u,2)}}
-    if(kind==='gem'){tone(0,1568,1600,.1,.4,'tri');tone(0,3136,3200,.05,.12)}
+    if(kind==='jingle'){for(var jk=0;jk<11;jk++){var ja=jk*.085+(jk%2)*.02,jv=.32*(1-jk/13);tone(ja,2637*(1+rn()*.012),2600,.09,jv,'tri');tone(ja,3951*(1+rn()*.01),3900,.06,jv*.45);tone(ja+.01,5274,5200,.04,jv*.22);noise(ja,.05,jv*.5,.85)}} /* 1.1.28 썰매 방울(직접 만든 소리) */
+    else if(kind==='gem'){tone(0,1568,1600,.1,.4,'tri');tone(0,3136,3200,.05,.12)}
     else if(kind==='hit'){noise(0,.04,.9,.55);tone(0,900,500,.03,.25,'tri')}
     else if(kind==='kill'){tone(0,520,1500,.07,.55);noise(0,.05,.35,.4);tone(.04,1200,1900,.06,.18)}
     else if(kind==='boom'){tone(0,140,38,.4,.9);noise(0,.32,.8,.12);noise(0,.08,.5,.6)}
@@ -7939,7 +7940,7 @@ var MUS=(function(){
     else if(kind==='hiss'){var yh=0;for(var jh=0;jh<n;jh++){var uh=jh/n;yh+=(rn()-yh)*.7;d[jh]+=(rn()-yh*.5)*.45*Math.min(1,jh/(sr*.02))*Math.pow(1-uh,1.4)}tone(0,90,45,.4,.35)}
     else if(kind==='evo'){[392,523,659,784,1047,1319].forEach(function(f,k){tone(k*.1,f,f,.45,.35,'tri')});tone(.55,1568,1568,.4,.2)}
     for(i=0;i<n;i++)d[i]=Math.max(-1,Math.min(1,d[i]));return b}
-  var SF2={bub:.07,hiss:.3,gem:.035,hit:.05,kill:.055,boom:.12,zap:.09,whoosh:.12,lvl:.3,chest:.4,hurt:.25,evo:.5},SF2V={bub:.2,hiss:.35,gem:.32,hit:.22,kill:.3,boom:.55,zap:.25,whoosh:.25,lvl:.45,chest:.45,hurt:.5,evo:.5};
+  var SF2={jingle:1.2,bub:.07,hiss:.3,gem:.035,hit:.05,kill:.055,boom:.12,zap:.09,whoosh:.12,lvl:.3,chest:.4,hurt:.25,evo:.5},SF2V={jingle:.2,bub:.2,hiss:.35,gem:.32,hit:.22,kill:.3,boom:.55,zap:.25,whoosh:.25,lvl:.45,chest:.45,hurt:.5,evo:.5};
   M.sfx2=function(kind,rate){var ac=M.ac;if(!ac||ac.state!=='running'||save.sfx===false||document.hidden)return;var now=ac.currentTime;M.sf2t=M.sf2t||{};if(now-(M.sf2t[kind]||0)<(SF2[kind]||.05))return;if((M.sf2n||0)>=12)return;M.sf2t[kind]=now;
     try{if(!M.sfxG){M.sfxG=ac.createGain();M.sfxG.gain.value=.8;M.sfxG.connect(ac.destination);M.sfxB={}}var key='2'+kind;if(!M.sfxB[key])M.sfxB[key]=sfx2Buf(ac,kind);
       var s=ac.createBufferSource(),g=ac.createGain();s.buffer=M.sfxB[key];s.playbackRate.value=(rate||1)*(rate||kind==='gem'||kind==='lvl'||kind==='chest'||kind==='evo'?1:.93+Math.random()*.14);g.gain.value=SF2V[kind]||.3;s.connect(g);g.connect(M.sfxG);M.sf2n=(M.sf2n||0)+1;s.start(now+.003);
@@ -15757,7 +15758,7 @@ var XM_HEAD=['wn_santa','wn_antler','wn_beanie','wn_santa'],XM_FACE=['wn_glass']
 var spawnFishXM=spawnFish;spawnFish=function(initial,prey){var n0=fish.length,r=spawnFishXM.apply(this,arguments);try{if(WN&&!HW&&mode!=='race'&&!P.surv){for(var i=n0;i<fish.length;i++){var f=fish[i];if(f&&!f.bot&&!f.peerEnt&&!f.q&&Math.random()<.55){var q={};if(Math.random()<.85)q.head=XM_HEAD[(Math.random()*XM_HEAD.length)|0];else q.face=XM_FACE[0];f.q=q}}}}catch(e){}return r};
 
 /* --- 저녁 7시 출석 알림(알림을 켠 사람 · 받을 출석이 남았을 때 · 기간 안에서만) --- */
-function xmAttNotiAt(){try{if(!xmSeason())return 0;var o=XM();if(o.an>=XM_ATT.length)return 0;var d=new Date(),t2=new Date(d.getFullYear(),d.getMonth(),d.getDate(),19,0,0,0);
+function xmAttNotiAt(){try{if(!xmSeason())return 0;var o=XM();if(o.an>=XM_ATT.length&&!xmDayCan()&&!xmXmasCan())return 0;var d=new Date(),t2=new Date(d.getFullYear(),d.getMonth(),d.getDate(),19,0,0,0);
   if(o.ad===today()||d.getTime()>t2.getTime()-10*60000)t2.setDate(t2.getDate()+1);var m=t2.getMonth()+1,dd=t2.getDate();if(!((m===11&&dd>=8)||(m===12&&dd<=30)))return 0;return t2.getTime()}catch(e){return 0}}
 var notiPlanXM=notiPlan;notiPlan=function(){notiPlanXM.apply(this,arguments);var L=lnPlug();if(!L||save.noti!==true)return;
   try{L.cancel({notifications:[{id:105}]}).catch(function(){})}catch(e){}var at=xmAttNotiAt();if(!at)return;
@@ -15769,7 +15770,7 @@ var XMS={};function xmSpr(k){var o=XMS[k];if(!o){o=XMS[k]=new Image();o.decoding
 function xmHomeFx(){var c=ctx,sm=Math.min(cw,ch);c.save();c.setTransform(dpr,0,0,dpr,0,0);
   c.fillStyle='rgba(8,18,60,.32)';c.fillRect(0,0,cw,ch);var g=c.createLinearGradient(0,0,0,ch*.66);g.addColorStop(0,'rgba(10,20,72,.7)');g.addColorStop(1,'rgba(14,30,90,0)');c.fillStyle=g;c.fillRect(0,0,cw,ch*.6);
   var g2=c.createLinearGradient(0,ch*.55,0,ch);g2.addColorStop(0,'rgba(255,190,90,0)');g2.addColorStop(1,'rgba(255,180,80,.13)');c.fillStyle=g2;c.fillRect(0,ch*.55,cw,ch*.45);
-  var tr=page==='home'&&xmSpr('dc_xm_tree');if(tr){var h=sm*.27,w=h*tr.naturalWidth/tr.naturalHeight,x=cw*.8-w/2,y=ch*.33+Math.sin(t*.9)*6-h/2;
+  var tr=false&&xmSpr('dc_xm_tree');if(tr){ /* 1.1.28 늑구 '트리가 둥 떠 있는 게 어색해' → 홈 트리 뺌(트리는 이벤트 창 '트리 꾸미기'로) */var h=sm*.27,w=h*tr.naturalWidth/tr.naturalHeight,x=cw*.8-w/2,y=ch*.33+Math.sin(t*.9)*6-h/2;
     c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.35+.15*Math.sin(t*2.2);c.drawImage(glow('255,215,120'),x-w*.6,y-h*.4,w*2.2,h*1.8);c.restore();c.drawImage(tr,x,y,w,h);
     for(var i=0;i<5;i++){var a=t*1.3+i*1.26,sx=x+w*(.5+.42*Math.cos(a)),sy=y+h*(.45+.32*Math.sin(a*1.3));c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.4+.4*Math.max(0,Math.sin(t*5+i*2));c.drawImage(glow('255,240,190'),sx-6,sy-6,12,12);c.restore()}}
   c.restore()}
@@ -15819,7 +15820,7 @@ function xmHomeSky(c){var P0=24,ph=(t%P0)/P0;if(ph>.32)return;var f=ph/.32,dir=M
   var x=dir<0?cw*(1.15-1.3*f):cw*(-.15+1.3*f),y=ch*.2+Math.sin(f*Math.PI)*(-ch*.03);
   c.save();c.globalCompositeOperation='lighter';for(var i=1;i<9;i++){var tx=x-dir*i*14*s,ty=y+6*s+Math.sin(t*3+i)*3,a=(1-i/9)*.55;c.globalAlpha=a;c.drawImage(glow('255,236,170'),tx-5*s,ty-5*s,10*s,10*s)}c.restore();
   xmSleigh(c,x,y,s,-dir)}
-var xmHomeFxSL=xmHomeFx;xmHomeFx=function(){xmHomeFxSL.apply(this,arguments);try{if(page==='home'){var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);xmHomeSky(c);c.restore()}}catch(e){}};
+var xmHomeFxSL=xmHomeFx;xmHomeFx=function(){xmHomeFxSL.apply(this,arguments);try{if(page==='home'){var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);xmHomeSanta(c);c.restore()}}catch(e){}};
 function xmBauble(c,x,y,r,col){c.save();c.globalCompositeOperation='lighter';c.globalAlpha*=.5;c.drawImage(glow(col[1]),x-r*2.6,y-r*2.6,r*5.2,r*5.2);c.restore();
   c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fillStyle=col[0];c.fill();c.lineWidth=Math.max(1,r*.14);c.strokeStyle='rgba(11,44,74,.7)';c.stroke();
   c.fillStyle='#C9A24A';c.fillRect(x-r*.28,y-r*1.2,r*.56,r*.3);c.globalAlpha*=.75;c.fillStyle='#fff';c.beginPath();c.ellipse(x-r*.35,y-r*.35,r*.18,r*.3,-.5,0,Math.PI*2);c.fill()}
@@ -15835,9 +15836,104 @@ function xmGiftCheck(tries){try{if(!xmSeason())return;var o=XM();if(o.g0)return;
   if(page!=='home'||state!=='home'||document.querySelector('.overlay:not([hidden])')||document.querySelector('.coach')||save.newsSeen!==APP_VER){if((tries||0)<30)setTimeout(function(){xmGiftCheck((tries||0)+1)},2000);return}
   o.g0=1;var sub=xmGive({d:'xm_gifts'});crumb('xmGift');try{buzz([20,30,20])}catch(e){}banner(T('크리스마스 선물이 도착했어요! 🎁'),sub)}catch(e){}}
 setTimeout(function(){xmGiftCheck(0)},5200);
-/* 1.1.28 업데이트 소식: 크리스마스를 맨 앞에 */
+/* ===== 1.1.28 늑구 '산타 할아버지가 썰매 타고 돌아다니고 · 다른 게임 크리스마스 레퍼런스 적용'
+   레퍼런스(조사 11/8): 클래시 오브 클랜 — 산타가 날아와 선물을 떨어뜨림 · 멀리서 썰매 방울 소리 · 마을 곳곳 반짝이 전구 /
+   심즈 프리플레이 — 12월 25일까지 매일 크리스마스 선물 · 집 꾸미기(트리 · 전구) / 앵그리버드 시즌즈 — 모든 캐릭터에 산타 모자 /
+   데드 트리거 — 크리스마스 보스 / 아케인 레전드 — 몬스터가 선물을 떨굼 / 홈스케이프류 — 모을수록 트리가 꾸며지는 진행 막대
+   → ① 홈: 산타가 해마 두 마리가 끄는 썰매를 타고 바다를 돌아다님(방울 소리 · 반짝이 꼬리 · 가끔 선물 떨굼)
+     ② 싱글: 산타가 가끔 위를 지나가며 선물 상자를 떨어뜨려 줌(이벤트 상자로 셈)
+     ③ 이벤트 창 맨 위 '트리 꾸미기': 선물 상자를 모을수록 전구가 하나씩 켜지고 500개면 꼭대기 별
+     ④ 7일 출석 뒤에도 12월 25일까지 매일 선물(진주 150) · 크리스마스(12/24~26) 특별 선물 보석 50 ===== */
+abyTr(TRT,{'트리 꾸미기':'Decorate the tree','선물 상자를 모을수록 트리에 불이 켜져요':'The more gift boxes you collect, the more lights turn on','크리스마스까지 매일 선물':'Daily gift until Christmas',
+ '크리스마스 당일 선물':'Christmas Day present','12월 24 ~ 26일에 받을 수 있어요':'Claim on Dec 24–26','산타가 선물을 떨어뜨렸어요!':'Santa dropped a present!','산타가 지나가요':'Santa is passing by','오늘 받았어요':'Claimed today'});
+abyTr(TRJ,{'트리 꾸미기':'ツリーかざり','선물 상자를 모을수록 트리에 불이 켜져요':'プレゼント箱を集めるほどツリーに明かりがつきます','크리스마스까지 매일 선물':'クリスマスまで毎日プレゼント',
+ '크리스마스 당일 선물':'クリスマス当日のプレゼント','12월 24 ~ 26일에 받을 수 있어요':'12月24〜26日に受け取れます','산타가 선물을 떨어뜨렸어요!':'サンタがプレゼントを落としました！','산타가 지나가요':'サンタが通ります','오늘 받았어요':'今日は受け取りました'});
+/* --- 산타 썰매(코드 그림 · 우리 꾸미기 그림과 같은 굵은 남색 테두리) --- */
+function xmSanta(c,x,y,s,dir,tt){c.save();c.translate(x,y);c.scale(dir*s,s);c.lineJoin='round';c.lineCap='round';var O='#0B2C4A',lw=2.4,bob=Math.sin(tt*3)*2;
+  /* 고삐 */c.strokeStyle='#C9A24A';c.lineWidth=1.6;c.beginPath();c.moveTo(-6,-6);c.quadraticCurveTo(-30,-14+bob,-58,-10+bob);c.moveTo(-6,-6);c.quadraticCurveTo(-30,-4,-90,-6);c.stroke();
+  /* 해마 두 마리 */for(var k=0;k<2;k++){var hx=-62-k*32,hy=-8+Math.sin(tt*4+k*1.3)*3;c.save();c.translate(hx,hy);
+    c.beginPath();c.moveTo(4,-10);c.quadraticCurveTo(12,-4,8,6);c.quadraticCurveTo(4,14,-2,12);c.quadraticCurveTo(-6,10,-3,6);c.quadraticCurveTo(0,4,-1,0);c.quadraticCurveTo(-4,-8,4,-10);c.closePath();
+    c.fillStyle=lg(c,-10,14,k?'#FFB45A':'#FF9A4A','#E0662A');c.fill();c.lineWidth=lw;c.strokeStyle=O;c.stroke();
+    c.beginPath();c.moveTo(3,-9);c.lineTo(-6,-14);c.lineTo(-7,-10);c.closePath();c.fillStyle='#FFB45A';c.fill();c.lineWidth=1.8;c.stroke();
+    c.beginPath();c.moveTo(-1,12);c.quadraticCurveTo(-8,18,-2,20);c.lineWidth=2.4;c.strokeStyle=O;c.stroke();
+    c.fillStyle=O;c.beginPath();c.arc(1,-6,1.4,0,Math.PI*2);c.fill();
+    /* 산타 모자 */c.beginPath();c.moveTo(-2,-11);c.quadraticCurveTo(4,-22,12,-18);c.lineTo(8,-10);c.closePath();c.fillStyle='#E8303A';c.fill();c.lineWidth=1.6;c.stroke();c.fillStyle='#fff';c.beginPath();c.arc(12,-18,2,0,Math.PI*2);c.fill();
+    if(k===1){c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.7;c.drawImage(glow('255,60,50'),-14,-14,10,10);c.restore()}
+    c.restore()}
+  /* 썰매 */c.beginPath();c.moveTo(-10,-6);c.lineTo(24,-6);c.quadraticCurveTo(32,-6,32,-20);c.quadraticCurveTo(38,-20,38,-12);c.quadraticCurveTo(38,6,20,6);c.lineTo(-4,6);c.quadraticCurveTo(-12,6,-10,-6);c.closePath();
+  c.fillStyle=lg(c,-20,6,'#FF6A6A','#B81E28');c.fill();c.lineWidth=lw;c.strokeStyle=O;c.stroke();
+  c.strokeStyle='#E3B95A';c.lineWidth=1.8;c.beginPath();c.moveTo(-6,-1);c.lineTo(28,-1);c.stroke();
+  c.beginPath();c.moveTo(-14,12);c.lineTo(26,12);c.quadraticCurveTo(36,12,38,4);c.lineWidth=3.2;c.strokeStyle=O;c.stroke();c.lineWidth=1.8;c.strokeStyle='#E3B95A';c.stroke();
+  c.beginPath();c.moveTo(0,6);c.lineTo(0,12);c.moveTo(20,6);c.lineTo(20,12);c.lineWidth=2;c.strokeStyle=O;c.stroke();
+  /* 선물 자루 */c.beginPath();c.ellipse(26,-16,9,10,.2,0,Math.PI*2);c.fillStyle=lg(c,-26,-6,'#C99A5A','#8A5A2A');c.fill();c.lineWidth=2;c.strokeStyle=O;c.stroke();
+  c.fillStyle='#5EDB6A';c.fillRect(22,-29,6,5);c.strokeRect(22,-29,6,5);c.fillStyle='#FFD23F';c.fillRect(28,-27,5,4);c.strokeRect(28,-27,5,4);
+  /* 산타 */c.beginPath();c.ellipse(10,-14+bob*.3,10,11,0,0,Math.PI*2);c.fillStyle=lg(c,-25,-3,'#FF5A5A','#C8202E');c.fill();c.lineWidth=lw;c.strokeStyle=O;c.stroke();
+  c.fillStyle='#2A1A10';c.fillRect(1,-12+bob*.3,18,3);c.fillStyle='#FFD23F';c.fillRect(8,-12.5+bob*.3,4,4);
+  var hy2=-30+bob*.3;c.beginPath();c.arc(10,hy2,7.5,0,Math.PI*2);c.fillStyle='#FFD3B0';c.fill();c.lineWidth=2;c.stroke();
+  c.beginPath();c.moveTo(3,hy2+1);c.quadraticCurveTo(4,hy2+13,10,hy2+14);c.quadraticCurveTo(17,hy2+13,17,hy2+1);c.quadraticCurveTo(10,hy2+5,3,hy2+1);c.fillStyle='#fff';c.fill();c.lineWidth=1.8;c.stroke();
+  c.fillStyle='#E8857A';c.beginPath();c.arc(13.5,hy2+.5,1.8,0,Math.PI*2);c.fill();c.fillStyle=O;c.beginPath();c.arc(12.5,hy2-2.5,1.1,0,Math.PI*2);c.fill();
+  c.beginPath();c.moveTo(2,hy2-3);c.quadraticCurveTo(8,hy2-16,-4,hy2-14+Math.sin(tt*5)*1.5);c.lineTo(17,hy2-4);c.closePath();c.fillStyle='#E8303A';c.fill();c.lineWidth=1.8;c.stroke();
+  c.beginPath();c.ellipse(10,hy2-3,8.5,2.6,0,0,Math.PI*2);c.fillStyle='#fff';c.fill();c.lineWidth=1.4;c.stroke();c.beginPath();c.arc(-4,hy2-14+Math.sin(tt*5)*1.5,2.4,0,Math.PI*2);c.fillStyle='#fff';c.fill();c.stroke();
+  /* 손 흔들기 */c.save();c.translate(17,-20+bob*.3);c.rotate(-.9+Math.sin(tt*6)*.35);c.fillStyle='#E8303A';c.fillRect(-2,-11,4,11);c.strokeStyle=O;c.lineWidth=1.4;c.strokeRect(-2,-11,4,11);c.beginPath();c.arc(0,-12,2.6,0,Math.PI*2);c.fillStyle='#fff';c.fill();c.stroke();c.restore();
+  c.restore()}
+function xmTrail(c,x,y,s,dir,n){c.save();c.globalCompositeOperation='lighter';for(var i=1;i<=n;i++){var tx=x-dir*(i*11+30)*s,ty=y+(6+Math.sin(t*4+i)*4)*s,a=(1-i/(n+1))*.6;c.globalAlpha=a;var r=(5-i*.25)*s;c.drawImage(glow(i%3?'255,236,170':'170,220,255'),tx-r,ty-r,r*2,r*2)}c.restore()}
+/* 홈: 18초마다 9초 동안 바다 위쪽을 물결치듯 가로지름 · 지나갈 때 방울 소리 · 가운데쯤 선물 하나 떨굼(반짝이며 가라앉음) */
+var XMH={last:-1,drops:[]};
+function xmHomeSanta(c){var P0=18,cyc=Math.floor(t/P0),ph=(t%P0)/P0,sm=Math.min(cw,ch),s=sm/400*1.55;
+  for(var i=XMH.drops.length-1;i>=0;i--){var d=XMH.drops[i];d.y+=d.vy*.016;d.vy=Math.min(d.vy+.5,38);d.a-=.004;if(d.a<=0||d.y>ch*.62){XMH.drops.splice(i,1);continue}
+    c.save();c.globalAlpha=Math.max(0,d.a);c.globalCompositeOperation='lighter';c.drawImage(glow('255,215,110'),d.x-14,d.y-14,28,28);c.restore();c.save();c.globalAlpha=Math.max(0,d.a);c.translate(d.x,d.y);c.rotate(Math.sin(t*2+d.x)*.3);c.fillStyle='#E8303A';c.strokeStyle='#0B2C4A';c.lineWidth=1.6;c.fillRect(-6,-5,12,10);c.strokeRect(-6,-5,12,10);c.fillStyle='#FFD23F';c.fillRect(-1.5,-5,3,10);c.restore()}
+  if(ph>.5)return;var f=ph/.5,dir=cyc%2?1:-1,x=dir>0?cw*(-.25+1.5*f):cw*(1.25-1.5*f),y=ch*(.215+.025*Math.sin(f*Math.PI*2+cyc))+Math.sin(t*1.7)*5;
+  if(XMH.last!==cyc){XMH.last=cyc;try{if(state==='home'&&!document.hidden)svSnd('jingle')}catch(e){}XMH.dropAt=.35+.3*h2(cyc,5,1);XMH.dropped=0}
+  if(!XMH.dropped&&f>XMH.dropAt){XMH.dropped=1;XMH.drops.push({x:x+dir*14*s,y:y-6*s,vy:6,a:1})}
+  xmTrail(c,x,y,s,dir,9);xmSanta(c,x,y,s,dir,t)}
+/* 싱글: 산타가 위쪽을 지나가며 선물 상자를 떨어뜨림(이벤트 선물 상자 · 한 판 최대 수는 기존 선물 상자와 같이 셈) */
+var XMP={next:0,on:0,t0:0,dir:1,dropped:0};
+var startRunXP=startRun;startRun=function(){XMP={next:rnd(18,26),on:0,t0:0,dir:1,dropped:0};return startRunXP.apply(this,arguments)};
+function xmPlaySanta(){if(!xmPlayOk()||P.time==null)return;var tm=P.time;
+  if(!XMP.on){if(tm>=XMP.next&&(P.candyN|0)<CANDY_MAX){XMP.on=1;XMP.t0=tm;XMP.dir=Math.random()<.5?1:-1;XMP.dropped=0;try{svSnd('jingle')}catch(e){}}return}
+  var f=(tm-XMP.t0)/6;if(f>=1){XMP.on=0;XMP.next=tm+rnd(28,40);return}
+  var sm=Math.min(cw,ch),s=sm/400*1.45,x=XMP.dir>0?cw*(-.2+1.4*f):cw*(1.2-1.4*f),y=ch*.2+Math.sin(f*Math.PI*2)*ch*.02;
+  if(!XMP.dropped&&f>.45&&x>cw*.15&&x<cw*.85&&(P.candyN|0)<CANDY_MAX){XMP.dropped=1;var wx=cam.x+(x-cw/2)/zoom,wy=cam.y+(y-ch/2)/zoom;
+    plank.push({x:wx,y:clamp(wy,H*.005,H*.995),s:Math.max(4,P.s*.34),ph:Math.random()*6,col:0,candy:1,xmDrop:1});P.candyAt=P.time;
+    if(!save.xmSantaTip){save.xmSantaTip=1;persist();banner(T('산타가 선물을 떨어뜨렸어요!'),T('판이 끝나면 진주를 더 받고 선물 상자가 모여요'))}}
+  var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);xmTrail(c,x,y,s,XMP.dir,9);xmSanta(c,x,y,s,XMP.dir,t);c.restore()}
+var drawXP=draw;draw=function(){drawXP();try{if(WN&&!HW&&!reduce&&state==='play')xmPlaySanta()}catch(e){}};
+/* 떨어뜨린 선물은 천천히 가라앉음 */
+var updateXP=update;update=function(dt){var r=updateXP.apply(this,arguments);try{if(state==='play')for(var i=0;i<plank.length;i++){var q=plank[i];if(q.xmDrop)q.y=Math.min(H*.995,q.y+dt*Math.max(14,P.s*.6))}}catch(e){}return r};
+/* --- 이벤트 창 맨 위: 트리 꾸미기(선물 상자 0 → 500, 전구 24개 · 꼭대기 별) --- */
+var XM_TB=null;function xmTreeBulbs(){if(XM_TB)return XM_TB;var B=[],rows=[[.30,2],[.38,3],[.46,4],[.54,4],[.62,5],[.70,6]];rows.forEach(function(r,k){var y=r[0],w=(y-.13)/.62*.62;for(var i=0;i<r[1];i++){var u=r[1]===1?.5:i/(r[1]-1);B.push([.5+(u-.5)*w*1.6*(k%2?.92:1),y+((i%2)?.012:-.008)])}});return XM_TB=B}
+function xmTreeDraw(cv){if(!cv||!cv.getContext)return;var W=cv.clientWidth||300,Hh=cv.clientHeight||150,d=Math.min(2,window.devicePixelRatio||1);if(cv.width!==Math.round(W*d)){cv.width=Math.round(W*d);cv.height=Math.round(Hh*d)}
+  var c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,W,Hh);var g=c.createLinearGradient(0,0,0,Hh);g.addColorStop(0,'#123A6E');g.addColorStop(1,'#0B2648');c.fillStyle=g;c.fillRect(0,0,W,Hh);
+  var n=xmBoxN(),B=xmTreeBulbs(),lit=Math.floor(B.length*Math.min(1,n/500)),tm=performance.now()/1000;
+  for(var i=0;i<26;i++){var sx=(h2(i,9,1)*W+tm*8*(.3+h2(i,9,2)))%W,sy=(h2(i,9,3)*Hh+tm*14*(.4+h2(i,9,4)))%Hh;c.fillStyle='rgba(255,255,255,'+(.35+.4*h2(i,9,5))+')';c.beginPath();c.arc(sx,sy,1+1.4*h2(i,9,6),0,Math.PI*2);c.fill()}
+  var im=xmSpr('dc_xm_tree'),th=Hh*.96,tw=im?th*im.naturalWidth/im.naturalHeight:th*.74,tx=W*.66-tw/2,ty=Hh-th;
+  if(im){c.save();if(lit===0)c.filter='saturate(.55) brightness(.8)';c.drawImage(im,tx,ty,tw,th);c.restore()}
+  B.forEach(function(b,k){var x=tx+b[0]*tw,y=ty+b[1]*th,on=k<lit,col=XM_BC[k%XM_BC.length];if(on){c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.55+.35*Math.sin(tm*3+k*1.7);c.drawImage(glow(col[1]),x-9,y-9,18,18);c.restore()}
+    c.beginPath();c.arc(x,y,3.2,0,Math.PI*2);c.fillStyle=on?col[0]:'rgba(60,80,100,.75)';c.fill();c.lineWidth=1;c.strokeStyle='rgba(11,44,74,.8)';c.stroke()});
+  if(n>=500){c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.7+.3*Math.sin(tm*4);c.drawImage(glow('255,230,140'),tx+tw/2-26,ty-14,52,52);c.restore()}
+  c.font='700 12px sans-serif';c.textAlign='left';c.fillStyle='#FFE27A';c.fillText(T('트리 꾸미기')+'  '+lit+' / '+B.length,10,18);c.fillStyle='rgba(255,255,255,.8)';c.font='11px sans-serif';
+  var tip=T('선물 상자를 모을수록 트리에 불이 켜져요'),mw=Math.max(90,tx-20),ln=[],cur='';var sp2=/\s/.test(tip)?' ':'';tip.split(sp2).forEach(function(w2){var tst=cur?cur+sp2+w2:w2;if(c.measureText(tst).width>mw&&cur){ln.push(cur);cur=w2}else cur=tst});if(cur)ln.push(cur);ln.slice(0,4).forEach(function(l2,k){c.fillText(l2,10,36+k*14)})}
+var XMTT=0;function xmTreeLoop(){var el=$('xmEv'),cv=$('xmTreeCv');if(!el||el.hidden||!cv){XMTT=0;return}xmTreeDraw(cv);XMTT=setTimeout(xmTreeLoop,90)}
+/* --- 7일 뒤 12/25까지 매일 선물 · 크리스마스 당일 선물 --- */
+function xmD(){var d=new Date();return {m:d.getMonth()+1,d:d.getDate()}}
+function xmDayCan(){if(!xmSeason())return false;var o=XM(),q=xmD();return o.an>=XM_ATT.length&&o.ad!==today()&&o.dd!==today()&&(q.m===11||(q.m===12&&q.d<=25))}
+function xmXmasCan(){if(!xmSeason())return false;var o=XM(),q=xmD();return !o.x25&&q.m===12&&q.d>=24&&q.d<=26}
+function xmDayClaim(){if(!xmDayCan())return;var o=XM();o.dd=today();save.pearls+=150;persist();crumb('xmDay');try{svSnd('gem');buzz([20,30])}catch(e){}banner(T('크리스마스까지 매일 선물'),T('진주 ')+'+150');try{refreshHome(true)}catch(e){}xmRender();xmBarPaint()}
+function xmXmasClaim(){if(!xmXmasCan())return;var o=XM();o.x25=1;save.gems+=50;persist();crumb('xm25');try{svSnd('chest');buzz([30,40,60])}catch(e){}banner(T('크리스마스 당일 선물'),T('보석 ')+'+50 🎄');try{refreshHome(true)}catch(e){}xmRender();xmBarPaint()}
+var xmAnyAD=xmAny;xmAny=function(){return xmAnyAD()||xmDayCan()||xmXmasCan()};
+var xmRenderAD=xmRender;xmRender=function(){var r=xmRenderAD.apply(this,arguments);try{var el=$('xmEv');if(!el)return r;var sc=el.querySelector('.hwe-scroll');
+  var tsec=$('xmTreeSec');if(!tsec){tsec=document.createElement('section');tsec.id='xmTreeSec';tsec.className='xm-tree';var cv=document.createElement('canvas');cv.id='xmTreeCv';tsec.appendChild(cv);sc.insertBefore(tsec,sc.firstChild)}
+  var o=XM(),A=$('xmA'),sec=A.closest('.hwe-sec');
+  if(o.an>=XM_ATT.length){sec.style.display='';A.style.display='none';$('xmAC').textContent='';$('xmAH').textContent=T('크리스마스까지 매일 선물');var box=$('xmAD');if(!box){box=document.createElement('div');box.id='xmAD';sec.appendChild(box)}box.textContent='';
+    var q=xmD(),show=q.m===11||(q.m===12&&q.d<=25);
+    if(show){var r1=document.createElement('div');r1.className='hwe-row'+(xmDayCan()?' rd':'');var i1=document.createElement('i');i1.className='hw3d';i1.appendChild(icImg('pearl'));r1.appendChild(i1);var t1=document.createElement('div');t1.className='hwe-tx';var b1=document.createElement('b');b1.textContent=T('진주 ')+'150';t1.appendChild(b1);var s1=document.createElement('small');s1.textContent=xmDayCan()?T('받을 수 있어요'):T('오늘 받았어요');t1.appendChild(s1);r1.appendChild(t1);r1.appendChild(xmBtn(xmDayCan(),!xmDayCan(),xmDayClaim));box.appendChild(r1)}
+    if(!o.x25&&q.m===12&&q.d<=26){var r2=document.createElement('div');r2.className='hwe-row'+(xmXmasCan()?' rd':'');var i2=document.createElement('i');i2.className='hw3d';i2.appendChild(icImg('gem'));r2.appendChild(i2);var t2=document.createElement('div');t2.className='hwe-tx';var b2=document.createElement('b');b2.textContent=T('크리스마스 당일 선물')+' · '+T('보석 ')+'50';t2.appendChild(b2);var s2=document.createElement('small');s2.textContent=T('12월 24 ~ 26일에 받을 수 있어요');t2.appendChild(s2);r2.appendChild(t2);r2.appendChild(xmBtn(xmXmasCan(),false,xmXmasClaim));box.appendChild(r2)}
+    if(!box.children.length)sec.style.display='none'}
+  clearTimeout(XMTT);XMTT=setTimeout(xmTreeLoop,30)}catch(e){}return r};
+(function(){var st=document.createElement('style');st.textContent='.xm-tree{border-radius:18px;overflow:hidden;box-shadow:0 0 0 2.5px #0B2C4A,0 4px 0 2.5px #0B2C4A;flex:none}.xm-tree canvas{display:block;width:100%;height:150px}@media (orientation:landscape) and (max-height:500px){.xm-tree canvas{height:96px}}';document.head.appendChild(st)})();
+/* 1.1.28 업데이트 소식: 크리스마스를 맨 앞에 */abyTr(TRT,{"산타가 썰매를 타고 바다를 돌아다니며 선물 상자를 떨어뜨려요 · 12월 25일까지 매일 선물 · 새 보스 「루돌프 아귀」": "Santa rides his sleigh through the sea dropping gift boxes · daily gifts until Dec 25 · new boss: the Rudolph Anglerfish"});abyTr(TRJ,{"산타가 썰매를 타고 바다를 돌아다니며 선물 상자를 떨어뜨려요 · 12월 25일까지 매일 선물 · 새 보스 「루돌프 아귀」": "サンタがそりで海をめぐってプレゼント箱を落とします・12月25日まで毎日プレゼント・新ボス「ルドルフアンコウ」"});
 abyTr(TRT,{"크리스마스가 찾아왔어요! 12월 30일까지 바다에 눈이 내리고 앱 전체가 크리스마스로 바뀌어요": "Christmas is here! Until Dec 30, snow falls in the sea and the whole app turns Christmas", "크리스마스 이벤트: 7일 출석 선물 · 매일 미션 3개 · 선물 상자를 모아 진주 · 보석 · 전용 「호랑가시 왕관」": "Christmas event: 7-day gifts · 3 daily missions · collect gift boxes for pearls, gems and the exclusive Holly Crown", "싱글: 떠다니는 선물 상자 · 보스 「루돌프 아귀」 등장 · 산타 모자를 쓴 물고기들": "Solo: floating gift boxes · new boss Rudolph Anglerfish · fish in Santa hats", "크리스마스 꾸미기 · 소품 · 배경이 상점 맨 앞에 (할로윈 아이템은 가진 것 그대로 써요)": "Christmas cosmetics, decor and backdrops up front in the Shop (Halloween items you own stay yours)", "심해 생존 밸런스: 약하던 능력 · 무기를 강하게 해서 챕터 깨기가 쉬워졌어요": "Deep Survival balance: weaker abilities and weapons buffed — chapters are easier to clear", "홈 화면 · 보상함을 깔끔하게 정리했어요": "Cleaner home screen and rewards box", "메리 크리스마스! 🎄 12월 30일까지 바다가 크리스마스로 바뀌어요": "Merry Christmas! 🎄 The sea turns Christmas until Dec 30"});abyTr(TRJ,{"크리스마스가 찾아왔어요! 12월 30일까지 바다에 눈이 내리고 앱 전체가 크리스마스로 바뀌어요": "クリスマスがやってきた！12月30日まで海に雪が降り、アプリ全体がクリスマス仕様に", "크리스마스 이벤트: 7일 출석 선물 · 매일 미션 3개 · 선물 상자를 모아 진주 · 보석 · 전용 「호랑가시 왕관」": "クリスマスイベント：7日間の出席プレゼント · 毎日ミッション3つ · プレゼント箱を集めて真珠 · 宝石 · 限定「ヒイラギの王冠」", "싱글: 떠다니는 선물 상자 · 보스 「루돌프 아귀」 등장 · 산타 모자를 쓴 물고기들": "ソロ：ただようプレゼント箱 · ボス「ルドルフアンコウ」登場 · サンタぼうしの魚たち", "크리스마스 꾸미기 · 소품 · 배경이 상점 맨 앞에 (할로윈 아이템은 가진 것 그대로 써요)": "クリスマスのきせかえ · 小物 · 背景をショップの先頭に（ハロウィンアイテムは持っているものをそのまま使えます）", "심해 생존 밸런스: 약하던 능력 · 무기를 강하게 해서 챕터 깨기가 쉬워졌어요": "深海サバイバルのバランス：弱かった能力 · 武器を強化し、章をクリアしやすく", "홈 화면 · 보상함을 깔끔하게 정리했어요": "ホーム画面と報酬ボックスをすっきり整理", "메리 크리스마스! 🎄 12월 30일까지 바다가 크리스마스로 바뀌어요": "メリークリスマス！🎄 12月30日まで海がクリスマスに"});
-abyTr(TRT,{"기록 화면: 랭킹 기록 글이 길면 이름 · 칭호가 잘리던 문제를 고쳤어요": "Records: long ranking results no longer cut off names and titles"});abyTr(TRJ,{"기록 화면: 랭킹 기록 글이 길면 이름 · 칭호가 잘리던 문제를 고쳤어요": "記録：ランキングの記録が長いと名前・称号が切れていた問題を修正"});NEWS['1.1.28']=[T("크리스마스가 찾아왔어요! 12월 30일까지 바다에 눈이 내리고 앱 전체가 크리스마스로 바뀌어요"),T("크리스마스 이벤트: 7일 출석 선물 · 매일 미션 3개 · 선물 상자를 모아 진주 · 보석 · 전용 「호랑가시 왕관」"),T("싱글: 떠다니는 선물 상자 · 보스 「루돌프 아귀」 등장 · 산타 모자를 쓴 물고기들"),T("크리스마스 꾸미기 · 소품 · 배경이 상점 맨 앞에 (할로윈 아이템은 가진 것 그대로 써요)"),T("기록 화면: 랭킹 기록 글이 길면 이름 · 칭호가 잘리던 문제를 고쳤어요")];NEWS_LEAD['1.1.28']=T("메리 크리스마스! 🎄 12월 30일까지 바다가 크리스마스로 바뀌어요");
+abyTr(TRT,{"기록 화면: 랭킹 기록 글이 길면 이름 · 칭호가 잘리던 문제를 고쳤어요": "Records: long ranking results no longer cut off names and titles"});abyTr(TRJ,{"기록 화면: 랭킹 기록 글이 길면 이름 · 칭호가 잘리던 문제를 고쳤어요": "記録：ランキングの記録が長いと名前・称号が切れていた問題を修正"});NEWS['1.1.28']=[T("크리스마스가 찾아왔어요! 12월 30일까지 바다에 눈이 내리고 앱 전체가 크리스마스로 바뀌어요"),T("크리스마스 이벤트: 7일 출석 선물 · 매일 미션 3개 · 선물 상자를 모아 진주 · 보석 · 전용 「호랑가시 왕관」"),T("싱글: 떠다니는 선물 상자 · 보스 「루돌프 아귀」 등장 · 산타 모자를 쓴 물고기들"),T("산타가 썰매를 타고 바다를 돌아다니며 선물 상자를 떨어뜨려요 · 12월 25일까지 매일 선물 · 새 보스 「루돌프 아귀」"),T("크리스마스 꾸미기 · 소품 · 배경이 상점 맨 앞에 (할로윈 아이템은 가진 것 그대로 써요)"),T("기록 화면: 랭킹 기록 글이 길면 이름 · 칭호가 잘리던 문제를 고쳤어요")];NEWS_LEAD['1.1.28']=T("메리 크리스마스! 🎄 12월 30일까지 바다가 크리스마스로 바뀌어요");
 (function(){var st=document.createElement('style');st.textContent='#svRw .crchip{display:flex;align-items:center;gap:6px;text-align:left}#svRw .crchip>.ic3d{width:24px;height:24px;flex:none;object-fit:contain}#svRw .crchip small{display:block;font-size:12px;opacity:.75;line-height:1.2}#svRw .crchip>span{min-width:0}';document.head.appendChild(st)})();
 function svRwIcons(){try{var rw=$('svRw');if(!rw)return;[].forEach.call(rw.querySelectorAll('.crchip'),function(c){if(c.querySelector('.ic3d'))return;var tx=c.textContent,k=c.classList.contains('pearl')?'':c.classList.contains('gulp')?'gulp':/경험치|XP|経験値/.test(tx)?'star':/장비|gear|Gear|装備/.test(tx)?'bag':/상자|chest|Chest|box|Box|箱/.test(tx)?'gift':/도전|challenge|Challenge|Achiev|チャレンジ|実績/.test(tx)?'chal':/보석|gem|Gem|ジェム/.test(tx)?'gem':/유물|relic|Relic|遺物/.test(tx)?'crown':'';if(!k)return;
   var sep=tx.indexOf(' — ');c.textContent='';c.classList.remove('wide');var sp=document.createElement('span');if(sep>0){sp.textContent=tx.slice(0,sep);var sm=document.createElement('small');sm.textContent=tx.slice(sep+3);sp.appendChild(sm)}else sp.textContent=tx;var ln=(sep>0?tx.slice(0,sep):tx).length;if(ln>(LANG==='en'?15:LANG==='ja'?8:9))c.classList.add('wide');c.appendChild(icImg(k));c.appendChild(sp)})}catch(e){}}

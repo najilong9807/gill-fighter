@@ -49,7 +49,7 @@ var hwListXM=hwList;hwList=function(arr,own){var r=hwListXM.apply(this,arguments
 
 /* --- 선물 주기(덱 · 진주 · 보석 · 꾸미기) --- */
 function xmGive(R){var sub='';
-  if(R.d){var D=decoById(R.d),dd=DS(),W=TWW();if(D&&dd.placed.length<DECO_MAX){var nx=decoSpot(D,true);dd.placed.push({k:R.d,x:nx,y:clamp((floorAt(nx*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95),s:1,f:0});sub=T('수족관에 「산호 트리」를 넣어 드렸어요')}else{dd.inv[R.d]=(dd.inv[R.d]||0)+1;sub=T('수족관 › 꾸미기 › 소품에 넣어 뒀어요')}try{refreshTank()}catch(e){}}
+  if(R.d){var D=decoById(R.d),dd=DS(),W=TWW();if(D&&dd.placed.length<DECO_MAX){var nx=decoSpot(D,true);dd.placed.push({k:R.d,x:nx,y:clamp((floorAt(nx*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95),s:1,f:0});sub=T('수족관에 넣어 드렸어요')+' · '+D.name}else{dd.inv[R.d]=(dd.inv[R.d]||0)+1;sub=T('수족관 › 꾸미기 › 소품에 넣어 뒀어요')}try{refreshTank()}catch(e){}}
   if(R.p){save.pearls+=R.p;sub=T('진주 ')+'+'+nf(R.p)}
   if(R.g){save.gems+=R.g;sub=T('보석 ')+'+'+nf(R.g)}
   if(R.a){var S=AS();if(S.own.indexOf(R.a)<0)S.own.push(R.a);var Ac=accById(R.a);sub=(Ac?Ac.name:'')+' · '+T('상점 › 꾸미기에서 씌워 보세요')}
@@ -236,20 +236,40 @@ function xmHomeFx(){var c=ctx,sm=Math.min(cw,ch);c.save();c.setTransform(dpr,0,0
  '.xmbar{background:linear-gradient(180deg,#FFF3F0,#FFC9C4);color:#5A0A12;max-width:100%}.xmbar .xm-bi{width:24px;height:24px}.xmbar b{background:linear-gradient(180deg,#FF8A8A,#D82E38);box-shadow:0 0 0 2px #3A0A10;-webkit-text-stroke:2px #7A0A14}.xmbar.ha-on b{animation:haPulse 1s ease-in-out infinite}';
  document.head.appendChild(st)})();
 setTimeout(function(){try{if(xmSeason()){XM();xmBarPaint()}}catch(e){}},600);
-/* ===== 1.1.27 늑구 '홈 화면 조금 다듬어 보기 편하게'
-   ① 왼쪽 위 재화 3칸(진주 · 보석 · 왕관) 높이 36 → 31, 간격 12 → 7 (위쪽이 덜 꽉 차게)
-   ② 홈 아래 '부스터' 한 줄을 없애고 물고기 칸 이름 줄 오른쪽에 작은 칩(⚡ n개 켬)으로 — 아래 줄 수 5 → 4
-   ③ 물고기 칸 줄 간격 · 그림자 정리 ===== */
-(function(){var st=document.createElement('style');st.textContent=
- '.home-wallet{gap:7px!important}.home-wallet>span{height:31px!important;font-size:15.5px!important;padding:0 12px 0 8px!important}'+
- '@media (min-width:360px) and (max-width:399px){.home-top{gap:8px!important}.home-icons{gap:5px!important;flex-wrap:nowrap!important;margin-left:auto}.home-icons .iconbtn{width:43px!important;height:43px!important;min-width:0!important}.home-icons .iconbtn img{max-width:31px;max-height:31px}.home-icons .iconbtn::after{font-size:10px!important;letter-spacing:-.3px}}'+
- '@media (max-width:359px){.home-top{gap:6px!important}.home-wallet>span{padding:0 8px 0 6px!important;font-size:14px!important}.home-icons{gap:3px!important;flex-wrap:nowrap!important;margin-left:auto}.home-icons .iconbtn{width:37px!important;height:37px!important;min-width:0!important}.home-icons .iconbtn img{max-width:27px;max-height:27px}.home-icons .iconbtn::after{font-size:9px!important}}'+
- '.hcr #boosts{display:inline-flex!important;margin:0;flex:none}.hcr #boosts[hidden]{display:none!important}'+
- '.hcr .boostbar{width:auto!important;min-width:0!important;height:30px!important;min-height:0!important;margin:0!important;padding:0 9px 0 4px!important;border-radius:15px!important;gap:2px!important;font-size:13px}'+
- '.hcr .boostbar .bb-l,.hcr .boostbar .bb-on{display:none!important}.hcr .boostbar .bb-ic{width:22px;height:22px}.hcr .boostbar .bb-st{font-size:12.5px!important}.hcr .boostbar.hb-off{display:none!important}';
- document.head.appendChild(st);
- try{var hc=document.querySelector('.home-card .hcr'),bx=$('boosts');if(hc&&bx)hc.insertBefore(bx,hc.firstChild)}catch(e){}})();
-var renderBoostsXH=renderBoosts;renderBoosts=function(){var r=renderBoostsXH.apply(this,arguments);try{var s=document.querySelector('.hcr .boostbar .bb-st');if(s)s.textContent=String(boostOnIds().length)}catch(e){}return r};try{renderBoosts()}catch(e){}
-/* 1.1.27 업데이트 소식: 크리스마스를 맨 앞에 */
-abyTr(TRT,{"크리스마스가 찾아왔어요! 12월 30일까지 바다에 눈이 내리고 앱 전체가 크리스마스로 바뀌어요": "Christmas is here! Until Dec 30, snow falls in the sea and the whole app turns Christmas", "크리스마스 이벤트: 7일 출석 선물 · 매일 미션 3개 · 선물 상자를 모아 진주 · 보석 · 전용 「호랑가시 왕관」": "Christmas event: 7-day gifts · 3 daily missions · collect gift boxes for pearls, gems and the exclusive Holly Crown", "싱글: 떠다니는 선물 상자 · 보스 「루돌프 아귀」 등장 · 산타 모자를 쓴 물고기들": "Solo: floating gift boxes · new boss Rudolph Anglerfish · fish in Santa hats", "크리스마스 꾸미기 · 소품 · 배경이 상점 맨 앞에 (할로윈 아이템은 가진 것 그대로 써요)": "Christmas cosmetics, decor and backdrops up front in the Shop (Halloween items you own stay yours)", "심해 생존 밸런스: 약하던 능력 · 무기를 강하게 해서 챕터 깨기가 쉬워졌어요": "Deep Survival balance: weaker abilities and weapons buffed — chapters are easier to clear", "홈 화면 · 보상함을 깔끔하게 정리했어요": "Cleaner home screen and rewards box", "메리 크리스마스! 🎄 12월 30일까지 바다가 크리스마스로 바뀌어요": "Merry Christmas! 🎄 The sea turns Christmas until Dec 30"});abyTr(TRJ,{"크리스마스가 찾아왔어요! 12월 30일까지 바다에 눈이 내리고 앱 전체가 크리스마스로 바뀌어요": "クリスマスがやってきた！12月30日まで海に雪が降り、アプリ全体がクリスマス仕様に", "크리스마스 이벤트: 7일 출석 선물 · 매일 미션 3개 · 선물 상자를 모아 진주 · 보석 · 전용 「호랑가시 왕관」": "クリスマスイベント：7日間の出席プレゼント · 毎日ミッション3つ · プレゼント箱を集めて真珠 · 宝石 · 限定「ヒイラギの王冠」", "싱글: 떠다니는 선물 상자 · 보스 「루돌프 아귀」 등장 · 산타 모자를 쓴 물고기들": "ソロ：ただようプレゼント箱 · ボス「ルドルフアンコウ」登場 · サンタぼうしの魚たち", "크리스마스 꾸미기 · 소품 · 배경이 상점 맨 앞에 (할로윈 아이템은 가진 것 그대로 써요)": "クリスマスのきせかえ · 小物 · 背景をショップの先頭に（ハロウィンアイテムは持っているものをそのまま使えます）", "심해 생존 밸런스: 약하던 능력 · 무기를 강하게 해서 챕터 깨기가 쉬워졌어요": "深海サバイバルのバランス：弱かった能力 · 武器を強化し、章をクリアしやすく", "홈 화면 · 보상함을 깔끔하게 정리했어요": "ホーム画面と報酬ボックスをすっきり整理", "메리 크리스마스! 🎄 12월 30일까지 바다가 크리스마스로 바뀌어요": "メリークリスマス！🎄 12月30日まで海がクリスマスに"});
-NEWS['1.1.27']=[T("크리스마스가 찾아왔어요! 12월 30일까지 바다에 눈이 내리고 앱 전체가 크리스마스로 바뀌어요"),T("크리스마스 이벤트: 7일 출석 선물 · 매일 미션 3개 · 선물 상자를 모아 진주 · 보석 · 전용 「호랑가시 왕관」"),T("싱글: 떠다니는 선물 상자 · 보스 「루돌프 아귀」 등장 · 산타 모자를 쓴 물고기들"),T("크리스마스 꾸미기 · 소품 · 배경이 상점 맨 앞에 (할로윈 아이템은 가진 것 그대로 써요)"),T("심해 생존 밸런스: 약하던 능력 · 무기를 강하게 해서 챕터 깨기가 쉬워졌어요"),T("홈 화면 · 보상함을 깔끔하게 정리했어요")];NEWS_LEAD['1.1.27']=T("메리 크리스마스! 🎄 12월 30일까지 바다가 크리스마스로 바뀌어요");
+/* ===== 1.1.28 늑구 '할로윈처럼 배경 · 아이템을 화면 곳곳에': 크리스마스 배치
+   (무료 에셋을 찾아봤지만 결이 맞는 게 없어서 — 케니 3D 로우폴리 · 도트 · 납작 벡터 · 실제 악기 녹음곡 — 우리 그림(svart/dc_xm_*)과 코드 그림만 씀)
+   ① 홈 위쪽: 가끔(약 24초마다) 산타 썰매 그림자가 달빛 앞을 가로질러 감(할로윈 박쥐 자리) · 반짝이 꼬리
+   ② 판(싱글 · 대전 · 탐험) 먼 배경: 얼음 산호 전구 · 트리가 은은하게 떠다님(할로윈 유령 · 호박 자리) + 유리 장식 방울
+   ③ 크리스마스 첫 접속 선물: 수족관에 「리본 선물 상자」 소품 1개(할로윈 '호박 무더기' 선물 자리) ===== */
+abyTr(TRT,{'수족관에 넣어 드렸어요':'Added to your aquarium','크리스마스 선물이 도착했어요! 🎁':'A Christmas present arrived! 🎁'});abyTr(TRJ,{'수족관에 넣어 드렸어요':'水族館に置きました','크리스마스 선물이 도착했어요! 🎁':'クリスマスプレゼントが届きました！🎁'});
+function xmSleigh(c,x,y,s,dir){c.save();c.translate(x,y);c.scale(dir*s,s);c.fillStyle='rgba(12,20,52,.82)';c.strokeStyle='rgba(12,20,52,.82)';c.lineCap='round';c.lineJoin='round';
+  var gl=Math.sin(t*12)*.12;
+  for(var k=0;k<2;k++){c.save();c.translate(-34-k*30,-4+Math.sin(t*6+k)*2);c.beginPath();c.ellipse(0,0,11,5,-.1,0,Math.PI*2);c.fill();c.beginPath();c.ellipse(-10,-6,4,3.4,-.5,0,Math.PI*2);c.fill();
+    c.lineWidth=2;c.beginPath();c.moveTo(-11,-9);c.lineTo(-13,-15);c.moveTo(-12,-12);c.lineTo(-16,-14);c.moveTo(-9,-9);c.lineTo(-8,-15);c.stroke();
+    c.lineWidth=2.2;c.beginPath();c.moveTo(-5,4);c.lineTo(-8+gl*20,12);c.moveTo(5,4);c.lineTo(8-gl*20,12);c.stroke();
+    if(k===1){c.fillStyle='rgba(255,70,60,.95)';c.beginPath();c.arc(-14,-5,1.8,0,Math.PI*2);c.fill();c.fillStyle='rgba(12,20,52,.82)'}c.restore()}
+  c.lineWidth=1.2;c.beginPath();c.moveTo(-30,-3);c.lineTo(-6,2);c.stroke();
+  c.beginPath();c.moveTo(-6,-6);c.lineTo(14,-6);c.quadraticCurveTo(20,-6,20,-14);c.lineTo(22,-14);c.quadraticCurveTo(22,2,10,2);c.lineTo(-4,2);c.closePath();c.fill();
+  c.lineWidth=1.8;c.beginPath();c.moveTo(-10,6);c.lineTo(16,6);c.quadraticCurveTo(22,6,23,1);c.stroke();
+  c.beginPath();c.arc(4,-11,5,0,Math.PI*2);c.fill();c.beginPath();c.moveTo(1,-14);c.lineTo(9,-20);c.lineTo(8,-13);c.fill();
+  c.beginPath();c.moveTo(12,-8);c.lineTo(18,-20);c.lineTo(22,-10);c.closePath();c.fill();c.restore()}
+function xmHomeSky(c){var P0=24,ph=(t%P0)/P0;if(ph>.32)return;var f=ph/.32,dir=Math.floor(t/P0)%2?1:-1,sm=Math.min(cw,ch),s=sm/400*1.45;
+  var x=dir<0?cw*(1.15-1.3*f):cw*(-.15+1.3*f),y=ch*.2+Math.sin(f*Math.PI)*(-ch*.03);
+  c.save();c.globalCompositeOperation='lighter';for(var i=1;i<9;i++){var tx=x-dir*i*14*s,ty=y+6*s+Math.sin(t*3+i)*3,a=(1-i/9)*.55;c.globalAlpha=a;c.drawImage(glow('255,236,170'),tx-5*s,ty-5*s,10*s,10*s)}c.restore();
+  xmSleigh(c,x,y,s,-dir)}
+var xmHomeFxSL=xmHomeFx;xmHomeFx=function(){xmHomeFxSL.apply(this,arguments);try{if(page==='home'){var c=ctx;c.save();c.setTransform(dpr,0,0,dpr,0,0);xmHomeSky(c);c.restore()}}catch(e){}};
+function xmBauble(c,x,y,r,col){c.save();c.globalCompositeOperation='lighter';c.globalAlpha*=.5;c.drawImage(glow(col[1]),x-r*2.6,y-r*2.6,r*5.2,r*5.2);c.restore();
+  c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fillStyle=col[0];c.fill();c.lineWidth=Math.max(1,r*.14);c.strokeStyle='rgba(11,44,74,.7)';c.stroke();
+  c.fillStyle='#C9A24A';c.fillRect(x-r*.28,y-r*1.2,r*.56,r*.3);c.globalAlpha*=.75;c.fillStyle='#fff';c.beginPath();c.ellipse(x-r*.35,y-r*.35,r*.18,r*.3,-.5,0,Math.PI*2);c.fill()}
+var XM_BC=[['#E8303A','255,90,80'],['#2FAE5A','110,220,140'],['#FFD23F','255,215,90'],['#5AA9FF','120,180,255']];
+function xmFloat(c,W,H,par,n,seed,alpha){var A=[xmSpr('dc_xm_icecoral'),xmSpr('dc_xm_tree')],sm=Math.min(W,H),i;
+  for(i=0;i<n;i++){var sp=W*1.3,x=(((h2(i,seed,2)*sp+t*(4+4*h2(i,seed,3))*(i%2?1:-1)-par)%sp)+sp)%sp-W*.15,y=H*(.14+.62*h2(i,seed,4))+Math.sin(t*.8+i*2.1)*12;
+    if(i<2&&A[i]){var im=A[i],hh=sm*.18*(.85+.3*h2(i,seed,1)),ww=hh*im.naturalWidth/im.naturalHeight,a=alpha*(.62+.12*Math.sin(t*.7+i));
+      c.save();c.globalCompositeOperation='lighter';c.globalAlpha=a*.5;c.drawImage(glow(i?'255,220,130':'170,220,255'),x-ww,y-hh*.8,ww*2,hh*1.6);c.restore();
+      c.save();c.globalAlpha=a;c.translate(x,y);c.rotate(Math.sin(t*.6+i)*.06);c.drawImage(im,-ww/2,-hh/2,ww,hh);c.restore()}
+    else{c.save();c.globalAlpha=alpha*.55;xmBauble(c,x,y,sm*.028*(.8+.5*h2(i,seed,1)),XM_BC[i%XM_BC.length]);c.restore()}}}
+var drawFarXM=drawFar;drawFar=function(dx,dy){drawFarXM(dx,dy);try{if(WN&&!HW&&!reduce&&(state==='play'||state==='pause'||state==='over')&&!P.surv){var dk=0;try{dk=mode==='single'?darkAt(P.y):0}catch(e){}xmFloat(ctx,cw,ch,parX*.08,mode==='multi'?4:5,83,.85*(1-.4*dk))}}catch(e){}};
+function xmGiftCheck(tries){try{if(!xmSeason())return;var o=XM();if(o.g0)return;if(!((save.runs|0)>0))return;
+  if(page!=='home'||state!=='home'||document.querySelector('.overlay:not([hidden])')||document.querySelector('.coach')||save.newsSeen!==APP_VER){if((tries||0)<30)setTimeout(function(){xmGiftCheck((tries||0)+1)},2000);return}
+  o.g0=1;var sub=xmGive({d:'xm_gifts'});crumb('xmGift');try{buzz([20,30,20])}catch(e){}banner(T('크리스마스 선물이 도착했어요! 🎁'),sub)}catch(e){}}
+setTimeout(function(){xmGiftCheck(0)},5200);

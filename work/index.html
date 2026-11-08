@@ -15553,6 +15553,10 @@ abyTr(TRT,{'오늘 미션을 모두 끝냈어요 · 내일 새 미션이 나와�
  document.head.appendChild(st);
  try{var hc=document.querySelector('.home-card .hcr'),bx=$('boosts');if(hc&&bx)hc.insertBefore(bx,hc.firstChild)}catch(e){}})();
 var renderBoostsXH=renderBoosts;renderBoosts=function(){var r=renderBoostsXH.apply(this,arguments);try{var s=document.querySelector('.hcr .boostbar .bb-st');if(s)s.textContent=String(boostOnIds().length)}catch(e){}return r};try{renderBoosts()}catch(e){}
+/* ===== 1.1.28 늑구 스샷 '기록 › 심해 생존 1위 줄 깨짐': 결과 글('모두 클리어 · 어려움 3장 클리어')이 한 줄로 길어서 이름 칸이 0으로 눌려 이름 · 칭호가 세로로 잘림
+   → 이름 칸은 최소 76px 지키고, 긴 결과 글은 '·' 앞에서 두 줄로 ===== */
+(function(){var st=document.createElement('style');st.textContent='.board.lb li{grid-template-columns:auto 50px minmax(76px,1fr) auto}.board.lb li>em{white-space:pre-line;text-align:right;line-height:1.12;max-width:min(46vw,190px)}@media (max-width:359px){.board.lb li{grid-template-columns:auto 40px minmax(62px,1fr) auto;gap:5px}.board.lb li>em{font-size:12.5px;max-width:none}.board.lb .bth img{max-width:38px}}';document.head.appendChild(st)})();
+var lbValW=lbVal;lbVal=function(m,v){var s=lbValW(m,v);try{if(typeof s==='string'&&s.length>13&&s.indexOf(' · ')>0)s=s.replace(' · ','\n')}catch(e){}return s};
 /* 1.1.27 업데이트 소식에 백업 불러오기 수정 · 홈 정리 추가 */
 abyTr(TRT,{"백업 코드로 불러오기가 안 되던 문제를 고쳤어요 (예전 저장을 다시 불러올 수 있어요)": "Fixed loading a save from a backup code (you can now restore your old save)", "홈 화면 · 보상함을 깔끔하게 정리했어요": "Cleaner home screen and rewards box"});abyTr(TRJ,{"백업 코드로 불러오기가 안 되던 문제를 고쳤어요 (예전 저장을 다시 불러올 수 있어요)": "バックアップコードから読み込めなかった問題を修正（前のセーブを読み込めます）", "홈 화면 · 보상함을 깔끔하게 정리했어요": "ホーム画面と報酬ボックスをすっきり整理"});
 /* ===== 1.1.26 결과 화면 '받은 것'에도 아이콘 (경험치 · 장비 · 꿀꺽 · 도전 · 상자 · 보석) + 장비 줄의 '— 빈 칸에 바로 장착'은 아랫줄 작은 글씨로 ===== */

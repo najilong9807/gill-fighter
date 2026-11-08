@@ -56,7 +56,7 @@ function xmGive(R){var sub='';
   persist();return sub}
 
 /* --- 출석 7일(빠진 날은 건너뛰지 않고 이어서) --- */
-var XM_ATT=[{d:'wn_tree'},{p:300},{a:'wn_santa'},{g:5},{a:'wn_snow'},{p:800},{g:15}];var XM_ATT_LB={wn_tree:'트리',wn_santa:'산타 모자',wn_snow:'눈 꼬리'}; /* 좁은 폰(320)에서 칸 안에 들어가게 짧은 이름 */
+var XM_ATT=[{d:'wn_tree'},{p:300},{a:'wn_santa'},{d:'xm_snowman'},{a:'wn_snow'},{p:800},{g:15}]; /* 1.1.28: 4일째 보석 5 → 해면 눈사람 소품 */var XM_ATT_LB={wn_tree:'트리',wn_santa:'산타 모자',wn_snow:'눈 꼬리',xm_snowman:'눈사람'}; /* 좁은 폰(320)에서 칸 안에 들어가게 짧은 이름 */
 function xmAttCan(){if(!xmSeason())return false;var o=XM();return o.an<XM_ATT.length&&o.ad!==today()}
 function xmAttClaim(){if(!xmAttCan())return;var o=XM(),i=o.an,R=XM_ATT[i];o.an++;o.ad=today();var sub=xmGive(R);crumb('xmAtt:'+o.an);try{svSnd('gem');buzz([20,30,40])}catch(e){}
   banner(o.an===1?T('크리스마스가 찾아왔어요! 🎄'):T('크리스마스 출석 선물')+' '+(LANG==='en'?'Day '+o.an:o.an+T('일째')),sub+(o.an<XM_ATT.length?' · '+T('내일 또 오면 크리스마스 선물이 이어져요'):''));
@@ -97,7 +97,7 @@ function xmOpen(){if(!xmSeason())return;var el=$('xmEv');if(!el){el=document.cre
     $('xmShop').addEventListener('click',function(){el.hidden=true;try{accSlot='head';showTab('sea');setTimeout(function(){var e=$('goodsAcc');if(e&&e.scrollIntoView)e.scrollIntoView({block:'start',behavior:'smooth'})},250)}catch(e){}})}
   xmRender();el.hidden=false;crumb('xmEv')}
 function xmBtn(rd,got,fn){var b=document.createElement('button');b.type='button';b.className='buy'+(rd?'':' off');b.disabled=!rd;b.textContent=got?'✓':T('받기');if(got)b.setAttribute('aria-label',T('받았어요'));b.addEventListener('click',fn);return b}
-function xmRwIc(R){if(R.a){var Ac=accById(R.a);try{if(Ac)return accIcon(Ac)}catch(e){}return icImg('gift')}if(R.d){var im=new Image();im.src='svart/dc_xm_tree.webp';im.alt='';im.className='ic3d';return im}return icImg(R.g?'gem':'pearl')}
+function xmRwIc(R){if(R.a){var Ac=accById(R.a);try{if(Ac)return accIcon(Ac)}catch(e){}return icImg('gift')}if(R.d){var im=new Image();im.src='svart/'+(R.d==='xm_snowman'?'dc_xm_snowman':'dc_xm_tree')+'.webp';im.alt='';im.className='ic3d';return im}return icImg(R.g?'gem':'pearl')}
 function xmRender(){var el=$('xmEv');if(!el)return;var o=XM();
   el.querySelector('h1').textContent=T('크리스마스 이벤트');el.querySelector('.lead').textContent=T('12월 30일까지 · 선물 상자를 모아 선물을 받아요');
   /* 출석 7일: 다 받으면 칸째 숨김 */
@@ -191,7 +191,7 @@ var svDrawUnderXB=svDrawUnder;svDrawUnder=function(){var r=svDrawUnderXB.apply(t
     var dir=Math.cos(f.ang||0)<0?-1:1,nx=f.x+dir*f.s*.95,ny=f.y-f.s*.55;c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.6+.3*pul;c.drawImage(glow('255,60,50'),nx-f.s*.5,ny-f.s*.5,f.s,f.s);c.restore()}}catch(e){}return r};
 
 /* --- 바다 물고기: 크리스마스 동안 절반 남짓이 산타 모자 · 루돌프 뿔 · 눈꽃 털모자 · 별 / 눈 결정 안경 --- */
-var XM_HEAD=['wn_santa','wn_antler','wn_beanie','wn_santa'],XM_FACE=['wn_glass'];
+var XM_HEAD=['wn_santa','wn_antler','wn_beanie','wn_santa','xm_elf','xm_snowhead','xm_treehat','wn_santa'],XM_FACE=['wn_glass'];
 var spawnFishXM=spawnFish;spawnFish=function(initial,prey){var n0=fish.length,r=spawnFishXM.apply(this,arguments);try{if(WN&&!HW&&mode!=='race'&&!P.surv){for(var i=n0;i<fish.length;i++){var f=fish[i];if(f&&!f.bot&&!f.peerEnt&&!f.q&&Math.random()<.55){var q={};if(Math.random()<.85)q.head=XM_HEAD[(Math.random()*XM_HEAD.length)|0];else q.face=XM_FACE[0];f.q=q}}}}catch(e){}return r};
 
 /* --- 저녁 7시 출석 알림(알림을 켠 사람 · 받을 출석이 남았을 때 · 기간 안에서만) --- */
@@ -230,7 +230,7 @@ function xmHomeFx(){var c=ctx,sm=Math.min(cw,ch);c.save();c.setTransform(dpr,0,0
  '#xmEv{z-index:60}#xmEv .panel.xm-panel{background:linear-gradient(180deg,#FFFDF7,#F3E9D8)!important}.xm-panel .lead{color:#5A2A12!important}.xm-panel .hwe-sec h3 b{color:#C8202E}'+
  '.xm-panel .hwe-row>i{background:#E7F6EC}.xm-panel .hwe-row>i img{width:28px;height:28px}.xm-panel .hwe-mb u{background:linear-gradient(180deg,#7FE09A,#2FAE5A)}.xm-panel .hwe-bar{background:#F6E0E0}.xm-panel .hwe-bar u{background:linear-gradient(180deg,#FF9A9A,#D82E38)}'+
  '.xm-panel .hwe-tx small img{width:15px;height:15px}.xm-bi{display:inline-flex;width:16px;height:16px;flex:none}.xm-bi svg{width:100%;height:100%}.xm-panel .hwe-m small svg{width:14px;height:14px;vertical-align:-2px}'+
- '.xm-att .hwe-m i img,.xm-att .hwe-m i canvas{max-width:28px;max-height:28px}.xm-att .hwe-m b{font-size:13px!important;line-height:1.1;overflow-wrap:anywhere;word-break:keep-all}.xm-att .hwe-m.big{background:#FFF1C9;box-shadow:inset 0 0 0 2px #E3B95A}'+
+ '.xm-att .hwe-m i img,.xm-att .hwe-m i canvas{max-width:28px;max-height:28px}.xm-att .hwe-m b{font-size:12.5px!important;line-height:1.1;overflow-wrap:normal;word-break:keep-all;letter-spacing:-.2px}.xm-att .hwe-m.big{background:#FFF1C9;box-shadow:inset 0 0 0 2px #E3B95A}'+
  '.xm-panel .hwe-ms .hwe-m i img,.xm-panel .hwe-ms .hwe-m i canvas{max-width:30px;max-height:30px}'+
  '@media (orientation:landscape) and (max-height:500px){#xmEv .xm-panel .lead,#xmEv .hwe-btns{display:none!important}}'+
  '.xmbar{background:linear-gradient(180deg,#FFF3F0,#FFC9C4);color:#5A0A12;max-width:100%}.xmbar .xm-bi{width:24px;height:24px}.xmbar b{background:linear-gradient(180deg,#FF8A8A,#D82E38);box-shadow:0 0 0 2px #3A0A10;-webkit-text-stroke:2px #7A0A14}.xmbar.ha-on b{animation:haPulse 1s ease-in-out infinite}';
@@ -412,6 +412,12 @@ setTimeout(function(){try{if(xmSeason())xmBossLook()}catch(e){}},2500);
 var XM2H={wn_santa:['ac_xmsanta',1.18,.24,.05],wn_antler:['ac_xmantler',1.2,.2,0],xm_holly:['ac_holly',1.1,.16,0]};
 Object.keys(XM2H).forEach(function(id){var old=ACC_HEAD[id];ACC_HEAD[id]=function(c,U){var q=XM2H[id],im=xmSpr(q[0]);if(!im)return old&&old.apply(this,arguments);var w=U*q[1],hh=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-hh,w,hh)}});
 setTimeout(function(){try{['ac_xmsanta','ac_xmantler','ac_holly'].forEach(function(k){xmSpr(k)})}catch(e){}},1500);
+/* 1.1.28 늑구 '물고기 꾸미기 템이랑 눈사람도(펫 말고도)': 그림 꾸미기 5가지 더 — 눈사람 탈 · 엘프 모자 · 미니 트리 모자(새로) + 눈꽃 털모자 · 트리 꼭대기 별(코드 그림 → 그림) */
+ACC.push({id:'xm_snowhead',slot:'head',name:T('눈사람 탈'),c:{cur:'pearls',price:1500},wn:1},{id:'xm_elf',slot:'head',name:T('엘프 모자'),c:{cur:'pearls',price:1000},wn:1},{id:'xm_treehat',slot:'head',name:T('미니 트리 모자'),c:{cur:'gems',price:25},wn:1});
+Object.assign(XM2H,{xm_snowhead:['ac_xmsnowhead',1.22,.42,0],xm_elf:['ac_xmelf',1.2,.24,.02],xm_treehat:['ac_xmtreehat',.86,.16,0],wn_beanie:['ac_xmbeanie',1.08,.26,0],wn_star:['ac_xmstar',.82,.18,0]});
+['xm_snowhead','xm_elf','xm_treehat','wn_beanie','wn_star'].forEach(function(id){var old=ACC_HEAD[id];ACC_HEAD[id]=function(c,U){var q=XM2H[id],im=xmSpr(q[0]);if(!im)return old&&old.apply(this,arguments);var w=U*q[1],hh=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-hh,w,hh)}});
+setTimeout(function(){try{['ac_xmsnowhead','ac_xmelf','ac_xmtreehat','ac_xmbeanie','ac_xmstar'].forEach(function(k){xmSpr(k)})}catch(e){}},1600);
+abyTr(TRT,{'눈사람 탈':'Snowman Head','엘프 모자':'Elf Hat','미니 트리 모자':'Mini Tree Hat','눈사람':'Snowman'});abyTr(TRJ,{'눈사람 탈':'ゆきだるまのかぶりもの','엘프 모자':'エルフのぼうし','미니 트리 모자':'ミニツリーぼうし','눈사람':'ゆきだるま'});
 /* --- ④ 눈사람 짝꿍(펫) --- */
 ACC.push({id:'pr_snowman',slot:'pet',name:T('눈사람 짝꿍'),c:{cur:'gems',price:0},wn:1,ex:1});PRPET.pr_snowman='pet_snowman';PRPET_K.pet_snowman=['swim',1.1];
 PET_AB.pr_snowman={n:'눈보라',d:function(l){return (12-l)+T('초마다 주변 적을 얼려 느리게')}};

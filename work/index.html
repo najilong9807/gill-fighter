@@ -14761,7 +14761,7 @@ function tkStage(id){var p=TKX().g[id]|0,s=1;for(var i=1;i<TKG_ST.length;i++)if(
 function tkStageName(s){return [T('아기'),T('꼬마'),T('청소년'),T('어른'),T('대왕')][clamp(s,1,5)-1]}
 function tkNeed(lv){return 60+40*lv}
 function tkXp(n,why){var o=TKX();o.xp+=n;var up=0;while(o.xp>=tkNeed(o.lv)){o.xp-=tkNeed(o.lv);o.lv++;up++;var g=Math.min(20,3+2*o.lv),p=Math.round(200*o.lv*RW_K);save.gems=(save.gems||0)+g;save.pearls+=p;
-    (function(lv,g,p){setTimeout(function(){banner(T('수족관 레벨 업! Lv.')+lv,T('보석 +')+g+' · '+T('진주 +')+nf(p));try{svSnd('lvl');buzz([30,40,60])}catch(e){}},1600)})(o.lv,g,p)}
+    (function(lv,g,p){setTimeout(function(){banner(T('수족관 레벨 업! Lv.')+lv,T('보석 +')+g+' · '+T('진주 +')+nf(p));try{svSnd('lvl');buzz([30,40,60])}catch(e){}try{if(lv>=2)askReview('tanklv')}catch(e){}},1600)})(o.lv,g,p)}
   persist();try{refreshTank()}catch(e){}}
 /* 크기: 내 수족관에서 성장 단계만큼 조금씩 커짐 · 새끼는 작게 */
 var tankSizeTKG=tankSize;tankSize=function(L){var s=tankSizeTKG(L);try{if(L&&L.baby)return s*.42*(1+.5*Math.min(1,(Date.now()-L.born)/TK_BABY.grow));if(!VISIT&&L)s*=1+TKG_K*(tkStage(L.id)-1)}catch(e){}return s};
@@ -15563,6 +15563,74 @@ var lbValW=lbVal;lbVal=function(m,v){var s=lbValW(m,v);try{if(typeof s==='string
 (function(){var st=document.createElement('style');st.textContent='.board.lb li>em.lb2{white-space:pre;font-size:14px;line-height:1.15;max-width:none}.board.lb .lbttl{white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}@media (max-width:359px){.board.lb li>em.lb2{font-size:12.5px}}';document.head.appendChild(st)})();
 var lbValW2=lbVal;lbVal=function(m,v){var s=lbValW2(m,v);try{if(m==='surv'&&typeof s==='string'&&s.indexOf('\n')>0)s=s.replace(/(어려움 \d+)장 클리어$/,'$1장').replace(/ cleared$/,'').replace(/(ハード \d+)章クリア$/,'$1章')}catch(e){}return s};
 var lbDecoL2=lbDeco;lbDeco=function(){var r=lbDecoL2.apply(this,arguments);try{Array.prototype.forEach.call(document.querySelectorAll('#lbList li>em'),function(e){e.classList.toggle('lb2',e.textContent.indexOf('\n')>0)})}catch(e){}return r}; /* 목록이 서버에서 늦게 와도 MutationObserver가 lbDeco를 부르므로 거기에 붙임 */
+/* ===== 1.1.28 늑구 'Fish Sort Puzzle 아이템 배워서 우리도 추가(11/9)': 특별 상품 3가지 (애플에서 상품 정보를 받아온 것만 보임 — App Store Connect에 상품을 만들기 전에는 숨겨져 있음)
+   ① 첫 선물 팩(설치 7일 안 · 한 번만, 소모성 com.gillfighter.game.starter): 보석 500 + 진주 5,000
+   ② 광고 없이 보상(한 번 사면 영원히, 비소모성 com.gillfighter.game.noads): '광고 보고 …' 보상을 광고 없이 바로. 강제 광고는 원래 없음. 구매 복원 버튼
+   ③ 진주조개 저금통(소모성 com.gillfighter.game.piggy): 20초 넘게 한 판마다 보석 +3(이기면 +6)이 저금통에 쌓임(최대 300) → 60개부터 사서 깨면 전부 받음 ===== */
+var SP_ID={starter:'com.gillfighter.game.starter',noads:'com.gillfighter.game.noads',piggy:'com.gillfighter.game.piggy'},SP_PIG={win:6,run:3,max:300,min:60},SP_ST={g:500,p:5000,days:7};
+abyTr(TRT,{'첫 선물 팩':'Starter Gift Pack','설치 7일 안 · 한 번만':'First 7 days only · once','남은 시간 ':'Ends in ','광고 없이 보상':'No-Ad Rewards','광고 보고 받던 보상을 영원히 바로 받아요':'Get every ad reward instantly, forever','가지고 있어요':'Owned','구매 복원':'Restore purchases','복원했어요':'Restored','복원할 구매가 없어요':'Nothing to restore','진주조개 저금통':'Pearl Clam Piggy Bank','판을 할 때마다 보석이 쌓여요':'Gems pile up every run','보석 ':'Gems ','개부터 깰 수 있어요':' needed to open','깨서 받기':'Open','첫 선물 팩을 받았어요!':'Starter Gift Pack received!','저금통을 깼어요!':'Piggy bank opened!','이제 광고 없이 바로 받아요!':'Ad rewards are now instant!','특별 상품':'Special offers','진주 2배 받기':'Get 2× pearls','바로 되살아나기':'Revive now','바로 2배':'2× now','바로 받기':'Claim now','바로 빠른 탐사':'Quick dive now','바로 받을 수 있어요':'You can claim it right away','바로 되살아날 수 있어요':'You can revive right away','바로 이어할 수 있어요':'You can continue right away','바로 하트 3칸으로 되살아나요 · 한 판에 한 번':'Revive with 3 hearts right away · once per run','2시간 치 보상을 바로 받아요':'Get 2 hours of rewards right away','저금통 +':'Piggy bank +'});
+abyTr(TRJ,{'첫 선물 팩':'スターターギフト','설치 7일 안 · 한 번만':'インストール7日以内 · 1回のみ','남은 시간 ':'残り ','광고 없이 보상':'広告なしでごほうび','광고 보고 받던 보상을 영원히 바로 받아요':'広告を見てもらうごほうびを、ずっとすぐにもらえます','가지고 있어요':'購入済み','구매 복원':'購入を復元','복원했어요':'復元しました','복원할 구매가 없어요':'復元する購入はありません','진주조개 저금통':'真珠貝の貯金箱','판을 할 때마다 보석이 쌓여요':'プレイするたびに宝石がたまります','보석 ':'宝石 ','개부터 깰 수 있어요':'個から開けられます','깨서 받기':'割ってもらう','첫 선물 팩을 받았어요!':'スターターギフトを受け取りました！','저금통을 깼어요!':'貯金箱を割りました！','이제 광고 없이 바로 받아요!':'ごほうびが広告なしですぐもらえます！','특별 상품':'特別商品','진주 2배 받기':'真珠2倍をもらう','바로 되살아나기':'すぐ復活','바로 2배':'すぐ2倍','바로 받기':'すぐもらう','바로 빠른 탐사':'すぐクイック探索','바로 받을 수 있어요':'すぐにもらえます','바로 되살아날 수 있어요':'すぐに復活できます','바로 이어할 수 있어요':'すぐに続けられます','바로 하트 3칸으로 되살아나요 · 한 판에 한 번':'すぐにハート3つで復活 · 1回のプレイで1度','2시간 치 보상을 바로 받아요':'2時間分のごほうびをすぐもらえます','저금통 +':'貯金箱 +'});
+function spNoAds(){return !!(save&&save.noAds)}
+function spStarterOpen(){if(save.spStarter)return false;var f=save.firstAt||Date.now();return Date.now()-f<SP_ST.days*864e5}
+function spPig(){if(!save.pig||typeof save.pig!=='object')save.pig={g:0,n:0};if(!(save.pig.g>=0))save.pig.g=0;return save.pig}
+function spPack(id){for(var k in SP_ID)if(SP_ID[k]===id)return k;return ''}
+/* 지급: 같은 거래 번호는 한 번만 */
+function spGrant(tx){if(!tx||!tx.transactionId)return false;var k=spPack(tx.productIdentifier);if(!k)return false;var N=iapNative(),id=String(tx.transactionId);if(!save.iapDone)save.iapDone={};
+  if(k==='noads'){if(!tx.revocationDate&&!save.noAds){save.noAds=Date.now();persist();buzz([20,30,40]);banner(T('광고 없이 보상'),T('이제 광고 없이 바로 받아요!'))}}
+  else if(!save.iapDone[id]&&!tx.revocationDate){save.iapDone[id]=Date.now();
+    if(k==='starter'){save.spStarter=Date.now();save.gems=(save.gems||0)+SP_ST.g;save.pearls=(save.pearls||0)+SP_ST.p;save.iapGems=(save.iapGems||0)+SP_ST.g;persist();buzz([30,40,60]);banner(T('첫 선물 팩을 받았어요!'),T('보석 +')+SP_ST.g+' · '+T('진주 +')+nf(SP_ST.p))}
+    else if(k==='piggy'){var P0=spPig(),g=Math.max(SP_PIG.min,P0.g|0);save.gems=(save.gems||0)+g;save.iapGems=(save.iapGems||0)+g;P0.g=0;P0.n=(P0.n|0)+1;persist();buzz([30,40,60]);try{svSnd('gem')}catch(e){}banner(T('저금통을 깼어요!'),T('보석 +')+g)}}
+  if(N&&N.acknowledgePurchase)N.acknowledgePurchase({purchaseToken:id}).catch(function(){});
+  try{if(page==='sea')renderSea();else if(typeof refreshHome==='function')refreshHome(true)}catch(e){}return true}
+var iapGrantSP=iapGrant;iapGrant=function(tx){try{if(tx&&spPack(tx.productIdentifier)){spGrant(tx);return}}catch(e){}return iapGrantSP.apply(this,arguments)};
+var iapPackSP=iapPack;iapPack=function(id){var r=iapPackSP(id);if(r)return r;var k=spPack(id);return k?{id:id,n:0,sp:k}:null};
+var SP={tried:false};
+function spLoad(){var N=iapNative();if(!N||SP.tried)return;SP.tried=true;
+  N.getProducts({productIdentifiers:[SP_ID.starter,SP_ID.noads,SP_ID.piggy]}).then(function(r){(r&&r.products||[]).forEach(function(p){IAP.prod[p.identifier]=p});if(page==='sea')renderSea()}).catch(function(){})}
+function spRestore(btn){var N=iapNative();if(!N){banner(T('복원할 구매가 없어요'),'');return}if(btn)btn.disabled=true;var had=spNoAds();
+  var go=N.restorePurchases?N.restorePurchases():Promise.resolve();go.catch(function(){}).then(function(){return N.getPurchases?N.getPurchases({}):null}).then(function(r){(r&&r.purchases||[]).forEach(function(tx){if(spPack(tx.productIdentifier)==='noads')spGrant(tx)})}).catch(function(){}).then(function(){if(btn)btn.disabled=false;if(spNoAds()&&!had)return;banner(spNoAds()?T('복원했어요'):T('복원할 구매가 없어요'),'')})}
+/* 광고 없이 보상: 광고 자리를 바로 성공으로 */
+var showRewardedSP=showRewarded;showRewarded=function(cb){if(spNoAds()){crumb('adSkip:noads');ADS.fail=false;setTimeout(function(){try{cb&&cb(true)}catch(e){}},200);return}return showRewardedSP.apply(this,arguments)};
+var SP_LAB={'광고 보고 진주 2배':'진주 2배 받기','광고 보고 되살아나기':'바로 되살아나기','광고 보고 2배':'바로 2배','광고 보고':'바로 받기','광고 보고 빠른 탐사':'바로 빠른 탐사','광고를 끝까지 보면 받을 수 있어요':'바로 받을 수 있어요','광고를 끝까지 보면 되살아날 수 있어요':'바로 되살아날 수 있어요','광고를 끝까지 보면 이어할 수 있어요':'바로 이어할 수 있어요','광고를 끝까지 보면 하트 3칸으로 되살아나요 · 한 판에 한 번':'바로 하트 3칸으로 되살아나요 · 한 판에 한 번','광고를 보면 2시간 치 보상을 바로 받아요':'2시간 치 보상을 바로 받아요'};
+var T_SP=T;T=function(s){if(SP_LAB[s]&&spNoAds())return T_SP(SP_LAB[s]);return T_SP(s)};
+/* 저금통: 20초 넘게 한 판마다(연습 제외) 쌓임 */
+var endRunSP=endRun;endRun=function(win,quit){var st=state,t=P?(P.time||0):0,tut=false;try{tut=!!(typeof TUT!=='undefined'&&TUT&&TUT.on)}catch(e){}var r=endRunSP.apply(this,arguments);
+  try{if(st==='play'&&state!=='play'&&!tut&&t>=20&&mode!=='race'){var pg=spPig(),add=win&&!quit?SP_PIG.win:SP_PIG.run;if(pg.g<SP_PIG.max){pg.g=Math.min(SP_PIG.max,pg.g+add);persist()}}}catch(e){}return r};
+/* 상점 › 보석 맨 위 '특별 상품' */
+(function(){var st=document.createElement('style');st.textContent='.sp-h{grid-column:1/-1;margin:2px 0 -2px;font:400 15px var(--disp);color:#0B2C4A;display:flex;align-items:center;justify-content:space-between}.sp-h button{font:700 11.5px system-ui,sans-serif;color:#2B6CB0;background:none;border:0;padding:4px 2px;text-decoration:underline}.good.sp{position:relative}.good.sp .ico{display:flex;align-items:center;justify-content:center;font-size:26px}.good.sp>span{white-space:pre-line}.good.sp.own .buy{background:#5CC27A!important;color:#fff}.sp-bar{display:block;width:84%;height:7px;border-radius:5px;background:rgba(11,44,74,.15);margin:3px auto 4px;overflow:hidden}.sp-bar>i{display:block;height:100%;background:linear-gradient(90deg,#FFD25A,#FF9F2E)}.sp-tag{position:absolute;top:-7px;right:-4px;background:#E5383B;color:#fff;font:700 10.5px system-ui,sans-serif;padding:2px 7px;border-radius:999px;box-shadow:0 2px 0 rgba(0,0,0,.18)}';document.head.appendChild(st)})();
+function spLeft(){var f=save.firstAt||Date.now(),ms=f+SP_ST.days*864e5-Date.now();if(ms<=0)return '';var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5);return T('남은 시간 ')+(d>0?d+(LANG==='en'?'d ':LANG==='ja'?'日':'일 '):'')+h+(LANG==='en'?'h':LANG==='ja'?'時間':'시간')}
+function spCard(box,before,o){var g=document.createElement('div');g.className='good iap sp'+(o.own?' own':'');g.id='sp-'+o.k;var ic=document.createElement('div');ic.className='ico';ic.style.background=o.bg;ic.textContent=o.ico;
+  var nm=document.createElement('b');nm.textContent=o.n;var ds=document.createElement('span');ds.textContent=o.d;g.appendChild(ic);g.appendChild(nm);g.appendChild(ds);
+  if(o.bar!=null){var br=document.createElement('i');br.className='sp-bar';var bi=document.createElement('i');bi.style.width=Math.round(o.bar*100)+'%';br.appendChild(bi);g.appendChild(br)}
+  if(o.tag){var tg=document.createElement('em');tg.className='sp-tag';tg.textContent=o.tag;g.appendChild(tg)}
+  var bt=document.createElement('button');bt.type='button';bt.className='buy';var pr=IAP.prod[SP_ID[o.k]];
+  if(o.own){bt.textContent=T('가지고 있어요');bt.disabled=true}
+  else if(pr){bt.textContent=IAP.busy===SP_ID[o.k]?T('결제 중…'):(o.lab?o.lab+' · ':'')+(pr.priceString||'');bt.disabled=!!IAP.busy||!!o.lock;bt.addEventListener('click',function(){iapBuy({id:SP_ID[o.k],n:0},bt)})}
+  else{bt.textContent=iapNative()?T('불러오는 중'):T('앱에서만');bt.disabled=true}
+  g.appendChild(bt);box.insertBefore(g,before);return g}
+function spRender(){var box=$('goodsGems');if(!box||page!=='sea')return;var NP=iapNative();if(!NP&&BUILD==='release')return;spLoad();
+  var has=function(k){return !NP||!!IAP.prod[SP_ID[k]]};var list=[];
+  if(spStarterOpen()&&has('starter'))list.push({k:'starter',ico:'🎁',bg:'linear-gradient(180deg,#FFE7A8,#FF9F2E)',n:T('첫 선물 팩'),d:T('보석 ')+SP_ST.g+' · '+T('진주 ')+nf(SP_ST.p)+'\n'+(spLeft()||T('설치 7일 안 · 한 번만'))});
+  if(has('piggy')){var pg=spPig();list.push({k:'piggy',ico:'🐚',bg:'linear-gradient(180deg,#FFE3F0,#F59AC0)',n:T('진주조개 저금통'),d:T('보석 ')+(pg.g|0)+' / '+SP_PIG.max+'\n'+((pg.g|0)>=SP_PIG.min?T('판을 할 때마다 보석이 쌓여요'):T('보석 ')+SP_PIG.min+T('개부터 깰 수 있어요')),bar:Math.min(1,(pg.g|0)/SP_PIG.max),lock:(pg.g|0)<SP_PIG.min})}
+  if(has('noads')||spNoAds())list.push({k:'noads',ico:'⚡',bg:'linear-gradient(180deg,#D7F5FF,#56B6F0)',n:T('광고 없이 보상'),d:T('광고 보고 받던 보상을 영원히 바로 받아요'),own:spNoAds()});
+  if(!list.length)return;var first=box.querySelector('.good.iap');var before=first||null;
+  if(before&&before.previousElementSibling&&!before.previousElementSibling.classList.contains('good'))before=before.previousElementSibling;
+  var h=document.createElement('div');h.className='sp-h';var ht=document.createElement('span');ht.textContent=T('특별 상품');var rb=document.createElement('button');rb.type='button';rb.textContent=T('구매 복원');rb.addEventListener('click',function(){spRestore(rb)});h.appendChild(ht);h.appendChild(rb);box.insertBefore(h,before);
+  list.forEach(function(o){spCard(box,before,o)})}
+var renderSeaSP=renderSea;renderSea=function(){var r=renderSeaSP.apply(this,arguments);try{spRender()}catch(e){}return r};
+/* ===== 1.1.28 늑구 '평가 요청 점검 진행(11/9, Fish Sort Puzzle 평점 4.93 · 1.5만 개 참고)':
+   - 전: 4판 · 설치 1일 뒤 · 60일에 한 번 · 좋은 순간 4곳(최고 기록 · 생존 승리 · 탐험 첫 별3 · 대전 1위)
+   - 후: 3판 · 설치 1일 뒤 · 30일에 한 번, 새 버전이면 14일 뒤 다시 한 번(iOS가 1년 3번까지만 실제로 띄움) · 좋은 순간에 '수족관 레벨 업' 추가
+   - 부르는 곳은 좋은 순간만(이긴 순간 · 첫 별3 · 신기록 · 레벨 업). 몇 번 불렀는지 익명 기록(kind='rv')으로 남겨 아침 점검에서 확인
+   - 애플 규칙(5.6.1): 애플 기본 평가 창만 쓰고, '재밌어요?'로 먼저 걸러 묻지 않음 ===== */
+askReview=function(why){var R=reviewNative();if(!R)return;var now=Date.now();if(!save.firstAt){save.firstAt=now;persist();return}
+  if((save.runs||0)<3||now-save.firstAt<864e5)return;
+  var last=save.rvAt||0,newVer=save.rvVer!==APP_VER;if(last&&now-last<(newVer?14:30)*864e5)return;
+  save.rvAt=now;save.rvWhy=why;save.rvVer=APP_VER;save.rvN=(save.rvN|0)+1;
+  try{save.crashQ=(save.crashQ||[]).concat([{kind:'rv',v:APP_VER,at:now,why:String(why||''),n:save.rvN,runs:save.runs|0,d:Math.floor((now-save.firstAt)/864e5),lang:LANG}]).slice(-40)}catch(e){}
+  persist();try{if(typeof crashSend==='function')setTimeout(crashSend,4000)}catch(e){}
+  setTimeout(function(){try{R.requestReview().catch(function(){})}catch(e){}},1600)};
+try{if(iapNative())setTimeout(function(){try{iapInit();spLoad()}catch(e){}},2500)}catch(e){} /* 광고 없이 보상은 켤 때 getPurchases로 되살림(iapInit이 iapGrant → spGrant) */
 /* 1.1.27 업데이트 소식에 백업 불러오기 수정 · 홈 정리 추가 */
 abyTr(TRT,{"백업 코드로 불러오기가 안 되던 문제를 고쳤어요 (예전 저장을 다시 불러올 수 있어요)": "Fixed loading a save from a backup code (you can now restore your old save)", "홈 화면 · 보상함을 깔끔하게 정리했어요": "Cleaner home screen and rewards box"});abyTr(TRJ,{"백업 코드로 불러오기가 안 되던 문제를 고쳤어요 (예전 저장을 다시 불러올 수 있어요)": "バックアップコードから読み込めなかった問題を修正（前のセーブを読み込めます）", "홈 화면 · 보상함을 깔끔하게 정리했어요": "ホーム画面と報酬ボックスをすっきり整理"});
 /* ===== 1.1.26 결과 화면 '받은 것'에도 아이콘 (경험치 · 장비 · 꿀꺽 · 도전 · 상자 · 보석) + 장비 줄의 '— 빈 칸에 바로 장착'은 아랫줄 작은 글씨로 ===== */

@@ -16339,6 +16339,164 @@ var svGpXM=svGp;svGp=function(dt){svGpXM(dt);try{if(!xmSvOk()||!SV.xg)return;SV.
     if(dd<P.s*.9+r){SV.xg.splice(i,1);xmBoxAdd(2);try{xmmAdd('gift',1)}catch(x){}svGainXp(Math.max(5,SV.need*.3));texts.push({x:P.x,y:P.y-P.s*1.6,txt:T('선물 상자!')+' +2',life:1.2});rings.push({x:g.x,y:g.y,r:r*2.2,life:.5,max:.5,col:'255,215,110'});try{svSnd('jingle');buzz(25)}catch(x){}continue}
     if(g.t<=0)SV.xg.splice(i,1)}}catch(e){}};
 var svGpDrawXM=svGpDraw;svGpDraw=function(){svGpDrawXM();try{if(!SV.xg||!SV.xg.length)return;var R=viewR();for(var i=0;i<SV.xg.length;i++){var g=SV.xg[i];if(g.t<3&&Math.floor(g.t*6)%2)continue;xmGiftDraw(g.x,g.y,Math.max(18/zoom,R*.055),g.sd)}}catch(e){}};
+/* ===== 1.1.28 늑구 '수족관 업데이트 대규모 · 크리스마스 끝나도 쓸 수 있게 대형 크리스마스 트리(한눈에) · 꾸미기에서 트리 장식템을 진주로'
+   ① 내 크리스마스 트리 → 대형 트리(폭 0.3 → 0.56, 한 화면에 통째로 보이게) · 크기 조절 0.6~1.25배 · 시즌 표시(wn) 뗌
+   ② 1년 내내: 트리가 없으면 한 번 넣어 드림(장식 3개 포함) · 수족관에서 트리를 누르면 꾸미기 창 · 꾸미기 서랍(소품)에 「트리 장식」 버튼
+   ③ 꾸미기 창 아래 「장식 가게」: 장식 22가지를 진주로(80 ~ 600) · 새 장식 14가지(CC0: 반짝 방울 Wenrexa · 진저브레드/양말/눈사람/루돌프/리스 등 Kenney Holiday Kit)
+   ④ 트리 자리 15 → 20(아래 줄 5칸, 예전 자리 번호 그대로라 단 장식 안 바뀜)
+   트리 밑 선물 · 산타 선물 · 오늘의 미션 장식은 예전처럼 크리스마스 기간에만 ===== */
+abyTr(TRT,{'대형 크리스마스 트리':'Giant Christmas Tree','장식 가게':'Ornament shop','트리 장식':'Tree ornaments','진주로 사서 바로 달 수 있어요':'Buy with pearls and hang them right away',
+ '가진 장식이 없어요 · 아래 장식 가게에서 진주로 사요':'No ornaments yet · buy some with pearls in the shop below','장식을 샀어요':'Ornament bought','트리에 달아 보세요':'Hang it on your tree',
+ '수족관 트리를 눌러 달아요':'Tap your aquarium tree to hang it','수족관에 대형 크리스마스 트리가 생겼어요! 🎄':'A giant Christmas tree is in your aquarium! 🎄','트리를 누르면 장식을 달 수 있어요 · 장식은 꾸미기에서 진주로 사요':'Tap the tree to hang ornaments · buy more with pearls in Decorate',
+ '금빛 방울':'Gold bauble','보라 방울':'Purple bauble','초록 방울':'Green bauble','분홍 방울':'Pink bauble','청록 방울':'Teal bauble','구리 방울':'Copper bauble','진저브레드':'Gingerbread','크리스마스 양말':'Stocking','초록 지팡이 사탕':'Green candy cane','파란 눈꽃':'Blue snowflake','꼬마 눈사람':'Little snowman','꼬마 루돌프':'Little reindeer','초록 선물':'Green present','작은 리스':'Little wreath','보유 ':'Own '});
+abyTr(TRJ,{'대형 크리스마스 트리':'大きなクリスマスツリー','장식 가게':'かざりショップ','트리 장식':'ツリーかざり','진주로 사서 바로 달 수 있어요':'真珠で買ってすぐにつけられます',
+ '가진 장식이 없어요 · 아래 장식 가게에서 진주로 사요':'かざりがありません · 下のショップで真珠で買えます','장식을 샀어요':'かざりを買いました','트리에 달아 보세요':'ツリーにつけてみよう',
+ '수족관 트리를 눌러 달아요':'水族館のツリーをタップしてつけよう','수족관에 대형 크리스마스 트리가 생겼어요! 🎄':'水族館に大きなクリスマスツリーが届きました！🎄','트리를 누르면 장식을 달 수 있어요 · 장식은 꾸미기에서 진주로 사요':'ツリーをタップでかざりつけ · かざりは「飾る」で真珠で買えます',
+ '금빛 방울':'金のボール','보라 방울':'むらさきのボール','초록 방울':'みどりのボール','분홍 방울':'ピンクのボール','청록 방울':'ターコイズのボール','구리 방울':'銅のボール','진저브레드':'ジンジャーブレッド','크리스마스 양말':'クリスマスくつした','초록 지팡이 사탕':'みどりのキャンディケイン','파란 눈꽃':'青い雪の結晶','꼬마 눈사람':'ちびゆきだるま','꼬마 루돌프':'ちびトナカイ','초록 선물':'みどりのプレゼント','작은 리스':'ちいさなリース','보유 ':'所持 '});
+/* 장식 22가지: 새 14가지 + 가격(진주) */
+[['gold','금빛 방울'],['purple','보라 방울'],['green','초록 방울'],['pink','분홍 방울'],['aqua','청록 방울'],['copper','구리 방울'],['ginger','진저브레드'],['sock','크리스마스 양말'],['gcane','초록 지팡이 사탕'],['bflake','파란 눈꽃'],['snowman','꼬마 눈사람'],['deer','꼬마 루돌프'],['gpresent','초록 선물'],['wreath','작은 리스']].forEach(function(q){XORN.push(q)});
+var XORN_P={star:600,red:80,blue:80,gold:100,green:100,purple:120,pink:120,aqua:120,copper:150,cane:120,gcane:120,bell:200,present:180,gpresent:180,flake:160,bflake:160,shell:300,ginger:220,sock:200,snowman:260,deer:320,wreath:280};
+/* 트리 자리 20칸(뒤에만 붙임) */
+XSLOT.push([.18,.73],[.34,.75],[.5,.73],[.66,.75],[.82,.73]);
+/* ① 대형 트리 */
+var XBT_W=.56;(function(){var D=decoById('xm_mytree');if(D){try{delete D.w;Object.defineProperty(D,'w',{configurable:true,enumerable:true,get:function(){return cw>ch*1.2?.42:XBT_W}})}catch(e){D.w=XBT_W}D.wn=0;D.name=T('대형 크리스마스 트리')}})(); /* 가로 화면은 키가 낮아서 0.42 (꼭대기 별까지 한 화면) */
+function xbtClamp(it){if(it&&it.k==='xm_mytree')it.s=clamp(it.s||1,.6,1.25)}
+var decoEditXB=decoEdit;decoEdit=function(fn){return decoEditXB(function(it,p){var r=fn(it,p);xbtClamp(it);return r})};
+function xbtOwned(){try{if(xmTreeIt())return true;var d=DS();return (d.inv.xm_mytree|0)>0}catch(e){return false}}
+/* 예전 작은 트리를 한 번만: 크기 1배 · 바닥에 다시 앉히고 · 집에 가리지 않는 보이는 자리로 */
+/* 자리: 집 바로 오른쪽(가로 · 아이패드는 첫 화면에 통째로, 세로 폰은 살짝 밀면 통째로) · 오른쪽이 모자라면 왼쪽 · 다른 소품 뒤에 */
+function xbtSpot(){var W=TWW(),U=decoU(),D=decoById('xm_mytree'),hp=housePos(),hw=Math.max(hp.w,hp.d?hp.d.iw:0)/2,tw=decoW(D,1)/2,x=hp.x+hw+tw;if(x+tw>W)x=hp.x-hw-tw;return clamp(x/W,.03,.97)}
+function xbtFix(){try{var d=DS(),W=TWW(),D=decoById('xm_mytree'),it=null,i;for(i=0;i<d.placed.length;i++)if(d.placed[i].k==='xm_mytree'&&!d.placed[i].pv){it=d.placed.splice(i,1)[0];break}if(!it)return;
+  it.s=1;it.x=xbtSpot();it.y=clamp((floorAt(it.x*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95);d.placed.unshift(it);deco.sel=-1}catch(e){}}
+/* ② 트리가 없으면 한 번 넣어 드림 */
+function xbtGiveCheck(tries){try{if(save.aqT1)return;if(!((save.runs|0)>0)){if((tries||0)<60)setTimeout(function(){xbtGiveCheck((tries||0)+1)},5000);return}
+  if(page!=='home'||state!=='home'||document.querySelector('.overlay:not([hidden])')||document.querySelector('.coach')||save.newsSeen!==APP_VER){if((tries||0)<60)setTimeout(function(){xbtGiveCheck((tries||0)+1)},2500);return}
+  save.aqT1=1;if(xbtOwned()){xbtFix();persist();try{refreshTank()}catch(e){}return}
+  xmGive({d:'xm_mytree'});xbtFix();var o=XT(),n=0;for(var k in o.inv)n+=o.inv[k]|0;o.s.forEach(function(k){if(k)n++});if(!n){xmOrnAdd('red',1,1);xmOrnAdd('gold',1,1);xmOrnAdd('bell',1,1)}
+  try{XM().g0=1}catch(e){}persist();crumb('aqTree');try{buzz([20,30,20])}catch(e){}banner(T('수족관에 대형 크리스마스 트리가 생겼어요! 🎄'),T('트리를 누르면 장식을 달 수 있어요 · 장식은 꾸미기에서 진주로 사요'));try{refreshTank()}catch(e){}}catch(e){}}
+setTimeout(xbtGiveCheck,4500);
+/* 트리를 받은 뒤 처음 수족관을 열 때 한 번: 카메라를 트리 쪽으로(세로 폰은 집과 트리가 한 화면에 다 안 들어가서) */
+var camClampXB=camClamp;camClamp=function(){var reset=tankCam<0,r=camClampXB.apply(this,arguments);try{if(reset&&page==='tank'&&!VISIT&&save.aqT1&&!save.aqTc){var it=xmTreeIt();if(it){save.aqTc=1;persist();tankCam=clamp(it.x*TWW()-viewW()/2,0,camMax())}}}catch(e){}return r};
+/* 장식 받았을 때 안내: 기간과 상관없이 트리에서 */
+xmOrnAdd=function(k,n,quiet){var o=XT();o.inv[k]=(o.inv[k]|0)+(n||1);persist();if(!quiet){var nm=(XORN.filter(function(q){return q[0]===k})[0]||[,''])[1];setTimeout(function(){banner(T('장식을 받았어요!'),T(nm)+' · '+T('수족관 트리를 눌러 달아요'))},900)}};
+/* 수족관에서 트리 누르기 → 꾸미기 창 (집 · 손님 · 선물 · 물고기는 원래대로) */
+var tankTapXB=tankTap;tankTap=function(wx,wy){try{if(!VIEWM&&!VISIT&&!deco.on&&!houseHit(wx,wy)&&!(typeof guestHit==='function'&&guestHit(wx,wy))){var pl=DS().placed,i=decoHit(wx,wy);
+  if(i>=0&&pl[i].k==='xm_mytree'){var W=TWW(),R=decoU()*.07,gift=false;if(xmSeason()){XG().g.forEach(function(g){var x=g.x*W;if(Math.hypot(wx-x,wy-(floorAt(x)-2-R))<R*1.8)gift=true});
+      if(xmTreeGiftCan()){var tx=pl[i].x*W+R*2.2;if(Math.hypot(wx-tx,wy-(floorAt(tx)-2-R))<R*1.8)gift=true}}
+    var fish=false;for(var q=0;q<tank.length;q++){if(Math.hypot(wx-tank[q].x,wy-tank[q].y)<tankSize(tank[q].L)*.9+6){fish=true;break}}
+    if(!gift&&!fish){DECO_BT[i]=t;try{svSnd('bub',.8);buzz(8)}catch(e){}xmTreeOpen();return}}}}catch(e){}return tankTapXB.apply(this,arguments)};
+/* ③ 꾸미기 창: 장식 가게 */
+function xbtBuy(k){var c={cur:'pearls',price:XORN_P[k]||150};if(!pay(c)){short(c);return}var o=XT();o.inv[k]=(o.inv[k]|0)+1;XTD.sel=k;persist();crumb('ornBuy:'+k);
+  try{svSnd('gem');buzz([15,25,15])}catch(e){}var nm=(XORN.filter(function(q){return q[0]===k})[0]||[,''])[1];banner(T('장식을 샀어요'),T(nm)+' · '+T('트리에 달아 보세요'));xmTreeRender();try{refreshHome&&refreshHome(true)}catch(e){}}
+var xmTreeRenderXB=xmTreeRender;xmTreeRender=function(){var r=xmTreeRenderXB.apply(this,arguments);try{var el=$('xmTreeP');if(!el)return r;var T0=XT();
+  var nn=el.querySelector('.xmt-none');if(nn)nn.textContent=T('가진 장식이 없어요 · 아래 장식 가게에서 진주로 사요');
+  var sh=$('xmtShop');if(!sh){sh=document.createElement('section');sh.id='xmtShop';sh.className='xmt-shop';sh.innerHTML='<h2></h2><p class="xmt-sh-sub"></p><div class="xmt-sh-grid"></div><p class="xmt-sh-bal"></p>';el.querySelector('.xmt-panel').insertBefore(sh,$('xmtX'))}
+  sh.querySelector('h2').textContent='🛍️ '+T('장식 가게');sh.querySelector('.xmt-sh-sub').textContent=T('진주로 사서 바로 달 수 있어요');
+  var bal=sh.querySelector('.xmt-sh-bal');bal.textContent='';bal.appendChild(costEl({cur:'pearls',price:save.pearls|0}));
+  var g=sh.querySelector('.xmt-sh-grid');g.textContent='';XORN.forEach(function(q){var k=q[0],c={cur:'pearls',price:XORN_P[k]||150},b=document.createElement('button');b.type='button';b.className='xmt-sh-c';b.dataset.poor=canPay(c)?'0':'1';
+    var im=new Image();im.src='svart/orn_'+k+'.webp';im.alt='';b.appendChild(im);var nm=document.createElement('b');nm.textContent=T(q[1]);b.appendChild(nm);
+    var own=T0.inv[k]|0;T0.s.forEach(function(x){if(x===k)own++});if(own){var o2=document.createElement('i');o2.textContent=T('보유 ')+own;b.appendChild(o2)}
+    b.appendChild(costEl(c));b.setAttribute('aria-label',T(q[1])+' '+c.price);b.addEventListener('click',function(){xbtBuy(k)});g.appendChild(b)})}catch(e){}return r};
+/* 서랍 「트리 장식」 버튼 */
+(function(){var acts=document.querySelector('#decoDrawer .dd-acts')||($('ddFold')&&$('ddFold').parentNode);if(!acts||$('ddTree'))return;var b=document.createElement('button');b.type='button';b.className='dd-fold dd-tree';b.id='ddTree';b.textContent='🎄 '+T('트리 장식');acts.insertBefore(b,acts.firstChild);
+  b.addEventListener('click',function(){try{decoCancelPv(true)}catch(e){}xmTreeOpen()})})();
+var renderDrawerXB=renderDrawer;renderDrawer=function(){var r=renderDrawerXB.apply(this,arguments);try{var b=$('ddTree');if(b){b.hidden=deco.seg!=='decor'||!xbtOwned();b.textContent='🎄 '+T('트리 장식')}}catch(e){}return r};
+/* 친구 수족관 구경 중엔 내 장식을 그 집 트리에 달지 않음(예전엔 내 장식이 보였음) */
+var drawDecoItemXB=drawDecoItem;drawDecoItem=function(D){if(D&&D.id==='xm_mytree'&&VISIT){var keep=save.xmTree;save.xmTree={s:[],inv:{}};try{return drawDecoItemXB.apply(this,arguments)}finally{save.xmTree=keep}}return drawDecoItemXB.apply(this,arguments)};
+setTimeout(function(){try{XORN.forEach(function(q){xmSpr('orn_'+q[0])});xmSpr('dc_xm_mytree')}catch(e){}},2600);
+(function(){var st=document.createElement('style');st.textContent='.xmt-panel{max-height:calc(100dvh - 40px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;overflow-y:auto!important}.xmt-stage canvas{height:min(42vh,340px)!important}'+
+ '.xmt-shop{border-radius:16px;background:#FFF8E6;box-shadow:inset 0 0 0 2px #E8CF8E;padding:10px 8px 8px}.xmt-shop h2{margin:0;font-family:var(--disp);font-weight:400;font-size:17px;color:#0B2C4A;text-align:center}.xmt-sh-sub{margin:2px 0 8px;font-size:12px;color:#7A6230;text-align:center}'+
+ '.xmt-sh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:6px}.xmt-sh-c{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;border-radius:13px;background:#fff;box-shadow:0 0 0 2px #0B2C4A,0 3px 0 2px #0B2C4A;padding:6px 3px 7px;font:inherit;cursor:pointer;min-width:0}'+
+ '.xmt-sh-c img{height:40px;max-width:44px;object-fit:contain}.xmt-sh-c b{font-family:var(--disp);font-weight:400;font-size:11.5px;line-height:1.1;color:#0B2C4A;text-align:center;min-height:25px;display:flex;align-items:center;overflow-wrap:anywhere}.xmt-sh-c i{position:absolute;top:3px;right:4px;font:700 10px sans-serif;font-style:normal;color:#1E7A3E;background:#DFF6E6;border-radius:6px;padding:0 4px}'+
+ '.xmt-sh-c .cost{font-size:12.5px}.xmt-sh-c[data-poor="1"]{opacity:.55}.xmt-sh-c:active{transform:translateY(2px);box-shadow:0 0 0 2px #0B2C4A,0 1px 0 2px #0B2C4A}.xmt-sh-bal{margin:8px 0 0;text-align:center;font-weight:700;font-size:13px}';document.head.appendChild(st)})();
+/* ===== 1.1.28 늑구 '전깃줄도 어디랑 연결하고 · 궁전도 더 업글 · 수족관을 진짜 하나의 게임처럼' (가로 화면도 늘 같이 확인)
+   ① 전구 줄 잇기: 꾸미기에서 소품을 고르고 「전구 줄」 → 다른 소품이나 집을 누르면 그 사이에 전구 줄(진주 80, 최대 20줄)
+      줄마다 색 4가지(알록달록 · 금빛 · 얼음 · 분홍)가 차례로, 「줄 빼기」로 그 소품의 줄을 모두 뗌. 소품을 옮기면 줄도 따라감
+      대형 트리를 받으면 트리 ↔ 집 첫 줄은 무료로 이어 드림
+   ② 해저 궁전 증축 ★1~★5: 집이 5단계(궁전)면 집 창에 「궁전 증축」. 별마다 진주 샘 +12%
+      ★1 탑을 잇는 전구 줄 · ★2 탑 깃발 · ★3 떠오르는 진주 반짝이 · ★4 꼭대기 빛기둥 · ★5 황금 왕관 ===== */
+abyTr(TRT,{'전구 줄':'Lights','줄 빼기':'Unstring','이을 소품이나 집을 눌러요':'Tap another decor or the house to string lights','전구 줄 하나에 진주 ':'Each string costs pearls ','전구 줄을 이었어요':'Lights strung!','전구 줄을 뗐어요':'Lights removed',
+ '전구 줄은 ':'Up to ','줄까지 이어요':' strings','같은 소품끼리는 못 이어요':'Pick a different decor','이미 이어져 있어요':'Already connected','취소했어요':'Cancelled',
+ '궁전 증축':'Expand palace','궁전 증축 → ':'Expand → ','완성된 궁전이에요!':'Your palace is complete!','궁전을 증축했어요!':'Palace expanded!','진주 샘 +':'Pearl spring +',
+ '탑을 잇는 전구 줄':'lights between towers','탑 깃발':'tower flags','떠오르는 진주 반짝이':'rising pearl sparkles','꼭대기 빛기둥':'light beams','황금 왕관':'golden crown','다음 증축: ':'Next: ','트리와 집을 전구 줄로 이어 드렸어요':'We strung lights between your tree and house'});
+abyTr(TRJ,{'전구 줄':'電球',"줄 빼기":'外す','이을 소품이나 집을 눌러요':'つなぐ小物か家をタップ','전구 줄 하나에 진주 ':'電球ひもは1本につき真珠 ','전구 줄을 이었어요':'電球をつなぎました','전구 줄을 뗐어요':'電球を外しました',
+ '전구 줄은 ':'電球ひもは','줄까지 이어요':'本まで','같은 소품끼리는 못 이어요':'別の小物を選んでね','이미 이어져 있어요':'もうつながっています','취소했어요':'キャンセルしました',
+ '궁전 증축':'宮殿の増築','궁전 증축 → ':'増築 → ','완성된 궁전이에요!':'宮殿が完成しました！','궁전을 증축했어요!':'宮殿を増築しました！','진주 샘 +':'真珠の泉 +',
+ '탑을 잇는 전구 줄':'塔をつなぐ電球','탑 깃발':'塔の旗','떠오르는 진주 반짝이':'のぼる真珠のきらめき','꼭대기 빛기둥':'てっぺんの光の柱','황금 왕관':'金の王冠','다음 증축: ':'次の増築: ','트리와 집을 전구 줄로 이어 드렸어요':'ツリーと家を電球でつなぎました'});
+/* --- 공통: 전구 그리기(색 묶음) --- */
+var AQB=[[['#FF5A5A','255,90,90'],['#FFD23F','255,215,80'],['#5EDB6A','110,220,140'],['#5AA9FF','110,180,255'],['#FF8AD6','255,140,220']],
+ [['#FFD86B','255,210,110'],['#FFF1B8','255,235,170']],[['#9FE6FF','150,225,255'],['#FFFFFF','220,240,255'],['#5AA9FF','110,180,255']],[['#FF8AD6','255,140,220'],['#FFC3E6','255,190,230'],['#FFFFFF','255,220,240']]];
+function aqBulb(c,x,y,r,pal,i){var P=AQB[pal]||AQB[0],q=P[i%P.length],on=.6+.4*Math.sin(t*3+i*1.7);
+  c.save();c.globalCompositeOperation='lighter';c.globalAlpha*=.6*on;c.drawImage(glow(q[1]),x-r*3.2,y-r*3.2,r*6.4,r*6.4);c.restore();
+  c.beginPath();c.ellipse(x,y+r*.2,r*.6,r*.85,0,0,Math.PI*2);c.fillStyle=q[0];c.fill();c.lineWidth=Math.max(.8,r*.2);c.strokeStyle='#0B2C4A';c.stroke();
+  c.fillStyle='#5A6B7A';c.fillRect(x-r*.33,y-r*.8,r*.66,r*.38);c.save();c.globalAlpha*=.7;c.fillStyle='#FFFFFF';c.beginPath();c.ellipse(x-r*.18,y,r*.15,r*.26,-.3,0,Math.PI*2);c.fill();c.restore()}
+/* 늘어진 줄(2차 곡선) + 전구 */
+function aqString(c,x0,y0,x1,y1,pal,r,seed){var dx=x1-x0,dy=y1-y0,d=Math.hypot(dx,dy);if(d<4)return;var sag=clamp(d*.2,10,110)+Math.sin(t*.8+seed)*2,mx=(x0+x1)/2,my=(y0+y1)/2+sag;
+  c.save();c.beginPath();c.moveTo(x0,y0);c.quadraticCurveTo(mx,my,x1,y1);c.lineWidth=Math.max(1.2,r*.32);c.strokeStyle='rgba(15,35,55,.85)';c.stroke();c.restore();
+  var n=Math.max(2,Math.round(d/(r*4.4)));for(var k=1;k<n;k++){var u=k/n,a=(1-u)*(1-u),b=2*(1-u)*u,e=u*u;aqBulb(c,a*x0+b*mx+e*x1,a*y0+b*my+e*y1+r*.75,r,pal,k+(seed|0))}}
+/* --- ① 전구 줄 잇기 --- */
+var AQL_MAX=20,AQL_COST=80,AQLK=null;
+function AQL(){if(!Array.isArray(save.aqL))save.aqL=[];return save.aqL}
+function aqU(it){if(!it.u)it.u=Math.random().toString(36).slice(2,9);return it.u}
+function aqItem(u){var p=DS().placed;for(var i=0;i<p.length;i++)if(p[i].u===u&&!p[i].pv)return p[i];return null}
+function aqPrune(){var L=AQL(),n0=L.length;save.aqL=L.filter(function(s){return (s.a==='h'||aqItem(s.a))&&(s.b==='h'||aqItem(s.b))&&(s.a!=='h'&&s.b!=='h'||HS().lv>0)});return save.aqL.length!==n0}
+function aqAnchor(u){var W=TWW();if(u==='h'){var p=housePos();if(!HS().lv)return null;return {x:p.x,y:p.y-(p.d?p.d.ih*.6:p.h*.78)}}
+  var it=aqItem(u);if(!it)return null;var D=decoById(it.k);if(!D)return null;var w=decoW(D,it.s),h=w*decoAR(D);return {x:it.x*W,y:it.y*ch-h*(it.k==='xm_mytree'?.2:.3)}}
+function aqLink(a,b,free){var L=AQL();aqPrune();L=AQL();if(a===b){banner(T('같은 소품끼리는 못 이어요'),'');return false}
+  if(L.some(function(s){return (s.a===a&&s.b===b)||(s.a===b&&s.b===a)})){banner(T('이미 이어져 있어요'),'');return false}
+  if(L.length>=AQL_MAX){banner(T('전구 줄은 ')+AQL_MAX+T('줄까지 이어요'),'');return false}
+  if(!free){var c={cur:'pearls',price:AQL_COST};if(!pay(c)){short(c);return false}}
+  L.push({a:a,b:b,c:L.length%AQB.length});persist();return true}
+function aqDrawLights(){try{var L=AQL();if(!L.length)return;var r=Math.max(3,decoU()*.0105),lx0=tankCam-xOff()/tankZ-60,lx1=tankCam+viewW()+60;
+  for(var i=0;i<L.length;i++){var s=L[i],A=aqAnchor(s.a),B=aqAnchor(s.b);if(!A||!B)continue;if(Math.max(A.x,B.x)<lx0||Math.min(A.x,B.x)>lx1)continue;aqString(ctx,A.x,A.y,B.x,B.y,s.c|0,r,i*3.1)}
+  if(AQLK&&deco.on){var it=aqItem(AQLK);if(it){var A2=aqAnchor(AQLK);if(A2){ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.5+.3*Math.sin(t*6);ctx.drawImage(glow('255,230,120'),A2.x-r*8,A2.y-r*8,r*16,r*16);ctx.restore()}}}}catch(e){}}
+var drawHouseAQ=drawHouse;drawHouse=function(){var r=drawHouseAQ.apply(this,arguments);aqDrawLights();return r};
+/* 꾸미기 도구 줄에 버튼 2개 */
+(function(){var tl=$('ddTools'),st=$('dtStore');if(!tl||$('dtLink'))return;
+  function mk(id,svg){var b=document.createElement('button');b.type='button';b.id=id;b.innerHTML=svg+'<span></span>';tl.insertBefore(b,st);return b}
+  mk('dtLink','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 6c4 5 15 5 19 0" fill="none" stroke="#0B2C4A" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="7" cy="12" rx="2.2" ry="3" fill="#FF5A5A" stroke="#0B2C4A" stroke-width="1.5"/><ellipse cx="12" cy="13.2" rx="2.2" ry="3" fill="#FFD23F" stroke="#0B2C4A" stroke-width="1.5"/><ellipse cx="17" cy="12" rx="2.2" ry="3" fill="#5AA9FF" stroke="#0B2C4A" stroke-width="1.5"/></svg>');
+  mk('dtUnlink','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 7c3 4 7 4.5 8 4.4M13.5 11.4c1 .1 5-.4 8-4.4" fill="none" stroke="#0B2C4A" stroke-width="1.8" stroke-linecap="round"/><path d="M8 15l8 6M16 15l-8 6" stroke="#E5386B" stroke-width="2.4" stroke-linecap="round"/></svg>');
+  $('dtLink').addEventListener('click',function(){var it=DS().placed[deco.sel];if(!it)return;if(AQLK){AQLK=null;banner(T('취소했어요'),'');decoTools();return}AQLK=aqU(it);persist();banner(T('이을 소품이나 집을 눌러요'),T('전구 줄 하나에 진주 ')+AQL_COST);decoTools()});
+  $('dtUnlink').addEventListener('click',function(){var it=DS().placed[deco.sel];if(!it||!it.u)return;var u=it.u,n0=AQL().length;save.aqL=AQL().filter(function(s){return s.a!==u&&s.b!==u});if(save.aqL.length!==n0){persist();banner(T('전구 줄을 뗐어요'),'');try{svSnd('bub')}catch(e){}}AQLK=null;decoTools()})})();
+var decoToolsAQ=decoTools;decoTools=function(){var r=decoToolsAQ.apply(this,arguments);try{var it=deco.sel>=0?DS().placed[deco.sel]:null,a=$('dtLink'),b=$('dtUnlink');if(a){a.lastChild.textContent=AQLK?T('취소'):T('전구 줄');a.classList.toggle('on',!!AQLK)}
+  if(b){b.lastChild.textContent=T('줄 빼기');b.hidden=!(it&&it.u&&AQL().some(function(s){return s.a===it.u||s.b===it.u}))}}catch(e){}return r};
+/* 잇는 중이면 다음 누르기가 상대 고르기 */
+var decoDownAQ=decoDown;decoDown=function(e){if(!AQLK)return decoDownAQ.apply(this,arguments);
+  try{var wx=s2wx(e.clientX),wy=s2wy(e.clientY),i=decoHit(wx,wy),from=AQLK,to=null;if(i>=0)to=aqU(DS().placed[i]);else if(houseHit(wx,wy)&&HS().lv)to='h';
+    AQLK=null;if(to&&to!==from){if(aqLink(from,to)){persist();crumb('aqL');try{svSnd('gem');buzz([15,25,15])}catch(x){}banner(T('전구 줄을 이었어요'),T('진주 ')+'-'+AQL_COST)}}else if(to===from)banner(T('같은 소품끼리는 못 이어요'),'');else banner(T('취소했어요'),'');
+    if(i>=0)deco.sel=i;decoTools();refreshTank()}catch(x){AQLK=null}return true};
+var decoEndAQ=decoEnd;decoEnd=function(){AQLK=null;try{aqPrune()}catch(e){}return decoEndAQ.apply(this,arguments)};
+/* 트리를 받은 사람: 트리 ↔ 집 첫 줄 무료(한 번) */
+function aqFirstLink(){try{if(save.aqL1)return;var it=xmTreeIt();if(!it||!HS().lv)return;save.aqL1=1;if(aqLink(aqU(it),'h',true)){persist();try{refreshTank()}catch(e){}if(page==='tank')banner(T('전구 줄을 이었어요'),T('트리와 집을 전구 줄로 이어 드렸어요'))}}catch(e){}}
+setInterval(aqFirstLink,20000);setTimeout(aqFirstLink,9000);
+/* --- ② 해저 궁전 증축 --- */
+var PAL=[{c:30000},{c:42000},{c:60000},{c:85000},{c:120000}],PAL_FX=['탑을 잇는 전구 줄','탑 깃발','떠오르는 진주 반짝이','꼭대기 빛기둥','황금 왕관'];
+function palS(){var o=HS();return o.lv>=5?clamp(o.ps|0,0,PAL.length):0}
+var houseRateAtAQ=houseRateAt;houseRateAt=function(lv){var r=houseRateAtAQ.apply(this,arguments);try{if(lv>=5){var s=palS();if(s)r=Math.round(r*(1+.12*s))}}catch(e){}return r};
+function palUp(){var o=houseSettle();if(o.lv<5)return;var s=palS();if(s>=PAL.length)return;var c={cur:'pearls',price:PAL[s].c};if(!pay(c)){short(c);return}
+  o.ps=s+1;o.at=Date.now();persist();crumb('palace:'+o.ps);var p=housePos();tankPops.push({x:p.x,y:p.y-p.h*1.1,txt:'★'+o.ps,life:1.8,sm:1});try{buzz([30,40,60]);svSnd('lvl')}catch(e){}
+  banner(T('궁전을 증축했어요!')+' ★'+o.ps,T(PAL_FX[s])+' · '+T('진주 샘 +')+(12*o.ps)+'%');houseClose();refreshTank();refreshHome(true)}
+var houseOpenAQ=houseOpen;houseOpen=function(){var r=houseOpenAQ.apply(this,arguments);try{var o=HS(),b=$('hsPal');if(!b){b=document.createElement('button');b.className='btn';b.id='hsPal';b.type='button';b.addEventListener('click',palUp);$('hsUp').parentNode.insertBefore(b,$('hsUp').nextSibling)}
+  if(o.lv<5){b.hidden=true;return r}var s=palS();$('hsName').textContent=HOUSE[5].n+(s?' ★'+s:'')+' Lv.5';b.textContent='';
+  if(s<PAL.length){var c={cur:'pearls',price:PAL[s].c};b.appendChild(document.createTextNode(T('궁전 증축 → ')+'★'+(s+1)+' '));b.appendChild(costEl(c));b.disabled=!canPay(c);b.hidden=false;
+    $('hsNext').textContent=T('다음 증축: ')+T(PAL_FX[s])+' · '+T('진주 샘 +')+(12*(s+1))+'%'}
+  else{b.hidden=true;$('hsNext').textContent=T('완성된 궁전이에요!')+' ★★★★★'}}catch(e){}return r};
+/* 궁전 그림 위 효과 (houseFx 안: 집 가운데 아래가 0,0 · 그림 왼쪽 위 = (-iw/2, -ih*.965)) */
+var PAL_PT={top:[.5,.03],l:[.19,.27],r:[.81,.27]};
+function palXY(q,iw,ih){return [-iw/2+q[0]*iw,-ih*.965+q[1]*ih]}
+var houseFxAQ=houseFx;houseFx=function(lv,iw,ih){var r=houseFxAQ.apply(this,arguments);try{if(lv<5)return r;var s=palS();if(!s)return r;var c=ctx,T0=palXY(PAL_PT.top,iw,ih),L0=palXY(PAL_PT.l,iw,ih),R0=palXY(PAL_PT.r,iw,ih),u=iw/420;
+  if(s>=4){c.save();c.globalCompositeOperation='lighter';var cols=['255,120,160','255,220,120','120,220,255','170,140,255'];for(var k=0;k<4;k++){var a=-Math.PI/2+Math.sin(t*.35+k*1.6)*.55;c.save();c.translate(T0[0],T0[1]);c.rotate(a+Math.PI/2);var g=c.createLinearGradient(0,0,0,-ih*1.1);g.addColorStop(0,'rgba('+cols[k]+',.5)');g.addColorStop(1,'rgba('+cols[k]+',0)');c.fillStyle=g;c.beginPath();c.moveTo(-iw*.025,0);c.lineTo(-iw*.12,-ih*1.1);c.lineTo(iw*.12,-ih*1.1);c.lineTo(iw*.025,0);c.closePath();c.globalAlpha=.6+.25*Math.sin(t*1.3+k);c.fill();c.restore()}c.restore()}
+  if(s>=3){c.save();c.globalCompositeOperation='lighter';for(var j=0;j<14;j++){var ph=((t*.18+j/14)%1+1)%1,x=-iw*.5+iw*h2(j,331,1)+Math.sin(t*1.3+j)*iw*.03,y=-ih*.1-ph*ih*1.05,rr=(2.5+3*h2(j,331,2))*u*2;c.globalAlpha=Math.sin(ph*Math.PI)*.8;c.drawImage(glow('255,245,215'),x-rr*2.5,y-rr*2.5,rr*5,rr*5)}c.restore()}
+  if(s>=2){[L0,R0,T0].forEach(function(P0,k){if(k===2&&s>=5)return;var U2=u*2.8,px=P0[0],py=P0[1]-(k===2?8:6)*U2,ph=t*3+k;c.save();c.strokeStyle='#6A4A10';c.lineWidth=Math.max(1,2.2*u);c.beginPath();c.moveTo(px,P0[1]-6*U2);c.lineTo(px,py-14*U2);c.stroke();
+    var fw=(k===2?34:28)*U2,fh=(k===2?16:13)*U2,top=py-14*U2;c.beginPath();c.moveTo(px,top);for(var q=0;q<=6;q++){var xx=px+fw*q/6,yy=top+Math.sin(ph+q*.9)*fh*.18;c.lineTo(xx,yy)}c.lineTo(px+fw*.92,top+fh*.5+Math.sin(ph+5)*fh*.18);
+    for(q=6;q>=0;q--){c.lineTo(px+fw*q/6,top+fh+Math.sin(ph+q*.9)*fh*.18)}c.closePath();c.fillStyle=k===2?'#E5386B':'#2FB3A8';c.fill();c.lineWidth=Math.max(1,1.6*u);c.strokeStyle='#0B2C4A';c.stroke();
+    c.beginPath();c.arc(px,top-2*U2,3*U2,0,Math.PI*2);c.fillStyle='#FFD34D';c.fill();c.restore()})}
+  if(s>=1){var rb=Math.max(2.4,iw*.016);aqString(c,L0[0],L0[1]+ih*.1,T0[0],T0[1]+ih*.22,0,rb,1);aqString(c,T0[0],T0[1]+ih*.22,R0[0],R0[1]+ih*.1,0,rb,7);aqString(c,L0[0],L0[1]+ih*.3,R0[0],R0[1]+ih*.3,1,rb,4)}
+  if(s>=5){var cx=T0[0],cy=T0[1]+ih*.03+Math.sin(t*1.6)*ih*.004,cw2=iw*.2,chh=iw*.12;c.save();c.globalCompositeOperation='lighter';c.globalAlpha=.5+.2*Math.sin(t*2.2);c.drawImage(glow('255,215,110'),cx-cw2*1.2,cy-chh*1.9,cw2*2.4,cw2*2.4);c.restore();
+    c.save();c.beginPath();c.moveTo(cx-cw2/2,cy);c.lineTo(cx-cw2/2,cy-chh*.75);c.lineTo(cx-cw2*.25,cy-chh*.35);c.lineTo(cx,cy-chh);c.lineTo(cx+cw2*.25,cy-chh*.35);c.lineTo(cx+cw2/2,cy-chh*.75);c.lineTo(cx+cw2/2,cy);c.closePath();
+    var g2=c.createLinearGradient(0,cy-chh,0,cy);g2.addColorStop(0,'#FFF3A0');g2.addColorStop(1,'#E0A21E');c.fillStyle=g2;c.fill();c.lineWidth=Math.max(1.2,iw*.008);c.strokeStyle='#6A4A10';c.stroke();
+    [[-.5,-.75,'#FFFFFF'],[0,-1,'#FF5A8A'],[.5,-.75,'#FFFFFF'],[0,-.35,'#5AA9FF']].forEach(function(q){c.beginPath();c.arc(cx+q[0]*cw2,cy+q[1]*chh,Math.max(1.6,iw*.012),0,Math.PI*2);c.fillStyle=q[2];c.fill();c.lineWidth=1;c.stroke()});c.restore()}}catch(e){}return r};
+(function(){var st=document.createElement('style');st.textContent='#dtLink.on{background:#FFF4D6!important;box-shadow:inset 0 0 0 2.5px #E3B95A!important}#hsPal{background:linear-gradient(180deg,#FFD25A,#F08A12)!important;color:#fff!important;-webkit-text-stroke:0!important;text-shadow:0 2px 0 rgba(120,50,0,.55)!important}';document.head.appendChild(st)})();
 if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(boot);else boot();
 })();
 </script>

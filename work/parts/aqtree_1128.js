@@ -40,13 +40,13 @@ var camClampXB=camClamp;camClamp=function(){var reset=tankCam<0,r=camClampXB.app
 xmOrnAdd=function(k,n,quiet){var o=XT();o.inv[k]=(o.inv[k]|0)+(n||1);persist();if(!quiet){var nm=(XORN.filter(function(q){return q[0]===k})[0]||[,''])[1];setTimeout(function(){banner(T('장식을 받았어요!'),T(nm)+' · '+T('수족관 트리를 눌러 달아요'))},900)}};
 /* 수족관에서 트리 누르기 → 꾸미기 창 (집 · 손님 · 선물 · 물고기는 원래대로) */
 var tankTapXB=tankTap;tankTap=function(wx,wy){try{if(!VIEWM&&!VISIT&&!deco.on&&!houseHit(wx,wy)&&!(typeof guestHit==='function'&&guestHit(wx,wy))){var pl=DS().placed,i=decoHit(wx,wy);
-  if(i>=0&&pl[i].k==='xm_mytree'){var W=TWW(),R=decoU()*.07,gift=false;if(xmSeason()){XG().g.forEach(function(g){var x=g.x*W;if(Math.hypot(wx-x,wy-(floorAt(x)-2-R))<R*1.8)gift=true});
+  if(i>=0&&pl[i].k==='xm_mytree'){var W=TWW(),R=decoU()*.07,gift=false,Dt=decoById('xm_mytree'),tw0=decoW(Dt,pl[i].s),th0=tw0*decoAR(Dt);if(Math.abs(wx-pl[i].x*W)>tw0*.3||wy>pl[i].y*ch+th0*.28)return tankTapXB.apply(this,arguments);if(xmSeason()){XG().g.forEach(function(g){var x=g.x*W;if(Math.hypot(wx-x,wy-(floorAt(x)-2-R))<R*1.8)gift=true});
       if(xmTreeGiftCan()){var tx=pl[i].x*W+R*2.2;if(Math.hypot(wx-tx,wy-(floorAt(tx)-2-R))<R*1.8)gift=true}}
     var fish=false;for(var q=0;q<tank.length;q++){if(Math.hypot(wx-tank[q].x,wy-tank[q].y)<tankSize(tank[q].L)*.9+6){fish=true;break}}
     if(!gift&&!fish){DECO_BT[i]=t;try{svSnd('bub',.8);buzz(8)}catch(e){}xmTreeOpen();return}}}}catch(e){}return tankTapXB.apply(this,arguments)};
 /* ③ 꾸미기 창: 장식 가게 */
 function xbtBuy(k){var c={cur:'pearls',price:XORN_P[k]||150};if(!pay(c)){short(c);return}var o=XT();o.inv[k]=(o.inv[k]|0)+1;XTD.sel=k;persist();crumb('ornBuy:'+k);
-  try{svSnd('gem');buzz([15,25,15])}catch(e){}var nm=(XORN.filter(function(q){return q[0]===k})[0]||[,''])[1];banner(T('장식을 샀어요'),T(nm)+' · '+T('트리에 달아 보세요'));xmTreeRender();try{refreshHome&&refreshHome(true)}catch(e){}}
+  try{svSnd('gem');buzz([15,25,15])}catch(e){}var nm=(XORN.filter(function(q){return q[0]===k})[0]||[,''])[1];if(!xbtBuy.n){banner(T('장식을 샀어요'),T(nm)+' · '+T('트리에 달아 보세요'))}xbtBuy.n=(xbtBuy.n|0)+1;xmTreeRender();try{refreshHome&&refreshHome(true)}catch(e){}}
 var xmTreeRenderXB=xmTreeRender;xmTreeRender=function(){var r=xmTreeRenderXB.apply(this,arguments);try{var el=$('xmTreeP');if(!el)return r;var T0=XT();
   var nn=el.querySelector('.xmt-none');if(nn)nn.textContent=T('가진 장식이 없어요 · 아래 장식 가게에서 진주로 사요');
   var sh=$('xmtShop');if(!sh){sh=document.createElement('section');sh.id='xmtShop';sh.className='xmt-shop';sh.innerHTML='<h2></h2><p class="xmt-sh-sub"></p><div class="xmt-sh-grid"></div><p class="xmt-sh-bal"></p>';el.querySelector('.xmt-panel').insertBefore(sh,$('xmtX'))}

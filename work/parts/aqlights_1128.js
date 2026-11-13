@@ -45,14 +45,14 @@ var drawHouseAQ=drawHouse;drawHouse=function(){var r=drawHouseAQ.apply(this,argu
   function mk(id,svg){var b=document.createElement('button');b.type='button';b.id=id;b.innerHTML=svg+'<span></span>';tl.insertBefore(b,st);return b}
   mk('dtLink','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 6c4 5 15 5 19 0" fill="none" stroke="#0B2C4A" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="7" cy="12" rx="2.2" ry="3" fill="#FF5A5A" stroke="#0B2C4A" stroke-width="1.5"/><ellipse cx="12" cy="13.2" rx="2.2" ry="3" fill="#FFD23F" stroke="#0B2C4A" stroke-width="1.5"/><ellipse cx="17" cy="12" rx="2.2" ry="3" fill="#5AA9FF" stroke="#0B2C4A" stroke-width="1.5"/></svg>');
   mk('dtUnlink','<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 7c3 4 7 4.5 8 4.4M13.5 11.4c1 .1 5-.4 8-4.4" fill="none" stroke="#0B2C4A" stroke-width="1.8" stroke-linecap="round"/><path d="M8 15l8 6M16 15l-8 6" stroke="#E5386B" stroke-width="2.4" stroke-linecap="round"/></svg>');
-  $('dtLink').addEventListener('click',function(){var it=DS().placed[deco.sel];if(!it)return;if(AQLK){AQLK=null;banner(T('취소했어요'),'');decoTools();return}AQLK=aqU(it);persist();banner(T('이을 소품이나 집을 눌러요'),T('전구 줄 하나에 진주 ')+AQL_COST);decoTools()});
+  $('dtLink').addEventListener('click',function(){var it=DS().placed[deco.sel];if(!it)return;if(AQLK){AQLK=null;banner(T('취소했어요'),'');decoTools();return}AQLK=aqU(it);persist();banner(T('이을 소품이나 집을 눌러요'),T('전구 줄 하나에 진주 ')+AQL_COST+' · '+T('빈 곳을 밀면 옆으로 가요'));decoTools()});
   $('dtUnlink').addEventListener('click',function(){var it=DS().placed[deco.sel];if(!it||!it.u)return;var u=it.u,n0=AQL().length;save.aqL=AQL().filter(function(s){return s.a!==u&&s.b!==u});if(save.aqL.length!==n0){persist();banner(T('전구 줄을 뗐어요'),'');try{svSnd('bub')}catch(e){}}AQLK=null;decoTools()})})();
 var decoToolsAQ=decoTools;decoTools=function(){var r=decoToolsAQ.apply(this,arguments);try{var it=deco.sel>=0?DS().placed[deco.sel]:null,a=$('dtLink'),b=$('dtUnlink');if(a){a.lastChild.textContent=AQLK?T('취소'):T('전구 줄');a.classList.toggle('on',!!AQLK)}
   if(b){b.lastChild.textContent=T('줄 빼기');b.hidden=!(it&&it.u&&AQL().some(function(s){return s.a===it.u||s.b===it.u}))}}catch(e){}return r};
 /* 잇는 중이면 다음 누르기가 상대 고르기 */
 var decoDownAQ=decoDown;decoDown=function(e){if(!AQLK)return decoDownAQ.apply(this,arguments);
   try{var wx=s2wx(e.clientX),wy=s2wy(e.clientY),i=decoHit(wx,wy),from=AQLK,to=null;if(i>=0)to=aqU(DS().placed[i]);else if(houseHit(wx,wy)&&HS().lv)to='h';
-    AQLK=null;if(to&&to!==from){if(aqLink(from,to)){persist();crumb('aqL');try{svSnd('gem');buzz([15,25,15])}catch(x){}banner(T('전구 줄을 이었어요'),T('진주 ')+'-'+AQL_COST)}}else if(to===from)banner(T('같은 소품끼리는 못 이어요'),'');else banner(T('취소했어요'),'');
+    if(!to){return decoDownAQ.apply(this,arguments)}AQLK=null;if(to!==from){if(aqLink(from,to)){persist();crumb('aqL');try{svSnd('gem');buzz([15,25,15])}catch(x){}banner(T('전구 줄을 이었어요'),T('진주 ')+'-'+AQL_COST)}}else banner(T('같은 소품끼리는 못 이어요'),'');
     if(i>=0)deco.sel=i;decoTools();refreshTank()}catch(x){AQLK=null}return true};
 var decoEndAQ=decoEnd;decoEnd=function(){AQLK=null;try{aqPrune()}catch(e){}return decoEndAQ.apply(this,arguments)};
 /* 트리를 받은 사람: 트리 ↔ 집 첫 줄 무료(한 번) */

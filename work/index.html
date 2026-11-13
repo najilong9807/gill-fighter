@@ -16694,12 +16694,12 @@ abyTr(TRT,{'내 친구':'My friends','친구 추가':'Add friend','친구를 추
  '닉네임으로 찾기':'Find by nickname','찾기':'Search','찾는 사람이 없어요':'No one found','공개한 수족관만 찾을 수 있어요':'Only public aquariums can be found','아직 친구가 없어요 · 친구 수족관에 놀러 가서 「친구 추가」를 눌러요':'No friends yet · visit an aquarium and tap “Add friend”',
  '진주 선물':'Gift pearls','님에게 진주 보내기':': send pearls','보낼 진주':'Pearls to send','오늘 더 보낼 수 있어요: ':'You can still send today: ','보내기':'Send','선물을 보냈어요!':'Gift sent!','진주가 모자라요':'Not enough pearls',
  '오늘은 더 보낼 수 없어요 (하루 1,000)':'Daily limit reached (1,000 a day)','친구가 오늘 받을 수 있는 양을 넘었어요':'Your friend can’t receive more today','그 코드의 수족관이 없어요':'No aquarium with that code','내 수족관이에요':'That’s your aquarium',
- '선물 기능은 곧 열려요':'Gifts are coming soon','님이 진주 ':' sent you ','개를 보냈어요 🎁':' pearls 🎁','친구에게서 진주 선물이 왔어요 🎁':'Pearl gifts from friends 🎁','1 ~ 1,000':'1 – 1,000','친구':'Friend','놀러 가기':'Visit','빼기':'Remove','진주 ':'Pearls '});
+ '선물 기능은 곧 열려요':'Gifts are coming soon','님이 진주 ':' sent you ','개를 보냈어요 🎁':' pearls 🎁','친구에게서 진주 선물이 왔어요 🎁':'Pearl gifts from friends 🎁','1 ~ 1,000':'1 – 1,000','놀러 가기':'Visit','빼기':'Remove','진주 ':'Pearls '});
 abyTr(TRJ,{'내 친구':'ともだち','친구 추가':'ともだちに追加','친구를 추가했어요':'ともだちに追加しました','이미 친구예요':'もうともだちです','친구는 30명까지예요':'ともだちは30人まで','친구에서 뺐어요':'ともだちから外しました',
  '닉네임으로 찾기':'ニックネームでさがす','찾기':'さがす','찾는 사람이 없어요':'見つかりません','공개한 수족관만 찾을 수 있어요':'公開した水族館だけさがせます','아직 친구가 없어요 · 친구 수족관에 놀러 가서 「친구 추가」를 눌러요':'まだともだちがいません · 水族館に遊びに行って「ともだちに追加」を押してね',
  '진주 선물':'真珠をおくる','님에게 진주 보내기':'さんに真珠をおくる','보낼 진주':'おくる真珠','오늘 더 보낼 수 있어요: ':'今日おくれる残り: ','보내기':'おくる','선물을 보냈어요!':'プレゼントをおくりました！','진주가 모자라요':'真珠が足りません',
  '오늘은 더 보낼 수 없어요 (하루 1,000)':'今日はもうおくれません（1日1,000まで）','친구가 오늘 받을 수 있는 양을 넘었어요':'相手が今日受け取れる量をこえました','그 코드의 수족관이 없어요':'そのコードの水族館はありません','내 수족관이에요':'自分の水族館です',
- '선물 기능은 곧 열려요':'プレゼント機能はもうすぐ','님이 진주 ':'さんから真珠 ','개를 보냈어요 🎁':'個が届きました 🎁','친구에게서 진주 선물이 왔어요 🎁':'ともだちから真珠のプレゼント 🎁','1 ~ 1,000':'1〜1,000','친구':'ともだち','놀러 가기':'遊びに行く','빼기':'外す','진주 ':'真珠 '});
+ '선물 기능은 곧 열려요':'プレゼント機能はもうすぐ','님이 진주 ':'さんから真珠 ','개를 보냈어요 🎁':'個が届きました 🎁','친구에게서 진주 선물이 왔어요 🎁':'ともだちから真珠のプレゼント 🎁','1 ~ 1,000':'1〜1,000','놀러 가기':'遊びに行く','빼기':'外す','진주 ':'真珠 '});
 var FG_MAX=1000;
 function FRL(){if(!Array.isArray(save.frL))save.frL=[];return save.frL}
 function frHas(c){return FRL().some(function(f){return f.c===c})}
@@ -16719,10 +16719,7 @@ function frRow(c,n,mine,sub){var li=document.createElement('li');li.className='f
 function frFind(){var q=String($('frNick').value||'').trim().slice(0,12),ul=document.querySelector('#tkFr .fr-fl');if(!q||!ul)return;ul.textContent='';var w=document.createElement('li');w.className='fr-empty';w.textContent=T('불러오는 중…');ul.appendChild(w);
   lbReq('rpc/gf_tank_find',{p_nick:q}).then(function(rows){ul.textContent='';rows=(rows||[]).filter(function(x){return x.code!==TKS().code});if(!rows.length){var e=document.createElement('li');e.className='fr-empty';e.textContent=T('찾는 사람이 없어요');ul.appendChild(e);return}
     rows.forEach(function(x){ul.appendChild(frRow(x.code,x.nick,false,x.code+' · '+T('물고기 ')+Math.min(visNum(x.fishn),40)+T('마리')))})}).catch(function(e){ul.textContent='';fgErr(e)})}
-/* 코드로 바로 친구 추가(놀러 가지 않고) */
-function frAddCode(){var c=gfCodeIn(($('frCode')||{}).value||'').slice(0,6);if(c.length!==6){banner(T('6자리 코드'),'');return}if(c===TKS().code){banner(T('내 수족관이에요'),'');return}if(frHas(c)){banner(T('이미 친구예요'),'');return}
-  lbReq('rpc/gf_tank_get',{p_code:c}).then(function(r){var row=r&&r[0];if(!row){banner(T('그 코드의 수족관이 없어요'),'');return}frAdd(row.code||c,row.nick)}).catch(function(){banner(T('인터넷 연결을 확인해 주세요'),'')})}
-var tkFrOpenFG=tkFrOpen;tkFrOpen=function(){var r=tkFrOpenFG.apply(this,arguments);try{var row=document.querySelector('#tkFr .fr-go .fr-row');if(row&&!$('frAddC')){var x=document.createElement('button');x.type='button';x.className='btn ghost';x.id='frAddC';x.addEventListener('click',frAddCode);row.appendChild(x)}if($('frAddC'))$('frAddC').textContent='＋ '+T('친구');frRender();fgClaim()}catch(e){}return r};
+var tkFrOpenFG=tkFrOpen;tkFrOpen=function(){var r=tkFrOpenFG.apply(this,arguments);try{frRender();fgClaim()}catch(e){}return r};
 /* 구경 중: 친구 추가 · 진주 선물 */
 var visBarFG=visBar;visBar=function(){var r=visBarFG.apply(this,arguments);try{var b=$('visBar'),v=VISIT;if(!b||!v)return r;var row=b.querySelector('.vb-btns');var a=b.querySelector('.vb-add'),g=b.querySelector('.vb-gift');
   if(!a){a=document.createElement('button');a.type='button';a.className='btn ghost vb-add';a.addEventListener('click',function(){if(VISIT)frAdd(VISIT.code,VISIT.nick)});row.insertBefore(a,b.querySelector('.vb-out'))}
@@ -16756,7 +16753,7 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)setT
  '.fr-mb{flex:none;width:38px;height:34px;border:0;border-radius:10px;font-size:16px;background:#EAF4FB;box-shadow:inset 0 0 0 2px #B9D4E6;cursor:pointer}.fr-mb.gift{background:#FFF1D6;box-shadow:inset 0 0 0 2px #E8C77A}.fr-mb.add{background:#DFF6E6;box-shadow:inset 0 0 0 2px #8FD3A6;font-weight:700}.fr-mb.del{background:#F4F4F6;color:#8A93A0}'+
  '#fgP{z-index:63}.fg-panel{display:block!important;height:auto!important}.fg-panel>*{margin:0 0 10px}.fg-panel h1{font-size:19px!important;margin:0 0 10px!important}.fg-have{text-align:center;font-weight:700}.fg-l{display:flex;flex-direction:column;gap:4px;font-size:13px;color:#2A5A7A}'+
  '.fg-l input{font:700 22px/1.2 sans-serif;text-align:center;border:0;border-radius:12px;padding:10px;background:#fff;box-shadow:inset 0 0 0 2.5px #0B2C4A;color:#0B2C4A;width:100%;box-sizing:border-box}.fg-q{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.fg-qb{border:0;border-radius:10px;padding:8px 2px;font:700 14px sans-serif;background:#EAF4FB;box-shadow:inset 0 0 0 2px #B9D4E6;color:#0B2C4A;cursor:pointer}.fg-qb.on{background:#FFF4D6;box-shadow:inset 0 0 0 2.5px #E3B95A}'+
- '.fg-left{text-align:center;font-size:12.5px;color:#5C7C95}.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fg-row .btn{min-height:0!important;height:46px!important;padding:0!important;margin:0!important}.vb-btns .vb-add,.vb-btns .vb-gift{white-space:nowrap}#frAddC{flex:none;white-space:nowrap;width:auto!important;padding:0 10px!important}@media (max-width:400px){#tkFr .fr-go .fr-row{flex-wrap:wrap}#tkFr .fr-go #frCode{flex:1 1 100%;min-width:0}#tkFr .fr-go #frGo,#tkFr .fr-go #frAddC{flex:1 1 0}}';document.head.appendChild(st)})();
+ '.fg-left{text-align:center;font-size:12.5px;color:#5C7C95}.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fg-row .btn{min-height:0!important;height:46px!important;padding:0!important;margin:0!important}.vb-btns .vb-add,.vb-btns .vb-gift{white-space:nowrap}';document.head.appendChild(st)})();
 if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(boot);else boot();
 })();
 </script>

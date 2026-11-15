@@ -289,8 +289,8 @@ def step_build(api, v):
     if not bs: log('BUILD none VALID for', VER); return None
     b = bs[0]; num = b['attributes'].get('version')
     cur = (api.get('appStoreVersions/%s/relationships/build' % v['id']).get('data') or {}).get('id')
-    if cur == b['id']: log('BUILD already attached', num); return b
-    log('BUILD attach', num, '(was %s)' % (cur or 'none'))
+    if cur == b['id']: log('BUILD already attached', num, 'uploaded', b['attributes'].get('uploadedDate')); return b
+    log('BUILD attach', num, '(was %s)' % (cur or 'none'), 'uploaded', b['attributes'].get('uploadedDate'))
     if DRY: return b
     api.req('PATCH', 'appStoreVersions/%s/relationships/build' % v['id'], {'data': {'type': 'builds', 'id': b['id']}})
     return b

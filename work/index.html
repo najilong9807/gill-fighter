@@ -7441,7 +7441,7 @@ function tankTurn(f,dir,s){var n=(typeof performance!=='undefined'?performance.n
   f._tf+=(dir-f._tf)*Math.min(1,d*5.5);var turning=Math.abs(dir-f._tf)>.08,sc=(f._tf<0?-1:1)*(.42+.58*Math.abs(f._tf));
   var sw=swimPh(f,turning?s*7:(f.v!=null?Math.abs(f.v)*3+s*.8:s*2.4),s);return [sc,turning?-dir*.12*Math.sin(Math.PI*Math.min(1,Math.abs(dir-f._tf)/2)):0,sw]}
 function refreshTank(){var d=DS();$('tkPearl').textContent=nf(save.pearls);$('tkGem').textContent=nf(save.gems);var no=tankIds().length,na=ownedIds().length,cnt=(no<na?no+' / '+na:no);
-  var dst=decoStars();$('tkCount').textContent=(LANG==='en'?(cnt+' fish · '+d.placed.length+' decor'):(LANG==='ja'?'魚'+cnt+'匹 · 小物'+d.placed.length+'個':'물고기 '+cnt+'마리 · 소품 '+d.placed.length+'개'))+(dst?' · '+T('꾸밈 ')+'★'+dst:'');
+  var dst=decoStars();$('tkCount').textContent=(LANG==='en'?(cnt+' fish · '+d.placed.length+' decor'):(LANG==='ja'?'魚'+cnt+'匹 · 小物'+d.placed.length+'個':'물고기 '+cnt+'마리 · 소품 '+d.placed.length+'개'))+(dst?' · '+(LANG==='ko'?T('꾸밈 '):'')+'★'+dst:''); /* 1.1.28 영어 · 일본어는 'Decor' 낱말이 'decor'와 겹치고 줄이 꺾여서 ★만 */
   /* 1.1.10(b173) 아래 안내: 집이 없으면 '집터를 눌러 집을 지어요'(전엔 집이 없어도 '집을 눌러 진주를 받아요'가 떴다) */var tip=$('tkTip');if(tip)tip.textContent=HS().lv>0?(houseN()>=1?T('집을 눌러 진주를 받아요'):T('물을 톡 누르면 물고기가 모여들어요')):T('집터를 눌러 집을 지어요');zoomUI()}
 function toTank(){if(!owns(sel))sel=save.owned[0];showTab('tank')}
 function decoStart(){try{houseSettle()}catch(e){}DECO_S0=decoStars();bgPv=null;decoCancelPv(true);deco.on=true;deco.sel=-1;deco.fold=false;deco.drag=null;$('decoDrawer').hidden=false;$('decoBtn').hidden=true;$('feedBtn').hidden=true;$('tkTip').hidden=true;$('tabs').hidden=true;renderDrawer();decoTools()}
@@ -16065,11 +16065,11 @@ var XM2H={wn_santa:['ac_xmsanta',1.18,.24,.05],wn_antler:['ac_xmantler',1.2,.2,0
 Object.keys(XM2H).forEach(function(id){var old=ACC_HEAD[id];ACC_HEAD[id]=function(c,U){var q=XM2H[id],im=xmSpr(q[0]);if(!im)return old&&old.apply(this,arguments);var w=U*q[1],hh=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-hh,w,hh)}});
 setTimeout(function(){try{['ac_xmsanta','ac_xmantler','ac_holly'].forEach(function(k){xmSpr(k)})}catch(e){}},1500);
 /* 1.1.28 늑구 '물고기 꾸미기 템이랑 눈사람도(펫 말고도)': 그림 꾸미기 5가지 더 — 눈사람 탈 · 엘프 모자 · 미니 트리 모자(새로) + 눈꽃 털모자 · 트리 꼭대기 별(코드 그림 → 그림) */
+/* 1.1.28 번역을 먼저 등록(전엔 이름 T()가 번역 등록보다 먼저 돌아서 영어 · 일본어 화면에 한국어 그대로 나왔음) */abyTr(TRT,{'눈사람 탈':'Snowman Head','엘프 모자':'Elf Hat','미니 트리 모자':'Mini Tree Hat','눈사람':'Snowman'});abyTr(TRJ,{'눈사람 탈':'ゆきだるまのかぶりもの','엘프 모자':'エルフのぼうし','미니 트리 모자':'ミニツリーぼうし','눈사람':'ゆきだるま'});
 ACC.push({id:'xm_snowhead',slot:'head',name:T('눈사람 탈'),c:{cur:'pearls',price:1500},wn:1},{id:'xm_elf',slot:'head',name:T('엘프 모자'),c:{cur:'pearls',price:1000},wn:1},{id:'xm_treehat',slot:'head',name:T('미니 트리 모자'),c:{cur:'gems',price:25},wn:1});
 Object.assign(XM2H,{xm_snowhead:['ac_xmsnowhead',1.22,.42,0],xm_elf:['ac_xmelf',1.2,.24,.02],xm_treehat:['ac_xmtreehat',.86,.16,0],wn_beanie:['ac_xmbeanie',1.08,.26,0],wn_star:['ac_xmstar',.82,.18,0]});
 ['xm_snowhead','xm_elf','xm_treehat','wn_beanie','wn_star'].forEach(function(id){var old=ACC_HEAD[id];ACC_HEAD[id]=function(c,U){var q=XM2H[id],im=xmSpr(q[0]);if(!im)return old&&old.apply(this,arguments);var w=U*q[1],hh=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-hh,w,hh)}});
 setTimeout(function(){try{['ac_xmsnowhead','ac_xmelf','ac_xmtreehat','ac_xmbeanie','ac_xmstar'].forEach(function(k){xmSpr(k)})}catch(e){}},1600);
-abyTr(TRT,{'눈사람 탈':'Snowman Head','엘프 모자':'Elf Hat','미니 트리 모자':'Mini Tree Hat','눈사람':'Snowman'});abyTr(TRJ,{'눈사람 탈':'ゆきだるまのかぶりもの','엘프 모자':'エルフのぼうし','미니 트리 모자':'ミニツリーぼうし','눈사람':'ゆきだるま'});
 /* --- ④ 눈사람 짝꿍(펫) --- */
 ACC.push({id:'pr_snowman',slot:'pet',name:T('눈사람 짝꿍'),c:{cur:'gems',price:0},wn:1,ex:1});PRPET.pr_snowman='pet_snowman';PRPET_K.pet_snowman=['swim',1.1];
 PET_AB.pr_snowman={n:'눈보라',d:function(l){return (12-l)+T('초마다 주변 적을 얼려 느리게')}};

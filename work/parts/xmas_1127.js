@@ -413,11 +413,11 @@ var XM2H={wn_santa:['ac_xmsanta',1.18,.24,.05],wn_antler:['ac_xmantler',1.2,.2,0
 Object.keys(XM2H).forEach(function(id){var old=ACC_HEAD[id];ACC_HEAD[id]=function(c,U){var q=XM2H[id],im=xmSpr(q[0]);if(!im)return old&&old.apply(this,arguments);var w=U*q[1],hh=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-hh,w,hh)}});
 setTimeout(function(){try{['ac_xmsanta','ac_xmantler','ac_holly'].forEach(function(k){xmSpr(k)})}catch(e){}},1500);
 /* 1.1.28 늑구 '물고기 꾸미기 템이랑 눈사람도(펫 말고도)': 그림 꾸미기 5가지 더 — 눈사람 탈 · 엘프 모자 · 미니 트리 모자(새로) + 눈꽃 털모자 · 트리 꼭대기 별(코드 그림 → 그림) */
+abyTr(TRT,{'눈사람 탈':'Snowman Head','엘프 모자':'Elf Hat','미니 트리 모자':'Mini Tree Hat','눈사람':'Snowman'});abyTr(TRJ,{'눈사람 탈':'ゆきだるまのかぶりもの','엘프 모자':'エルフのぼうし','미니 트리 모자':'ミニツリーぼうし','눈사람':'ゆきだるま'});
 ACC.push({id:'xm_snowhead',slot:'head',name:T('눈사람 탈'),c:{cur:'pearls',price:1500},wn:1},{id:'xm_elf',slot:'head',name:T('엘프 모자'),c:{cur:'pearls',price:1000},wn:1},{id:'xm_treehat',slot:'head',name:T('미니 트리 모자'),c:{cur:'gems',price:25},wn:1});
 Object.assign(XM2H,{xm_snowhead:['ac_xmsnowhead',1.22,.42,0],xm_elf:['ac_xmelf',1.2,.24,.02],xm_treehat:['ac_xmtreehat',.86,.16,0],wn_beanie:['ac_xmbeanie',1.08,.26,0],wn_star:['ac_xmstar',.82,.18,0]});
 ['xm_snowhead','xm_elf','xm_treehat','wn_beanie','wn_star'].forEach(function(id){var old=ACC_HEAD[id];ACC_HEAD[id]=function(c,U){var q=XM2H[id],im=xmSpr(q[0]);if(!im)return old&&old.apply(this,arguments);var w=U*q[1],hh=w*im.naturalHeight/im.naturalWidth;c.drawImage(im,-w/2+q[3]*U,U*q[2]-hh,w,hh)}});
 setTimeout(function(){try{['ac_xmsnowhead','ac_xmelf','ac_xmtreehat','ac_xmbeanie','ac_xmstar'].forEach(function(k){xmSpr(k)})}catch(e){}},1600);
-abyTr(TRT,{'눈사람 탈':'Snowman Head','엘프 모자':'Elf Hat','미니 트리 모자':'Mini Tree Hat','눈사람':'Snowman'});abyTr(TRJ,{'눈사람 탈':'ゆきだるまのかぶりもの','엘프 모자':'エルフのぼうし','미니 트리 모자':'ミニツリーぼうし','눈사람':'ゆきだるま'});
 /* --- ④ 눈사람 짝꿍(펫) --- */
 ACC.push({id:'pr_snowman',slot:'pet',name:T('눈사람 짝꿍'),c:{cur:'gems',price:0},wn:1,ex:1});PRPET.pr_snowman='pet_snowman';PRPET_K.pet_snowman=['swim',1.1];
 PET_AB.pr_snowman={n:'눈보라',d:function(l){return (12-l)+T('초마다 주변 적을 얼려 느리게')}};

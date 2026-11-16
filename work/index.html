@@ -4946,8 +4946,8 @@ function svAchRender(){var S=svSave();svSt();var tb=SV.achTab;if(LANG!=='ko'){tr
         c.innerHTML='<i>'+svIco(on?col:'#C9D2DA',k)+'</i><b></b><small></small>';c.querySelector('b').textContent=on?nm:'???';c.querySelector('small').textContent=on||g[0]==='e'?ds:T('아직 못 만났어요');gr.appendChild(c)});box.appendChild(gr)})}}
 /* 1.1.8(빌드 98) 보스 도감: 챕터마다 중간 · 마지막 보스, 처음 잡으면 보석 2 */
 function svBkS(){var S=svSave();if(!S.bk)S.bk={};return S.bk}
-function svBossDex(box){var B=svBkS(),tot=0,got=0,n,k;for(n=1;n<=SV_LBN;n++)['boss1','boss2'].forEach(function(t){tot++;if(B[n+'_'+t])got++});var h=document.createElement('h4');h.className='svcx-h';h.textContent=T('보스 도감')+' '+got+' / '+tot+' · '+T('처음 잡으면 보석 2');box.appendChild(h);
-  var gr=document.createElement('div');gr.className='svcx svbx';for(n=1;n<=SV_LBN;n++)['boss1','boss2'].forEach(function(t){var C=SV_CH[n],L=byId(C.ids[t]),r=B[n+'_'+t],c=document.createElement('div');c.className='svcx-c svbx-c'+(r?'':' off');
+function svBossDex(box){var B=svBkS(),tot=0,got=0,n,k,NB=SV_CH.length-1; /* 1.1.29 9~30장 보스도 도감에 */for(n=1;n<=NB;n++)['boss1','boss2'].forEach(function(t){tot++;if(B[n+'_'+t])got++});var h=document.createElement('h4');h.className='svcx-h';h.textContent=T('보스 도감')+' '+got+' / '+tot+' · '+T('처음 잡으면 보석 2');box.appendChild(h);
+  var gr=document.createElement('div');gr.className='svcx svbx';for(n=1;n<=NB;n++)['boss1','boss2'].forEach(function(t){var C=SV_CH[n],L=byId(C.ids[t]),r=B[n+'_'+t],c=document.createElement('div');c.className='svcx-c svbx-c'+(r?'':' off');
     var pic=document.createElement('i');try{pic.appendChild(campPicEl(L,72,44,'svbx-p'))}catch(x){}c.appendChild(pic);var b=document.createElement('b');b.textContent=r&&L?L.name:'???';var sm=document.createElement('small');sm.textContent=(LANG==='en'?'Ch. '+n:n+T('장'))+' · '+(t==='boss1'?T('중간 보스'):T('마지막 보스'))+(r?' · '+T('처치 ')+r.n+tU(r.n,'번')+' · '+T('최단 ')+fmtTime(r.f):'');c.appendChild(b);c.appendChild(sm);gr.appendChild(c)});box.appendChild(gr)}
 function svTrShow(){svTrRender();$('svTr').hidden=false}
 function svTrRender(){var ul=$('svTrList');if(!ul)return;ul.textContent='';$('svTrPearl').textContent=T('진주 ')+nf(save.pearls||0);
@@ -5669,12 +5669,12 @@ function svEnd0(win,quit){var lb0=svLbScore();
   try{var pf=SV.pf;if(pf&&pf.n>900&&pf.s/pf.n>.06)svStuckRep('lag',JSON.stringify({sr:Math.round(pf.s/pf.n*100),n:pf.n,w:Math.round(pf.w),wt:pf.wt,we:pf.we,b:pf.b,w5:Object.keys(SV.w).map(function(k){return k+SV.w[k].lv}).join(','),dpr:window.devicePixelRatio||1,lod:SV.lod?1:0,lt:save.lite?1:0}))}catch(e){}
   runSnapClear();if(P.menu){P.menu=false;$('pause').hidden=true}$('svUp').hidden=true;
   state='over';P.dead=true;joy=null;shake=reduce?0:.45;if(!win)buzz(70);bannerOff();if(!win&&!quit)MUS.lose();else if(win&&!quit)MUS.win();
-  var S=svSave(),C=SV.C||SV_CH[1],O=svChS(C.n),tm=Math.round(SV.t),rb0=svReadyN(),base=(svTv()/5+SV.kills/5+(SV.won?60:0)+(SV.bossN>1||(SV.bossN&&!SV.boss)?40:0))*(1+.25*(C.n-1)),
-    gain=Math.min((SV.inf?750:350)+150*(C.n-1),Math.floor(base*PEARL_K)+(SV.bonus||0)),gem=win?2:0,spc=!!SV.dm||SV.tr!=null,newB=!quit&&!spc&&tm>(O.best||0),firstClear=win&&!spc&&!O.clear; /* 1.1.9(빌드 150) 시련 · 오늘의 도전은 보통 챕터 기록 · 클리어(다음 챕터 열림)에 안 들어감 */
+  var S=svSave(),C=SV.C||SV_CH[1],O=svChS(C.n),tm=Math.round(SV.t),rb0=SV.pre&&SV.pre.rb!=null?Math.min(SV.pre.rb,svReadyN()):svReadyN(),base=(svTv()/5+SV.kills/5+(SV.won?60:0)+(SV.bossN>1||(SV.bossN&&!SV.boss)?40:0))*(1+.25*(C.n-1)),
+    gain=Math.min((SV.inf?750:350)+150*(C.n-1),Math.floor(base*PEARL_K)+(SV.bonus||0)),gem=win?2:0,spc=!!SV.dm||SV.tr!=null,newB=!quit&&!spc&&tm>((SV.pre?SV.pre.b:O.best)||0),firstClear=win&&!spc&&!O.clear; /* 1.1.9(빌드 150) 시련 · 오늘의 도전은 보통 챕터 기록 · 클리어(다음 챕터 열림)에 안 들어감 */
   if(SV.br){gain=Math.min(1000,60*SV.br.k+Math.floor(SV.t/8));gem=SV.br.k>=SV.br.list.length?10:Math.floor(SV.br.k/2);newB=false;firstClear=false;if(SV.br.wk){var WK=svWkS();gain=Math.min(750,75*SV.br.k+Math.floor(SV.t/8));gem=0;if(SV.br.k>=SV.br.list.length&&!WK.done&&!quit&&SV.br.wkK===svWkKey()){WK.done=1;gem=20}}}
   if(SV.arc==='gold')gain=Math.floor(gain*1.3);if(svRl('crown'))gain=Math.floor(gain*1.1);if(svTr('pearl'))gain=Math.floor(gain*(1+.05*svTr('pearl')));if(SV.hard)gain=Math.floor(gain*1.8);if(quit)gain=Math.floor(gain*.5);gain=Math.floor(gain*(1+((SV.eqb&&SV.eqb.pearl)||0)/100)*(x2On()?2:1));var eqD=svEqDrop(win,quit,Math.round(SV.t)),hdG=0;
-  if(SV.hard&&!quit){newB=tm>(O.hbest||0);if(newB)O.hbest=tm;if(win&&!O.hclear){O.hclear=1;hdG=10+5*C.n;gem+=hdG}firstClear=false}
-  var dyR=svDayEnd(win,quit,tm),trR=svTrlEnd(win,quit,tm);if(SV.br){var BRs=svSave();if(!SV.br.wk){if(!quit&&SV.br.k>(BRs.brBest||0)){BRs.brBest=SV.br.k;newB=true}if(win)BRs.brClear=1}}else if(SV.inf){if(tm>(O.inf||0)&&!quit)O.inf=tm;newB=!quit&&tm>=(O.inf||0)&&tm>0}else if(!SV.hard&&!spc){if(tm>O.best)O.best=tm;if(win)O.clear=1}var RB=SV.rb||{t:0,k:0,gu:0},dTm=Math.max(0,tm-RB.t);svStAdd('kills',Math.max(0,SV.kills-RB.k));svStAdd('gulp',Math.max(0,SV.gulp-RB.gu));svSeen('w',Object.keys(SV.w)[0]||'bubble');if(tm>(S.best||0))S.best=tm;if(SV.kills>(S.kills||0))S.kills=SV.kills;if(SV.lv>(S.lv||0))S.lv=SV.lv;if(win)S.wins=(S.wins||0)+1;if(svLbScore()>lb0){S.lbF=P.look&&P.look.id;setTimeout(lbSync,2500)} /* 1.1.10 심해 생존 랭킹 */var rbN=svReadyN()-rb0;
+  if(SV.hard&&!quit){newB=tm>((SV.pre?SV.pre.hb:O.hbest)||0);if(newB)O.hbest=tm;if(win&&!O.hclear){O.hclear=1;hdG=10+5*C.n;gem+=hdG}firstClear=false}
+  var dyR=svDayEnd(win,quit,tm),trR=svTrlEnd(win,quit,tm);if(SV.br){var BRs=svSave();if(!SV.br.wk){if(!quit&&SV.br.k>(BRs.brBest||0)){BRs.brBest=SV.br.k;newB=true}if(win)BRs.brClear=1}}else if(SV.inf){var inf0=O.inf||0;if(tm>inf0)O.inf=tm;newB=!quit&&tm>inf0 /* 1.1.29 무한은 그만둬도 버틴 시간 기록(진주는 절반 그대로) */}else if(!SV.hard&&!spc){if(tm>O.best)O.best=tm;if(win)O.clear=1}var RB=SV.rb||{t:0,k:0,gu:0},dTm=Math.max(0,tm-RB.t);svStAdd('kills',Math.max(0,SV.kills-RB.k));svStAdd('gulp',Math.max(0,SV.gulp-RB.gu));svSeen('w',Object.keys(SV.w)[0]||'bubble');if(tm>(S.best||0))S.best=tm;if(SV.kills>(S.kills||0))S.kills=SV.kills;if(SV.lv>(S.lv||0))S.lv=SV.lv;if(win)S.wins=(S.wins||0)+1;if(svLbScore()>lb0){S.lbF=P.look&&P.look.id;setTimeout(lbSync,2500)} /* 1.1.10 심해 생존 랭킹 */var rbN=svReadyN()-rb0;
   svRkAdd(win,quit,tm);svSt().ptime=(svSt().ptime||0)+dTm;if(tm>=20&&!(RB.t>=20))svDqAdd('plays',1);svDqAdd('time',dTm);var msId=P.look&&P.look.id,msL0=svMsLv(msId);if(msId){svMsS()[msId]=(svMsS()[msId]||0)+dTm}SV.msUp=msId&&svMsLv(msId)>msL0?svMsLv(msId):0;save.pearls+=gain;save.gems=(save.gems||0)+gem;P.lastGain=gain;SV.bonus=0;
   var x2b=$('svX2');if(x2b){SV.x2g=gain;x2b.hidden=quit||gain<15||x2On()||SV.dm;x2b.disabled=false;x2b.textContent=T('광고 보고 진주 2배')+' (+'+nf(gain)+')'}
   if(tm>=20&&!(RB.t>=20)){dmAdd('solo',1);dmAdd('surv',1)}dmAdd('pearl',Math.max(0,gain-(RB.g||0)));dmAdd('time',dTm);if(SV.gulp-RB.gu>0)dmAdd('gulp',SV.gulp-RB.gu);persist();
@@ -6362,7 +6362,7 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(mp){netIDied(by);setTimeout(netStop,400)}
   var rm=mp&&!!NET.room,RR=rm?roomRank():null;
   if(rm){rk=RR.r;P.rank=rk;P.mpBonus=curSrv.mult;P.trophy=0} /* 친구 바다는 순위 보너스·트로피·대전 전적 없음(혼자 들어가 1위 반복 방지) */
-  else if(mp){rk=mpRank();P.rank=rk; /* 1.1.3: 대전 순위는 끝날 때 크기 순위로만(전엔 판 중 가장 높았던 순위와 둘 중 좋은 쪽) */P.mpBonus=curSrv.mult*(rk===1?1.5:rk<=3?1.2:1);var M=save.mp;M.games++;if(rk===1)M.wins++;if(rk<=3)M.top3++;P.trophy=rk===1?30:rk<=3?15:rk<=(bots.length+1)/2?5:0;M.trophy+=P.trophy;M.kills=(M.kills||0)+P.kills;if(!(M.best>0&&M.best<=rk))M.best=rk;if(!(M.time>=P.time))M.time=Math.round(P.time)}
+  else if(mp){rk=mpRank();P.rank=rk; /* 1.1.3: 대전 순위는 끝날 때 크기 순위로만(전엔 판 중 가장 높았던 순위와 둘 중 좋은 쪽) */P.mpBonus=curSrv.mult*(rk===1?1.5:rk<=3?1.2:1);var M=save.mp,mpOk=(P.time||0)>=20;M.games++;P.trophy=0;if(mpOk){if(rk===1)M.wins++;if(rk<=3)M.top3++;P.trophy=rk===1?30:rk<=3?15:rk<=(bots.length+1)/2?5:0;M.trophy+=P.trophy;if(!(M.best>0&&M.best<=rk))M.best=rk}M.kills=(M.kills||0)+P.kills; /* 1.1.29: 들어가자마자 그만두기를 반복해 1위 · 트로피 · 업적 보석을 모을 수 있던 것 → 20초 넘게 한 판만 */if(!(M.time>=P.time))M.time=Math.round(P.time)}
   if(by&&by.bot)by.bot.kills++;
   win=win||P.full;var cm=P.full&&P.s>=P.capS*.999&&P.maxS<=P.capS?P.look.cap:cmOf(P.s),L=P.look,gain=runGain(win); /* 1.1.10 사용자 요청: 기록 크기는 판 중 가장 컸던 크기가 아니라 끝날 때 크기(갈매기 · 물어뜯기로 줄면 줄어든 크기) */
   /* 1.1.10 처음 10분: 처음 3판(15초 넘게 한 싱글)은 진주 선물 +20 · +15 · +10 — 두 번째 판쯤 첫 물고기를 해금할 수 있게 */
@@ -6382,7 +6382,7 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
     if(!mp){var old=save.top[r[2]]||0;if(r[3]>old){save.top[r[2]]=r[3];if(old>0||r[2]==='score')li.className='new'}else{var sm=document.createElement('small');sm.className='rbest';sm.textContent=T('최고 ')+(r[2]==='time'?fmtTime(old):r[2]==='deepm'?fmtDepth(old):nf(old));s.appendChild(sm)}}
     li.appendChild(s);li.appendChild(b);rec.appendChild(li)});
   var bRank=0,mRank=0;
-  if(mp)mRank=mboardAdd({cm:Math.round(cm*10)/10,f:L.id,r:rk,n:rm?RR.n:bots.length+1,k:P.kills||0,t:Math.round(P.time||0),dt:Date.now()});
+  if(mp&&!rm)mRank=mboardAdd({cm:Math.round(cm*10)/10,f:L.id,r:rk,n:rm?RR.n:bots.length+1,k:P.kills||0,t:Math.round(P.time||0),dt:Date.now()});
   /* 1.1.8(빌드 138) 중간에 그만둬도(일시정지 › 그만하기) 그 판 기록은 남긴다(최고 기록 · 기록판 · 주간 랭킹) */
   var cb=P.cbase||(P.cbase={});
   if(!mp){if(!save.sc)save.sc={};if(!(save.sc[L.id]>=sc))save.sc[L.id]=sc;if(cb.bdt&&save.board)save.board=save.board.filter(function(x){return x.dt!==cb.bdt}); /* 1.1.8(빌드 139) 이어하기 뒤 다시 끝나면 같은 판 기록을 두 줄로 남기지 않는다 */
@@ -6390,7 +6390,7 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   /* 1.1.4 오늘의 미션 진행: 20초 넘게 한 판만 '판 수'로 센다 */
   /* 1.1.8(빌드 139) 이어하기(광고·보석·끊긴 판)로 같은 판이 두 번 끝나도 미션은 늘어난 만큼만 센다 */
   if((P.time||0)>=20&&!cb.cnt){cb.cnt=1;dmAdd(mp?'arena':'solo',1);if(mp&&!rm&&rk<=3)dmAdd('top3',1)}
-  dmAdd('eat',Math.max(0,(P.eaten||0)-(cb.eaten||0)));dmAdd('pearl',Math.max(0,gain-(cb.gain||0)));cb.eaten=P.eaten||0;cb.gain=gain;if(!mp)dmAdd('deep',Math.round(P.deep||0));dmAdd('time',Math.round(P.time||0));{if(mp)wkBest('multi',Math.round(cm*10)/10,L.id);else wkBest('single',sc,L.id);persist()}overRank(mp?'multi':'single');overShare(mp,L,cm,sc,quit);if(!quit&&((!mp&&bRank===1&&sc>0)||(mp&&!rm&&rk===1)))askReview(mp?'arena1':'best');
+  dmAdd('eat',Math.max(0,(P.eaten||0)-(cb.eaten||0)));dmAdd('pearl',Math.max(0,gain-(cb.gain||0)));cb.eaten=P.eaten||0;cb.gain=gain;if(!mp)dmAdd('deep',Math.round(P.deep||0));dmAdd('time',Math.round(P.time||0));{if(mp){if(!rm&&cm<=5000)wkBest('multi',Math.round(cm*10)/10,L.id)}else wkBest('single',sc,L.id);persist()} /* 1.1.29 친구 바다 판은 대전 랭킹에 안 올림 */overRank(mp?'multi':'single');overShare(mp,L,cm,sc,quit);if(!quit&&((!mp&&bRank===1&&sc>0)||(mp&&!rm&&rk===1)))askReview(mp?'arena1':'best');
   $('oSize').textContent=fmt(cm);$('oEat').textContent=mp?P.kills:P.eaten;$('oPearl').textContent='+'+nf(gain);$('oTotal').textContent=nf(save.pearls);
   var n=nextLocked(),msg=win?T('끝까지 키웠어요! 사냥한 만큼 진주를 더 받았어요. ')+(P.starGems?T('별 보상으로 보석 ')+P.starGems+T('개도 받았어요. '):'')+(starsOf(L.id)<3?T('다음 별은 사냥 ')+HUNT_GOAL[starsOf(L.id)-1]+T('마리예요. '):T('다음 목표는 사냥 ')+nextHuntGoal(P.hunt)+T('마리예요. ')):(gain>0?T('자란 만큼 진주를 받았어요. '):T('자라기 전에 먹혀서 진주가 없어요. 조금이라도 크면 진주가 생겨요. '));if(P.candyN>0&&!P.camp)msg+=T(HW?'할로윈 사탕 ':'선물 상자 ')+P.candyN+T('개로 진주 ')+Math.round(P.candyN*CANDY_B*PEARL_K)+T('개를 더 받았어요. ');try{if(HWB&&HWB.done&&!P.camp&&!P.surv)msg+=T('호박 유령 아귀를 물리쳐 진주 ')+Math.round(250*PEARL_K)+T('개를 더 받았어요. ')}catch(_){}
   if(mp)msg=(mRank===1?T('대전 최고 기록 경신! 끝날 때 크기 ')+fmt(cm)+'. ':'')+(by?(by.bot?by.bot.name:by.look.name)+josa(by.bot?by.bot.name:by.look.name,T('에게'),T('에게'))+T(' 먹혔어요. '):'')+curSrv.name+T('에서 최종 ')+rk+T('위로 끝났어요')+(P.trophy?T(', 트로피 +')+P.trophy+T(' (지금 ')+save.mp.trophy+T('개)'):'')+T('. 바로 다시 들어갈 수 있어요. ');
@@ -8031,7 +8031,7 @@ function continueRun(free){
   P.dead=false;P.vx=P.vy=0;P.fx={ghost:3};state='play';shake=0;
   fish.forEach(function(f){if(Math.hypot(f.x-P.x,f.y-P.y)<viewR()*.7)f.stun=2});
   rings.push({x:P.x,y:P.y,r:P.s*5,life:.6,max:.6,col:'120,200,255'});texts.push({x:P.x,y:P.y-P.s*1.6,txt:T('이어하기!'),life:1.2});
-  $('over').hidden=true;$('skill').hidden=false;
+  $('over').hidden=true;$('skill').hidden=false;try{runSnap()}catch(e){} /* 1.1.29 이어하기 직후 끊겨도 진주 유지 */
 }
 var ICON_SVG={
   shield:"<svg viewBox=\"0 0 48 48\" width=\"44\" height=\"44\" aria-hidden=\"true\"><path d=\"M24 5l15 5v11c0 10-7 17-15 21C16 38 9 31 9 21V10z\" fill=\"#BFE9FF\" stroke=\"#0B2C4A\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M24 11l9 3v7c0 6-4 11-9 14z\" fill=\"#fff\" opacity=\".75\"/></svg>",
@@ -9058,7 +9058,7 @@ function renderRec(){
     if(SPRITE_SRC[e.f]){var im=document.createElement('img');im.alt='';im.src=SPRITE_SRC[e.f];th.appendChild(im)}
     var nm=document.createElement('span');nm.className='bnm';nm.textContent=byId(e.f).name;
     var sc2=document.createElement('em');sc2.textContent=fmt(e.cm);
-    var sub=document.createElement('small');sub.textContent=T('최고 ')+e.r+T('위 / ')+e.n+T('명 · 꺼-억 ')+e.k+' · '+fmtTime(e.t);
+    var sub=document.createElement('small');sub.textContent=e.r>0?T('최고 ')+e.r+T('위 / ')+e.n+T('명 · 꺼-억 ')+e.k+' · '+fmtTime(e.t):fmtTime(e.t);
     nm.appendChild(sub);li.appendChild(rk);li.appendChild(th);li.appendChild(nm);li.appendChild(sc2);mb.appendChild(li)});
   /* 1.1.10 내 심해 생존 기록: 챕터마다 가장 오래 버틴 시간 · 클리어 · 어려움 · 무한 */
   var sbd=$('sboard');if(sbd){sbd.textContent='';var sn=0;
@@ -10777,9 +10777,10 @@ var SV_LBN=8; /* 1.1.16: 챕터가 20개로 늘어도 랭킹 점수는 예전 8�
 function svLbScore(){var S=svSave(),hi=0,n,O;for(n=1;n<=SV_LBN;n++){O=S.ch[n];if(O&&O.best>0){var v=n*1000+Math.min(420,Math.floor(O.clear?420:O.best));if(v>hi)hi=v}}return hi}
 function svLbTxt(v){var n=Math.floor(v/1000),t=Math.round(v%1000);return (LANG==='en'?'Ch '+n:n+T('장'))+' · '+(t>=420?T('클리어'):fmtTime(t))}
 function lbVal(m,v){return m==='camp'?'★'+Math.floor(v/100)+' · '+campFl(Math.round(v%100)):m==='surv'?svLbTxt(v):m==='single'?nf(v)+T('점'):fmt(v)}
-function lbBest(m){if(m==='camp')return campLbScore();if(m==='surv')return svLbScore();if(m==='single')return save.top&&save.top.score>0?Math.round(save.top.score):0;var b=save.mboard&&save.mboard[0];return b&&b.cm>0&&b.cm<=5000?Math.round(b.cm*10)/10:0}
+function lbBest(m){if(m==='camp')return campLbScore();if(m==='surv')return svLbScore();if(m==='single')return save.top&&save.top.score>0?Math.round(save.top.score):0;var b=(save.mboard||[]).filter(function(x){return x&&x.cm>0&&x.cm<=5000})[0];return b?Math.round(b.cm*10)/10:0}
 function lbFish(m){if(m==='camp')return sel;if(m==='surv')return (save.sv&&save.sv.lbF)||sel;if(m==='single')return (save.board&&save.board[0]&&save.board[0].f)||sel;return (save.mboard&&save.mboard[0]&&save.mboard[0].f)||sel}
 /* 1.2 주간 랭킹: 매주 월요일(한국 시간) 새로 시작. 이번 주 내 최고 기록을 기기에 따로 들고 있다가 gf_submit_week로 올린다 */
+function wkIdAt(ts){var d=new Date(ts+9*3600e3),day=(d.getUTCDay()+6)%7;d.setUTCDate(d.getUTCDate()-day+3);var y=d.getUTCFullYear(),j=new Date(Date.UTC(y,0,4)),w=1+Math.round(((d-j)/864e5-3+((j.getUTCDay()+6)%7))/7);return y+'-W'+(w<10?'0':'')+w} /* 1.1.29 끊긴 판은 그 판을 한 주의 주간 기록으로만 */
 function wkId(){var d=new Date(Date.now()+9*3600e3),day=(d.getUTCDay()+6)%7;d.setUTCDate(d.getUTCDate()-day+3);var y=d.getUTCFullYear(),j=new Date(Date.UTC(y,0,4)),w=1+Math.round(((d-j)/864e5-3+((j.getUTCDay()+6)%7))/7);return y+'-W'+(w<10?'0':'')+w}
 function wkBest(m,v,f){var w=wkId();if(!save.wk||save.wk.w!==w)save.wk={w:w,single:0,multi:0};if(v>0&&v>(save.wk[m]||0)){save.wk[m]=m==='single'?Math.round(v):Math.round(v*10)/10;if(f){if(!save.wk.f)save.wk.f={};save.wk.f[m]=f}}return save.wk[m]||0} /* 1.1.10 이번 주 기록을 세운 물고기를 같이 기억(전엔 주간 랭킹에 역대 최고 기록의 물고기가 올라감) */
 function lbSyncWeek(){if(!save.lbSentW)save.lbSentW={};var nick=netClean(save.nick||''),w=wkId();['single','multi'].forEach(function(m,k){var v=wkBest(m);if(!(v>0)||(m==='multi'&&v>5000))return;var sent=save.lbSentW[m]||{};if(sent.w===w&&sent.v===v&&sent.n===nick)return;
@@ -10841,24 +10842,24 @@ setTimeout(lbSync,4000);
 var RUNK='gf.run';
 /* 1.1.8(빌드 139) 끊긴 판(앱이 갑자기 닫힘) 기록 남기기: 싱글·대전은 최고 기록 · 기록판 · 주간 랭킹 · 미션, 심해 생존은 진주 · 최고 기록 · 임무 */
 function runRecCommit(r,g){if(r.camp||r.sc==null)return null;var cb={eaten:(r.cb&&r.cb.eaten)||0,gain:(r.cb&&r.cb.gain)||0,cnt:(r.cb&&r.cb.cnt)||0,bdt:(r.cb&&r.cb.bdt)||0},mp=r.m==='multi',t=r.t||0;
-  if(!mp){if(!save.top)save.top={};[['score',r.sc],['time',t],['eaten',r.e||0],['deepm',r.d||0]].forEach(function(o){if(o[1]>(save.top[o[0]]||0))save.top[o[0]]=o[1]});if(!save.sc)save.sc={};if(r.id&&!(save.sc[r.id]>=r.sc))save.sc[r.id]=r.sc;if(r.id&&r.cm>0&&!(save.best[r.id]>=r.cm))save.best[r.id]=r.cm;
-    if(cb.bdt&&save.board)save.board=save.board.filter(function(x){return x.dt!==cb.bdt});var e={sc:r.sc,f:r.id,cm:r.cm||0,e:r.e||0,h:r.h||0,d:r.d||0,t:t,dt:Date.now()};if(r.sc>0){boardAdd(e);cb.bdt=e.dt}wkBest('single',r.sc,r.id)}
-  else if(r.cm>0&&r.cm<=5000)wkBest('multi',r.cm,r.id);
+  if(!mp){if(!save.top)save.top={};[['score',r.sc],['time',t],['hunt',r.h||0],['deepm',r.d||0]] /* 1.1.29: 끊긴 판 사냥 기록이 'eaten'으로 잘못 들어가 최고 사냥 수가 안 바뀌던 것 */.forEach(function(o){if(o[1]>(save.top[o[0]]||0))save.top[o[0]]=o[1]});if(!save.sc)save.sc={};if(r.id&&!(save.sc[r.id]>=r.sc))save.sc[r.id]=r.sc;if(r.id&&r.cm>0&&!(save.best[r.id]>=r.cm))save.best[r.id]=r.cm;
+    if(cb.bdt&&save.board)save.board=save.board.filter(function(x){return x.dt!==cb.bdt});var e={sc:r.sc,f:r.id,cm:r.cm||0,e:r.e||0,h:r.h||0,d:r.d||0,t:t,dt:Date.now()};if(r.sc>0){boardAdd(e);cb.bdt=e.dt}if(!r.at||wkIdAt(r.at)===wkId())wkBest('single',r.sc,r.id)}
+  else if(r.cm>0&&r.cm<=5000&&!r.rm){if(!r.at||wkIdAt(r.at)===wkId())wkBest('multi',r.cm,r.id);mboardAdd({cm:Math.round(r.cm*10)/10,f:r.id,r:0,n:0,k:0,t:t,dt:Date.now()})} /* 1.1.29: 끊긴 대전 판이 주간 기록에만 들어가고 전체 기록 · 기록판엔 안 들어가던 것(친구 바다 판은 둘 다 빼기) */
   if(t>=20&&!cb.cnt){cb.cnt=1;dmAdd(mp?'arena':'solo',1)}dmAdd('eat',Math.max(0,(r.e||0)-cb.eaten));dmAdd('pearl',Math.max(0,g-cb.gain));if(!mp)dmAdd('deep',r.d||0);dmAdd('time',t);cb.eaten=r.e||0;cb.gain=g;crumb('recCommit:'+r.m);setTimeout(lbSync,3000);return cb}
 function svSnap(){var C=SV.C||SV_CH[1],base=(SV.t/5+SV.kills/5)*(1+.25*(C.n-1)),g=Math.min((SV.inf?750:350)+150*(C.n-1),Math.floor(base*PEARL_K)+(SV.bonus||0));if(SV.br)g=Math.min(1000,60*SV.br.k+Math.floor(SV.t/8));
-  var o={m:'surv',at:Date.now(),g:g,t:Math.round(SV.t),ch:C.n,k:SV.kills||0,gu:SV.gulp||0,plain:!SV.inf&&!SV.hard&&!SV.br&&!SV.dm&&SV.tr==null?1:0,id:P.look&&P.look.id,rb:SV.rb||null};
+  var o={m:'surv',at:Date.now(),g:g,t:Math.round(SV.t),ch:C.n,k:SV.kills||0,gu:SV.gulp||0,inf:SV.inf&&!SV.br&&!SV.dm&&SV.tr==null?1:0,hard:SV.hard&&!SV.inf&&!SV.br&&!SV.dm&&SV.tr==null?1:0,plain:!SV.inf&&!SV.hard&&!SV.br&&!SV.dm&&SV.tr==null?1:0,id:P.look&&P.look.id,rb:SV.rb||null};
   /* 1.1.8(빌드 144) 앱이 꺼져도 심해 생존을 이어서 할 수 있게 진행 상태도 남긴다(보스 러시 · 이번 주의 보스 제외) */
   if(!SV.br){var w={};for(var k in SV.w)w[k]=SV.w[k].lv;o.rs={n:SV.chN,inf:SV.inf?1:0,dm:SV.dm&&SV.dmKey&&SV.tr==null?SV.dmKey:0,tr:SV.tr,t:SV.t,lv:SV.lv,xp:SV.xp,hp:SV.hp,mh:SV.maxHp,w:w,pv:SV.pv,bonus:SV.bonus||0,rr:SV.reroll,rev:SV.revUsed?1:0,ad:SV.adRev||0,bn:SV.bossN||0,ba:SV.boss?1:0,arc:SV.arc||null,ult:SV.ult||0,uq:SV.upQ||0}}
   return o}
-function svRecCommit(r,g){var t=r.t||0,S=svSave(),rb=r.rb||{t:0,k:0,gu:0};var lb0=svLbScore();if(r.plain){var O=svChS(r.ch||1);if(t>(O.best||0))O.best=t}if(t>(S.best||0))S.best=t;var dk=Math.max(0,(r.k||0)-(rb.k||0)),dg=Math.max(0,(r.gu||0)-(rb.gu||0)),dtm=Math.max(0,t-(rb.t||0));if(dk)svStAdd('kills',dk);if(dg)svStAdd('gulp',dg);svSt().ptime=(svSt().ptime||0)+dtm;if(t>=20&&!((rb.t||0)>=20)){svDqAdd('plays',1);dmAdd('solo',1);dmAdd('surv',1)}svDqAdd('time',dtm);if(g)dmAdd('pearl',g);dmAdd('time',dtm);if(dg)dmAdd('gulp',dg);if(r.id&&dtm>0){svMsS()[r.id]=(svMsS()[r.id]||0)+dtm}if(svLbScore()>lb0){S.lbF=r.id;setTimeout(lbSync,3000)}crumb('recCommit:surv')}
-function runSnap(){if((state!=='play'&&state!=='pause')||mode==='race'||P.dead)return;try{if(P.surv){if(SV.t>3)localStorage.setItem(RUNK,JSON.stringify(svSnap()));return}var g=runGain(false),o={g:g,at:Date.now(),id:P.look&&P.look.id,d:Math.round(P.deep||0),m:mode};
+function svRecCommit(r,g){var t=r.t||0,S=svSave(),rb=r.rb||{t:0,k:0,gu:0};var lb0=svLbScore();if(r.plain){var O=svChS(r.ch||1);if(t>(O.best||0))O.best=t}else if(r.inf){var Oi=svChS(r.ch||1);if(t>(Oi.inf||0))Oi.inf=t}else if(r.hard){var Oh=svChS(r.ch||1);if(Math.min(t,419)>(Oh.hbest||0))Oh.hbest=Math.min(t,419)} /* 1.1.29 끊긴 무한 · 어려움 판 기록도 남김 */if(t>(S.best||0))S.best=t;var dk=Math.max(0,(r.k||0)-(rb.k||0)),dg=Math.max(0,(r.gu||0)-(rb.gu||0)),dtm=Math.max(0,t-(rb.t||0));if(dk)svStAdd('kills',dk);if(dg)svStAdd('gulp',dg);svSt().ptime=(svSt().ptime||0)+dtm;if(t>=20&&!((rb.t||0)>=20)){svDqAdd('plays',1);dmAdd('solo',1);dmAdd('surv',1)}svDqAdd('time',dtm);if(g)dmAdd('pearl',Math.max(0,g-((r.rb&&r.rb.g)||0)));dmAdd('time',dtm);if(dg)dmAdd('gulp',dg);if(r.id&&dtm>0){svMsS()[r.id]=(svMsS()[r.id]||0)+dtm}if(svLbScore()>lb0){S.lbF=r.id;setTimeout(lbSync,3000)}crumb('recCommit:surv')}
+function runSnap(){if((state!=='play'&&state!=='pause')||mode==='race'||P.dead)return;try{if(P.surv){if(SV.t>3)localStorage.setItem(RUNK,JSON.stringify(svSnap()));return}var g=runGain(false),o={g:g,at:Date.now(),id:P.look&&P.look.id,d:Math.round(P.deep||0),m:mode,rm:mode==='multi'&&NET&&NET.room?1:0};
   /* 1.1.8(빌드 139) 끊긴 판도 기록(최고 기록 · 기록판 · 주간 랭킹 · 미션)을 남기려고 점수·크기·시간·먹은 수도 적어 둔다. 탐험은 진주만(층 기록은 탐험 규칙대로) */
   if(P.camp)o.camp=1;else{o.sc=mode==='single'?scoreNow():0;o.cm=Math.round((P.full&&P.s>=P.capS*.999&&P.maxS<=P.capS?P.look.cap:cmOf(P.s))*10)/10;o.t=Math.round(P.time||0);o.e=P.eaten||0;o.h=P.hunt||0;o.cb=P.cbase||{}}
   if(mode==='single'&&!P.camp){var q={};RES_KEYS.forEach(function(k){if(P[k]!==undefined)q[k]=P[k]});q.f=P.y/H;q.cm=cmOf(P.s);o.p=q}
   localStorage.setItem(RUNK,JSON.stringify(o))}catch(e){}}
 function runSnapClear(){try{localStorage.removeItem(RUNK)}catch(e){}}
 function runRecover(){var r=null;try{r=JSON.parse(localStorage.getItem(RUNK)||'null')}catch(e){}runSnapClear();
-  if(!r||!(Date.now()-r.at<12*3600e3))return 0;var g=r.g>0?Math.min(Math.floor(r.g),100000):0;if(g)save.pearls+=g;if(r.m==='surv'){try{svRecCommit(r,g)}catch(e){}persist();try{var RS=r.rs;if(RS&&(RS.hp|0)>0&&r.t>=20&&Date.now()-r.at<30*60e3&&owns(r.id)&&svChOpen(RS.n))RES_PEND={r:r,g:g,surv:1}}catch(e){}return g}if(r.d&&!(save.deep>=r.d)&&!r.camp)save.deep=r.d;var rcb=null;try{rcb=runRecCommit(r,g)}catch(e){}persist();
+  if(!r)return 0;var old=!(Date.now()-r.at<12*3600e3);var g=!old&&r.g>0?Math.min(Math.floor(r.g),100000):0; /* 1.1.29: 12시간 넘게 지나 켜도 진주만 빼고 기록(최고 기록 · 기록판 · 생존 기록)은 남긴다 */if(g)save.pearls+=g;if(r.m==='surv'){try{svRecCommit(r,g)}catch(e){}persist();try{var RS=r.rs;if(RS&&!(RS.dm&&RS.dm!==svDayKey())&&(RS.hp|0)>0&&r.t>=20&&Date.now()-r.at<30*60e3&&owns(r.id)&&svChOpen(RS.n))RES_PEND={r:r,g:g,surv:1}}catch(e){}return g}if(r.d&&!(save.deep>=r.d)&&!r.camp)save.deep=r.d;var rcb=null;try{rcb=runRecCommit(r,g)}catch(e){}persist();
   /* 1.1.2: 싱글 판이 15초 넘게 진행 중이었고 30분 안이면 '이어서 하기'를 고를 수 있게 남겨 둔다 */
   if(r.m==='single'&&r.p&&!r.camp&&(r.p.time||0)>=15&&Date.now()-r.at<30*60e3&&owns(r.id))RES_PEND={r:r,g:g,cb:rcb};
   return g}
@@ -10879,7 +10880,7 @@ function runResume(pd){
   cam.x=P.x;cam.y=P.y;zoom=targetZoom();lastCX=cam.x;lastCY=cam.y;buildFar();
   fish.length=0;fxs.length=0;texts.length=0;rings.length=0;populate();
   rings.push({x:P.x,y:P.y,r:P.s*5,life:.6,max:.6,col:'120,200,255'});texts.push({x:P.x,y:P.y-P.s*1.6,txt:T('이어하기!'),life:1.2});
-  goalUI(true);setCap();updateHud();
+  goalUI(true);setCap();updateHud();try{runSnap()}catch(e){} /* 1.1.29: 이어한 직후 3초 안에 또 끊기면 돌려놓은 진주가 사라지던 것 */
 }
 function runResumeAsk(){
   var pd=RES_PEND;RES_PEND=null;if(!pd||state!=='home')return;var p=pd.r.p,L=byId(pd.r.id);
@@ -10893,7 +10894,7 @@ function runResumeAsk(){
 setInterval(runSnap,3000);
 /* 1.1.21 종한 '심해 생존 기록 업데이트가 실시간으로 안 된다': 전엔 판이 끝나야 랭킹에 올라갔음 → 판 도중에도 30초마다, 이번 판이 내 기록을 넘으면 바로 올림(서버는 같은 사람 20초 안 재요청을 무시하므로 30초 간격) */
 setInterval(function(){try{if(state!=='play'||!P||!P.surv||P.dead||SV.br||SV.inf||SV.dm||SV.tr!=null||!SV.chN)return;var tm=Math.round(SV.t||0);if(tm<20)return;var O=svChS(SV.chN),lb0=svLbScore();
-  if(SV.hard){if(tm>(O.hbest||0))O.hbest=Math.min(tm,419)}else if(tm>(O.best||0))O.best=Math.min(tm,419);
+  if(SV.hard){/* 1.1.29: 어려움은 판 도중에 기록을 미리 적지 않음(그만두면 기록 안 남는 규칙과 맞춤 · 랭킹은 어려움 클리어 수로 셈) */}else if(tm>(O.best||0))O.best=Math.min(tm,419);
   if(svLbScore()>lb0){svSave().lbF=P.look&&P.look.id;persist();lbSync();crumb('svLive:'+svLbScore())}}catch(e){}},30000);
 document.addEventListener('visibilitychange',function(){if(document.hidden)runSnap()});
 window.addEventListener('pagehide',runSnap);
@@ -11136,7 +11137,7 @@ function roomInvite(c){if(!/^\d{4}$/.test(c))return;if(state==='play'||state==='
 function appNative(){try{var C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.App?C.Plugins.App:null}catch(e){return null}}
 /* 1.1.5 새 버전 안내: 앱스토어에 올라간 버전이 지금 앱보다 높으면 처음 화면에 띠를 띄우고,
    그 버전을 처음 알게 됐을 때(또는 '나중에' 뒤 3일 지나서) 안내 창을 한 번 보여 준다. 업데이트는 앱스토어로 보낸다 */
-var APP_VER='1.1.28',UPD={v:null,notes:'',at:0,busy:false};
+var APP_VER='1.1.29',UPD={v:null,notes:'',at:0,busy:false};
 function verGt(a,b){a=String(a||'').split('.');b=String(b||'').split('.');for(var i=0;i<4;i++){var x=parseInt(a[i]||0,10)||0,y=parseInt(b[i]||0,10)||0;if(x!==y)return x>y}return false}
 function updCheck(force){
   var C=window.Capacitor;if(!(C&&C.isNativePlatform&&C.isNativePlatform())&&location.search.indexOf('updtest')<0)return;
@@ -11658,7 +11659,7 @@ function gfDlgClose(){var el=$('gfDlg');if(el)el.hidden=true}
 /* ① 백업 코드 */
 function CL(){var c=save.cloud;if(!c||typeof c!=='object')c=save.cloud={code:'',at:0,h:''};return c}
 function cloudData(){var o=JSON.parse(JSON.stringify(save));delete o.crashQ;delete o.crashLog;delete o.cloud;delete o.dev;return o}
-function cloudPut(force,cb){var c=CL();if(!c.code){cb&&cb(false);return}var d=cloudData(),s=JSON.stringify(d),h=s.length+':'+s.slice(-64);
+function cloudPut(force,cb){var c=CL();if(!c.code){cb&&cb(false);return}var d=cloudData(),s=JSON.stringify(d),h=s.length+':'+(function(x){var a=2166136261>>>0;for(var i=0;i<x.length;i++){a^=x.charCodeAt(i);a=Math.imul(a,16777619)>>>0}return a.toString(36)})(s); /* 1.1.29: 길이 + 끝 64글자만 비교해서 진주 · 보석 · 레벨이 바뀌어도 '그대로'로 보고 자동 백업을 6시간 건너뛰던 것 */
   if(!force&&c.h===h&&Date.now()-c.at<6*3600e3){cb&&cb(true);return}
   lbReq('rpc/gf_cloud_put',{p_code:c.code,p_data:d,p_ver:APP_VER}).then(function(){c.at=Date.now();c.h=h;persist();crumb('cloudPut');cb&&cb(true);try{achDot()}catch(e){}}).catch(function(){cb&&cb(false)})}
 function cloudMake(cb){var c=CL();if(!c.code)c.code=gfRand(12);persist();cloudPut(true,function(ok){if(!ok){banner(T('백업하지 못했어요'),T('인터넷 연결을 확인해 주세요'));cb&&cb(false);return}cb&&cb(true)})}
@@ -11668,7 +11669,7 @@ function cloudLoad(code,done){lbReq('rpc/gf_cloud_get',{p_code:code}).then(funct
 function cloudConfirm(code,row){var d=row.data,sum=T('물고기 ')+((d.owned||[]).length)+T('종')+' · '+T('진주 ')+nf(d.pearls||0)+' · '+T('보석 ')+nf(d.gems||0)+(d.nick?' · '+d.nick:'')+'\n'+T('마지막 백업: ')+gfAgo(new Date(row.updated_at).getTime());
   gfDlg({title:T('이 저장으로 바꿀까요?'),text:T('지금 이 폰의 저장은 사라지고 아래 저장으로 바뀌어요.'),code:sum,btns:[{t:T('바꾸기'),fn:function(){cloudApply(code,d)}},{t:T('취소'),ghost:1}]})}
 /* 1.1.27 늑구 '춘맘 백업 코드가 안 불러와짐': 저장을 쓴 바로 뒤 알림(banner)이 알림 내역(nlLog)을 저장하면서 persist()로 지금 폰 저장을 다시 덮어썼음(잠금이 알림 뒤에 걸려서) → 잠금을 맨 먼저 · 다시 켜기 직전에 한 번 더 씀 */
-function cloudApply(code,d){CLOUD_LOCK=1;d.cloud={code:code,at:Date.now(),h:''};d.lang=LANG;if(save.acct)d.acct=save.acct;crumb('cloudLoad');var s=JSON.stringify(d);try{localStorage.setItem('fishproto.save2',s)}catch(e){}banner(T('불러왔어요! 다시 시작할게요'),'');setTimeout(function(){try{localStorage.setItem('fishproto.save2',s)}catch(e){}location.reload()},900)}
+function cloudApply(code,d){try{var bk=localStorage.getItem('fishproto.save2');if(bk)localStorage.setItem('fishproto.save2.bak',bk)}catch(e){} /* 1.1.29 불러오기 전 이 폰 저장을 한 벌 남김 */CLOUD_LOCK=1;d.cloud={code:code,at:Date.now(),h:''};d.lang=LANG;if(save.acct)d.acct=save.acct;crumb('cloudLoad');var s=JSON.stringify(d);try{localStorage.setItem('fishproto.save2',s)}catch(e){}banner(T('불러왔어요! 다시 시작할게요'),'');setTimeout(function(){try{localStorage.setItem('fishproto.save2',s)}catch(e){}location.reload()},900)}
 var CLOUD_LOCK=0,CLOUD_T=0;
 document.addEventListener('visibilitychange',function(){if(document.hidden&&!CLOUD_LOCK&&CL().code&&Date.now()-CLOUD_T>10*60000){CLOUD_T=Date.now();cloudPut(false)}});
 /* 불러온 직후엔 persist가 새 저장을 옛 값으로 덮지 않게 막는다 */
@@ -14681,6 +14682,8 @@ var svLbScore30=svLbScore;svLbScore=function(){var v=svLbScore30();try{if(svAll3
 var svLbTxt30=svLbTxt;svLbTxt=function(v){v=+v;if(v>=21000){var h=Math.floor((v-21000)/200),i=Math.round(v-21000-h*200)*30;
   if(!h&&!i)return svLbW('all');return (h?svLbW('hard')+h+'/30':svLbW('all'))+(i>0?' · '+svLbW('inf')+fmtTime(i):'')}
   return svLbTxt30(v)};
+/* 1.1.29 판 시작 때 기록을 따로 들고 있다가 끝날 때 '최고 기록 경신' · '새 상자 N개'를 그것과 비교(판 도중 30초마다 랭킹용으로 기록을 미리 적어서 결과 화면에 새 상자 · 신기록 표시가 빠지던 것) */
+var svSetupPre=svSetup;svSetup=function(){var r=svSetupPre.apply(this,arguments);try{var O=svChS((SV.C||SV_CH[1]).n);SV.pre={b:O.best||0,hb:O.hbest||0,rb:svReadyN()}}catch(e){SV.pre=null}return r};
 /* 생존 고르기 카드 '다음 목표'도 30장 기준으로(전엔 1~8장만 보고 '무한 8장 최고'로 멈춤) */
 var modePickOpen30=modePickOpen;modePickOpen=function(){var r=modePickOpen30.apply(this,arguments);try{var el=$('mpSurvMeta');if(el&&svAll30()&&!svReadyN()){var top=svLbTop(),h=0;for(var n=1;n<=top;n++)if(!svChS(n).hclear){h=n;break}
   el.textContent=h?svLbW('next')+svLbW('hard')+svLbCh(h):svLbW('inf').trim()+svLbW('best')+fmtTime(svInfMax())}
@@ -15632,7 +15635,8 @@ var SP_LAB={'광고 보고 진주 2배':'진주 2배 받기','광고 보고 되�
 var T_SP=T;T=function(s){if(SP_LAB[s]&&spNoAds())return T_SP(SP_LAB[s]);return T_SP(s)};
 /* 저금통: 20초 넘게 한 판마다(연습 제외) 쌓임 */
 var endRunSP=endRun;endRun=function(win,quit){var st=state,t=P?(P.time||0):0,tut=false;try{tut=!!(typeof TUT!=='undefined'&&TUT&&TUT.on)}catch(e){}var r=endRunSP.apply(this,arguments);
-  try{if(st==='play'&&state!=='play'&&!tut&&t>=20&&mode!=='race'){var pg=spPig(),add=win&&!quit?SP_PIG.win:SP_PIG.run;if(pg.g<SP_PIG.max){pg.g=Math.min(SP_PIG.max,pg.g+add);persist()}}}catch(e){}return r};
+  try{if(st==='play'&&state!=='play'&&!tut&&t>=20&&mode!=='race'&&P&&!P.spEnd){P.spEnd=1;var pg=spPig(),add=win&&!quit?SP_PIG.win:SP_PIG.run;if(pg.g<SP_PIG.max){pg.g=Math.min(SP_PIG.max,pg.g+add);persist()}}}catch(e){}return r};
+var startRunSPE=startRun;startRun=function(){try{if(P)P.spEnd=0}catch(e){}return startRunSPE.apply(this,arguments)}; /* 1.1.29 저금통은 한 판에 한 번(이어하기로 두 번 끝나도) */
 /* 상점 › 보석 맨 위 '특별 상품' */
 (function(){var st=document.createElement('style');st.textContent='.sp-h{grid-column:1/-1;margin:2px 0 -2px;font:400 15px var(--disp);color:#0B2C4A;display:flex;align-items:center;justify-content:space-between}.sp-h button{font:700 11.5px system-ui,sans-serif;color:#2B6CB0;background:none;border:0;padding:4px 2px;text-decoration:underline}.good.sp{position:relative}.good.sp .ico{display:flex;align-items:center;justify-content:center;font-size:26px}.good.sp>span{white-space:pre-line}.good.sp.own .buy{background:#5CC27A!important;color:#fff}.sp-bar{display:block;width:84%;height:7px;border-radius:5px;background:rgba(11,44,74,.15);margin:3px auto 4px;overflow:hidden}.sp-bar>i{display:block;height:100%;background:linear-gradient(90deg,#FFD25A,#FF9F2E)}.sp-tag{position:absolute;top:-7px;right:-4px;background:#E5383B;color:#fff;font:700 10.5px system-ui,sans-serif;padding:2px 7px;border-radius:999px;box-shadow:0 2px 0 rgba(0,0,0,.18)}';document.head.appendChild(st)})();
 function spLeft(){var f=save.firstAt||Date.now(),ms=f+SP_ST.days*864e5-Date.now();if(ms<=0)return '';var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5);return T('남은 시간 ')+(d>0?d+(LANG==='en'?'d ':LANG==='ja'?'日':'일 '):'')+h+(LANG==='en'?'h':LANG==='ja'?'時間':'시간')}
@@ -16756,12 +16760,12 @@ function fgOpen(code,nick){if(code===TKS().code){banner(T('내 수족관이에�
   lbReq('rpc/gf_gift_left',{p_pid:lbPid()}).then(function(n){FG.left=Math.max(0,+n||0);fgPaint()}).catch(function(){FG.left=null;fgPaint()})}
 function fgAmt(){var v=Math.floor(+($('fgAmt')&&$('fgAmt').value)||0);return clamp(v,0,FG_MAX)}
 function fgPaint(){var el=$('fgP');if(!el)return;var a=fgAmt();el.querySelector('.fg-have').textContent=T('진주 ')+nf(save.pearls|0);el.querySelector('.fg-left').textContent=T('오늘 더 보낼 수 있어요: ')+(FG.left==null?'…':nf(FG.left));
-  $('fgGo').disabled=!(a>=1&&a<=(save.pearls|0)&&(FG.left==null||a<=FG.left));el.querySelectorAll('.fg-qb').forEach(function(b){b.classList.toggle('on',+b.textContent.replace(/,/g,'')===a)})}
-function fgSend(){var a=fgAmt();if(a<1)return;if((save.pearls|0)<a){banner(T('진주가 모자라요'),'');return}var b=$('fgGo');b.disabled=true;
-  lbReq('rpc/gf_gift_send',{p_to:FG.to,p_pid:lbPid(),p_code:TKS().code||null,p_nick:netClean(save.nick||''),p_amt:a}).then(function(n){n=+n;b.disabled=false;
-    if(n>=0){if((save.pearls|0)<a){return}save.pearls-=a;persist();FG.left=n;crumb('fgSend');try{svSnd('chest');buzz([20,30,40])}catch(e){}banner(T('선물을 보냈어요!'),FG.n+' · '+T('진주 ')+'-'+nf(a));$('fgP').hidden=true;try{refreshHome(true);refreshTank()}catch(e){}
+  $('fgGo').disabled=!!FG.busy||!(a>=1&&a<=(save.pearls|0)&&(FG.left==null||a<=FG.left));el.querySelectorAll('.fg-qb').forEach(function(b){b.classList.toggle('on',+b.textContent.replace(/,/g,'')===a)})}
+function fgSend(){var a=fgAmt();if(a<1||FG.busy)return;if((save.pearls|0)<a){banner(T('진주가 모자라요'),'');return}var b=$('fgGo');b.disabled=true;FG.busy=1;save.pearls-=a;persist(); /* 1.1.29: 보내는 중에 버튼이 다시 켜져 두 번 보내지고 두 번 빠지던 것 → 먼저 빼고, 안 보내지면 돌려줌 */
+  lbReq('rpc/gf_gift_send',{p_to:FG.to,p_pid:lbPid(),p_code:TKS().code||null,p_nick:netClean(save.nick||''),p_amt:a}).then(function(n){n=+n;FG.busy=0;b.disabled=false;
+    if(n>=0){FG.left=n;crumb('fgSend');try{svSnd('chest');buzz([20,30,40])}catch(e){}banner(T('선물을 보냈어요!'),FG.n+' · '+T('진주 ')+'-'+nf(a));$('fgP').hidden=true;try{refreshHome(true);refreshTank()}catch(e){}
       try{if(VISIT){for(var i=0;i<tank.length;i+=2)abyFxPush(tank[i].x,tank[i].y-20,'heart',2)}}catch(e){}return}
-    banner(n===-3?T('오늘은 더 보낼 수 없어요 (하루 1,000)'):n===-4?T('친구가 오늘 받을 수 있는 양을 넘었어요'):n===-2?T('내 수족관이에요'):n===-1?T('그 코드의 수족관이 없어요'):T('인터넷 연결을 확인해 주세요'),'');if(n===-3){FG.left=0;fgPaint()}}).catch(function(e){b.disabled=false;fgErr(e)})}
+    save.pearls+=a;persist();banner(n===-3?T('오늘은 더 보낼 수 없어요 (하루 1,000)'):n===-4?T('친구가 오늘 받을 수 있는 양을 넘었어요'):n===-2?T('내 수족관이에요'):n===-1?T('그 코드의 수족관이 없어요'):T('인터넷 연결을 확인해 주세요'),'');if(n===-3){FG.left=0;fgPaint()}}).catch(function(e){FG.busy=0;save.pearls+=a;persist();b.disabled=false;fgErr(e)})}
 /* 받기: 앱을 켤 때 · 친구 창 열 때 */
 function fgClaim(){var o=TKS();if(!o.code||!o.sec||fgClaim.busy)return;fgClaim.busy=1;lbReq('rpc/gf_gift_claim',{p_code:o.code,p_sec:o.sec}).then(function(rows){fgClaim.busy=0;rows=rows||[];if(!rows.length)return;var sum=0,by={};
     rows.forEach(function(r){var a=clamp(+r.amt||0,0,FG_MAX);sum+=a;var k=visNick(r.from_nick||'?');by[k]=(by[k]||0)+a});if(sum<=0)return;save.pearls+=sum;persist();crumb('fgGot:'+sum);
@@ -16850,6 +16854,9 @@ var showTabAQW=showTab;showTab=function(p){var was=page,r=showTabAQW.apply(this,
   window.__subTx=tx;
   function start(){try{walk(document.body);new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var m=ms[i];if(m.type==='characterData')fixNode(m.target);else if(m.type==='attributes'){var e=m.target,l=txl(e.dataset.lab||'');if(l!==null&&l!==e.dataset.lab)e.dataset.lab=l}else for(var j=0;j<m.addedNodes.length;j++)walk(m.addedNodes[j])}}).observe(document.body,{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['data-lab']})}catch(e){}}
   if(document.body)start();else document.addEventListener('DOMContentLoaded',start)})();
+/* ===== 1.1.29 겨울맞이 대수선(기록 점검) 소식 ===== */
+abyTr(TRT,{"겨울맞이 대수선 🛠️ 기록이 빠지거나 잘못 남던 곳들을 한꺼번에 고쳤어요": "Winter tune-up 🛠️ We fixed the places where records went missing or were saved wrong", "심해 생존 랭킹: 30장을 다 깨면 깬 어려움 장 수 + 무한 최고 기록으로 순위가 올라가요 (전엔 어려움 8장 · 무한 8장까지만 셌어요)": "Deep Survival ranking: after clearing all 30 chapters, you now climb by Hard chapters cleared + best Endless time (it used to count only Hard and Endless up to Ch 8)", "심해 생존: 무한 모드는 그만둬도 버틴 시간이 기록돼요 · 보스 도감에 30장 보스 60마리가 모두 나와요": "Deep Survival: Endless time is saved even if you quit · the Boss Codex now shows all 60 bosses from 30 chapters", "심해 생존 결과 화면에 '새 상자' · '최고 기록 경신'이 가끔 안 뜨던 것을 고쳤어요": "Fixed 'New boxes' and 'New best!' sometimes missing on the Deep Survival results screen", "앱이 갑자기 꺼진 판: 오래 지나서 켜도 기록은 남고, 대전 판도 기록판 · 전체 기록에 들어가요": "Runs cut off by the app closing: records are kept even if you come back much later, and Arena runs now go on your record board", "대전: 친구 바다 판은 대전 랭킹에 안 올라가요 · 1위 · 트로피는 20초 넘게 한 판만 세요": "Arena: friend-sea matches no longer count for the Arena ranking · 1st place and trophies only count for matches over 20 seconds", "자동 백업이 바뀐 진주 · 보석을 놓치던 것, 친구에게 진주를 보낼 때 두 번 빠지던 것을 고쳤어요": "Fixed auto backup missing pearl and gem changes, and pearl gifts to friends being charged twice", "겨울맞이 대수선 🛠️ 기록이 새던 곳을 막았어요": "Winter tune-up 🛠️ No more missing records"});abyTr(TRJ,{"겨울맞이 대수선 🛠️ 기록이 빠지거나 잘못 남던 곳들을 한꺼번에 고쳤어요": "冬のおおそうじ 🛠️ 記録が抜けたり間違って残ったりしていた所をまとめて直しました", "심해 생존 랭킹: 30장을 다 깨면 깬 어려움 장 수 + 무한 최고 기록으로 순위가 올라가요 (전엔 어려움 8장 · 무한 8장까지만 셌어요)": "深海サバイバルのランキング：30章をすべてクリアすると、クリアしたハード章の数＋無限の最高記録で順位が上がります（以前はハード8章・無限8章までしか数えていませんでした）", "심해 생존: 무한 모드는 그만둬도 버틴 시간이 기록돼요 · 보스 도감에 30장 보스 60마리가 모두 나와요": "深海サバイバル：無限モードはやめても耐えた時間が記録されます・ボス図鑑に30章のボス60体がすべて登場", "심해 생존 결과 화면에 '새 상자' · '최고 기록 경신'이 가끔 안 뜨던 것을 고쳤어요": "深海サバイバルの結果画面で「新しい宝箱」「最高記録更新」がたまに出なかった問題を修正", "앱이 갑자기 꺼진 판: 오래 지나서 켜도 기록은 남고, 대전 판도 기록판 · 전체 기록에 들어가요": "アプリが急に閉じたプレイ：時間がたってから開いても記録は残り、対戦のプレイも記録ボードに入ります", "대전: 친구 바다 판은 대전 랭킹에 안 올라가요 · 1위 · 트로피는 20초 넘게 한 판만 세요": "対戦：フレンドの海のプレイは対戦ランキングに入りません・1位とトロフィーは20秒以上のプレイだけ", "자동 백업이 바뀐 진주 · 보석을 놓치던 것, 친구에게 진주를 보낼 때 두 번 빠지던 것을 고쳤어요": "自動バックアップが真珠・宝石の変化を見落としていた問題、フレンドへの真珠ギフトが二重に引かれる問題を修正", "겨울맞이 대수선 🛠️ 기록이 새던 곳을 막았어요": "冬のおおそうじ 🛠️ 記録の抜けをふさぎました"});if(SUBL==='es')abyTr(TRX,{"겨울맞이 대수선 🛠️ 기록이 빠지거나 잘못 남던 곳들을 한꺼번에 고쳤어요": "Puesta a punto de invierno 🛠️ Arreglamos los sitios donde los récords se perdían o se guardaban mal", "심해 생존 랭킹: 30장을 다 깨면 깬 어려움 장 수 + 무한 최고 기록으로 순위가 올라가요 (전엔 어려움 8장 · 무한 8장까지만 셌어요)": "Ranking de Supervivencia: al superar los 30 capítulos subes por capítulos Difícil superados + mejor tiempo Sin fin (antes solo contaba hasta el cap. 8)", "심해 생존: 무한 모드는 그만둬도 버틴 시간이 기록돼요 · 보스 도감에 30장 보스 60마리가 모두 나와요": "Supervivencia: el tiempo Sin fin se guarda aunque abandones · el códice de jefes muestra los 60 jefes de los 30 capítulos", "심해 생존 결과 화면에 '새 상자' · '최고 기록 경신'이 가끔 안 뜨던 것을 고쳤어요": "Arreglado: 'Cofres nuevos' y '¡Récord!' a veces no salían en los resultados de Supervivencia", "앱이 갑자기 꺼진 판: 오래 지나서 켜도 기록은 남고, 대전 판도 기록판 · 전체 기록에 들어가요": "Partidas cortadas al cerrarse la app: los récords se guardan aunque vuelvas mucho después, y las partidas de Arena entran en tu tabla", "대전: 친구 바다 판은 대전 랭킹에 안 올라가요 · 1위 · 트로피는 20초 넘게 한 판만 세요": "Arena: las partidas en el mar de amigos no cuentan para el ranking · 1.º puesto y trofeos solo en partidas de más de 20 s", "자동 백업이 바뀐 진주 · 보석을 놓치던 것, 친구에게 진주를 보낼 때 두 번 빠지던 것을 고쳤어요": "Arreglado: la copia automática no veía cambios de perlas y gemas, y el regalo de perlas a amigos se cobraba dos veces", "겨울맞이 대수선 🛠️ 기록이 새던 곳을 막았어요": "Puesta a punto de invierno 🛠️ Adiós a los récords perdidos"});else if(SUBL==='vi')abyTr(TRX,{"겨울맞이 대수선 🛠️ 기록이 빠지거나 잘못 남던 곳들을 한꺼번에 고쳤어요": "Sửa sang mùa đông 🛠️ Đã sửa những chỗ kỷ lục bị mất hoặc lưu sai", "심해 생존 랭킹: 30장을 다 깨면 깬 어려움 장 수 + 무한 최고 기록으로 순위가 올라가요 (전엔 어려움 8장 · 무한 8장까지만 셌어요)": "Xếp hạng Sinh tồn: phá đảo 30 chương thì xếp hạng theo số chương Khó đã qua + kỷ lục Vô tận (trước đây chỉ tính đến chương 8)", "심해 생존: 무한 모드는 그만둬도 버틴 시간이 기록돼요 · 보스 도감에 30장 보스 60마리가 모두 나와요": "Sinh tồn: chế độ Vô tận vẫn lưu thời gian dù bỏ cuộc · Sổ tay trùm hiện đủ 60 trùm của 30 chương", "심해 생존 결과 화면에 '새 상자' · '최고 기록 경신'이 가끔 안 뜨던 것을 고쳤어요": "Đã sửa lỗi đôi khi không hiện 'Rương mới' và 'Kỷ lục mới!' ở màn kết quả Sinh tồn", "앱이 갑자기 꺼진 판: 오래 지나서 켜도 기록은 남고, 대전 판도 기록판 · 전체 기록에 들어가요": "Ván bị ngắt do app tắt đột ngột: kỷ lục vẫn được lưu dù mở lại rất lâu sau, ván Đấu trường cũng vào bảng kỷ lục", "대전: 친구 바다 판은 대전 랭킹에 안 올라가요 · 1위 · 트로피는 20초 넘게 한 판만 세요": "Đấu trường: ván ở biển bạn bè không tính vào xếp hạng · hạng 1 và cúp chỉ tính ván trên 20 giây", "자동 백업이 바뀐 진주 · 보석을 놓치던 것, 친구에게 진주를 보낼 때 두 번 빠지던 것을 고쳤어요": "Đã sửa sao lưu tự động bỏ sót thay đổi ngọc trai/đá quý, và tặng ngọc trai cho bạn bị trừ hai lần", "겨울맞이 대수선 🛠️ 기록이 새던 곳을 막았어요": "Sửa sang mùa đông 🛠️ Không còn mất kỷ lục"});
+NEWS['1.1.29']=[T("심해 생존 랭킹: 30장을 다 깨면 깬 어려움 장 수 + 무한 최고 기록으로 순위가 올라가요 (전엔 어려움 8장 · 무한 8장까지만 셌어요)"),T("심해 생존: 무한 모드는 그만둬도 버틴 시간이 기록돼요 · 보스 도감에 30장 보스 60마리가 모두 나와요"),T("심해 생존 결과 화면에 '새 상자' · '최고 기록 경신'이 가끔 안 뜨던 것을 고쳤어요"),T("앱이 갑자기 꺼진 판: 오래 지나서 켜도 기록은 남고, 대전 판도 기록판 · 전체 기록에 들어가요"),T("대전: 친구 바다 판은 대전 랭킹에 안 올라가요 · 1위 · 트로피는 20초 넘게 한 판만 세요"),T("자동 백업이 바뀐 진주 · 보석을 놓치던 것, 친구에게 진주를 보낼 때 두 번 빠지던 것을 고쳤어요")];NEWS_LEAD['1.1.29']=T("겨울맞이 대수선 🛠️ 기록이 새던 곳을 막았어요");
 if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(boot);else boot();
 })();
 </script>

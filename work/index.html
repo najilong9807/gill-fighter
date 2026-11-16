@@ -14667,6 +14667,25 @@ svLbTxt=function(v){if(v>=20961){var N=SV_LBN;return (LANG==='en'?'Endless Ch '+
   if(v>=20921){var hc=Math.floor((v-20921)/4);return (LANG==='en'?'All clear · Hard ':LANG==='ja'?'全クリア · ハード ':'모두 클리어 · 어려움 ')+hc+(LANG==='en'?' cleared':LANG==='ja'?'章クリア':'장 클리어')}
   var n,t;if(v>=20421){n=21+Math.floor((v-20421)/50);var u=(v-20421)%50;return (LANG==='en'?'Ch '+n:n+T('장'))+' · '+(u>=49?T('클리어'):fmtTime(u*9))}
   n=Math.floor(v/1000);t=Math.round(v%1000);return (LANG==='en'?'Ch '+n:n+T('장'))+' · '+(t>=420?T('클리어'):fmtTime(t))};
+/* 1.1.29 늑구 '심해 생존 기록이 누락됐다': 30장을 다 깬 뒤 랭킹은 어려움 1~8장 + 무한 8장만 셌음(옛 8장 기준 SV_LBN) → 어려움 9~30장 · 다른 장 무한 기록은 해도 랭킹이 그대로였음.
+   (예: 1위 기기 저장 = 어려움 22장 클리어인데 랭킹은 11/10부터 '무한 8장 16분' 20977에 멈춤)
+   새 계산(보통 30장을 모두 깬 사람만): 21000 + 깬 어려움 장 수(1~30, 순서 상관없음)×200 + 무한 최고 기록(모든 장 중 가장 긴 것)÷30초(최대 199) → 최대 27199.
+   예전 숫자(20999 이하)보다 항상 커서 서버(상한 30999 · 더 좋은 기록만 반영)에 그대로 올라가고, 30장을 다 못 깬 사람 점수는 그대로 */
+function svLbTop(){return Math.min(SV_LBMAX,SV_CH.length-1)}
+function svAll30(){var top=svLbTop();if(top<SV_LBMAX)return false;for(var n=1;n<=top;n++)if(!svChS(n).clear)return false;return true}
+function svHardN(){var c=0,top=svLbTop();for(var n=1;n<=top;n++)if(svChS(n).hclear)c++;return c}
+function svInfMax(){var m=0,top=svLbTop();for(var n=1;n<=top;n++)m=Math.max(m,svChS(n).inf||0);return m}
+function svLbW(k){var L={hard:{ko:'어려움 ',en:'Hard ',ja:'ハード ',es:'Difícil ',vi:'Khó '},inf:{ko:'무한 ',en:'Endless ',ja:'無限 ',es:'Sin fin ',vi:'Vô tận '},all:{ko:'모두 클리어',en:'All clear',ja:'全クリア',es:'Todo superado',vi:'Phá đảo'},next:{ko:'다음 목표: ',en:'Next: ',ja:'次の目標: ',es:'Siguiente: ',vi:'Tiếp theo: '},best:{ko:' 최고 ',en:' best ',ja:' 最高 ',es:' récord ',vi:' kỷ lục '}}[k];return L[SUBL||LANG]||L.en}
+function svLbCh(n){var l=SUBL||LANG;return l==='ko'?n+'장':l==='ja'?n+'章':l==='es'?'Cap. '+n:l==='vi'?'Ch. '+n:'Ch '+n}
+var svLbScore30=svLbScore;svLbScore=function(){var v=svLbScore30();try{if(svAll30()){var v3=21000+svHardN()*200+Math.min(199,Math.floor(svInfMax()/30));if(v3>v)v=v3}}catch(e){}return Math.min(30999,v)};
+var svLbTxt30=svLbTxt;svLbTxt=function(v){v=+v;if(v>=21000){var h=Math.floor((v-21000)/200),i=Math.round(v-21000-h*200)*30;
+  if(!h&&!i)return svLbW('all');return (h?svLbW('hard')+h+'/30':svLbW('all'))+(i>0?' · '+svLbW('inf')+fmtTime(i):'')}
+  return svLbTxt30(v)};
+/* 생존 고르기 카드 '다음 목표'도 30장 기준으로(전엔 1~8장만 보고 '무한 8장 최고'로 멈춤) */
+var modePickOpen30=modePickOpen;modePickOpen=function(){var r=modePickOpen30.apply(this,arguments);try{var el=$('mpSurvMeta');if(el&&svAll30()&&!svReadyN()){var top=svLbTop(),h=0;for(var n=1;n<=top;n++)if(!svChS(n).hclear){h=n;break}
+  el.textContent=h?svLbW('next')+svLbW('hard')+svLbCh(h):svLbW('inf').trim()+svLbW('best')+fmtTime(svInfMax())}
+  else if(el&&svAllClear()&&!svReadyN()){var c=0,t2=svLbTop();for(var k=1;k<=t2;k++)if(!svChS(k).clear){c=k;break}if(c)el.textContent=svLbW('next')+svLbCh(c)} /* 1~8장만 깬 사람에게 '어려움 1장'을 권하던 것 → 랭킹이 오르는 다음 보통 장 */
+}catch(e){}return r};
 /* 묶기: 진행 · 그리기 · 시작 */
 var svSetupEW=svSetup;svSetup=function(){var r=svSetupEW.apply(this,arguments);try{svEwInit();SV.ruleShown=0;SV.psTip=0;SV.rushAt=0;SV.mk=null;SV.c2T=null;SV.awkPend=null;SV.awkN=0;SV.awT=0;SV.lgAH=0}catch(x){}return r};
 var svResumeEW=svResume;svResume=function(){var r=svResumeEW.apply(this,arguments);try{if(P.surv){SV.lgLv=SV.lv;SV.lgHp=SV.hp;var W=SV.ew;if(W)while(W.i<SV_EWT.length&&SV.t>SV_EWT[W.i]-3)W.i++;SV.supT=Math.max(20,SV.supT);SV.rushAt=0}}catch(x){}return r};

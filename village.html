@@ -21,6 +21,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#0B6BA8;font-family:sy
 .pill{pointer-events:auto;background:rgba(255,249,238,.95);border:2px solid #123049;border-radius:999px;padding:4px 9px;font:800 13.5px/1.15 system-ui,sans-serif;box-shadow:0 3px 0 #123049;display:flex;align-items:center;gap:4px;white-space:nowrap;color:var(--ink)}
 button.pill{cursor:pointer}
 .pill.warn{background:#FFD9D9;animation:blink 1s infinite}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.mgrid button{text-align:left;padding:10px;border-radius:12px;border:2px solid #123049;background:#FFF4DE;font:800 13px system-ui;color:#123049}.mgrid small{display:block;font-weight:600;font-size:11px;opacity:.75;margin-top:2px}
 .flow{display:grid;gap:3px;font-size:12.5px;line-height:1.35;background:#F3EBDC;border-radius:12px;padding:8px 10px;margin:4px 0 8px}.flow b{color:#2E9CCA}
 @keyframes blink{50%{transform:scale(1.06)}}
 .dem{display:flex;gap:4px;align-items:center;height:24px}
@@ -33,7 +34,7 @@ button.pill{cursor:pointer}
 .rb[aria-pressed=true]{background:var(--gold)}
 .bar{position:fixed;left:0;right:0;bottom:0;padding:8px 8px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(8,60,100,0),rgba(8,60,100,.88) 28%)}
 .tabs{display:flex;gap:2px;background:#123049;border-radius:14px;padding:4px;margin-bottom:6px}
-.tabs button{flex:1;border:0;border-radius:10px;padding:7px 0;font:800 12px system-ui;color:#DCEBF6;background:transparent;white-space:nowrap;min-width:0}
+.tabs button{flex:1;border:0;border-radius:10px;padding:7px 0;font:800 11.5px system-ui;letter-spacing:-.3px;color:#DCEBF6;background:transparent;white-space:nowrap;min-width:0}
 .tabs button[aria-pressed=true]{background:var(--gold);color:#3A2400}
 .tray{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none;touch-action:pan-x}
 .tray::-webkit-scrollbar{display:none}
@@ -86,6 +87,7 @@ button.pill{cursor:pointer}
 </div>
 <div class="goal" id="goal"></div>
 <div class="side">
+  <button class="rb" id="bMenu" aria-label="메뉴">☰<small>메뉴</small></button>
   <button class="rb" id="bSpd" aria-label="빠르기">▶<small>보통</small></button>
   <button class="rb" id="bView" aria-label="지도 보기">👁<small>보기</small></button>
   <button class="rb" id="bRot" aria-label="화면 돌리기">⟳<small>돌리기</small></button>
@@ -96,7 +98,7 @@ button.pill{cursor:pointer}
 <div class="panel" id="panel" hidden></div>
 <div class="bar">
   <div class="tabs" id="tabs">
-    <button data-t="road">길</button><button data-t="zone">구역</button><button data-t="base">숨·광산</button><button data-t="food">먹이</button><button data-t="svc">공공</button><button data-t="deco">꾸미기</button><button data-t="tool">불도저</button>
+    <button data-t="road">길</button><button data-t="zone">구역</button><button data-t="base">기반</button><button data-t="prod">생산</button><button data-t="svc">공공</button><button data-t="park">정원</button><button data-t="mark">명소</button><button data-t="tool">철거</button>
   </div>
   <div class="tray" id="tray"></div>
 </div>
@@ -120,19 +122,19 @@ var ZBT=[0,18,45,90],ZST=[0,0,20,60];
 var P={
  hall:{n:'산호궁',s:3,ds:2,c:[0,0],bt:0,fixed:1},
  pump:{t:'base',n:'숨샘',s:1,c:[250,40],bt:15,up:8,info:'주변에 산소 · 건물이 자라려면 꼭 필요'},
- quarry:{t:'base',n:'산호 광산',s:2,ds:1,c:[150,0],bt:15,up:4,info:'산호석(🪨)을 캐요 · 공사 · 레벨업에 써요'},
+ quarry:{t:'base',tab:'prod',n:'산호 광산',s:2,ds:1,c:[150,0],bt:15,up:4,info:'산호석(🪨)을 캐요 · 공사 · 레벨업에 써요'},
  pump2:{t:'base',n:'큰 숨탑',s:2,ds:1,c:[1500,400],bt:60,up:25,info:'넓은 곳에 산소'},
- farm:{t:'food',n:'다시마 농장',s:3,c:[200,30],bt:20,up:4,info:'다시마를 키워요'},
- factory:{t:'food',n:'경단 공장',s:3,ds:2,c:[600,150],bt:45,up:10,info:'다시마 1 → 경단 2'},
- diner:{t:'food',n:'말미잘 식당',s:2,ds:1,c:[300,80],bt:25,up:5,info:'따끈한 밥 · 주변 땅값 ↑'},
- park:{t:'svc',n:'산호 정원',s:2,ds:1,c:[150,40],bt:15,up:4},
+ farm:{t:'food',tab:'prod',n:'다시마 농장',s:3,c:[200,30],bt:20,up:4,info:'다시마를 키워요'},
+ factory:{t:'food',tab:'prod',n:'경단 공장',s:3,ds:2,c:[600,150],bt:45,up:10,info:'다시마 1 → 경단 2'},
+ diner:{t:'food',tab:'svc',n:'말미잘 식당',s:2,ds:1,c:[300,80],bt:25,up:5,info:'따끈한 밥 · 주변 땅값 ↑'},
+ park:{t:'svc',tab:'park',n:'산호 정원',s:2,ds:1,c:[150,40],bt:15,up:4},
  lamp:{t:'svc',n:'해파리 가로등',s:1,gap:0,c:[70,20],bt:8,up:1},
  school:{t:'svc',n:'해마 학교',s:2,ds:1,c:[900,250],bt:50,up:12,info:'배운 물고기가 사는 동네는 땅값 ↑'},
  clinic:{t:'svc',n:'불가사리 병원',s:2,ds:1,c:[1200,300],bt:60,up:15,info:'아픈 물고기를 돌봐요 · 행복 ↑'},
- light:{t:'svc',n:'초롱아귀 등대',s:1,c:[800,200],bt:50,up:10},
- gold:{t:'svc',n:'황금 물고기상',s:1,c:[2000,600],bt:80,up:12},
- king:{t:'svc',n:'용왕상',s:2,ds:1,c:[4000,1200],bt:120,up:20},
- d1:{t:'deco',n:'분홍 산호',s:1,c:[30,5],bt:4},d2:{t:'deco',n:'주황 산호',s:1,c:[30,5],bt:4},d3:{t:'deco',n:'보라 산호',s:1,c:[40,8],bt:5},d4:{t:'deco',n:'청록 산호',s:1,c:[40,8],bt:5}
+ light:{t:'svc',tab:'mark',n:'초롱아귀 등대',s:1,c:[800,200],bt:50,up:10},
+ gold:{t:'svc',tab:'mark',n:'황금 물고기상',s:1,c:[2000,600],bt:80,up:12},
+ king:{t:'svc',tab:'mark',n:'용왕상',s:2,ds:1,c:[4000,1200],bt:120,up:20},
+ d1:{t:'deco',tab:'park',n:'분홍 산호',s:1,c:[30,5],bt:4},d2:{t:'deco',tab:'park',n:'주황 산호',s:1,c:[30,5],bt:4},d3:{t:'deco',tab:'park',n:'보라 산호',s:1,c:[40,8],bt:5},d4:{t:'deco',tab:'park',n:'청록 산호',s:1,c:[40,8],bt:5}
 };
 /* 레벨별 효과 */
 function eff(b){var k=b.p,L=b.lv||1;switch(k){
@@ -255,7 +257,7 @@ function growOne(z){var sites=VG.b.filter(function(b){return b.z&&!built(b)}).le
 function upgradeOne(){var zl=HL[HLV()].zl,c=VG.b.filter(function(b){if(!b.z||b.ab||b.up||!built(b)||b.lv>=Math.min(3,zl)||!b.ok||ST.dem[b.z]<=-.2)return false;var need=b.lv===1?55:72;if(b.z==='R')return !ST.hungry&&!ST.ragged&&b.lvv>=need&&(b.occ|0)>=ZG.R.cap[b.lv]*.8;return ST.pop>=(b.lv===1?60:220)&&b.lvv>=need-15});
   if(!c.length)return;var b=c[Math.floor(Math.random()*c.length)],to=b.lv+1;if(VG.stone<ZST[to])return;VG.stone-=ZST[to];b.up={lv:to,bp:0,bt:ZBT[to]}}
 function monthEnd(){var inc=Math.round((ST.work*1.5+ST.pop*.3+VG.soldM*4)*VG.tax/9*(.8+ST.hap/250));ST.lastWork=ST.work;ST.lastSold=VG.soldM;VG.soldM=0;FISH.forEach(function(f){if(Math.random()<.3)assignLife(f)});var exp=Math.round(Object.keys(VG.road).length*.4);VG.b.forEach(function(b){if(b.p&&P[b.p].up&&built(b))exp+=P[b.p].up*(b.lv||1)});
-  VG.money+=inc-exp;VG.last={inc:inc,exp:exp};VG.month++;if(VG.month>12){VG.month=1;VG.year++}floatTxt(hallB(),(inc-exp>=0?'+':'')+(inc-exp)+'🐚');if(VG.money<0)toast('조개돈이 바닥났어요 · 세금을 올리거나 유지비를 줄여요');persist()}
+  VG.money+=inc-exp;VG.last={inc:inc,exp:exp};VG.hist=(VG.hist||[]).concat([{pop:ST.pop,money:VG.money,hap:ST.hap|0}]).slice(-36);VG.month++;if(VG.month>12){VG.month=1;VG.year++}floatTxt(hallB(),(inc-exp>=0?'+':'')+(inc-exp)+'🐚');if(VG.money<0)toast('조개돈이 바닥났어요 · 세금을 올리거나 유지비를 줄여요');persist()}
 var TIMER=null;function setSpeed(){clearInterval(TIMER);if(VG.spd!==0)TIMER=setInterval(function(){try{vgTick()}catch(e){console.error(e)}},VG.spd===2?350:1000);var b=$('bSpd');b.firstChild.textContent=VG.spd===0?'⏸':VG.spd===2?'⏩':'▶';b.lastChild.textContent=VG.spd===0?'멈춤':VG.spd===2?'빠르게':'보통'}
 
 /* ===== 화면 좌표 ===== */
@@ -570,7 +572,7 @@ function paintHud(){var L=HLV();$('hHall').innerHTML='🏛 <b>Lv.'+L+'</b>'+(hal
   var us=$('hDem').querySelectorAll('u');['R','C','I'].forEach(function(z,i){us[i].style.height=Math.round(clamp(ST.dem[z],0,1)*100)+'%'});goalPaint();try{$('goal').style.top=($('hud').getBoundingClientRect().bottom+6)+'px'}catch(e){}renderTray(true);if(SEL)openPanel(SEL)}
 /* 목표 = 다음 산호궁 레벨 조건(화이트아웃식 '다음 단계' 안내) */
 function goalPaint(){var el=$('goal'),L=HLV(),h;if(L>=10){el.hidden=true;return}var nx=HL[L+1];
-  if(!VG.b.some(function(b){return b.p==='pump'}))h='🎯 숨샘부터<small>「숨·광산」→ 숨샘 · 길에 붙여야 산소가 나와요 · 길은 「길」 탭에서 직접 깔아요</small>';
+  if(!VG.b.some(function(b){return b.p==='pump'}))h='🎯 숨샘부터<small>「기반」→ 숨샘 · 길에 붙여야 산소가 나와요 · 길은 「길」 탭에서 직접 깔아요</small>';
   else if(Object.keys(VG.road).length<12)h='🎯 길을 내요<small>「길」→ 산호궁 앞에서 끌어서</small>';
   else if(ST.cnt.R<3)h='🎯 집 구역을 칠해요<small>「구역」→ 길 옆을 끌어서 칠하면 물고기가 집을 지어요</small>';
   else if(ST.hungry&&ST.short)h='⚠️ 장 볼 곳이 모자라요<small>물고기 '+ST.pop+' · 장터 손님 한도 '+ST.shopCap+' → 「구역」에서 장터를 칠해요(산호궁 Lv.3)</small>';
@@ -584,9 +586,9 @@ var TOAST=0;function toast(s){var el=$('toast');el.textContent=s;el.hidden=false
 /* ===== 도구 서랍 ===== */
 var TAB='base';
 function tools(){var L=[];if(TAB==='road')L.push({id:'road',n:'모래 길',sw:'🛤️',bg:'#DDAE78',c:COST.road+'🐚/칸'});
-  else if(TAB==='zone')L.push({id:'zR',n:'집 구역',th:['R',1,1,4],c:COST.zone+'🐚/칸',lock:opened('zR')?0:openAt('zR')},{id:'zI',n:'공방 구역',th:['I',2,1,2],c:COST.zone+'🐚/칸',lock:opened('zI')?0:openAt('zI')},{id:'zC',n:'장터 구역',th:['C',1,1,2],c:COST.zone+'🐚/칸',lock:opened('zC')?0:openAt('zC')},{id:'z0',n:'구역 지우기',sw:'🧽',bg:'#eee',c:'무료'});
-  else if(TAB==='tool')L.push({id:'doze',n:'가재 불도저',sw:'🚜',bg:'#FFD9D9',c:'바위 '+COST.rock+' · 해초 '+COST.kelp});
-  else Object.keys(P).forEach(function(k){var d=P[k];if(d.t!==TAB)return;var lim=limitOf(k),n=countOf(k);L.push({id:'p:'+k,n:d.n,th:[kindOf({p:k}),1,d.ds||d.s,k.length*7+3],c:costTxt(costOf(k,1)),c0:costOf(k,1),bt:d.bt,lock:opened(k)?0:openAt(k),cnt:lim<999?n+'/'+lim:'',full:lim<999&&n>=lim})});return L}
+  else if(TAB==='zone')L.push({id:'zR',n:'집 구역',th:['R',1,1,4],c:COST.zone+'🐚/칸',lock:opened('zR')?0:openAt('zR')},{id:'zC',n:'장터 구역',th:['C',1,1,2],c:COST.zone+'🐚/칸',lock:opened('zC')?0:openAt('zC')},{id:'zI',n:'공방 구역',th:['I',2,1,2],c:COST.zone+'🐚/칸',lock:opened('zI')?0:openAt('zI')},{id:'z0',n:'구역 지우기',sw:'🧽',bg:'#eee',c:'무료'});
+  else if(TAB==='tool')L.push({id:'doze',n:'가재 불도저(철거)',sw:'🚜',bg:'#FFD9D9',c:'바위 '+COST.rock+' · 해초 '+COST.kelp});
+  else Object.keys(P).forEach(function(k){var d=P[k];if((d.tab||d.t)!==TAB)return;var lim=limitOf(k),n=countOf(k);L.push({id:'p:'+k,n:d.n,th:[kindOf({p:k}),1,d.ds||d.s,k.length*7+3],c:costTxt(costOf(k,1)),c0:costOf(k,1),bt:d.bt,lock:opened(k)?0:openAt(k),cnt:lim<999?n+'/'+lim:'',full:lim<999&&n>=lim})});return L}
 function renderTray(soft){var tr=$('tray'),sig=TAB+'|'+(TOOL||'')+'|'+Math.floor(VG.money/50)+'|'+Math.floor(VG.stone/20)+'|'+HLV()+'|'+VG.b.length;if(soft&&tr.dataset.k===sig)return;tr.dataset.k=sig;tr.textContent='';
   document.querySelectorAll('#tabs button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.t===TAB?'true':'false')});
   tools().forEach(function(o){var el=document.createElement('button');el.type='button';el.className='card';
@@ -609,7 +611,14 @@ function effTxt(b){var e=eff(b),o=[];if(e.o2)o.push('산소 반경 '+e.o2+'칸')
 function upInfo(b){var k=b.p,L=b.lv||1;if(k==='hall'){if(L>=10)return null;var nx=HL[L+1];return {req:nx.req.map(function(r){return [reqTxt(r),reqOk(r)]}),cost:nx.cost,bt:nx.bt,open:nx.open,max:nx.max,nx:nx}}
   var cap=HLV();return {req:[['산호궁 Lv.'+(L+1),cap>=L+1]],cost:costOf(k,L+1),bt:timeOf(k,L+1)}}
 function openPanel(b){var p=$('panel'),h='';
-  if(b==='budget'){var ck=function(ok){return ok?'✅':'⚠️'};h='<h2>🐚 마을 살림</h2><div class="flow">'+
+  if(b==='menu'){h='<h2>☰ 아가미시티</h2><div class="mgrid">'+[['budget','🐚','마을 살림','세금 · 유지비 · 의식주'],['stats','📊','마을 현황','물고기 · 일자리 · 땅값 기록'],['goals','🎯','할 일','산호궁 다음 단계'],['help','📖','도움말','건물 · 용어 안내']].map(function(m){return '<button data-a="go:'+m[0]+'"><b>'+m[1]+' '+m[2]+'</b><small>'+m[3]+'</small></button>'}).join('')+'</div><div class="row"><button data-a="new" class="no">새 마을</button><button data-a="x">닫기</button></div>'}
+  else if(b==='stats'){var H=VG.hist||[],spark=function(key,col){if(H.length<2)return '<small>한 달이 지나면 그래프가 생겨요</small>';var v=H.map(function(r){return r[key]}),mx=Math.max.apply(null,v.concat([1])),mn=Math.min.apply(null,v.concat([0])),w=260,hh=40,pts=v.map(function(y,i){return (i/(v.length-1)*w).toFixed(1)+','+(hh-(y-mn)/(mx-mn||1)*hh).toFixed(1)}).join(' ');return '<svg viewBox="0 0 '+w+' '+hh+'" style="width:100%;height:40px"><polyline fill="none" stroke="'+col+'" stroke-width="2.5" points="'+pts+'"/></svg>'};
+    var lv=0,ln=0;VG.b.forEach(function(x){if(x.z&&built(x)){lv+=x.lvv|0;ln++}});var unemp=Math.max(0,(ST.workers||0)-(ST.work||0));
+    h='<h2>📊 마을 현황</h2><table><tr><td>물고기(인구)</td><td>'+fmt(ST.pop)+'</td></tr><tr><td>행복</td><td>'+(ST.hap|0)+'</td></tr><tr><td>일하는 물고기 / 일자리</td><td>'+fmt(ST.work||0)+' / '+fmt(ST.jobs||0)+'</td></tr><tr><td>일자리 없는 물고기</td><td>'+fmt(unemp)+'</td></tr><tr><td>평균 땅값</td><td>'+(ln?Math.round(lv/ln):0)+'</td></tr><tr><td>집 · 장터 · 공방</td><td>'+ST.cnt.R+' · '+ST.cnt.C+' · '+ST.cnt.I+'</td></tr></table>'+
+    '<div style="margin-top:6px;font-weight:800">🐟 물고기</div>'+spark('pop','#2E9CCA')+'<div style="font-weight:800">🐚 조개돈</div>'+spark('money','#F2B233')+'<div style="font-weight:800">😊 행복</div>'+spark('hap','#35C27A')+'<div class="row"><button data-a="go:menu">← 메뉴</button><button data-a="x">닫기</button></div>'}
+  else if(b==='goals'){var L2=HLV();h='<h2>🎯 할 일</h2>'+(L2>=10?'산호궁이 가장 높은 단계예요':'<b>산호궁 Lv.'+(L2+1)+' 조건</b><br>'+HL[L2+1].req.map(function(r){return (reqOk(r)?'✅ ':'⬜ ')+reqTxt(r)}).join('<br>')+'<br><small>올리면 열리는 것: '+HL[L2+1].open.map(function(k){return P[k]?P[k].n:k==='road'?'길':k==='zR'?'집 구역':k==='zC'?'장터 구역':k==='zI'?'공방 구역':k}).join(' · ')+'</small>')+'<div class="row"><button data-a="go:menu">← 메뉴</button><button data-a="x">닫기</button></div>'}
+  else if(b==='help'){h='<h2>📖 도움말</h2><table>'+[['산호궁','시청 · 레벨이 오르면 새 건물 · 땅'],['집 · 장터 · 공방 구역','주거 · 상업 · 공업 구역'],['기반: 숨샘 · 큰 숨탑','전기 · 수도처럼 깔아야 건물이 자라요(산소)'],['생산: 광산 · 농장 · 공장','재료 · 먹거리를 만들어요'],['공공: 식당 · 학교 · 병원 · 가로등','범위 안 땅값 · 행복 ↑'],['정원 · 명소','공원 · 랜드마크'],['탁한 물','오염 · 공장 · 공방 근처 땅값 ↓'],['조개돈 🐚 · 산호석 🪨 · 보석 💎','돈 · 재료 · 빨리 짓기'],['경단 🍡 · 해초 옷 👕','먹을 것 · 입을 것(의식주)'],['게 일꾼 🦀','건설 인부 · 동시에 짓는 수'],['가재 불도저','철거 · 바위 · 해초 치우기'],['아가미시티 입구','도시 입구 · 여기부터 두 발로 걸어요']].map(function(r){return '<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td></tr>'}).join('')+'</table><div class="row"><button data-a="go:menu">← 메뉴</button><button data-a="x">닫기</button></div>'}
+  else if(b==='budget'){var ck=function(ok){return ok?'✅':'⚠️'};h='<h2>🐚 마을 살림</h2><div class="flow">'+
     '<div>'+ck(ST.cnt.R>0)+' 🏠 <b>주</b> 집 '+ST.cnt.R+'채 · 물고기 '+fmt(ST.pop)+'</div>'+
     '<div>'+ck(!ST.hungry)+' 🍡 <b>식</b> 경단 '+fmt(VG.food)+' · 만들기 '+fmt(ST.makeR*60)+' / 먹기 '+fmt(ST.eat*60)+' (분)</div>'+
     '<div>'+ck(!ST.ragged)+' 👕 <b>의</b> 해초 옷 '+fmt(VG.cloth)+(ST.clothOn?' · 짓기 '+fmt(ST.sewR*60)+' / 닳기 '+fmt(ST.wear*60)+' (분)':' · 공방이 열리면 옷을 입기 시작해요')+'</div>'+
@@ -630,6 +639,7 @@ function openPanel(b){var p=$('panel'),h='';
     h+='<div class="row">'+((!built(b)||b.up)?'<button class="hot" data-a="rush">'+(rushCost(b)?'💎'+rushCost(b)+' 바로 완성':'⚡ 무료로 바로 완성')+'</button>':'')+(U?'<button class="hot" data-a="up">레벨업</button>':'')+(d&&d.fixed?'':(d&&built(b)?'<button data-a="move">옮기기</button>':'')+'<button data-a="flip">돌리기</button><button class="no" data-a="del">부수기</button>')+'<button data-a="x">닫기</button></div>'}
   if(p.dataset.h!==h){p.innerHTML=h;p.dataset.h=h;p.querySelectorAll('button').forEach(function(bt){bt.addEventListener('click',function(){act(bt.dataset.a,b)})});var tr=$('taxR');if(tr)tr.addEventListener('input',function(){VG.tax=+tr.value;persist();openPanel('budget')})}p.hidden=false}
 function act(a,b){if(a==='x'){SEL=null;$('panel').hidden=true;return}
+  if(a.indexOf('go:')===0){SEL=a.slice(3);openPanel(SEL);return}
   if(a==='new'){if(confirm('지금 마을을 지우고 새로 시작할까요?')){VG=fresh();occMap();FISH.length=0;persist();SEL=null;$('panel').hidden=true;camHome();setSpeed()}return}
   if(a==='buy'){var pr=chunkPrice();if(Object.keys(VG.own).length>=HL[HLV()].land){toast('산호궁을 키우면 더 살 수 있어요');return}if(!pay(pr)){toast('조개돈 · 산호석이 모자라요');return}VG.own[b.cx+','+b.cy]=1;persist();toast('새 땅이 생겼어요! 🎉');SEL=null;$('panel').hidden=true;paintHud();return}
   if(a==='rush'){var c=rushCost(b);if(c&&!GEM.spend(c)){toast('💎 보석이 모자라요');return}if(c)floatTxt(b,'-💎'+c);if(b.up)b.up.bp=b.up.bt-.001;else b.bp=b.bt-.001;vgTick();return}
@@ -637,7 +647,7 @@ function act(a,b){if(a==='x'){SEL=null;$('panel').hidden=true;return}
   if(a==='flip'){b.f=b.f?0:1;persist();return}
   if(a==='del'){VG.b.splice(VG.b.indexOf(b),1);if(b.z)delete VG.zone[tk(b.x,b.y)];occMap();if(b.p){var back=costOf(b.p,1);VG.money+=Math.floor(back[0]/2);VG.stone+=Math.floor(back[1]/2);toast(P[b.p].n+' 부숨 · 절반 돌려받음')}SEL=null;$('panel').hidden=true;persist();return}
   if(a==='move'){TOOL='move';PICK=b;SEL=null;$('panel').hidden=true;showHint('옮길 칸을 눌러요')}}
-$('hMoney').addEventListener('click',function(){SEL='budget';openPanel('budget')});
+$('hMoney').addEventListener('click',function(){SEL='budget';openPanel('budget')});$('bMenu').addEventListener('click',function(){SEL='menu';openPanel('menu')});
 $('hFood').addEventListener('click',function(){SEL='budget';openPanel('budget')});$('hCloth').addEventListener('click',function(){SEL='budget';openPanel('budget')});
 $('hHall').addEventListener('click',function(){var h=hallB();SEL=h;openPanel(h);var F=foot(h.x,h.y,2),c=iso(F.vx+1,F.vy+1);cam.x=c[0];cam.y=c[1]-40});
 

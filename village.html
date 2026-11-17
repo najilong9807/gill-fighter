@@ -194,7 +194,9 @@ function needRoad(k){return P[k]&&P[k].t!=='deco'}
 function crowd(x,y,s,k,ign){if(!gapOf(k))return null;for(var i=-1;i<=s;i++)for(var j=-1;j<=s;j++){var o=OCC[tk(x+i,y+j)];if(o&&o!==ign&&o.p&&gapOf(o.p))return o}return null}
 function siteWhy(k,x,y,ign){var s=P[k].s;for(var i=0;i<s;i++)for(var j=0;j<s;j++){var X=x+i,Y=y+j;if(!inb(X,Y))return '지도 밖이에요';if(!own(X,Y))return '아직 내 땅이 아니에요';if(ter(X,Y))return '바위 · 해초는 불도저로 치워요';if(isRoad(X,Y))return '길 위엔 못 지어요';var o=OCC[tk(X,Y)];if(o&&o!==ign)return '이미 다른 건물이 있어요'}
   if(crowd(x,y,s,k,ign))return '다른 시설과 한 칸은 띄워야 해요';
-  if(needRoad(k)&&!linked(x,y,s))return ring(x,y,s,isRoad)?'이 길이 마을 입구와 이어져야 해요':'길에 붙여 지어야 해요';return ''}
+  return ''}
+/* 길이 닿아야 일해요: 장식 · 산호궁 말고는 해류 입구와 이어진 길에 붙어야 기능 */
+function roadOk(k,x,y){return !needRoad(k)||k==='hall'||linked(x,y,P[k].s)}
 function ring(x,y,s,fn){for(var i=-1;i<=s;i++)for(var j=-1;j<=s;j++){if((i>=0&&i<s)&&(j>=0&&j<s))continue;if((i===-1||i===s)&&(j===-1||j===s))continue;if(fn(x+i,y+j))return true}return false}
 var LINK={};function linkCalc(){LINK={};if(!isRoad(0,MID))return;var q=[[0,MID]],seen={};seen[tk(0,MID)]=1;while(q.length){var c=q.shift();LINK[tk(c[0],c[1])]=1;[[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){var X=c[0]+d[0],Y=c[1]+d[1],k=tk(X,Y);if(!seen[k]&&isRoad(X,Y)){seen[k]=1;q.push([X,Y])}})}}
 function linked(x,y,s){return ring(x,y,s||1,function(X,Y){return !!LINK[tk(X,Y)]})}
@@ -206,7 +208,7 @@ function costTxt(c){return '🐚'+fmt(c[0])+(c[1]?' 🪨'+fmt(c[1]):'')}
 
 /* ===== 지도 값: 산소 · 탁한 물 · 땅값 ===== */
 var O2={},POL={},LV={};
-function fields(){O2={};POL={};LV={};VG.b.forEach(function(b){if(!built(b))return;var e=b.p?eff(b):{},s=bSize(b),cx=b.x+s/2-.5,cy=b.y+s/2-.5,x,y;
+function fields(){O2={};POL={};LV={};VG.b.forEach(function(b){if(!built(b)||(b.p&&b.ok===false))return;var e=b.p?eff(b):{},s=bSize(b),cx=b.x+s/2-.5,cy=b.y+s/2-.5,x,y;
   if(e.o2){for(y=Math.floor(cy-e.o2);y<=cy+e.o2;y++)for(x=Math.floor(cx-e.o2);x<=cx+e.o2;x++)if(inb(x,y)&&Math.hypot(x-cx,y-cy)<=e.o2+.3)O2[tk(x,y)]=1}
   var pol=b.z==='I'?10+b.lv*6:b.p==='factory'?18:b.p==='quarry'?8:0,r=b.z==='I'?2+b.lv:3;if(pol&&!b.ab){for(y=b.y-r;y<=b.y+s-1+r;y++)for(x=b.x-r;x<=b.x+s-1+r;x++)if(inb(x,y)){var dd=Math.max(Math.abs(x-cx),Math.abs(y-cy));POL[tk(x,y)]=(POL[tk(x,y)]||0)+pol*clamp(1-dd/(r+1),0,1)}}
   if(e.hap){var rr=e.r||2;for(y=b.y-rr;y<=b.y+s-1+rr;y++)for(x=b.x-rr;x<=b.x+s-1+rr;x++)if(inb(x,y))LV[tk(x,y)]=(LV[tk(x,y)]||0)+e.hap}
@@ -217,7 +219,7 @@ function landVal(x,y){var v=48+Math.min(45,LV[tk(x,y)]||0)-Math.min(45,POL[tk(x,
 function vgTick(){linkCalc();var bs=VG.b;
   bs.forEach(function(b){if(!built(b)){b.bp=(b.bp||0)+1;if(built(b)){puff(b);floatTxt(b,'완성!');if(b.p)toast(P[b.p].n+' 완성! 🦀')}}
     if(b.up){b.up.bp++;if(b.up.bp>=b.up.bt){b.lv=b.up.lv;delete b.up;puff(b);if(b.p==='hall'){toast('🏛 산호궁 Lv.'+b.lv+'! 새로 열린 것을 확인해요');floatTxt(b,'Lv.'+b.lv+'!')}else floatTxt(b,(b.p?P[b.p].n:ZG[b.z].n)+' Lv.'+b.lv+'!')}}});
-  bs.forEach(function(b){if(b.p){var e=eff(b);b.ok=e.jobs?linked(b.x,b.y,bSize(b)):true}});fields();
+  bs.forEach(function(b){if(b.p){var was=b.ok;b.ok=roadOk(b.p,b.x,b.y);if(built(b)&&was!==false&&!b.ok&&was!==undefined)floatTxt(b,'길이 끊겼어요')}});fields();
   var pop=0,jC=0,jI=0,jP=0,hs=0,cnt={R:0,C:0,I:0};
   bs.forEach(function(b){if(b.p&&built(b)&&b.ok){var e=eff(b);if(e.jobs)jP+=e.jobs}if(!b.z)return;cnt[b.z]++;if(!built(b))return;
     b.ok=linked(b.x,b.y,1)&&!!O2[tk(b.x,b.y)];if(!b.ok){b.bad=(b.bad||0)+1;if(b.bad>12)b.ab=1}else{b.bad=0;if(b.ab&&Math.random()<.15)b.ab=0}
@@ -294,8 +296,8 @@ function vgDraw(){ctx.setTransform(dpr,0,0,dpr,0,0);var i;
   var plK=TOOL&&TOOL.indexOf('p:')===0?TOOL.slice(2):(TOOL==='move'&&PICK&&PICK.p?PICK.p:null);
   if(plK){var ps=P[plK].s,ign=TOOL==='move'?PICK:null,off=ps>1?1:0;
     if(gapOf(plK))VG.b.forEach(function(b){if(b===ign||!b.p||!gapOf(b.p))return;var F2=foot(b.x-1,b.y-1,bSize(b)+2);if(!onScreen(F2.vx,F2.vy,200))return;diamond(F2.vx+.08,F2.vy+.08,F2.vX-F2.vx+.84,F2.vY-F2.vy+.84);ctx.fillStyle='rgba(255,150,40,.2)';ctx.fill();ctx.setLineDash([7,5]);ctx.lineWidth=3;ctx.strokeStyle='rgba(235,120,20,.95)';ctx.stroke();ctx.setLineDash([])});
-    for(var sy=0;sy<N;sy++)for(var sx=0;sx<N;sx++){if(!own(sx,sy))continue;var pv=rot(sx+off,sy+off);if(!onScreen(pv[0],pv[1],40))continue;if(siteWhy(plK,sx,sy,ign))continue;var cpt=iso(pv[0]+.5,pv[1]+.5);ctx.fillStyle='rgba(60,210,120,.85)';ctx.strokeStyle='rgba(18,48,73,.6)';ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(cpt[0],cpt[1],5,2.6,0,0,7);ctx.fill();ctx.stroke()}}
-  if(GHOST&&GHOST.tiles){GHOST.tiles.forEach(function(q2){var P3=rot(q2[0],q2[1]);diamond(P3[0],P3[1],1,1);ctx.fillStyle=GHOST.ok?'rgba(80,220,140,.5)':'rgba(240,80,80,.5)';ctx.fill()})}
+    for(var sy=0;sy<N;sy++)for(var sx=0;sx<N;sx++){if(!own(sx,sy))continue;var pv=rot(sx+off,sy+off);if(!onScreen(pv[0],pv[1],40))continue;if(siteWhy(plK,sx,sy,ign))continue;var cpt=iso(pv[0]+.5,pv[1]+.5),rok=roadOk(plK,sx,sy);ctx.fillStyle=rok?'rgba(60,210,120,.9)':'rgba(255,214,90,.75)';ctx.strokeStyle='rgba(18,48,73,.6)';ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(cpt[0],cpt[1],5,2.6,0,0,7);ctx.fill();ctx.stroke()}}
+  if(GHOST&&GHOST.tiles){GHOST.tiles.forEach(function(q2){var P3=rot(q2[0],q2[1]);diamond(P3[0],P3[1],1,1);ctx.fillStyle=!GHOST.ok?'rgba(240,80,80,.5)':GHOST.nr?'rgba(255,200,60,.55)':'rgba(80,220,140,.5)';ctx.fill()})}
   var items=[];for(vy=0;vy<N;vy++)for(vx=0;vx<N;vx++){var u2=unrot(vx,vy),tv=ter(u2[0],u2[1]);if(tv&&onScreen(vx,vy,80))items.push({z:vx+vy+.4,o:tv,vx:vx,vy:vy,h:hh(u2[0]*13+u2[1]*17+VG.seed)})}
   VG.b.forEach(function(b){if(PICK===b)return;var F=foot(b.x,b.y,bSize(b));if(!onScreen(F.vx,F.vy,160))return;items.push({z:F.vX+F.vY+.5,b:b})});
   FISH.forEach(function(f){items.push({z:f.vz,f:f})});if(GHOST&&GHOST.p)items.push({z:999,g:GHOST});
@@ -305,7 +307,7 @@ function vgDraw(){ctx.setTransform(dpr,0,0,dpr,0,0);var i;
   VG.b.forEach(function(b){var s=bSize(b),c=centerOf(b.x,b.y,s);
     if(!built(b)||b.up){var tot=b.up?b.up.bt:b.bt,pr=b.up?b.up.bp:b.bp,by3=c[1]-TH*(s>1?3.4:2.4);ctx.save();ctx.fillStyle='#123049';ctx.beginPath();ctx.roundRect?ctx.roundRect(c[0]-36,by3-8,72,16,8):ctx.rect(c[0]-36,by3-8,72,16);ctx.fill();ctx.fillStyle='#FFD25C';ctx.beginPath();ctx.roundRect?ctx.roundRect(c[0]-34,by3-6,68*clamp(pr/tot,0,1),12,6):ctx.rect(c[0]-34,by3-6,68*clamp(pr/tot,0,1),12);ctx.fill();
       ctx.font='900 13px system-ui';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#123049';var lab='🔨 '+mmss(tot-pr);ctx.strokeText(lab,c[0],by3-10);ctx.fillStyle='#fff';ctx.fillText(lab,c[0],by3-10);ctx.restore();return}
-    if(b.ok!==false)return;var by2=c[1]-TH*2.2*s+Math.sin(t*3+b.id)*2;ctx.beginPath();ctx.arc(c[0],by2,11,0,7);ctx.fillStyle=b.ab?'#7A7A7A':'#E5484D';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.font='900 11px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#fff';ctx.fillText(b.z&&!O2[tk(b.x,b.y)]?'O₂':'!',c[0],by2+1);ctx.textBaseline='alphabetic'});
+    if(b.ok!==false)return;var by2=c[1]-TH*2.2*s+Math.sin(t*3+b.id)*2;ctx.beginPath();ctx.arc(c[0],by2,11,0,7);ctx.fillStyle=b.ab?'#7A7A7A':'#E5484D';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.font='900 11px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#fff';ctx.fillText(b.z&&!O2[tk(b.x,b.y)]?'O₂':b.p?'길':'!',c[0],by2+1);ctx.textBaseline='alphabetic'});
   PUFF.forEach(function(pf){var a=pf.t/.8;ctx.globalAlpha=clamp(1-a,0,1);for(var j=0;j<8;j++){var an=j/8*6.28,rr=12+a*30;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(pf.c[0]+Math.cos(an)*rr,pf.c[1]-14+Math.sin(an)*rr*.5,6*(1-a)+2,0,7);ctx.fill()}ctx.globalAlpha=1});
   FLT.forEach(function(f){var c=f.c,a=1-f.t/1.8;ctx.globalAlpha=clamp(a,0,1);ctx.font='900 15px system-ui';ctx.textAlign='center';ctx.lineWidth=4;ctx.strokeStyle='#123049';ctx.strokeText(f.s,c[0],c[1]-TH*2.6-f.t*28);ctx.fillStyle='#FFE27A';ctx.fillText(f.s,c[0],c[1]-TH*2.6-f.t*28);ctx.globalAlpha=1});
   ctx.restore();
@@ -467,7 +469,7 @@ function paintHud(){var L=HLV();$('hHall').innerHTML='🏛 <b>Lv.'+L+'</b>'+(hal
   var us=$('hDem').querySelectorAll('u');['R','C','I'].forEach(function(z,i){us[i].style.height=Math.round(clamp(ST.dem[z],0,1)*100)+'%'});goalPaint();try{$('goal').style.top=($('hud').getBoundingClientRect().bottom+6)+'px'}catch(e){}renderTray(true);if(SEL)openPanel(SEL)}
 /* 목표 = 다음 산호궁 레벨 조건(화이트아웃식 '다음 단계' 안내) */
 function goalPaint(){var el=$('goal'),L=HLV(),h;if(L>=10){el.hidden=true;return}var nx=HL[L+1];
-  if(!VG.b.some(function(b){return b.p==='pump'}))h='🎯 숨샘부터<small>「숨·광산」→ 숨샘 · 산소가 없으면 아무것도 안 자라요</small>';
+  if(!VG.b.some(function(b){return b.p==='pump'}))h='🎯 숨샘부터<small>「숨·광산」→ 숨샘 · 길에 붙여야 산소가 나와요 · 길은 「길」 탭에서 직접 깔아요</small>';
   else if(Object.keys(VG.road).length<12)h='🎯 길을 내요<small>「길」→ 산호궁 앞에서 끌어서</small>';
   else if(ST.cnt.R<3)h='🎯 집 구역을 칠해요<small>「구역」→ 길 옆을 끌어서 칠하면 물고기가 집을 지어요</small>';
   else{var rows=nx.req.map(function(r){return (reqOk(r)?'✅ ':'⬜ ')+reqTxt(r)}).join(' · ');h='🏛 산호궁 Lv.'+(L+1)+' 조건<small>'+rows+'</small>'}
@@ -489,7 +491,7 @@ function renderTray(soft){var tr=$('tray'),sig=TAB+'|'+(TOOL||'')+'|'+Math.floor
     if(o.lock){var lk=document.createElement('div');lk.className='lk';lk.textContent='🔒 🏛Lv.'+o.lock;el.appendChild(lk)}else if(o.full){var lk2=document.createElement('div');lk2.className='lk';lk2.textContent='한도 '+o.cnt;el.appendChild(lk2)}
     if(o.c0&&(VG.money<o.c0[0]||VG.stone<o.c0[1]))el.dataset.poor='1';if(TOOL===o.id)el.dataset.on='1';
     el.addEventListener('click',function(){if(o.lock){toast('산호궁 Lv.'+o.lock+'에 열려요');return}if(o.full){toast('지금 산호궁 레벨에선 '+o.cnt+'개까지예요 · 산호궁을 키워요');return}if(TOOL===o.id){stopTool();return}TOOL=o.id;SEL=null;$('panel').hidden=true;GHOST=null;
-      showHint(o.id==='road'?'끌어서 길을 깔아요(ㄱ자로)':o.id[0]==='z'?(o.id==='z0'?'끌어서 구역을 지워요':'끌어서 네모로 칠해요'):o.id==='doze'?'누르거나 끌어서 치워요':(P[o.id.slice(2)]&&P[o.id.slice(2)].t==='deco'?'놓을 칸을 눌러요 · 한 번 더 누르면 공사 시작':'🟢 초록 점에만 지어요 · 길에 붙이고 시설끼리 한 칸 띄워요'));renderTray()});tr.appendChild(el)})}
+      showHint(o.id==='road'?'끌어서 길을 깔아요(ㄱ자로)':o.id[0]==='z'?(o.id==='z0'?'끌어서 구역을 지워요':'끌어서 네모로 칠해요'):o.id==='doze'?'누르거나 끌어서 치워요':(P[o.id.slice(2)]&&P[o.id.slice(2)].t==='deco'?'놓을 칸을 눌러요 · 한 번 더 누르면 공사 시작':'🟢 길 닿는 칸 · 🟡 길 없는 칸(길 이어야 일함) · 시설끼리 한 칸 띄워요'));renderTray()});tr.appendChild(el)})}
 document.querySelectorAll('#tabs button').forEach(function(b){b.addEventListener('click',function(){TAB=b.dataset.t;stopTool()})});
 function showHint(s){var h=$('hint');h.firstChild.textContent=s;h.hidden=false}
 function stopTool(){TOOL=null;GHOST=null;PICK=null;$('hint').hidden=true;renderTray()}
@@ -506,7 +508,7 @@ function openPanel(b){var p=$('panel'),h='';
   else if(b&&b.chunk){var pr=chunkPrice(),lim=HL[HLV()].land,n=Object.keys(VG.own).length;h='<h2>🔒 새 땅</h2>8×8칸을 내 땅으로 만들어요<br>값 '+costTxt(pr)+'<br>지금 땅 '+n+' / '+lim+'구획(산호궁 레벨이 오르면 더 살 수 있어요)<div class="row">'+(n<lim?'<button class="hot" data-a="buy">땅 사기</button>':'<button disabled>산호궁을 키워요</button>')+'<button data-a="x">닫기</button></div>'}
   else{var d=b.p?P[b.p]:null,L=b.lv||1;h='<h2>'+(d?d.n:ZG[b.z].n)+' <span class="lv">Lv.'+L+'</span></h2>';
     if(!built(b)||b.up){var tot=b.up?b.up.bt:b.bt,pr2=b.up?b.up.bp:b.bp;h+='<b>🔨 '+(b.up?'Lv.'+b.up.lv+'로 올리는 중':'짓는 중')+'</b> · 남은 시간 '+mmss(tot-pr2)+'<div class="meter"><i style="width:'+Math.round(pr2/tot*100)+'%;background:#FFD25C"></i></div>'+(b.p?'<small>게 일꾼이 일하고 있어요</small>':'<small>주민들이 짓고 있어요</small>')}
-    else{if(b.ab)h+='<div class="bad">빈 건물 · 길이나 산소가 끊겼어요</div>';else if(b.ok===false)h+='<div class="bad">'+(b.z&&!O2[tk(b.x,b.y)]?'산소가 닿지 않아요 · 숨샘를 놓아요':'해류 입구와 길로 이어져야 해요')+'</div>'}
+    else{if(b.ab)h+='<div class="bad">빈 건물 · 길이나 산소가 끊겼어요</div>';else if(b.ok===false)h+='<div class="bad">'+(b.z&&!O2[tk(b.x,b.y)]?'산소가 닿지 않아요 · 숨샘를 놓아요':(b.p?'길이 닿지 않아 일을 못 해요 · 해류 입구까지 길을 이어 붙여요':'해류 입구와 길로 이어져야 해요'))+'</div>'}
     if(b.z&&built(b)){h+='땅값 '+(b.lvv|0)+'<div class="meter"><i style="width:'+(b.lvv|0)+'%;background:'+(b.lvv>=60?'#35C27A':b.lvv>=40?'#F2B233':'#E5484D')+'"></i></div>'+(b.z==='R'?'사는 물고기 '+(b.occ|0)+' / '+ZG.R.cap[b.lv]:'일자리 '+ZG[b.z].jobs[b.lv]);if(b.lv<3&&!b.up){var zl=HL[HLV()].zl;h+='<br><small>'+(b.lv>=zl?'산호궁 Lv.'+(b.lv===1?3:6)+'부터 더 크게 다시 지어요':'땅값이 오르고 수요가 있으면 🪨'+ZST[b.lv+1]+'을 써서 더 크게 다시 지어요')+'</small>'}}
     if(d&&built(b)&&b.p!=='hall'){if(d.info)h+='<small>'+d.info+'</small><br>';h+=effTxt(b)+(d.up?' · 유지비 🐚'+d.up*L+'/달':'')}
     if(b.p==='hall'&&built(b)){h+='물고기 '+ST.pop+' · 일꾼 🦀'+crabsMax()+' · 땅 '+Object.keys(VG.own).length+'/'+HL[L].land+'구획 · 집 최대 '+HL[L].zl+'단계'}
@@ -559,8 +561,8 @@ function hitB(sx,sy){var best=null,bz=-1;VG.b.forEach(function(b){var s=bSize(b)
 function tap(sx,sy){var tl=s2tile(sx,sy),x=tl[0],y=tl[1];
   if(TOOL&&TOOL.indexOf('p:')===0){var k=TOOL.slice(2),d=P[k],s=d.s,gx=x-(s>1?1:0),gy=y-(s>1?1:0),why=siteWhy(k,gx,gy),ok=!why;
     if(GHOST&&GHOST.p&&GHOST.x===gx&&GHOST.y===gy&&ok){var c0=costOf(k,1);if(countOf(k)>=limitOf(k)){toast('산호궁 레벨 한도예요');return}if(crabsBusy()>=crabsMax()){toast('🦀 게 일꾼이 모두 일하는 중이에요 · 하나가 끝나면 지어요');return}if(!pay(c0)){toast('조개돈 · 산호석이 모자라요');return}
-      var nb={id:VG.nid++,p:k,x:gx,y:gy,f:0,bp:0,bt:d.bt,lv:1};VG.b.push(nb);occMap();floatTxt(nb,'-'+costTxt(c0));persist();GHOST=null;paintHud();return}
-    var tl2=[];for(var i=0;i<s;i++)for(var j=0;j<s;j++)tl2.push([gx+i,gy+j]);GHOST={p:k,x:gx,y:gy,ok:ok&&VG.money>=costOf(k,1)[0],tiles:tl2};if(!ok)toast(why);return}
+      var nb={id:VG.nid++,p:k,x:gx,y:gy,f:0,bp:0,bt:d.bt,lv:1};VG.b.push(nb);occMap();floatTxt(nb,'-'+costTxt(c0));if(!roadOk(k,gx,gy))toast('공사는 시작했어요 · 길을 이어 붙여야 일을 해요');persist();GHOST=null;paintHud();return}
+    var tl2=[];for(var i=0;i<s;i++)for(var j=0;j<s;j++)tl2.push([gx+i,gy+j]);GHOST={p:k,x:gx,y:gy,ok:ok&&VG.money>=costOf(k,1)[0],tiles:tl2,nr:ok&&!roadOk(k,gx,gy)};if(!ok)toast(why);else if(GHOST.nr)toast('여기는 길이 안 닿아요 · 지어도 길을 이어야 일해요');return}
   if(TOOL==='move'&&PICK){var s2=bSize(PICK),mx=x-(s2>1?1:0),my=y-(s2>1?1:0),mw=PICK.p?siteWhy(PICK.p,mx,my,PICK):(freeArea(mx,my,s2,PICK)?'':'이 칸엔 못 옮겨요');if(!mw){PICK.x=mx;PICK.y=my;occMap();persist();var b0=PICK;stopTool();SEL=b0;openPanel(b0)}else toast(mw);return}
   var hb=hitB(sx,sy);if(hb){SEL=hb;openPanel(hb);return}
   if(inb(x,y)&&!own(x,y)){var cx=Math.floor(x/CK),cy=Math.floor(y/CK);if(chunkBuyable(cx,cy)){SEL={chunk:1,cx:cx,cy:cy};openPanel(SEL);return}toast('붙어 있는 땅부터 살 수 있어요');return}

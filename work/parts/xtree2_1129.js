@@ -3,9 +3,8 @@
       + 새 장식 5종: 사파이어 · 에메랄드 · 가리비 · 진주 조개 · 해파리. 모두 금빛 고리 + 실로 매달림
    ② 반짝이 줄: 막대 조각 → 보송보송한 가닥 + 반짝임 / 진주 줄은 진주 그림으로
    ③ 알아서 꾸미기: 가진 걸 다 붙이면 빽빽해서 → 종류 골고루 최대 28개 + 줄 3개(전구 2 · 반짝이 1). 나머지는 서랍에 남음
-   ④ 수족관 뒤 큰 트리(크리스마스 기간): 물 배경 위 · 소품/물고기 뒤에 반투명(낮 .36 · 밤 .5)으로 바닥에서 거의 천장까지.
-      내 트리 장식이 12개 넘으면 그대로, 적으면 기본 장식 세트로 꾸밈. 카메라보다 천천히 움직여 멀리 있는 느낌.
-      꾸미기 창 「🌲 뒤 큰 트리」로 켜고 끔(save.xtBig=0 이면 끔)
+   ④ (늑구 '배경 큰 트리 빼고 · 트리 하나 빼고 하나를 더 크게 · 대신 옮길 수 있게') 집 양쪽 두 그루 → 집 옆 한 그루, 크기 .72 → .95(가로 화면 .52 → .68).
+      처음 한 번만 집 왼쪽에 자리 잡아 주고(save.xtOne), 그 뒤엔 「꾸미기」에서 끌어 옮기고 크게 · 작게 · 뒤집기
    ⑤ 장식을 다 달아 서랍이 비면 '모두 달았어요' 안내 ===== */
 var XT_ART={p_pearl:'pearl',p_star:'dc_star',p_heart:'it_heal',p_moon:'slash',p_ribbon:'gem_r',p_gribbon:'it_gold',p_candy:'fx_candy',p_conch:'conch',q_sapph:'gem_b',q_emer:'gem_g',q_scal:'shell',q_clam:'it_pearl',q_jelly:'jelly'};
 var XT_NEW2=[['q_sapph','사파이어',180],['q_emer','에메랄드',180],['q_scal','가리비',150],['q_clam','진주 조개',220],['q_jelly','해파리',200]];
@@ -15,9 +14,6 @@ abyTr(TRT,{'얼음 초승달':'Ice crescent','루비':'Ruby','황금 비늘':'Go
 abyTr(TRJ,{'얼음 초승달':'氷の三日月','루비':'ルビー','황금 비늘':'金のうろこ','하트 거품':'ハートのあわ','사파이어':'サファイア','에메랄드':'エメラルド','가리비':'ホタテ','진주 조개':'真珠の貝','해파리':'クラゲ'});
 if(SUBL==='es')abyTr(TRX,{'얼음 초승달':'Media luna de hielo','루비':'Rubí','황금 비늘':'Escama dorada','하트 거품':'Burbuja corazón','사파이어':'Zafiro','에메랄드':'Esmeralda','가리비':'Vieira','진주 조개':'Almeja perla','해파리':'Medusa'});
 else if(SUBL==='vi')abyTr(TRX,{'얼음 초승달':'Trăng băng','루비':'Hồng ngọc','황금 비늘':'Vảy vàng','하트 거품':'Bong bóng tim','사파이어':'Ngọc bích','에메랄드':'Ngọc lục bảo','가리비':'Sò điệp','진주 조개':'Trai ngọc','해파리':'Sứa'});
-XT_WORDS.big={ko:'🌲 뒤 큰 트리',en:'🌲 Big tree',ja:'🌲 大きな木',es:'🌲 Árbol grande',vi:'🌲 Cây lớn'};
-XT_WORDS.bigOn={ko:'수족관 뒤에 큰 트리를 띄워요',en:'A big tree glows behind your aquarium',ja:'水そうのうしろに大きなツリー',es:'Un gran árbol detrás del acuario',vi:'Cây lớn phía sau bể cá'};
-XT_WORDS.bigOff={ko:'뒤 큰 트리를 껐어요',en:'Big tree off',ja:'大きなツリーをオフ',es:'Árbol grande apagado',vi:'Đã tắt cây lớn'};
 XT_WORDS.allHung={ko:'가진 장식을 모두 달았어요 · 장식 가게에서 더 살 수 있어요',en:'Everything is on the tree · get more in the shop',ja:'かざりを全部つけました・ショップでもっと買えます',es:'Todo está en el árbol · compra más en la tienda',vi:'Đã treo hết · mua thêm ở cửa hàng'};
 setTimeout(function(){try{for(var k in XT_ART)xmSpr(XT_ART[k])}catch(e){}},2400);
 
@@ -66,31 +62,16 @@ xtAuto=function(){var o=XT(),F=xtF(),k,i;function isS(kk){var kd=xtKind(kk);retu
     if(!best)return;F.push({k:k3,u:best[0],v:best[1]});XT_SW[F.length-1]=.3;if(xtKind(k3)!=='fish')o.inv[k3]--;added++});
   persist();crumb('xtAuto');try{svSnd('lvl');buzz([20,30,20])}catch(x){}banner(xtW('autoDone'),xtW('hung')+F.length);xtRender()};
 
-/* ⑤ 꾸미기 창: 뒤 큰 트리 켜고 끄기 · 다 달았을 때 안내 */
+/* ⑤ 꾸미기 창: 다 달았을 때 안내 */
 var xtRenderXT2=xtRender;xtRender=function(){var r=xtRenderXT2.apply(this,arguments);try{var el=$('xtP');if(!el)return r;
   var nn=el.querySelector('.xt-none');if(nn&&(XTE.tab==='orn'||XTE.tab==='str')&&xtF().length)nn.textContent=xtW('allHung');
-  var b=$('xtBig');if(!b){var bar=el.querySelector('.xt-bar');if(bar){b=document.createElement('button');b.type='button';b.id='xtBig';bar.appendChild(b);
-    b.addEventListener('click',function(){save.xtBig=save.xtBig===0?1:0;persist();crumb('xtBig:'+save.xtBig);try{svSnd('bub')}catch(e){}banner(xtW(save.xtBig===0?'bigOff':'bigOn'),'');xtRender()})}}
-  if(b){b.textContent=xtW('big');b.setAttribute('aria-pressed',save.xtBig===0?'false':'true');b.style.opacity=save.xtBig===0?'.55':'1'}}catch(e){}return r};
+  }catch(e){}return r};
 
-/* ④ 수족관 뒤 큰 트리 */
-var XTBG={c:null,f:0,key:''},XT_BIGDEF=null;
-function xtBigOn(){try{return page==='tank'&&!VISIT&&save.xtBig!==0&&xmSeason()}catch(e){return false}}
-function xtBigSet(){var F=xtF();if(F.length>=12)return F;if(XT_BIGDEF)return XT_BIGDEF;if(!xtMask())return F;
-  var S=[{k:'star',u:.5,v:.04},{k:'l_warm',u:.5,v:.33},{k:'g_gold',u:.5,v:.47},{k:'l_multi',u:.5,v:.6},{k:'g_pearl',u:.5,v:.72}],
-    K=['red','gold','blue','p_pearl','pink','q_sapph','bell','green','p_heart','purple','present','flake','aqua','q_emer','cane','p_ribbon','snowman','q_scal','gold','red','p_star','wreath','blue','q_clam','gingerbread','pink','p_conch','sock','aqua','bflake'],n=0,sd=1;
-  K.forEach(function(k){if(k==='gingerbread')k='ginger';var best=null,bs=-1;for(var c=0;c<80;c++){var u=xtH(sd++),v=.13+xtH(sd++)*.63;if(!xtGood(u,v))continue;var dm=1e9;S.forEach(function(it){var kd=xtKind(it.k);if(kd==='gar'||kd==='light'||it.k==='star')return;dm=Math.min(dm,Math.hypot((it.u-u)*.8,it.v-v))});if(dm>bs){bs=dm;best=[u,v]}}if(best){S.push({k:k,u:best[0],v:best[1]});n++}});
-  XT_BIGDEF=S;return S}
-function xtBigDraw(){if(!xtBigOn())return;var im=xmSpr('dc_xm_mytree');if(!im)return;
-  var fy=zy(floorY()),th=Math.max(ch*.5,(fy-ch*.07)/.93),tw=th*im.naturalWidth/im.naturalHeight,wx=TWW()*.5,sx=xOff()+tankZ*(wx-tankCam),cx=cw*.5+(sx-cw*.5)*.35,by=fy+th*.07,nt=abyNight();
-  if(cx+tw*.5<0||cx-tw*.5>cw)return;
-  var s=Math.min(1.25,window.devicePixelRatio||1);if(tw*s>900)s=900/tw;var pw=Math.ceil(tw*s),ph=Math.ceil(th*s);
-  if(!XTBG.c)XTBG.c=document.createElement('canvas');var oc=XTBG.c;
-  var set=xtBigSet(),key=pw+'x'+ph+(nt?'n':'d')+set.length+':'+set.reduce(function(a,it){return a+(it.u||0)*7+(it.v||0)*13},0).toFixed(3);
-  /* 장식 그림은 바뀔 때만 다시 그림(멀리 있는 트리라 흔들림 없이 고정) — 매 프레임 다시 그리면 수족관이 느려짐 */
-  if(XTBG.key!==key||XTBG.f++>600){XTBG.key=key;XTBG.f=0;if(oc.width!==pw||oc.height!==ph){oc.width=pw;oc.height=ph}var x=oc.getContext('2d');x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,pw,ph);x.setTransform(s,0,0,s,0,0);
-    x.save();x.globalCompositeOperation='lighter';x.globalAlpha=nt?.35:.18;x.drawImage(glow('255,214,140'),-tw*.15,th*.02,tw*1.3,th*.9);x.restore();x.drawImage(im,0,0,tw,th);var old=xtF,t0=t;xtF=function(){return set};try{t=0;xtDrawSet(x,0,0,tw,th,{night:nt})}catch(e){}finally{xtF=old;t=t0}}
-  var pul=.92+.08*Math.sin(t*1.2);
-  ctx.save();ctx.globalAlpha=(nt?.5:.36)*pul;ctx.drawImage(oc,cx-tw/2,by-th,tw,th);ctx.restore()}
+/* ④ 트리는 집 옆 한 그루만 크게 · 꾸미기에서 옮기기 */
+XBT_W=.95;try{var DT3=decoById('xm_mytree');if(DT3){delete DT3.w;Object.defineProperty(DT3,'w',{configurable:true,enumerable:true,get:function(){return cw>ch*1.2?.68:XBT_W}})}}catch(e){}
+xtTwins=function(){try{if(save.xtOne||VISIT)return;var d=DS(),trees=d.placed.filter(function(q){return q.k==='xm_mytree'&&!q.pv});if(!trees.length)return;
+  var W=TWW(),D=decoById('xm_mytree'),hp=housePos(),hw=Math.max(hp.w,hp.d?hp.d.iw:0)/2,tw=decoW(D,1)/2,x=clamp((hp.x-hw-tw*.75)/W,.06,.94),a=trees[0];
+  a.s=1;a.f=0;a.x=x;a.y=clamp((floorAt(x*W)+ch*.03-decoW(D,1)*decoAR(D)*.42)/ch,.25,.95);
+  d.placed=d.placed.filter(function(q){return q.k!=='xm_mytree'||q===a||q.pv});d.placed.splice(d.placed.indexOf(a),1);d.placed.unshift(a);
+  save.xtOne=1;persist();crumb('xtOne');try{refreshTank()}catch(x){}}catch(e){}};
 (function(){var st=document.createElement('style');st.textContent='#xtP .xt-it .cost{display:flex;flex-direction:column;align-items:center;gap:0;line-height:1.15}#xtP .xt-it .cost small{font-size:10px;opacity:.8}#xtP .xt-it{padding-bottom:6px}';document.head.appendChild(st)})();
-var drawTankWaterXT=drawTankWater;drawTankWater=function(){var r=drawTankWaterXT.apply(this,arguments);try{xtBigDraw()}catch(e){}return r};

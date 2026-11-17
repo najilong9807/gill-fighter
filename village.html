@@ -75,6 +75,7 @@ button.pill{cursor:pointer}
   <button class="pill hall" id="hHall" type="button">🏛 Lv.1</button>
   <button class="pill" id="hMoney" type="button">🐚 0</button>
   <div class="pill" id="hStone">🪨 0</div>
+  <div class="pill" id="hGem">💎 0</div>
   <button class="pill" id="hFood" type="button">🍡 0</button>
   <div class="pill" id="hPop">🐟 0</div>
   <div class="pill" id="hCrab">🦀 1/1</div>
@@ -173,12 +174,14 @@ var COST={road:10,zone:5,rock:40,kelp:15,doze:2};
 var N=64,MID=32,CK=8,KEY='fishvillage.v6',VG=null;
 function genMap(seed){var T=[],x,y;for(y=0;y<N;y++)for(x=0;x<N;x++){var n=hh(seed*977+x*31+y*7),c=hh(seed+Math.floor(x/4)*13+Math.floor(y/4)*29),v=0;if(c>.7&&n>.5)v=2;else if(n>.965)v=1;if(c<.07&&n>.45)v=1;T.push(v)}
   for(y=MID-6;y<=MID+6;y++)for(x=0;x<14;x++)T[y*N+x]=0;return T}
-function fresh(){var seed=Math.floor(Math.random()*1e6),g={v:6,seed:seed,money:3000,stone:200,food:100,kelp:0,tax:9,tick:0,month:1,year:1,rot:0,ter:genMap(seed),road:{},zone:{},b:[],nid:1,last:{inc:0,exp:0},spd:1,own:{}};
+function fresh(){var seed=Math.floor(Math.random()*1e6),g={v:6,seed:seed,gems:30,money:3000,stone:200,food:100,kelp:0,tax:9,tick:0,month:1,year:1,rot:0,ter:genMap(seed),road:{},zone:{},b:[],nid:1,last:{inc:0,exp:0},spd:1,own:{}};
   for(var cx=0;cx<2;cx++)for(var cy=3;cy<6;cy++)g.own[cx+','+cy]=1;for(var x=0;x<6;x++)g.road[x+','+MID]=1;g.b.push({id:g.nid++,p:'hall',x:6,y:MID-1,f:0,bp:1,bt:0,lv:1});return g}
 function load(){try{var s=localStorage.getItem(KEY);if(s){var g=JSON.parse(s);if(g&&g.v===6)return g}}catch(e){}return fresh()}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(VG))}catch(e){}}
 var ST={pop:0,jobsC:0,jobsI:0,jobsP:0,work:0,hap:0,dem:{R:0,C:0,I:0},cnt:{R:0,C:0,I:0},hungry:false,eat:0,makeR:0,kelpR:0,stoneR:0};
-VG=load();
+VG=load();if(VG.gems==null)VG.gems=30;
+/* 보석: 게임에 붙일 땐 save.gems로 바꿔요 */
+var GEM={get:function(){return VG.gems|0},spend:function(n){if((VG.gems|0)<n)return false;VG.gems-=n;persist();return true}};
 function tk(x,y){return x+','+y}
 function inb(x,y){return x>=0&&y>=0&&x<N&&y<N}
 function own(x,y){return inb(x,y)&&!!VG.own[Math.floor(x/CK)+','+Math.floor(y/CK)]}
@@ -306,7 +309,7 @@ function vgDraw(){ctx.setTransform(dpr,0,0,dpr,0,0);var i;
   drawSign();
   VG.b.forEach(function(b){var s=bSize(b),c=centerOf(b.x,b.y,s);
     if(!built(b)||b.up){var tot=b.up?b.up.bt:b.bt,pr=b.up?b.up.bp:b.bp,by3=c[1]-TH*(s>1?3.4:2.4);ctx.save();ctx.fillStyle='#123049';ctx.beginPath();ctx.roundRect?ctx.roundRect(c[0]-36,by3-8,72,16,8):ctx.rect(c[0]-36,by3-8,72,16);ctx.fill();ctx.fillStyle='#FFD25C';ctx.beginPath();ctx.roundRect?ctx.roundRect(c[0]-34,by3-6,68*clamp(pr/tot,0,1),12,6):ctx.rect(c[0]-34,by3-6,68*clamp(pr/tot,0,1),12);ctx.fill();
-      ctx.font='900 13px system-ui';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#123049';var lab='🔨 '+mmss(tot-pr);ctx.strokeText(lab,c[0],by3-10);ctx.fillStyle='#fff';ctx.fillText(lab,c[0],by3-10);ctx.restore();return}
+      ctx.font='900 13px system-ui';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#123049';var lab=(tot-pr<=30?'⚡ ':'🔨 ')+mmss(tot-pr);ctx.strokeText(lab,c[0],by3-10);ctx.fillStyle='#fff';ctx.fillText(lab,c[0],by3-10);ctx.restore();return}
     if(b.ok!==false)return;var by2=c[1]-TH*2.2*s+Math.sin(t*3+b.id)*2;ctx.beginPath();ctx.arc(c[0],by2,11,0,7);ctx.fillStyle=b.ab?'#7A7A7A':'#E5484D';ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#fff';ctx.stroke();ctx.font='900 11px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#fff';ctx.fillText(b.z&&!O2[tk(b.x,b.y)]?'O₂':b.p?'길':'!',c[0],by2+1);ctx.textBaseline='alphabetic'});
   PUFF.forEach(function(pf){var a=pf.t/.8;ctx.globalAlpha=clamp(1-a,0,1);for(var j=0;j<8;j++){var an=j/8*6.28,rr=12+a*30;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(pf.c[0]+Math.cos(an)*rr,pf.c[1]-14+Math.sin(an)*rr*.5,6*(1-a)+2,0,7);ctx.fill()}ctx.globalAlpha=1});
   FLT.forEach(function(f){var c=f.c,a=1-f.t/1.8;ctx.globalAlpha=clamp(a,0,1);ctx.font='900 15px system-ui';ctx.textAlign='center';ctx.lineWidth=4;ctx.strokeStyle='#123049';ctx.strokeText(f.s,c[0],c[1]-TH*2.6-f.t*28);ctx.fillStyle='#FFE27A';ctx.fillText(f.s,c[0],c[1]-TH*2.6-f.t*28);ctx.globalAlpha=1});
@@ -463,7 +466,7 @@ var FLT=[],PUFF=[];function floatTxt(b,s){FLT.push({c:centerOf(b.x,b.y,bSize(b))
 
 /* ===== 화면 위 표시 · 다음 단계 안내 ===== */
 function fmt(n){return Math.round(n).toLocaleString()}
-function paintHud(){var L=HLV();$('hHall').innerHTML='🏛 <b>Lv.'+L+'</b>'+(hallB().up?' 🔨':'');$('hMoney').textContent='🐚 '+fmt(VG.money);$('hMoney').style.color=VG.money<0?'#C02B2B':'';$('hStone').textContent='🪨 '+fmt(VG.stone);
+function paintHud(){var L=HLV();$('hHall').innerHTML='🏛 <b>Lv.'+L+'</b>'+(hallB().up?' 🔨':'');$('hMoney').textContent='🐚 '+fmt(VG.money);$('hGem').textContent='💎 '+fmt(GEM.get());$('hMoney').style.color=VG.money<0?'#C02B2B':'';$('hStone').textContent='🪨 '+fmt(VG.stone);
   var net=ST.makeR-ST.eat;$('hFood').textContent='🍡 '+fmt(VG.food)+(ST.pop?(net>=0?' ↑':' ↓'):'');$('hFood').classList.toggle('warn',ST.hungry||(ST.pop>0&&VG.food<30&&net<0));
   $('hPop').textContent='🐟 '+fmt(ST.pop)+(ST.pop?' '+(ST.hap>=70?'😊':ST.hap>=45?'🙂':'😟'):'');$('hCrab').textContent='🦀 '+Math.max(0,crabsMax()-crabsBusy())+'/'+crabsMax();$('hDate').textContent=VG.year+'년 '+VG.month+'월';
   var us=$('hDem').querySelectorAll('u');['R','C','I'].forEach(function(z,i){us[i].style.height=Math.round(clamp(ST.dem[z],0,1)*100)+'%'});goalPaint();try{$('goal').style.top=($('hud').getBoundingClientRect().bottom+6)+'px'}catch(e){}renderTray(true);if(SEL)openPanel(SEL)}
@@ -498,7 +501,8 @@ function stopTool(){TOOL=null;GHOST=null;PICK=null;$('hint').hidden=true;renderT
 $('hintX').addEventListener('click',stopTool);
 
 /* ===== 패널 ===== */
-function rushCost(b){var left=b.up?b.up.bt-b.up.bp:b.bt-b.bp;return Math.max(5,Math.ceil(left*3))}
+/* 빨리 짓기 = 보석: 30초 이하 무료, 그 위로 2분마다 💎1 */
+function rushCost(b){var left=b.up?b.up.bt-b.up.bp:b.bt-b.bp;return left<=30?0:Math.ceil(left/120)}
 function effTxt(b){var e=eff(b),o=[];if(e.o2)o.push('산소 반경 '+e.o2+'칸');if(e.stone)o.push('산호석 '+(e.stone*60).toFixed(0)+'/분');if(e.kelp)o.push('다시마 '+(e.kelp*60).toFixed(0)+'/분');if(e.make)o.push('경단 '+(e.make*120).toFixed(0)+'/분');if(e.jobs)o.push('일자리 '+e.jobs);if(e.hap)o.push('주변 '+e.r+'칸 땅값 +'+e.hap);return o.join(' · ')}
 function upInfo(b){var k=b.p,L=b.lv||1;if(k==='hall'){if(L>=10)return null;var nx=HL[L+1];return {req:nx.req.map(function(r){return [reqTxt(r),reqOk(r)]}),cost:nx.cost,bt:nx.bt,open:nx.open,max:nx.max,nx:nx}}
   var cap=HLV();return {req:[['산호궁 Lv.'+(L+1),cap>=L+1]],cost:costOf(k,L+1),bt:timeOf(k,L+1)}}
@@ -507,20 +511,20 @@ function openPanel(b){var p=$('panel'),h='';
     '<div style="margin-top:6px;font-weight:800">세율 '+VG.tax+'%</div><input type="range" min="0" max="20" value="'+VG.tax+'" id="taxR"><small>세금을 올리면 돈은 늘지만 땅값 · 수요가 떨어져요</small><div class="row"><button data-a="new" class="no">새 마을</button><button data-a="x">닫기</button></div>'}
   else if(b&&b.chunk){var pr=chunkPrice(),lim=HL[HLV()].land,n=Object.keys(VG.own).length;h='<h2>🔒 새 땅</h2>8×8칸을 내 땅으로 만들어요<br>값 '+costTxt(pr)+'<br>지금 땅 '+n+' / '+lim+'구획(산호궁 레벨이 오르면 더 살 수 있어요)<div class="row">'+(n<lim?'<button class="hot" data-a="buy">땅 사기</button>':'<button disabled>산호궁을 키워요</button>')+'<button data-a="x">닫기</button></div>'}
   else{var d=b.p?P[b.p]:null,L=b.lv||1;h='<h2>'+(d?d.n:ZG[b.z].n)+' <span class="lv">Lv.'+L+'</span></h2>';
-    if(!built(b)||b.up){var tot=b.up?b.up.bt:b.bt,pr2=b.up?b.up.bp:b.bp;h+='<b>🔨 '+(b.up?'Lv.'+b.up.lv+'로 올리는 중':'짓는 중')+'</b> · 남은 시간 '+mmss(tot-pr2)+'<div class="meter"><i style="width:'+Math.round(pr2/tot*100)+'%;background:#FFD25C"></i></div>'+(b.p?'<small>게 일꾼이 일하고 있어요</small>':'<small>주민들이 짓고 있어요</small>')}
-    else{if(b.ab)h+='<div class="bad">빈 건물 · 길이나 산소가 끊겼어요</div>';else if(b.ok===false)h+='<div class="bad">'+(b.z&&!O2[tk(b.x,b.y)]?'산소가 닿지 않아요 · 숨샘를 놓아요':(b.p?'길이 닿지 않아 일을 못 해요 · 해류 입구까지 길을 이어 붙여요':'해류 입구와 길로 이어져야 해요'))+'</div>'}
+    if(!built(b)||b.up){var tot=b.up?b.up.bt:b.bt,pr2=b.up?b.up.bp:b.bp;h+='<b>🔨 '+(b.up?'Lv.'+b.up.lv+'로 올리는 중':'짓는 중')+'</b> · 남은 시간 '+mmss(tot-pr2)+'<div class="meter"><i style="width:'+Math.round(pr2/tot*100)+'%;background:#FFD25C"></i></div>'+'<small>'+(b.p?'게 일꾼이 일하고 있어요':'주민들이 짓고 있어요')+' · 30초 남으면 무료로 바로 완성</small><br>'}
+    else{if(b.ab)h+='<div class="bad">빈 건물 · 길이나 산소가 끊겼어요</div>';else if(b.ok===false)h+='<div class="bad">'+(b.z&&!O2[tk(b.x,b.y)]?'산소가 닿지 않아요 · 숨샘을 놓아요':(b.p?'길이 닿지 않아 일을 못 해요 · 해류 입구까지 길을 이어 붙여요':'해류 입구와 길로 이어져야 해요'))+'</div>'}
     if(b.z&&built(b)){h+='땅값 '+(b.lvv|0)+'<div class="meter"><i style="width:'+(b.lvv|0)+'%;background:'+(b.lvv>=60?'#35C27A':b.lvv>=40?'#F2B233':'#E5484D')+'"></i></div>'+(b.z==='R'?'사는 물고기 '+(b.occ|0)+' / '+ZG.R.cap[b.lv]:'일자리 '+ZG[b.z].jobs[b.lv]);if(b.lv<3&&!b.up){var zl=HL[HLV()].zl;h+='<br><small>'+(b.lv>=zl?'산호궁 Lv.'+(b.lv===1?3:6)+'부터 더 크게 다시 지어요':'땅값이 오르고 수요가 있으면 🪨'+ZST[b.lv+1]+'을 써서 더 크게 다시 지어요')+'</small>'}}
     if(d&&built(b)&&b.p!=='hall'){if(d.info)h+='<small>'+d.info+'</small><br>';h+=effTxt(b)+(d.up?' · 유지비 🐚'+d.up*L+'/달':'')}
     if(b.p==='hall'&&built(b)){h+='물고기 '+ST.pop+' · 일꾼 🦀'+crabsMax()+' · 땅 '+Object.keys(VG.own).length+'/'+HL[L].land+'구획 · 집 최대 '+HL[L].zl+'단계'}
     var U=(built(b)&&!b.up&&b.p&&!(d.t==='deco'))?upInfo(b):null;
     if(U){h+='<div class="up"><b>⬆ Lv.'+(L+1)+' 조건</b><br>'+U.req.map(function(r){return (r[1]?'✅ ':'⬜ ')+r[0]}).join('<br>')+'<br>'+(VG.money>=U.cost[0]&&VG.stone>=U.cost[1]?'✅ ':'⬜ ')+costTxt(U.cost)+' · ⏱'+mmss(U.bt);
       if(U.open){var nm=U.open.map(function(k){return k==='zI'?'공방 구역':k==='zC'?'장터 구역':P[k]?P[k].n:k});var mx=Object.keys(U.max).map(function(k){return P[k].n+' '+U.max[k]+'개'});h+='<br><small>열리는 것: '+(nm.concat(mx).join(', ')||'-')+(U.nx.crabs>HL[L].crabs?', 게 일꾼 +1':'')+(U.nx.zl>HL[L].zl?', 집 '+U.nx.zl+'단계':'')+', 땅 '+U.nx.land+'구획</small>'}h+='</div>'}
-    h+='<div class="row">'+((!built(b)||b.up)?'<button class="hot" data-a="rush">🐚'+rushCost(b)+' 바로 완성</button>':'')+(U?'<button class="hot" data-a="up">레벨업</button>':'')+(d&&d.fixed?'':(d&&built(b)?'<button data-a="move">옮기기</button>':'')+'<button data-a="flip">돌리기</button><button class="no" data-a="del">부수기</button>')+'<button data-a="x">닫기</button></div>'}
+    h+='<div class="row">'+((!built(b)||b.up)?'<button class="hot" data-a="rush">'+(rushCost(b)?'💎'+rushCost(b)+' 바로 완성':'⚡ 무료로 바로 완성')+'</button>':'')+(U?'<button class="hot" data-a="up">레벨업</button>':'')+(d&&d.fixed?'':(d&&built(b)?'<button data-a="move">옮기기</button>':'')+'<button data-a="flip">돌리기</button><button class="no" data-a="del">부수기</button>')+'<button data-a="x">닫기</button></div>'}
   if(p.dataset.h!==h){p.innerHTML=h;p.dataset.h=h;p.querySelectorAll('button').forEach(function(bt){bt.addEventListener('click',function(){act(bt.dataset.a,b)})});var tr=$('taxR');if(tr)tr.addEventListener('input',function(){VG.tax=+tr.value;persist();openPanel('budget')})}p.hidden=false}
 function act(a,b){if(a==='x'){SEL=null;$('panel').hidden=true;return}
   if(a==='new'){if(confirm('지금 마을을 지우고 새로 시작할까요?')){VG=fresh();occMap();FISH.length=0;persist();SEL=null;$('panel').hidden=true;camHome();setSpeed()}return}
   if(a==='buy'){var pr=chunkPrice();if(Object.keys(VG.own).length>=HL[HLV()].land){toast('산호궁을 키우면 더 살 수 있어요');return}if(!pay(pr)){toast('조개돈 · 산호석이 모자라요');return}VG.own[b.cx+','+b.cy]=1;persist();toast('새 땅이 생겼어요! 🎉');SEL=null;$('panel').hidden=true;paintHud();return}
-  if(a==='rush'){var c=rushCost(b);if(VG.money<c){toast('조개돈이 모자라요');return}VG.money-=c;if(b.up)b.up.bp=b.up.bt-.001;else b.bp=b.bt-.001;vgTick();return}
+  if(a==='rush'){var c=rushCost(b);if(c&&!GEM.spend(c)){toast('💎 보석이 모자라요');return}if(c)floatTxt(b,'-💎'+c);if(b.up)b.up.bp=b.up.bt-.001;else b.bp=b.bt-.001;vgTick();return}
   if(a==='up'){var U=upInfo(b);if(!U)return;var bad=U.req.filter(function(r){return !r[1]});if(bad.length){toast('조건: '+bad[0][0]);return}if(crabsBusy()>=crabsMax()){toast('🦀 게 일꾼이 모두 일하는 중이에요');return}if(!pay(U.cost)){toast('조개돈 · 산호석이 모자라요');return}b.up={lv:(b.lv||1)+1,bp:0,bt:U.bt};persist();paintHud();return}
   if(a==='flip'){b.f=b.f?0:1;persist();return}
   if(a==='del'){VG.b.splice(VG.b.indexOf(b),1);if(b.z)delete VG.zone[tk(b.x,b.y)];occMap();if(b.p){var back=costOf(b.p,1);VG.money+=Math.floor(back[0]/2);VG.stone+=Math.floor(back[1]/2);toast(P[b.p].n+' 부숨 · 절반 돌려받음')}SEL=null;$('panel').hidden=true;persist();return}

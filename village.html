@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>물고기 마을 (시험판)</title>
-<!-- 물고기 마을 3차 — 늑구 '땅이 너무 좁음 · 건물이 처음부터 완성되면 안 됨, 화이트아웃 서바이벌처럼 짓는 데 시간 · 물고기밥 만드는 공장 · 스펀지밥 느낌으로'
+<!-- 이름(11/17 늑구 '물고기밥도 물고기 입장에선 다르게'): 물고기밥 → 다시마 경단(🍡), 물고기밥 공장 → 경단 공장
+     물고기 마을 3차 — 늑구 '땅이 너무 좁음 · 건물이 처음부터 완성되면 안 됨, 화이트아웃 서바이벌처럼 짓는 데 시간 · 물고기밥 만드는 공장 · 스펀지밥 느낌으로'
      · 땅 40×40, 8×8 구획으로 나눠 처음엔 6구획만 내 땅 → 옆 구획을 조개돈으로 사서 넓힘
      · 모든 건물은 공사장(비계 · 게 일꾼 · 진행 막대 · 남은 시간)부터 시작해 시간이 지나야 완성, 커질 때도 공사
      · 직접 짓는 시설은 게 일꾼 2마리가 맡음(동시에 2곳까지), 조개돈으로 바로 끝내기 가능 · 구역 건물은 주민들이 알아서 지음
@@ -74,7 +75,7 @@ button.pill{cursor:pointer}
   <button class="pill hall" id="hHall" type="button">🏛 Lv.1</button>
   <button class="pill" id="hMoney" type="button">🐚 0</button>
   <div class="pill" id="hStone">🪨 0</div>
-  <button class="pill" id="hFood" type="button">🍙 0</button>
+  <button class="pill" id="hFood" type="button">🍡 0</button>
   <div class="pill" id="hPop">🐟 0</div>
   <div class="pill" id="hCrab">🦀 1/1</div>
   <div class="pill" id="hDate">1년 1월</div>
@@ -118,8 +119,8 @@ var P={
  pump:{t:'base',n:'숨샘',s:1,c:[250,40],bt:15,up:8,info:'주변에 산소 · 건물이 자라려면 꼭 필요'},
  quarry:{t:'base',n:'산호 광산',s:1,c:[150,0],bt:15,up:4,info:'산호석(🪨)을 캐요 · 공사 · 레벨업에 써요'},
  pump2:{t:'base',n:'큰 숨탑',s:1,c:[1500,400],bt:60,up:25,info:'넓은 곳에 산소'},
- farm:{t:'food',n:'다시마 농장',s:2,c:[200,30],bt:20,up:4,info:'해초를 키워요'},
- factory:{t:'food',n:'물고기밥 공장',s:2,c:[600,150],bt:45,up:10,info:'해초 1 → 물고기밥 2'},
+ farm:{t:'food',n:'다시마 농장',s:2,c:[200,30],bt:20,up:4,info:'다시마를 키워요'},
+ factory:{t:'food',n:'경단 공장',s:2,c:[600,150],bt:45,up:10,info:'다시마 1 → 경단 2'},
  diner:{t:'food',n:'말미잘 식당',s:1,c:[300,80],bt:25,up:5,info:'따끈한 밥 · 주변 땅값 ↑'},
  park:{t:'svc',n:'산호 정원',s:1,c:[150,40],bt:15,up:4},
  lamp:{t:'svc',n:'해파리 가로등',s:1,c:[70,20],bt:8,up:1},
@@ -398,8 +399,8 @@ function design(kind,lv,sd,s){var w=PAL.wall[Math.floor(hh(sd)*6)],r=PAL.roof[Ma
   else if(kind==='clinic'){B({x0:.1,y0:.1,x1:.9,y1:.9,h:40,c:'#F4FBFF',win:{rows:2,cols:2,sq:1,r:3.2,c:'#D8F6FF'},door:1,band:[34,38,'#35C27A']});F({x:.5,y:.5,z:46,f:function(c){c.fillStyle='#35C27A';c.strokeStyle=OL;c.lineWidth=1.6;c.beginPath();c.moveTo(0,-2);c.bezierCurveTo(-12,-12,-6,-22,0,-15);c.bezierCurveTo(6,-22,12,-12,0,-2);c.fill();c.stroke()}});F({x:.9,y:.9,z:22,f:sign('불가사리 병원','#fff')})}
   else if(kind==='pump'){B({x0:.2,y0:.2,x1:.8,y1:.8,h:5,c:'#9AA5B5'});C({cx:.5,cy:.5,r:.26,z:5,h:30,c:'#5FB7E6',stripes:1,sc:'#E7EDF2'});D({cx:.5,cy:.5,r:.26,z:35,h:12,c:'#BFEFFF',a:.9});F({x:.5,y:.5,z:46,always:0,f:bubbles(5,sd)})}
   else if(kind==='pump2'){B({x0:.15,y0:.15,x1:.85,y1:.85,h:6,c:'#9AA5B5'});C({cx:.5,cy:.5,r:.3,z:6,h:64,c:'#4FA3D8',stripes:3,sc:'#E7EDF2'});D({cx:.5,cy:.5,r:.3,z:70,h:22,c:'#BFEFFF',a:.9});F({x:.5,y:.5,z:92,f:bubbles(7,sd)})}
-  else if(kind==='factory'){B({x0:.15,y0:.6,x1:1.35,y1:1.85,h:40,c:'#F2D6A2',win:{rows:1,cols:3,sq:1,c:'#FFE6A0'},door:1,band:[26,32,'#E5484D']});RF({x0:.1,y0:.55,x1:1.4,y1:1.9,z:40,h:16,c:'#E5484D'});C({cx:1.62,cy:.85,r:.3,h:62,c:'#E7EDF2',stripes:2,sc:'#F2B233'});D({cx:1.62,cy:.85,r:.3,z:62,h:12,c:'#F2B233'});C({cx:.5,cy:.3,r:.1,h:70,c:'#D9DEE4',stripes:3,sc:'#E5484D'});F({x:.5,y:.3,z:70,f:bubbles(5,sd)});F({x:1.35,y:1.85,z:42,f:sign('🍙 물고기밥 공장')})}
-  else if(kind==='diner'){C({cx:.5,cy:.5,r:.42,h:24,c:'#E7EDF2',stripes:1,sc:'#E5484D',door:1});D({cx:.5,cy:.5,r:.42,z:24,h:14,c:'#FFD25C'});F({x:.5,y:.5,z:42,f:sign('🍙 식당','#fff')})}
+  else if(kind==='factory'){B({x0:.15,y0:.6,x1:1.35,y1:1.85,h:40,c:'#F2D6A2',win:{rows:1,cols:3,sq:1,c:'#FFE6A0'},door:1,band:[26,32,'#E5484D']});RF({x0:.1,y0:.55,x1:1.4,y1:1.9,z:40,h:16,c:'#E5484D'});C({cx:1.62,cy:.85,r:.3,h:62,c:'#E7EDF2',stripes:2,sc:'#F2B233'});D({cx:1.62,cy:.85,r:.3,z:62,h:12,c:'#F2B233'});C({cx:.5,cy:.3,r:.1,h:70,c:'#D9DEE4',stripes:3,sc:'#E5484D'});F({x:.5,y:.3,z:70,f:bubbles(5,sd)});F({x:1.35,y:1.85,z:42,f:sign('🍡 경단 공장')})}
+  else if(kind==='diner'){C({cx:.5,cy:.5,r:.42,h:24,c:'#E7EDF2',stripes:1,sc:'#E5484D',door:1});D({cx:.5,cy:.5,r:.42,z:24,h:14,c:'#FFD25C'});F({x:.5,y:.5,z:42,f:sign('🍡 식당','#fff')})}
   else if(kind==='park'){B({x0:.05,y0:.05,x1:.95,y1:.95,h:3,c:'#6CCB6B',top:'#79D877'});F({x:.3,y:.35,z:3,f:coral('#FF6F91',sd)});F({x:.7,y:.4,z:3,f:coral('#FFB347',sd+1)});F({x:.45,y:.75,z:3,f:coral('#9B7BFF',sd+2)});F({x:.75,y:.78,z:3,f:function(c){c.fillStyle='#B07A44';c.strokeStyle=OL;c.lineWidth=1.4;c.fillRect(-9,-6,18,4);c.strokeRect(-9,-6,18,4);c.fillRect(-8,-2,2,5);c.fillRect(6,-2,2,5)}})}
   else if(kind==='lamp'){F({x:.5,y:.5,z:0,f:function(c){c.lineWidth=3;c.strokeStyle=OL;c.beginPath();c.moveTo(0,0);c.lineTo(0,-34);c.stroke();var gl=NIGHT?1:.5;c.globalCompositeOperation='lighter';c.globalAlpha=gl*.6;c.fillStyle='rgba(180,140,255,1)';c.beginPath();c.arc(0,-38,13,0,7);c.fill();c.globalCompositeOperation='source-over';c.globalAlpha=1;c.fillStyle='#D9C6FF';c.beginPath();c.ellipse(0,-38,9,7,0,Math.PI,0);c.lineTo(9,-36);c.lineTo(-9,-36);c.closePath();c.fill();c.lineWidth=1.5;c.stroke();for(var i=-1;i<=1;i++){c.beginPath();c.moveTo(i*5,-36);c.quadraticCurveTo(i*5+Math.sin(t*3+i)*3,-30,i*5,-24);c.stroke()}}})}
   else if(kind==='light'){B({x0:.2,y0:.2,x1:.8,y1:.8,h:6,c:'#9AA5B5'});C({cx:.5,cy:.5,r:.24,z:6,h:72,c:'#FFFFFF',stripes:3,sc:'#E5484D'});C({cx:.5,cy:.5,r:.2,z:78,h:12,c:'#FFE58A'});K({cx:.5,cy:.5,r:.26,z:90,h:14,c:'#E5484D'});F({x:.5,y:.5,z:84,f:function(c){c.globalCompositeOperation='lighter';c.globalAlpha=.5+.3*Math.sin(t*2);c.fillStyle='rgba(255,230,150,1)';c.beginPath();c.moveTo(0,0);c.lineTo(60*Math.cos(t),-8);c.lineTo(60*Math.cos(t),8);c.closePath();c.fill();c.globalAlpha=1;c.globalCompositeOperation='source-over'}})}
@@ -446,12 +447,12 @@ var FLT=[],PUFF=[];function floatTxt(b,s){FLT.push({c:centerOf(b.x,b.y,bSize(b))
 /* ===== 화면 위 표시 · 다음 단계 안내 ===== */
 function fmt(n){return Math.round(n).toLocaleString()}
 function paintHud(){var L=HLV();$('hHall').innerHTML='🏛 <b>Lv.'+L+'</b>'+(hallB().up?' 🔨':'');$('hMoney').textContent='🐚 '+fmt(VG.money);$('hMoney').style.color=VG.money<0?'#C02B2B':'';$('hStone').textContent='🪨 '+fmt(VG.stone);
-  var net=ST.makeR-ST.eat;$('hFood').textContent='🍙 '+fmt(VG.food)+(ST.pop?(net>=0?' ↑':' ↓'):'');$('hFood').classList.toggle('warn',ST.hungry||(ST.pop>0&&VG.food<30&&net<0));
+  var net=ST.makeR-ST.eat;$('hFood').textContent='🍡 '+fmt(VG.food)+(ST.pop?(net>=0?' ↑':' ↓'):'');$('hFood').classList.toggle('warn',ST.hungry||(ST.pop>0&&VG.food<30&&net<0));
   $('hPop').textContent='🐟 '+fmt(ST.pop)+(ST.pop?' '+(ST.hap>=70?'😊':ST.hap>=45?'🙂':'😟'):'');$('hCrab').textContent='🦀 '+Math.max(0,crabsMax()-crabsBusy())+'/'+crabsMax();$('hDate').textContent=VG.year+'년 '+VG.month+'월';
   var us=$('hDem').querySelectorAll('u');['R','C','I'].forEach(function(z,i){us[i].style.height=Math.round(clamp(ST.dem[z],0,1)*100)+'%'});goalPaint();try{$('goal').style.top=($('hud').getBoundingClientRect().bottom+6)+'px'}catch(e){}renderTray(true);if(SEL)openPanel(SEL)}
 /* 목표 = 다음 산호궁 레벨 조건(화이트아웃식 '다음 단계' 안내) */
 function goalPaint(){var el=$('goal'),L=HLV(),h;if(L>=10){el.hidden=true;return}var nx=HL[L+1];
-  if(!VG.b.some(function(b){return b.p==='pump'}))h='🎯 숨샘부터<small>「기반」→ 숨샘 · 산소가 없으면 아무것도 안 자라요</small>';
+  if(!VG.b.some(function(b){return b.p==='pump'}))h='🎯 숨샘부터<small>「숨·광산」→ 숨샘 · 산소가 없으면 아무것도 안 자라요</small>';
   else if(Object.keys(VG.road).length<12)h='🎯 길을 내요<small>「길」→ 산호궁 앞에서 끌어서</small>';
   else if(ST.cnt.R<3)h='🎯 집 구역을 칠해요<small>「구역」→ 길 옆을 끌어서 칠하면 물고기가 집을 지어요</small>';
   else{var rows=nx.req.map(function(r){return (reqOk(r)?'✅ ':'⬜ ')+reqTxt(r)}).join(' · ');h='🏛 산호궁 Lv.'+(L+1)+' 조건<small>'+rows+'</small>'}
@@ -481,11 +482,11 @@ $('hintX').addEventListener('click',stopTool);
 
 /* ===== 패널 ===== */
 function rushCost(b){var left=b.up?b.up.bt-b.up.bp:b.bt-b.bp;return Math.max(5,Math.ceil(left*3))}
-function effTxt(b){var e=eff(b),o=[];if(e.o2)o.push('산소 반경 '+e.o2+'칸');if(e.stone)o.push('산호석 '+(e.stone*60).toFixed(0)+'/분');if(e.kelp)o.push('해초 '+(e.kelp*60).toFixed(0)+'/분');if(e.make)o.push('밥 '+(e.make*120).toFixed(0)+'/분');if(e.jobs)o.push('일자리 '+e.jobs);if(e.hap)o.push('주변 '+e.r+'칸 땅값 +'+e.hap);return o.join(' · ')}
+function effTxt(b){var e=eff(b),o=[];if(e.o2)o.push('산소 반경 '+e.o2+'칸');if(e.stone)o.push('산호석 '+(e.stone*60).toFixed(0)+'/분');if(e.kelp)o.push('다시마 '+(e.kelp*60).toFixed(0)+'/분');if(e.make)o.push('경단 '+(e.make*120).toFixed(0)+'/분');if(e.jobs)o.push('일자리 '+e.jobs);if(e.hap)o.push('주변 '+e.r+'칸 땅값 +'+e.hap);return o.join(' · ')}
 function upInfo(b){var k=b.p,L=b.lv||1;if(k==='hall'){if(L>=10)return null;var nx=HL[L+1];return {req:nx.req.map(function(r){return [reqTxt(r),reqOk(r)]}),cost:nx.cost,bt:nx.bt,open:nx.open,max:nx.max,nx:nx}}
   var cap=HLV();return {req:[['산호궁 Lv.'+(L+1),cap>=L+1]],cost:costOf(k,L+1),bt:timeOf(k,L+1)}}
 function openPanel(b){var p=$('panel'),h='';
-  if(b==='budget'){h='<h2>🐚 마을 살림</h2><table><tr><td>지난달 세금</td><td>+'+fmt(VG.last.inc)+'</td></tr><tr><td>지난달 유지비(길 · 시설)</td><td>-'+fmt(VG.last.exp)+'</td></tr><tr><td>집 · 장터 · 공방</td><td>'+ST.cnt.R+' · '+ST.cnt.C+' · '+ST.cnt.I+'</td></tr><tr><td>일자리(장터 · 공방 · 시설)</td><td>'+ST.jobsC+' · '+ST.jobsI+' · '+ST.jobsP+'</td></tr><tr><td>🍙 만들기 / 먹기(분)</td><td>'+fmt(ST.makeR*60)+' / '+fmt(ST.eat*60)+'</td></tr><tr><td>🪨 캐기(분)</td><td>'+fmt(ST.stoneR*60)+'</td></tr><tr><td>🌿 해초 창고</td><td>'+fmt(VG.kelp)+'</td></tr></table>'+
+  if(b==='budget'){h='<h2>🐚 마을 살림</h2><table><tr><td>지난달 세금</td><td>+'+fmt(VG.last.inc)+'</td></tr><tr><td>지난달 유지비(길 · 시설)</td><td>-'+fmt(VG.last.exp)+'</td></tr><tr><td>집 · 장터 · 공방</td><td>'+ST.cnt.R+' · '+ST.cnt.C+' · '+ST.cnt.I+'</td></tr><tr><td>일자리(장터 · 공방 · 시설)</td><td>'+ST.jobsC+' · '+ST.jobsI+' · '+ST.jobsP+'</td></tr><tr><td>🍡 만들기 / 먹기(분)</td><td>'+fmt(ST.makeR*60)+' / '+fmt(ST.eat*60)+'</td></tr><tr><td>🪨 캐기(분)</td><td>'+fmt(ST.stoneR*60)+'</td></tr><tr><td>🌿 다시마 창고</td><td>'+fmt(VG.kelp)+'</td></tr></table>'+
     '<div style="margin-top:6px;font-weight:800">세율 '+VG.tax+'%</div><input type="range" min="0" max="20" value="'+VG.tax+'" id="taxR"><small>세금을 올리면 돈은 늘지만 땅값 · 수요가 떨어져요</small><div class="row"><button data-a="new" class="no">새 마을</button><button data-a="x">닫기</button></div>'}
   else if(b&&b.chunk){var pr=chunkPrice(),lim=HL[HLV()].land,n=Object.keys(VG.own).length;h='<h2>🔒 새 땅</h2>8×8칸을 내 땅으로 만들어요<br>값 '+costTxt(pr)+'<br>지금 땅 '+n+' / '+lim+'구획(산호궁 레벨이 오르면 더 살 수 있어요)<div class="row">'+(n<lim?'<button class="hot" data-a="buy">땅 사기</button>':'<button disabled>산호궁을 키워요</button>')+'<button data-a="x">닫기</button></div>'}
   else{var d=b.p?P[b.p]:null,L=b.lv||1;h='<h2>'+(d?d.n:ZG[b.z].n)+' <span class="lv">Lv.'+L+'</span></h2>';

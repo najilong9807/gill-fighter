@@ -57,7 +57,7 @@ function centerOf(b){var s=sz(b.k);return sc(b.x+(s-1)/2,b.y+(s-1)/2)}
 function inb(i,j){return i>=0&&j>=0&&i<N&&j<N}
 var OCC={};function occ(){OCC={};G.b.forEach(function(b){var s=sz(b.k);for(var i=0;i<s;i++)for(var j=0;j<s;j++)OCC[(b.x+i)+','+(b.y+j)]=b})}occ();
 function isRoad(i,j){return !!G.road[i+','+j]}
-function siteWhy(k,x,y){var s=sz(k),road=false;for(var i=0;i<s;i++)for(var j=0;j<s;j++){var X=x+i,Y=y+j,t=X+','+Y;if(!inb(X,Y))return '땅 밖이에요';if(!own(X,Y))return '아직 우리 땅이 아니에요 · 땅을 넓혀요';if(OCC[t])return '다른 건물이 있어요';if(G.road[t])return '도로 위에는 못 지어요';if(G.ter[t])return '바위 · 덤불을 먼저 치워요'}
+function siteWhy(k,x,y){var s=sz(k),road=false;for(var i=0;i<s;i++)for(var j=0;j<s;j++){var X=x+i,Y=y+j,t=X+','+Y;if(!inb(X,Y))return '땅 밖이에요';if(!own(X,Y))return '아직 우리 땅이 아니에요 · 영토를 확장해요';if(OCC[t])return '다른 건물이 있어요';if(G.road[t])return '도로 위에는 못 지어요';if(G.ter[t])return '바위 · 덤불을 먼저 치워요'}
   for(i=-1;i<=s;i++)for(j=-1;j<=s;j++){if((i<0||i>=s)&&(j<0||j>=s))continue;if(i>=0&&i<s&&j>=0&&j<s)continue;if(isRoad(x+i,y+j))road=true}
   return road?'':'도로에 붙여 지어야 해요'}
 
@@ -278,7 +278,7 @@ function helpPanel(){var el=$('panel');el.innerHTML='<button class="x" id="pX">�
   '<p><b>🏛 산호궁</b>이 모든 걸 열어요. 올리려면 정해진 건물 레벨 · 인구 · 진주가 필요해요. 다른 건물은 산호궁보다 높게 못 올려요.</p>'+
   '<p><b>🫧 진주 · 💎 보석</b>은 아가미 파이터와 같은 지갑이에요. 진주로 짓고, 보석으로 공사를 바로 끝내요(5분 이하는 무료).</p>'+
   '<p><b>🏘 구역</b>을 지정하면 물고기들이 주택 · 상점 · 공장을 지어요. 도로와 산소 펌프의 산소가 닿아야 해요.</p>'+
-  '<p><b>🐟 물고기</b>가 일하면 생산이 빨라지고, 상점에서 🍡 경단 · 👕 옷을 사면 행복해져 집이 자라요.</p>'+
+  '<p><b>🐟 물고기</b>가 일하면 생산이 빨라지고, 상점에서 🍡 경단 · 👕 옷을 사면 행복해져 주택이 자라요.</p>'+
   '<p><b>🧾 세금</b>은 상점에서 장을 본 인구 × 행복만큼 🏛 산호궁에 쌓여요(8시간치까지). 산호궁 위 🫧 말풍선을 눌러 걷어요.</p>'+
   '<p><b>🐢 주문</b>대로 물건을 배달하면 진주 · 명성을 받아요. 세금과 함께 마을의 두 가지 수입이에요. 명성 레벨마다 💎 선물이 있어요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 $('bBuild').onclick=function(){if(TAB)closeBuild();else openBuild()};$('bOrd').onclick=function(){closeBuild();orderPanel()};$('bStore').onclick=function(){closeBuild();storePanel()};$('bMenu').onclick=function(){closeBuild();menuPanel()};

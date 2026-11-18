@@ -47,7 +47,7 @@ function cityTick(now){if(now-cityT<1000)return;var dt=Math.min(5,(now-(cityT||n
   walkersTick(dt)}
 function zUpWhy(b){var z=b.k.charAt(1),L=b.lv,why=[];if(L>=5)return ['최고 단계'];if(L>=zMax())why.push('🏛 산호궁 Lv.'+ZHL[L]+' 필요');
   var lv=landVal(b.x,b.y),need=ZLV[L];if(lv<need)why.push('땅값 '+need+' 이상(지금 '+lv+')');if(CS.happy<55)why.push('행복 55 이상(지금 '+CS.happy+')');
-  if(z==='R'&&(b.occ|0)<ZN.R.cap[L]*.8)why.push('물고기가 더 살아야 해요');if(CS.dem[z]<-.2)why.push(ZN[z].n+' 수요가 없어요');if((G.res.stone||0)<ZST[L+1])why.push('🪨 '+ZST[L+1]+' 필요');if(ZBR[L+1]&&(G.res.brick||0)<ZBR[L+1])why.push('🧱 '+ZBR[L+1]+' 필요');return why.concat(svcWhy(b,L+1))}
+  if(z==='R'&&(b.occ|0)<ZN.R.cap[L]*.8)why.push('주민이 더 입주해야 해요');if(CS.dem[z]<-.2)why.push(ZN[z].n+' 수요가 없어요');if((G.res.stone||0)<ZST[L+1])why.push('🪨 '+ZST[L+1]+' 필요');if(ZBR[L+1]&&(G.res.brick||0)<ZBR[L+1])why.push('🧱 '+ZBR[L+1]+' 필요');return why.concat(svcWhy(b,L+1))}
 
 /* --- 주민: 물고기 머리 · 옷 입은 몸으로 길을 걸어요 --- */
 var WALK=[],FISHC=['#ff9f43','#ff6b8b','#4fb3ff','#ffd54a','#7ed957','#b48cff','#ff7d4d'],OUTF=['#4f8fdc','#3fae6a','#ff7d8f','#ffb347','#8a6cff','#2fb5a7'];
@@ -93,9 +93,9 @@ function zonePanel(b){var el=$('panel'),z=b.k.charAt(1),Z=ZN[z],L=b.lv,lv=landVa
   if(b.job)h+='<div class="box">'+(b.job.L===1?'물고기들이 짓는 중':'Lv.'+b.job.L+'로 올리는 중')+' · '+dur((b.job.end-NOW())/1000)+'</div>';
   if(z==='R')h+='<p class="prod">🐟 사는 물고기 '+(b.occ|0)+' / '+Z.cap[Math.max(1,L)]+'</p>';else if(z==='C')h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 물고기 '+Z.serve[Math.max(1,L)]+'마리가 와서 경단 · 옷을 사요</p>';else h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 일꾼이 차면 마을 생산이 빨라져요</p>';
   h+='<p class="prod">땅값 '+lv+'<span class="meter"><i style="width:'+lv+'%;background:'+(lv>=62?'#35C27A':lv>=45?'#F2B233':'#E5484D')+'"></i></span></p>';
-  if(!O2[b.x+','+b.y])h+='<p class="why">산소가 안 닿아요 · 산소 펌프를 가까이 지어요</p>';if(!roadAdj(b.x,b.y))h+='<p class="why">길이 안 닿아요</p>';
+  if(!O2[b.x+','+b.y])h+='<p class="why">산소가 안 닿아요 · 산소 펌프를 가까이 지어요</p>';if(!roadAdj(b.x,b.y))h+='<p class="why">도로가 안 닿아요</p>';
   if(L&&!b.job){var why=zUpWhy(b);h+='<div class="box"><b>'+(L>=5?'최고 단계':'Lv.'+(L+1)+'로 자라려면')+'</b>'+(L<5?'<ul class="req">'+(why.length?why.map(function(s){return '<li class="no">○ '+s+'</li>'}).join(''):'<li class="ok">✓ 곧 저절로 올라가요</li>')+'</ul>':'')+'</div>'}
-  h+='<div class="row"><button id="pDel" class="sub">구역 지우기</button></div>';
+  h+='<div class="row"><button id="pDel" class="sub">구역 해제</button></div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){var k=b.x+','+b.y;delete G.zone[k];G.b.splice(G.b.indexOf(b),1);occ();SEL=null;closePanel();save()};panelFor=b}
 function lifePanel(){var el=$('panel'),c=CS,h='<button class="x" id="pX">✕</button><h2>🐟 마을 현황</h2>';
   function bar(v){var x=Math.round((v+1)*50);return '<span class="meter"><i style="width:'+x+'%;background:'+(v>.1?'#35C27A':v<-.1?'#E5484D':'#F2B233')+'"></i></span>'}

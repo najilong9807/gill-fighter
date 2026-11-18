@@ -19,7 +19,7 @@ function r100(v){return v<1000?Math.round(v/10)*10:v<10000?Math.round(v/100)*100
 /* 건물: n 이름, at 열리는 산호궁 레벨, cm 비용 배수(산호궁 같은 레벨 대비), tm 시간 배수, need 같이 물린 건물(같은 레벨-off 이상) */
 var B={
  hall:   {n:'산호궁',at:1,cm:1,tm:1},
- pump:   {n:'산소 펌프',at:1,cm:.25,tm:.35,role:'산소 · 집이 자라는 범위'},
+ pump:   {n:'산소 펌프',at:1,cm:.25,tm:.35,role:'산소 · 구역이 자라는 범위'},
  quarry: {n:'산호 광산',at:1,cm:.3,tm:.4,role:'산호석 생산',prod:{stone:+(process.env.SP||7)}},
  farm:   {n:'다시마 농장',at:1,cm:.3,tm:.4,role:'다시마 생산',prod:{kelp:30}},
  crab:   {n:'게 일꾼 숙소',at:2,cm:.35,tm:.45,role:'동시에 짓는 게 일꾼 수',need:[['quarry',0]]},

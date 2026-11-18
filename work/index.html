@@ -17090,7 +17090,7 @@ NEWS['1.1.29']=[T("트리 꾸미기 새 단장: 장식을 톡 누르면 알아�
   cloudApply=function(code,d){try{if(d&&('city' in d)){var old=localStorage.getItem(CK);if(old)localStorage.setItem(CK+'.bak',old);if(d.city&&typeof d.city==='object')localStorage.setItem(CK,JSON.stringify(d.city));else localStorage.removeItem(CK);delete d.city}}catch(e){}_ca(code,d)};
   var ov=null;
   function open(){if(ov)return;ov=document.createElement('div');ov.id='cityOv';ov.style.cssText='position:fixed;inset:0;z-index:9000;background:#1d5f86';
-    var f=document.createElement('iframe');f.src='city.html';f.title='아가미시티';f.style.cssText='border:0;width:100%;height:100%;display:block';ov.appendChild(f);document.body.appendChild(ov);
+    var f=document.createElement('iframe');f.src='city.html?lang='+((typeof SUBL==='string'&&SUBL)||LANG||'ko');f.title='아가미시티';f.style.cssText='border:0;width:100%;height:100%;display:block';ov.appendChild(f);document.body.appendChild(ov);
     try{if(window.Bgm&&Bgm.pause)Bgm.pause()}catch(e){}}
   window.GF_CITY_CLOSE=function(){if(!ov)return;ov.remove();ov=null;try{refreshHome()}catch(e){}};
   window.GF_CITY_OPEN=open;

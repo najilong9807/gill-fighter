@@ -11,6 +11,8 @@ window.CITY_LANG=L;try{document.documentElement.lang=L}catch(e){}
 if(L==='ko'||typeof I18N==='undefined'||!I18N[L]){window.CITY_TR=function(s){return s};return}
 /* 베트남어: 제목 글꼴(Black Han Sans · Jua)에 성조 글자가 없어 글자가 섞여 보임 → 기기 글꼴로 */
 if(L==='vi'){try{var st=document.createElement('style');st.textContent=':root{--disp:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}body,button,input{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}.card b,h2,.main,#bBuild{font-weight:800!important}';document.head.appendChild(st)}catch(e){}}
+/* 일본어는 띄어쓰기가 없어 낱말 단위 줄바뀜을 끈다 */
+if(L==='ja'){try{var sj=document.createElement('style');sj.textContent='html,body,button{word-break:normal;line-break:strict}';document.head.appendChild(sj)}catch(e){}}
 var P=I18N[L],D=P.d||{},U=P.u||{},HAN=/[가-힣]/;
 function esc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 var T=(P.t||[]).map(function(q){return [new RegExp(q[0],'g'),q[1]]});

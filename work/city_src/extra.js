@@ -31,7 +31,7 @@ function trainPanel(b){var el=$('panel'),T=G.tr,tl=lvOf('train'),h='<button clas
   else if(T.st==='away')h+='<div class="box">🚋 먼 바다로 떠났어요 · 돌아오기까지 <b>'+dur((T.back-NOW())/1000)+'</b></div><div class="row"><button id="tRush">💎 '+D.rushGems((T.back-NOW())/1000)+' 바로 돌아오기</button></div>';
   else if(T.st==='back')h+='<div class="box">🚋 열차가 돌아왔어요! 🧱 '+T.rw.brick+(T.rw.nail?' · 📌 '+T.rw.nail:'')+' · ⭐'+T.rw.xp+'</div><div class="row"><button id="tGet">받기</button></div>';
   else{h+='<div class="cars">'+T.cars.map(function(c,i){var k=Object.keys(c.it)[0],ok=(G.res[k]||0)>=c.it[k];return '<div class="car'+(c.full?' full':'')+'"><b>'+ICON[k]+' '+c.it[k]+'</b>'+(c.full?'<small>✓ 실었어요</small>':'<button data-c="'+i+'"'+(ok?'':' disabled')+'>싣기</button>')+'</div>'}).join('')+'</div>';
-    h+='<p class="role">다 실으면 떠나요 · 돌아오면 🧱 '+T.rw.brick+(T.rw.nail?' · 📌 '+T.rw.nail:'')+' · ⭐'+T.rw.xp+' (다녀오는 데 '+dur(trainTrip())+')</p>'}
+    h+='<p class="role">다 실으면 떠나요 · 돌아오면 <span class="nb">🧱 '+T.rw.brick+'</span> '+(T.rw.nail?'<span class="nb">📌 '+T.rw.nail+'</span> ':'')+'<span class="nb">⭐'+T.rw.xp+'</span><br><small>다녀오는 데 '+dur(trainTrip())+'</small></p>'}
   h+='<p class="role">'+(B.train.role||'')+'</p>';el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};
   el.querySelectorAll('[data-c]').forEach(function(x){x.onclick=function(){var c=T.cars[+x.dataset.c],k=Object.keys(c.it)[0];if((G.res[k]||0)<c.it[k])return;G.res[k]-=c.it[k];c.full=true;snd('load');if(T.cars.every(function(q){return q.full})){T.st='away';T.back=NOW()+trainTrip()*1000;toast('🚋 열차가 떠났어요');var cc=centerOf(b);dust(cc.x,cc.y,14,1.2)}save();trainPanel(b)}});
   if($('tGet'))$('tGet').onclick=function(){G.res.brick+=T.rw.brick;G.res.nail+=T.rw.nail;addXP(T.rw.xp);evtAdd(10);var cc=centerOf(b);float(cc.x,cc.y-70*cam.z,'+'+T.rw.brick+'🧱');G.tr=trainNew();save();trainPanel(b)};
@@ -41,7 +41,7 @@ function trainTrip(){return 1800+lvOf('train')*60}
 /* --- 돌아왔을 때 정산 창 --- */
 function settle(awaySec,done){if(awaySec<300)return;var sum={};G.b.forEach(function(b){for(var k in b.buf){var v=Math.floor(b.buf[k]);if(v>0)sum[k]=(sum[k]||0)+v}});
   var el=$('panel'),h='<h2>🐠 다녀오셨어요!</h2><p class="role">'+dur(awaySec)+' 동안 마을 소식이에요</p><div class="box">'+(done?'<div>🔨 공사 '+done+'개가 끝났어요</div>':'')+
-    (Object.keys(sum).length?'<div>쌓인 것: '+Object.keys(sum).map(function(k){return ICON[k]+' '+fmt(sum[k])}).join(' · ')+'</div>':'')+(ordReady()?'<div>🐢 배달할 수 있는 주문 '+ordReady()+'개</div>':'')+(G.tr&&G.tr.st==='back'?'<div>🚋 열차가 돌아왔어요</div>':'')+'</div>'+
+    (Object.keys(sum).length?'<div>쌓인 것: '+Object.keys(sum).map(function(k){return '<span class="nb">'+ICON[k]+' '+fmt(sum[k])+'</span>'}).join(' ')+'</div>':'')+(ordReady()?'<div>🐢 배달할 수 있는 주문 '+ordReady()+'개</div>':'')+(G.tr&&G.tr.st==='back'?'<div>🚋 열차가 돌아왔어요</div>':'')+'</div>'+
     '<div class="row"><button id="sAll">모두 받기</button></div>';el.innerHTML=h;el.hidden=false;panelFor=null;
   $('sAll').onclick=function(){G.b.forEach(function(b){if(bufReady(b))collect(b)});closePanel()}}
 

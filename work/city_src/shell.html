@@ -93,14 +93,28 @@ body,button{font-family:"Jua",-apple-system,"Apple SD Gothic Neo",sans-serif}
 #tut .av{font-size:28px}#tut div{flex:1;min-width:0}#tut small{font-size:11.5px;font-weight:800;color:#a07a10}#tut p{margin:0;font-size:13px;line-height:1.3}#tut i{font-style:normal;font-size:12px;color:#6a7690}#tut>b{font-size:22px}
 .cars{display:flex;gap:6px}.car{flex:1;border:2px solid var(--ink);border-radius:12px 12px 6px 6px;background:#fff7d6;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px}.car.full{background:#e7f7ea}.car button{width:100%;height:30px;border:2px solid var(--ink);border-radius:9px;background:#ffd54a;font:inherit;font-weight:900}.car button:disabled{background:#e6e9ef;opacity:.6}.car small{font-size:12px;font-weight:800;color:#2e9b55}
 #goal{top:calc(env(safe-area-inset-top) + 92px)!important}#side{top:calc(env(safe-area-inset-top) + 92px)!important}#toast{top:calc(env(safe-area-inset-top) + 236px)!important}
-.tapme{pointer-events:auto;cursor:pointer}.chip small{font-size:12px;color:#5a6a88}
+.tapme{pointer-events:auto;cursor:pointer}
+/* 줄바뀜 · 칸 맞춤 손질 */
+html,body,button{word-break:keep-all;overflow-wrap:break-word}
+#top .r2{gap:5px}#top .r2 .chip{font-size:13px;padding:3px 7px}
+.nb{display:inline-block;white-space:nowrap;margin-right:6px}
+#tray .pills{flex-wrap:wrap;overflow:visible;padding:0 0 6px 0}
+#tray .close{top:-17px;right:6px;width:32px;height:32px;border-radius:16px;box-shadow:0 2px 0 var(--ink)}
+.card{flex-basis:104px}.card.own{background:#f3fbf5}.card i.own{color:var(--ok)}
+.ord .who{max-width:calc(100% - 20px);padding:0 0 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#panel p,#panel li,#panel .box{line-height:1.45}
+.ords{grid-template-columns:repeat(3,minmax(0,1fr))}.ord button{max-width:100%}
+#toast{top:calc(env(safe-area-inset-top) + 316px)!important}
+#toolbar .tl b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#toolbar.z{flex-wrap:wrap;row-gap:6px}#toolbar.z .tl{flex:1 0 100%}#toolbar.z .zs{flex:1;gap:6px}#toolbar.z .zs button{flex:1;max-width:64px}
+@media (max-width:380px){#top .r1{gap:4px}#top .r2{gap:4px}#top .r2 .chip{font-size:12px;padding:3px 5px}.chip{padding:4px 7px}}.chip small{font-size:12px;color:#5a6a88}
 #dem{gap:4px;height:56px!important;align-items:flex-end!important;padding:6px!important}#dem i{width:9px;height:100%;background:#e6ecf3;border-radius:4px;display:flex;align-items:flex-end;overflow:hidden;border:1.5px solid var(--ink)}#dem b{display:block;width:100%}
 .ztools{display:flex;gap:6px}.ztools button{flex:1;border:2px solid var(--ink);border-radius:12px;background:#fff;font:inherit;padding:6px 2px;display:flex;flex-direction:column;align-items:center;color:var(--ink)}.ztools button.on{background:#ffd54a}.ztools button.off{opacity:.5}.ztools b{font-size:13px}.ztools i{font-style:normal;font-size:12px;font-weight:700}
 .meter{display:inline-block;width:90px;height:9px;background:#e6ecf3;border-radius:5px;margin-left:6px;vertical-align:middle;overflow:hidden;border:1.5px solid var(--ink)}.meter i{display:block;height:100%}
 #panel .row button.sub{background:#fff;font-size:14px;height:40px}
 </style></head><body>
 <canvas id="cv"></canvas>
-<div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>
+<div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1 r2"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>
 <div id="goal"></div><div id="tut" hidden></div>
 <div id="side"><span id="dem" title="수요"><i><b id="dR"></b></i><i><b id="dC"></b></i><i><b id="dI"></b></i></span><button id="home" aria-label="산호궁으로">🏛</button><button id="bView" aria-label="현황 지도">🗺</button><button id="bTut" aria-label="도미 비서" hidden>🐠</button><button id="bEvt" aria-label="축제" style="position:relative;flex-direction:column;background:#fff2c2">🎐<em id="evN" hidden></em></button></div><div id="legend" hidden></div>
 <div id="tray" hidden></div><div id="place" hidden></div><div id="panel" hidden></div>

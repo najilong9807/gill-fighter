@@ -14,7 +14,7 @@ function gateStep(f,dt){if(f.st==='swim'){if(swimTo(f,G.gate.x-.2,G.gate.y,dt,1.
   if(f.g>=1){if(CAMBACK){var cb=CAMBACK;CAMBACK=null;setTimeout(function(){CAMGO={x:cb.x,y:cb.y,z:cb.z,t:1800};toast('🐟 새 주민이 집으로 걸어가요')},1200)}var to=roadNear(f.home),pth=to?path([G.gate.x,G.gate.y],to):null;f.st=null;if(!pth||pth.length<2)return false;f.p=pth;f.i=0;f.t=0;var p2=sc(G.gate.x,G.gate.y);bubbleFx(p2.x,p2.y-20*cam.z)}return true}
 var ANT=0;function arriveNotice(){var p=sc(G.gate.x,G.gate.y),vis=p.x>20&&p.x<VW-20&&p.y>150&&p.y<VH-120;
   if(!G.firstArr){G.firstArr=1;CAMBACK={x:cam.x,y:cam.y,z:cam.z};CAMGO={x:(G.gate.x-G.gate.y)*TW/2,y:(G.gate.x+G.gate.y)*TH/2-20,z:Math.max(cam.z,1.15),t:2200};toast('🐟 첫 주민이 아가미시티로 들어와요!');return}
-  if(vis)return;if(NOW()-ANT<8000)return;ANT=NOW();var el=$('arrN');el.hidden=false;el.innerHTML='🐟 새 물고기가 입구로 들어와요 <b>보러 가기 ›</b>';clearTimeout(el.t);el.t=setTimeout(function(){el.hidden=true},4500)}
+  if(vis)return;if(NOW()-ANT<8000)return;ANT=NOW();var el=$('arrN');el.hidden=false;el.style.top=$('tut').hidden?'':Math.round($('tut').getBoundingClientRect().bottom+10)+'px';el.innerHTML='🐟 새 물고기가 입구로 들어와요 <b>보러 가기 ›</b>';clearTimeout(el.t);el.t=setTimeout(function(){el.hidden=true},4500)}
 var CAMGO=null,CAMBACK=null;function camGo(dt){if(!CAMGO)return;var k=Math.min(1,dt*3);cam.x+=(CAMGO.x-cam.x)*k;cam.y+=(CAMGO.y-cam.y)*k;cam.z+=(CAMGO.z-cam.z)*k;CAMGO.t-=dt*1000;if(CAMGO.t<=0)CAMGO=null}
 $('arrN').onclick=function(){this.hidden=true;CAMGO={x:(G.gate.x-G.gate.y)*TW/2,y:(G.gate.x+G.gate.y)*TH/2-20,z:Math.max(cam.z,1.1),t:1500}};
 function wildTick(dt){WILDF.forEach(function(w){w.fade=Math.min(1,w.fade+dt*.6);if(swimTo(w,w.gx,w.gy,dt,w.sp)){var q=wildSpot();w.gx=q[0];w.gy=q[1]}})}

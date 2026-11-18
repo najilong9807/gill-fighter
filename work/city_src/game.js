@@ -39,6 +39,8 @@ function payOk(c){for(var k in c)if(have(k)<c[k])return false;return true}
 function pay(c){for(var k in c){if(k==='pearl'||k==='gem')WAL.add(k,-c[k]);else G.res[k]-=c[k]}}
 function needList(k,L){var o=D.needs(k,L).map(function(n){return {k:n[0],lv:n[1],ok:lvOf(n[0])>=n[1]}});if(k==='hall'&&POPREQ(L))o.push({k:'pop',lv:POPREQ(L),ok:CS.pop>=POPREQ(L)});return o}
 function fmt(n){n=Math.floor(n);return n>=100000?(n/10000).toFixed(n>=1e6?0:1)+'만':n.toLocaleString('ko-KR')}
+/* 위쪽 줄 전용: 1만부터 줄여 써서 칩 다섯 개가 한 줄에 들어가게 */
+function fmtS(n){n=Math.floor(n);return n>=10000?(n/10000).toFixed(n>=1e6?0:1)+'만':n.toLocaleString('ko-KR')}
 function dur(s){s=Math.max(0,Math.ceil(s));var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),x=s%60;return d?d+'일 '+h+'시간':h?h+'시간 '+m+'분':m?m+'분 '+(m<10?x+'초':''):x+'초'}
 
 /* --- 그림 캐시 --- */
@@ -193,9 +195,9 @@ function tap(x,y){
 /* --- 화면 틀 --- */
 function toast(s){var el=$('toast');el.textContent=s;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove('on')},1800)}
 function hud(){var L=hallLv();$('hLv').innerHTML='🏛 <b>Lv.'+L+'</b>';$('hX').innerHTML='⭐ <b>'+(G.xl||1)+'</b><span class="xpb"><i style="width:'+Math.min(100,(G.xp||0)/xpNeed(G.xl||1)*100)+'%"></i></span>';var on=ordReady();$('ordN').textContent=on||'';$('ordN').hidden=!on;$('hP').innerHTML='🫧 <b>'+fmt(WAL.get('pearl'))+'</b>';$('hG').innerHTML='💎 <b>'+fmt(WAL.get('gem'))+'</b>';
-  $('hS').innerHTML='🪨 <b>'+fmt(G.res.stone)+'</b>';$('hB').hidden=L<7;$('hB').innerHTML='🧱 <b>'+fmt(G.res.brick)+'</b>';$('hN').hidden=L<8;$('hN').innerHTML='📌 <b>'+fmt(G.res.nail)+'</b>';
+  $('hS').innerHTML='🪨 <b>'+fmtS(G.res.stone)+'</b>';$('hB').hidden=L<7;$('hB').innerHTML='🧱 <b>'+fmtS(G.res.brick)+'</b>';$('hN').hidden=L<8;$('hN').innerHTML='📌 <b>'+fmtS(G.res.nail)+'</b>';
   $('hF').innerHTML='🐟 <b>'+CS.pop+'</b><small>/'+CS.lim+'</small>';['R','C','I'].forEach(function(z){var d=CS.dem[z],el=$('d'+z);el.style.height=Math.round(Math.max(.08,(d+1)/2)*100)+'%';el.style.background=d>.1?'#35C27A':d<-.1?'#E5484D':'#F2B233'});
-  $('crabs').innerHTML='🦀 <b>'+jobs().length+'/'+crabsMax()+'</b>';goal();tutPaint();evtTick();undoBtn()}
+  $('crabs').innerHTML='🦀 <b>'+jobs().length+'/'+crabsMax()+'</b>';goal();tutPaint();evtTick();undoBtn();var an=$('arrN');if(an)an.style.visibility=(!$('panel').hidden||!$('tray').hidden||TOOL)?'hidden':''}
 function goal(){var L=hallLv(),el=$('goal');if(L>=D.HMAX){el.innerHTML='🏛 산호궁 최고 단계! 용궁 완성';return}
   var h=bOf('hall'),list=needList('hall',L+1);if(h.job){el.innerHTML='🏛 산호궁 Lv.'+(L+1)+' 공사 중 · '+dur((h.job.end-NOW())/1000);return}
   el.innerHTML='<span class="gt">🏛 Lv.'+(L+1)+' 조건</span>'+list.map(function(n){return '<span class="'+(n.ok?'ok':'no')+'" data-k="'+n.k+'">'+(n.ok?'✓':'○')+' '+reqTxt(n)+'</span>'}).join('')}
@@ -216,7 +218,7 @@ function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(functi
     h+='<button data-tool="z0"><b>🧽 구역 해제</b><i>지정 취소</i></button></div><p class="tip">지정한 칸이 도로 · 산소(산소 펌프)에 닿고 수요가 있으면 물고기들이 직접 지어요 · 한 칸 5🫧</p>'}
   else if(c==='deco'){var dc='';Object.keys(DEC).sort(function(a,b){return (DEC[b].gift?1:0)-(DEC[a].gift?1:0)}).forEach(function(k){var d=DEC[k],inv=(G.inv&&G.inv[k])|0;if(d.gift&&!inv)return;var open=d.gift?inv>0:L>=d.at;dc+='<button class="card'+(open?'':' off')+'" data-dk="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+d.n+'</b><i>'+(d.gift?'🎁 '+inv+'개 있어요':open?'🫧'+fmt(d.c):'🔒 🏛Lv.'+d.at)+'</i><small>주변 '+d.r+'칸 땅값 +'+d.v+'</small></button>'});h+='<div class="cards">'+dc+'</div><p class="tip">장식은 도로에 안 붙어도 돼요 · 땅값이 오르면 주택이 2 · 3단계로 자라요</p>'}
   else{var cards='';Object.keys(CATOF).forEach(function(k){if(CATOF[k]!==c)return;var b=B[k],built=bOf(k),open=L>=b.at,cc=D.cost(k,1),why=open?needList(k,1).filter(function(n){return !n.ok}).map(reqTxt).join(', '):'';
-      cards+='<button class="card'+(built||!open||why?' off':'')+'" data-k="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+b.n+'</b>'+(built?'<i>Lv.'+built.lv+' · 눌러서 보기</i>':!open?'<i>🔒 🏛Lv.'+b.at+'</i>':why?'<i>'+why+' 필요</i>':'<i>🫧'+fmt(cc.pearl)+' 🪨'+fmt(cc.stone)+'</i>')+'<small>'+(DESC[k]?DESC[k].s:'')+'</small></button>'});
+      cards+='<button class="card'+(built?' own':!open||why?' off':'')+'" data-k="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+b.n+'</b>'+(built?'<i class="own">✓ Lv.'+built.lv+'</i>':!open?'<i>🔒 🏛Lv.'+b.at+'</i>':why?'<i>'+why+' 필요</i>':'<i>🫧'+fmt(cc.pearl)+' 🪨'+fmt(cc.stone)+'</i>')+'<small>'+(DESC[k]?DESC[k].s:'')+'</small></button>'});
     h+='<div class="cards">'+cards+'</div>'}
   var tr=$('tray');tr.innerHTML=h+'<button class="close" id="tX">✕</button>';$('tX').onclick=closeBuild;
   tr.querySelectorAll('.pills button').forEach(function(el){el.onclick=function(){showCat(el.dataset.c)}});
@@ -226,7 +228,7 @@ function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(functi
     if(hallLv()<B[k].at){toast('🏛 산호궁 Lv.'+B[k].at+'에 열려요');return}var w=needList(k,1).filter(function(n){return !n.ok});if(w.length){toast(reqTxt(w[0])+'이(가) 먼저 필요해요');return}
     ghostAt(k)}})}
 var TOOLN={road:'🛣 도로 건설',clear:'🧹 철거',zR:'🏠 주거 구역',zC:'🛍 상업 구역',zI:'🔧 산업 구역',z0:'🧽 구역 해제'};
-function startTool(t){TOOL=t;$('tray').hidden=true;TAB=null;$('bBuild').classList.remove('on');closePanel();var el=$('toolbar');el.hidden=false;$('dock').hidden=true;
+function startTool(t){TOOL=t;$('tray').hidden=true;TAB=null;$('bBuild').classList.remove('on');closePanel();var el=$('toolbar');el.hidden=false;el.className=t.charAt(0)==='z'?'z':'';$('dock').hidden=true;
   var h='<div class="tl"><b>'+TOOLN[t]+'</b><small>'+(t==='road'?'끌어서 도로를 놓아요 · '+D_ROAD+'🫧':t==='clear'?'눌러서 철거해요':'끌어서 지정해요 · 5🫧')+' · 이동은 두 손가락</small></div>';
   if(t.charAt(0)==='z')h+='<div class="zs">'+['zR','zC','zI','z0'].map(function(z){return '<button data-z="'+z+'" class="'+(z===t?'on':'')+'">'+TOOLN[z].split(' ')[0]+'</button>'}).join('')+'</div>';
   h+='<button class="main" id="tDone">✓ 끝</button>';el.innerHTML=h;$('tDone').onclick=function(){endTool();save()};
@@ -252,7 +254,7 @@ function orderPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button
   if(!lvOf('turtle')){h+='<div class="box">거북 배달소를 지으면 주민 주문이 들어오고, 배달하면 진주를 벌어요 · 🏛 산호궁 Lv.3에 열려요</div>';el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;return}
   if(!goodsPool().length)h+='<div class="box">다시마 농장이나 산호 광산이 있어야 주문이 들어와요</div>';
   h+='<p class="role">주민이 주문한 물건을 창고에서 꺼내 배달하면 🫧 진주와 ⭐ 명성을 받아요</p>';h+='<div class="ords">'+G.ord.map(function(o,i){if(!o.it)return '<div class="ord wait">🐢<br><small>'+(NOW()<o.at?'오는 중 '+dur((o.at-NOW())/1000):'물건을 기다려요')+'</small></div>';
-    var can=ordCan(o);return '<div class="ord'+(can?' can':'')+'"><small class="who">'+(o.who||'🐟 주민')+'의 주문</small><div class="its">'+Object.keys(o.it).map(function(k){var ok=(G.res[k]||0)>=o.it[k];return '<span class="'+(ok?'ok':'no')+'">'+ICON[k]+' '+o.it[k]+'</span>'}).join('')+'</div>'+
+    var can=ordCan(o);return '<div class="ord'+(can?' can':'')+'"><small class="who">'+(o.who||'🐟 주민')+'</small><div class="its">'+Object.keys(o.it).map(function(k){var ok=(G.res[k]||0)>=o.it[k];return '<span class="'+(ok?'ok':'no')+'">'+ICON[k]+' '+o.it[k]+'</span>'}).join('')+'</div>'+
       '<div class="rw">🫧'+o.rw.pearl+(o.rw.brick?' 🧱'+o.rw.brick:'')+(o.rw.gem?' 💎'+o.rw.gem:'')+' <small>⭐'+o.rw.xp+'</small></div><button data-s="'+i+'"'+(can?'':' disabled')+'>배달</button><button class="del" data-d="'+i+'" aria-label="주문 취소">🗑</button></div>'}).join('')+'</div>';
   h+='<p class="role">배달하면 1분 뒤 새 주문 · 취소하면 5분 뒤 · 주문 칸은 배달소 레벨에 따라 3~9칸</p>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;el.querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){ordSend(G.ord[+b.dataset.s])}});el.querySelectorAll('[data-d]').forEach(function(b){b.onclick=function(){ordDrop(G.ord[+b.dataset.d])}});panelFor='ord'}
@@ -302,9 +304,9 @@ function openPanel(b){if(isZ(b.k))return zonePanel(b);if(isD(b.k))return decoPan
   if(b.job){var left=(b.job.end-NOW())/1000,g=D.rushGems(left);h+='<div class="box">Lv.'+b.job.L+'로 올리는 중 · 남은 시간 <b>'+dur(left)+'</b></div><div class="row"><button class="main" id="pRush">'+(g?'💎 '+g+' 바로 완성':'무료로 바로 완성')+'</button></div>'}
   else if(L>=D.HMAX)h+='<div class="box">최고 단계예요 ✨</div>';
   else{var N2=L+1,c=D.cost(k,N2),nl=needList(k,N2),why=canStart(k,N2);
-    h+='<div class="box"><b>Lv.'+N2+'로 업그레이드</b><div class="cost">'+costHtml(c)+' · ⏱ '+dur(D.time(k,N2))+'</div>'+
+    h+='<div class="box"><b>Lv.'+N2+'로 업그레이드</b><div class="cost">'+costHtml(c)+' <span class="nb">· ⏱ '+dur(D.time(k,N2))+'</span></div>'+
       '<ul class="req">'+nl.map(function(n){return '<li class="'+(n.ok?'ok':'no')+'" data-k="'+n.k+'">'+(n.ok?'✓':'○')+' '+reqTxt(n)+' <small>(지금 '+(n.k==='pop'?CS.pop:lvOf(n.k))+')</small></li>'}).join('')+'</ul></div>'+
-      '<div class="row"><button class="main" id="pUp"'+(why.length?' disabled':'')+'>⬆ 업그레이드</button></div>'+(why.length?'<p class="why">'+why.join(' · ')+'</p>':'')}
+      '<div class="row"><button class="main" id="pUp"'+(why.length?' disabled':'')+'>⬆ 업그레이드</button></div>'+(function(){var rest=why.filter(function(s){return !/ 필요$/.test(s)}),un=nl.some(function(n){return !n.ok});if(un)rest.unshift('○ 표시한 조건을 먼저 채워요');return rest.length?'<p class="why">'+rest.join(' · ')+'</p>':''})()}
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};
   if($('pUp'))$('pUp').onclick=function(){var w=canStart(k,L+1);if(w.length){toast(w[0]);return}pushUndo(B[k].n+' 업그레이드');setTimeout(endAct,0);startJob(b,L+1);openPanel(b);toast('🦀 Lv.'+(L+1)+' 공사 시작')};
   if($('pRush'))$('pRush').onclick=function(){rush(b)};if($('pTrain'))$('pTrain').onclick=function(){trainPanel(b)};if($('pPort'))$('pPort').onclick=function(){portPanel(b)};

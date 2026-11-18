@@ -56,9 +56,9 @@ function centerOf(b){var s=sz(b.k);return sc(b.x+(s-1)/2,b.y+(s-1)/2)}
 function inb(i,j){return i>=0&&j>=0&&i<N&&j<N}
 var OCC={};function occ(){OCC={};G.b.forEach(function(b){var s=sz(b.k);for(var i=0;i<s;i++)for(var j=0;j<s;j++)OCC[(b.x+i)+','+(b.y+j)]=b})}occ();
 function isRoad(i,j){return !!G.road[i+','+j]}
-function siteWhy(k,x,y){var s=sz(k),road=false;for(var i=0;i<s;i++)for(var j=0;j<s;j++){var X=x+i,Y=y+j,t=X+','+Y;if(!inb(X,Y))return '땅 밖이에요';if(!own(X,Y))return '아직 우리 땅이 아니에요 · 땅을 넓혀요';if(OCC[t])return '다른 건물이 있어요';if(G.road[t])return '길 위에는 못 지어요';if(G.ter[t])return '바위 · 덤불을 먼저 치워요'}
+function siteWhy(k,x,y){var s=sz(k),road=false;for(var i=0;i<s;i++)for(var j=0;j<s;j++){var X=x+i,Y=y+j,t=X+','+Y;if(!inb(X,Y))return '땅 밖이에요';if(!own(X,Y))return '아직 우리 땅이 아니에요 · 땅을 넓혀요';if(OCC[t])return '다른 건물이 있어요';if(G.road[t])return '도로 위에는 못 지어요';if(G.ter[t])return '바위 · 덤불을 먼저 치워요'}
   for(i=-1;i<=s;i++)for(j=-1;j<=s;j++){if((i<0||i>=s)&&(j<0||j>=s))continue;if(i>=0&&i<s&&j>=0&&j<s)continue;if(isRoad(x+i,y+j))road=true}
-  return road?'':'길에 붙여 지어야 해요'}
+  return road?'':'도로에 붙여 지어야 해요'}
 
 /* --- 진행: 공사 · 생산 --- */
 var FX=[],TXT=[],POPS={};
@@ -138,7 +138,7 @@ function drawWorld(t,now){var items=[];
   if(GH){var s2=sz(GH.k);items.push({z:GH.x+GH.y+2*(s2-1)+.6,g:GH,c:sc(GH.x+(s2-1)/2,GH.y+(s2-1)/2)})}
   items.sort(function(a,b){return a.z-b.z});BUBS=[];var ji=0;
   items.forEach(function(it){if(it.ter){drawTer(it.p,it.ter,it.s,t);return}if(it.w){drawWalker(it.w,t);return}if(it.wf){var pw=sc(it.wf.fx,it.wf.fy);if(pw.x>-60&&pw.x<VW+60&&pw.y>-60&&pw.y<VH+60)plainFish(pw.x,pw.y-22*cam.z,it.wf,it.wf.fade*.9,t);return}if(it.gate){drawGate(t);return}
-    if(it.g){var g=it.g,s3=sz(g.k),why=siteWhy(g.k,g.x,g.y);if(isD(g.k)&&why==='길에 붙여 지어야 해요')why='';for(var a=0;a<s3;a++)for(var b2=0;b2<s3;b2++){var pp=sc(g.x+a,g.y+b2);diamond(pp.x,pp.y,TW*cam.z,TH*cam.z);ctx.fillStyle=why?'rgba(255,90,90,.45)':'rgba(90,220,120,.45)';ctx.fill()}
+    if(it.g){var g=it.g,s3=sz(g.k),why=siteWhy(g.k,g.x,g.y);if(isD(g.k)&&why==='도로에 붙여 지어야 해요')why='';for(var a=0;a<s3;a++)for(var b2=0;b2<s3;b2++){var pp=sc(g.x+a,g.y+b2);diamond(pp.x,pp.y,TW*cam.z,TH*cam.z);ctx.fillStyle=why?'rgba(255,90,90,.45)':'rgba(90,220,120,.45)';ctx.fill()}
       drawArt(art(g.k,1),it.c,.6);g.why=why;return}
     var b=it.b,c=it.c,s=sz(b.k),z=cam.z;
     ctx.fillStyle='rgba(15,60,80,.2)';ctx.beginPath();ctx.ellipse(c.x+4*z,c.y+6*z,44*s*z,20*s*z,0,0,7);ctx.fill();
@@ -160,7 +160,7 @@ function drawWorld(t,now){var items=[];
 var TOOL=null,GH=null,SEL=null,PT={},drag=null,pinch=null;
 cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);PT[e.pointerId]={x:e.clientX,y:e.clientY};var ids=Object.keys(PT);
   if(ids.length===2){var a=PT[ids[0]],b=PT[ids[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),z:cam.z};drag=null;return}
-  if(GH&&ghostHit(e.clientX,e.clientY)){GDRAG={};drag=null;return}VEL={x:0,y:0};drag={x:e.clientX,y:e.clientY,cx:cam.x,cy:cam.y,moved:false,paint:!!TOOL};if(drag.paint){pushUndo(TOOLN[TOOL]||'칠하기');paintAt(e.clientX,e.clientY)}});
+  if(GH&&ghostHit(e.clientX,e.clientY)){GDRAG={};drag=null;return}VEL={x:0,y:0};drag={x:e.clientX,y:e.clientY,cx:cam.x,cy:cam.y,moved:false,paint:!!TOOL};if(drag.paint){pushUndo(TOOLN[TOOL]||'구역 지정');paintAt(e.clientX,e.clientY)}});
 cv.addEventListener('pointermove',function(e){if(!PT[e.pointerId])return;PT[e.pointerId]={x:e.clientX,y:e.clientY};var ids=Object.keys(PT);
   if(pinch&&ids.length===2){var a=PT[ids[0]],b=PT[ids[1]],mx=(a.x+b.x)/2,my=(a.y+b.y)/2,wx=(mx-VW/2)/cam.z+cam.x,wy=(my-VH/2)/cam.z+cam.y;cam.z=Math.max(.35,Math.min(1.6,pinch.z*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d));cam.x=wx-(mx-VW/2)/cam.z;cam.y=wy-(my-VH/2)/cam.z;return}
   if(GDRAG&&GH){var tt=tileAt(e.clientX,e.clientY),ss=sz(GH.k),nx=tt.i-Math.floor((ss-1)/2),ny=tt.j-Math.floor((ss-1)/2);if(nx!==GH.x||ny!==GH.y){GH.x=nx;GH.y=ny;placeBar()}return}
@@ -175,7 +175,7 @@ var lastPaint='';
 function paintAt(x,y){var t=tileAt(x,y),k=t.i+','+t.j;if(k===lastPaint||!inb(t.i,t.j))return;lastPaint=k;if(!own(t.i,t.j)){toast('아직 우리 땅이 아니에요');return}
   if(TOOL.charAt(0)==='z'){paintZone(t,k);return}
   if(TOOL==='road'){if(G.road[k]||OCC[k]||G.ter[k])return;if(G.zone[k])delete G.zone[k];if(WAL.get('pearl')<D_ROAD){toast('진주가 모자라요');return}WAL.add('pearl',-D_ROAD);G.road[k]=1;snd('tap');var p=sc(t.i,t.j);dust(p.x,p.y,3,.4)}
-  else if(TOOL==='clear'){if(G.road[k]){if(roadNeeded(t.i,t.j)){toast('건물에 이어진 마지막 길은 못 지워요');return}delete G.road[k];WAL.add('pearl',Math.floor(D_ROAD/2));return}
+  else if(TOOL==='clear'){if(G.road[k]){if(roadNeeded(t.i,t.j)){toast('건물에 이어진 마지막 도로는 철거할 수 없어요');return}delete G.road[k];WAL.add('pearl',Math.floor(D_ROAD/2));return}
     if(G.ter[k]){var cst=G.ter[k]===1?60:25;if(WAL.get('pearl')<cst){toast('진주 '+cst+' 필요해요');return}WAL.add('pearl',-cst);delete G.ter[k];var p2=sc(t.i,t.j);dust(p2.x,p2.y,10,1);float(p2.x,p2.y-20,'-'+cst+'🫧')}}}
 var D_ROAD=10;
 function roadNeeded(i,j){var k=i+','+j;delete G.road[k];var bad=G.b.some(function(b){return siteRoad(b)===false});G.road[k]=1;return bad}
@@ -202,18 +202,18 @@ $('goal').onclick=function(e){var k=e.target.dataset&&e.target.dataset.k;if(k===
 function focus(b){var s=sz(b.k);cam.x=((b.x-b.y))*TW/2;cam.y=(b.x+b.y+s-1)*TH/2-60/cam.z}
 /* ===== 메뉴 정리: 아래 [🐢 주문 · 📦 창고] [🔨 짓기] [☰ 메뉴] / 짓기 안 분류 / 도구 쓸 땐 얇은 줄만 ===== */
 var TAB=null,CAT='road';
-var CATS=[['road','🛣 길'],['zone','🏘 구역'],['base','⚙ 기반'],['prod','🏭 생산'],['trade','🐢 교역'],['pub','🏫 공공'],['mark','✨ 명소'],['deco','🌸 꾸미기'],['clear','🧹 정리']];
+var CATS=[['road','🛣 도로'],['zone','🏘 구역'],['base','⚙ 기반'],['prod','🏭 생산'],['trade','🐢 교역'],['pub','🏫 공공'],['mark','✨ 랜드마크'],['deco','🌸 장식'],['clear','🧹 철거']];
 var CATOF={pump:'base',crab:'base',store:'base',quarry:'prod',farm:'prod',factory:'prod',sew:'prod',kiln:'prod',pearl:'prod',turtle:'trade',train:'trade',port:'trade',diner:'pub',school:'pub',clinic:'pub',fire:'pub',police:'pub',aqua:'mark',palace:'mark'};
 function setTab(t){if(!t){closeBuild();endTool();return}if(t==='build')t='base';if(t==='road'||t==='zone'||t==='clear'){startTool(t==='zone'?'zR':t);return}openBuild(t)}
 function openBuild(c){endTool();closePanel();GH=null;$('place').hidden=true;TAB='build';$('bBuild').classList.add('on');var tr=$('tray');tr.hidden=false;showCat(c||CAT)}
 function closeBuild(){TAB=null;$('bBuild').classList.remove('on');$('tray').hidden=true}
 function catBadge(c){var L=hallLv(),n=0;Object.keys(CATOF).forEach(function(k){if(CATOF[k]===c&&!bOf(k)&&L>=B[k].at&&needList(k,1).every(function(q){return q.ok}))n++});return n}
 function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(function(q){var n=catBadge(q[0]);return '<button data-c="'+q[0]+'" class="'+(q[0]===c?'on':'')+'">'+q[1]+(n?'<em>'+n+'</em>':'')+'</button>'}).join('')+'</div>';
-  if(c==='road')h+='<div class="tools1"><button data-tool="road"><b>🛣 길 깔기</b><i>끌어서 깔아요 · 한 칸 '+D_ROAD+'🫧</i></button><p class="tip">건물 · 구역은 길에 붙어야 돌아가요. 길끼리 이어지면 모양이 저절로 맞춰져요.</p></div>';
-  else if(c==='clear')h+='<div class="tools1"><button data-tool="clear"><b>🧹 정리하기</b><i>바위 60🫧 · 덤불 25🫧 · 길 걷기(절반 돌려받음)</i></button><p class="tip">다시마 덤불은 근처 땅값을 조금 올려 줘요. 꼭 필요한 곳만 치워요.</p></div>';
+  if(c==='road')h+='<div class="tools1"><button data-tool="road"><b>🛣 도로 건설</b><i>끌어서 도로를 놓아요 · 한 칸 '+D_ROAD+'🫧</i></button><p class="tip">건물 · 구역은 도로에 붙어야 돌아가요. 도로끼리 이어지면 모양이 저절로 맞춰져요.</p></div>';
+  else if(c==='clear')h+='<div class="tools1"><button data-tool="clear"><b>🧹 철거하기</b><i>바위 60🫧 · 덤불 25🫧 · 도로 철거(절반 환급)</i></button><p class="tip">다시마 덤불은 근처 땅값을 조금 올려 줘요. 꼭 필요한 곳만 철거해요.</p></div>';
   else if(c==='zone'){h+='<div class="tools1 z">';[['zR','R'],['zC','C'],['zI','I']].forEach(function(a){var z=ZN[a[1]],lock=L<z.at,d=CS.dem[a[1]];h+='<button data-tool="'+a[0]+'"'+(lock?' class="off"':'')+'><b>'+z.ic+' '+z.n+'</b><i>'+(lock?'🔒 🏛Lv.'+z.at:'수요 '+(d>.1?'▲ 많음':d<-.1?'▼ 없음':'– 보통'))+'</i></button>'});
-    h+='<button data-tool="z0"><b>🧽 지우기</b><i>구역 걷기</i></button></div><p class="tip">칠한 칸이 길 · 산소(숨샘)에 닿고 수요가 있으면 물고기들이 직접 지어요 · 한 칸 5🫧</p>'}
-  else if(c==='deco'){var dc='';Object.keys(DEC).sort(function(a,b){return (DEC[b].gift?1:0)-(DEC[a].gift?1:0)}).forEach(function(k){var d=DEC[k],inv=(G.inv&&G.inv[k])|0;if(d.gift&&!inv)return;var open=d.gift?inv>0:L>=d.at;dc+='<button class="card'+(open?'':' off')+'" data-dk="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+d.n+'</b><i>'+(d.gift?'🎁 '+inv+'개 있어요':open?'🫧'+fmt(d.c):'🔒 🏛Lv.'+d.at)+'</i><small>주변 '+d.r+'칸 땅값 +'+d.v+'</small></button>'});h+='<div class="cards">'+dc+'</div><p class="tip">꾸미기는 길에 안 붙어도 돼요 · 땅값이 오르면 집이 2 · 3단계로 자라요</p>'}
+    h+='<button data-tool="z0"><b>🧽 구역 해제</b><i>지정 취소</i></button></div><p class="tip">지정한 칸이 도로 · 산소(산소 펌프)에 닿고 수요가 있으면 물고기들이 직접 지어요 · 한 칸 5🫧</p>'}
+  else if(c==='deco'){var dc='';Object.keys(DEC).sort(function(a,b){return (DEC[b].gift?1:0)-(DEC[a].gift?1:0)}).forEach(function(k){var d=DEC[k],inv=(G.inv&&G.inv[k])|0;if(d.gift&&!inv)return;var open=d.gift?inv>0:L>=d.at;dc+='<button class="card'+(open?'':' off')+'" data-dk="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+d.n+'</b><i>'+(d.gift?'🎁 '+inv+'개 있어요':open?'🫧'+fmt(d.c):'🔒 🏛Lv.'+d.at)+'</i><small>주변 '+d.r+'칸 땅값 +'+d.v+'</small></button>'});h+='<div class="cards">'+dc+'</div><p class="tip">장식은 도로에 안 붙어도 돼요 · 땅값이 오르면 주택이 2 · 3단계로 자라요</p>'}
   else{var cards='';Object.keys(CATOF).forEach(function(k){if(CATOF[k]!==c)return;var b=B[k],built=bOf(k),open=L>=b.at,cc=D.cost(k,1),why=open?needList(k,1).filter(function(n){return !n.ok}).map(reqTxt).join(', '):'';
       cards+='<button class="card'+(built||!open||why?' off':'')+'" data-k="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+b.n+'</b>'+(built?'<i>Lv.'+built.lv+' · 눌러서 보기</i>':!open?'<i>🔒 🏛Lv.'+b.at+'</i>':why?'<i>'+why+' 필요</i>':'<i>🫧'+fmt(cc.pearl)+' 🪨'+fmt(cc.stone)+'</i>')+'<small>'+(DESC[k]?DESC[k].s:'')+'</small></button>'});
     h+='<div class="cards">'+cards+'</div>'}
@@ -224,35 +224,36 @@ function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(functi
   tr.querySelectorAll('.card[data-k]').forEach(function(el){el.onclick=function(){var k=el.dataset.k;if(bOf(k)){var b=bOf(k);closeBuild();focus(b);SEL=b;openPanel(b);return}
     if(hallLv()<B[k].at){toast('🏛 산호궁 Lv.'+B[k].at+'에 열려요');return}var w=needList(k,1).filter(function(n){return !n.ok});if(w.length){toast(reqTxt(w[0])+'이(가) 먼저 필요해요');return}
     ghostAt(k)}})}
-var TOOLN={road:'🛣 길 깔기',clear:'🧹 정리',zR:'🏠 집 구역',zC:'🛍 장터 구역',zI:'🔧 공방 구역',z0:'🧽 구역 지우기'};
+var TOOLN={road:'🛣 도로 건설',clear:'🧹 철거',zR:'🏠 주거 구역',zC:'🛍 상업 구역',zI:'🔧 산업 구역',z0:'🧽 구역 해제'};
 function startTool(t){TOOL=t;$('tray').hidden=true;TAB=null;$('bBuild').classList.remove('on');closePanel();var el=$('toolbar');el.hidden=false;$('dock').hidden=true;
-  var h='<div class="tl"><b>'+TOOLN[t]+'</b><small>'+(t==='road'?'끌어서 깔아요 · '+D_ROAD+'🫧':t==='clear'?'눌러서 치워요':'끌어서 칠해요 · 5🫧')+' · 이동은 두 손가락</small></div>';
+  var h='<div class="tl"><b>'+TOOLN[t]+'</b><small>'+(t==='road'?'끌어서 도로를 놓아요 · '+D_ROAD+'🫧':t==='clear'?'눌러서 철거해요':'끌어서 지정해요 · 5🫧')+' · 이동은 두 손가락</small></div>';
   if(t.charAt(0)==='z')h+='<div class="zs">'+['zR','zC','zI','z0'].map(function(z){return '<button data-z="'+z+'" class="'+(z===t?'on':'')+'">'+TOOLN[z].split(' ')[0]+'</button>'}).join('')+'</div>';
   h+='<button class="main" id="tDone">✓ 끝</button>';el.innerHTML=h;$('tDone').onclick=function(){endTool();save()};
   el.querySelectorAll('[data-z]').forEach(function(b){b.onclick=function(){var z=b.dataset.z;if(z!=='z0'&&hallLv()<ZN[z.charAt(1)].at){toast(ZN[z.charAt(1)].n+' 구역은 🏛 Lv.'+ZN[z.charAt(1)].at+'에 열려요');return}startTool(z)}})}
 function endTool(){TOOL=null;var el=$('toolbar');if(el)el.hidden=true;$('dock').hidden=false}
 function zoneTray(){startTool(TOOL&&TOOL.charAt(0)==='z'?TOOL:'zR')}
 
-/* --- 🐢 거북 택배 주문판 --- */
+/* --- 🐢 주문 배달 --- */
 var GV={kelp:1,stone:1,dango:3,cloth:4,brick:6,nail:15},GB={kelp:8,stone:10,dango:4,cloth:3,brick:2,nail:1};
 function ordSlots(){var L=lvOf('turtle');return L?Math.min(9,3+Math.floor(L/2)):0}
 function goodsPool(){var L=hallLv(),p=[];if(lvOf('farm'))p.push('kelp');if(lvOf('quarry'))p.push('stone');if(lvOf('factory'))p.push('dango');if(lvOf('sew'))p.push('cloth');if(lvOf('kiln'))p.push('brick');if(lvOf('pearl')&&L>=12)p.push('nail');return p}
 function genOrder(){var L=hallLv(),pool=goodsPool(),n=Math.min(pool.length,1+Math.floor(Math.random()*Math.min(3,1+L/5))),it={},val=0;pool=pool.slice().sort(function(){return Math.random()-.5});
   for(var i=0;i<n;i++){var g=pool[i],a=Math.max(1,Math.round(GB[g]*(1+L*.35)*(.7+Math.random()*.6)));it[g]=a;val+=a*GV[g]}
-  var rw={pearl:Math.max(10,Math.round(val*.7/5)*5),xp:Math.round(val/3)+3};if(Math.random()<.12&&L>=7)rw.brick=Math.max(2,Math.round(L/2));else if(Math.random()<.05)rw.gem=1;return {id:G.nid++,it:it,rw:rw,at:0}}
-function ordTick(now){var n=ordSlots();G.ord=G.ord||[];while(G.ord.length<n)G.ord.push({id:G.nid++,it:null,at:now});G.ord.forEach(function(o){if(!o.it&&now>=o.at&&goodsPool().length){var g=genOrder();o.it=g.it;o.rw=g.rw}})}
+  var rw={pearl:Math.max(10,Math.round(val*.7/5)*5),xp:Math.round(val/3)+3};if(Math.random()<.12&&L>=7)rw.brick=Math.max(2,Math.round(L/2));else if(Math.random()<.05)rw.gem=1;return {id:G.nid++,it:it,rw:rw,at:0,who:ORDWHO[Math.floor(Math.random()*ORDWHO.length)]}}
+var ORDWHO=['🐡 복어 아주머니','🐠 흰동가리 남매','🦐 새우 요리사','🐙 문어 선생님','🦀 꽃게 목수','🐟 고등어 반장','🦑 오징어 화가','🐚 소라 할머니','🐬 돌고래 우체부','🦞 가재 대장장이'];
+function ordTick(now){var n=ordSlots();G.ord=G.ord||[];while(G.ord.length<n)G.ord.push({id:G.nid++,it:null,at:now});G.ord.forEach(function(o){if(!o.it&&now>=o.at&&goodsPool().length){var g=genOrder();o.it=g.it;o.rw=g.rw;o.who=g.who}})}
 function ordCan(o){if(!o.it)return false;for(var k in o.it)if((G.res[k]||0)<o.it[k])return false;return true}
 function ordReady(){return (G.ord||[]).filter(ordCan).length}
-function ordSend(o){if(!ordCan(o)){toast('물건이 모자라요');return}for(var k in o.it)G.res[k]-=o.it[k];G.ordSent=(G.ordSent|0)+1;snd('coin');var tc=bOf('turtle'),tcc=tc?centerOf(tc):{x:VW/2,y:VH/2};evtAdd(3+Math.floor(Object.keys(o.it).length*2),tcc.x+30,tcc.y-40*cam.z);WAL.add('pearl',o.rw.pearl);if(o.rw.gem)WAL.add('gem',o.rw.gem);if(o.rw.brick)G.res.brick+=o.rw.brick;addXP(o.rw.xp);
+function ordSend(o){if(!ordCan(o)){toast('창고에 물건이 모자라요');return}for(var k in o.it)G.res[k]-=o.it[k];G.ordSent=(G.ordSent|0)+1;snd('coin');var tc=bOf('turtle'),tcc=tc?centerOf(tc):{x:VW/2,y:VH/2};evtAdd(3+Math.floor(Object.keys(o.it).length*2),tcc.x+30,tcc.y-40*cam.z);WAL.add('pearl',o.rw.pearl);if(o.rw.gem)WAL.add('gem',o.rw.gem);if(o.rw.brick)G.res.brick+=o.rw.brick;addXP(o.rw.xp);
   var t=bOf('turtle');if(t){var c=centerOf(t);float(c.x,c.y-70*cam.z,'+'+o.rw.pearl+'🫧');bubbleFx(c.x,c.y-50*cam.z)}o.it=null;o.at=NOW()+60000;save();orderPanel()}
 function ordDrop(o){o.it=null;o.at=NOW()+5*60000;save();orderPanel()}
-function orderPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>🐢 거북 택배 주문판</h2>';
-  if(!lvOf('turtle')){h+='<div class="box">거북 택배 정류장을 지으면 주민들이 물건을 부탁해요 · 🏛 산호궁 Lv.3에 열려요</div>';el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;return}
+function orderPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>🐢 주문 배달</h2>';
+  if(!lvOf('turtle')){h+='<div class="box">거북 배달소를 지으면 주민 주문이 들어오고, 배달하면 진주를 벌어요 · 🏛 산호궁 Lv.3에 열려요</div>';el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;return}
   if(!goodsPool().length)h+='<div class="box">다시마 농장이나 산호 광산이 있어야 주문이 들어와요</div>';
-  h+='<div class="ords">'+G.ord.map(function(o,i){if(!o.it)return '<div class="ord wait">🐢<br><small>'+(NOW()<o.at?'오는 중 '+dur((o.at-NOW())/1000):'물건을 기다려요')+'</small></div>';
-    var can=ordCan(o);return '<div class="ord'+(can?' can':'')+'"><div class="its">'+Object.keys(o.it).map(function(k){var ok=(G.res[k]||0)>=o.it[k];return '<span class="'+(ok?'ok':'no')+'">'+ICON[k]+' '+o.it[k]+'</span>'}).join('')+'</div>'+
-      '<div class="rw">🫧'+o.rw.pearl+(o.rw.brick?' 🧱'+o.rw.brick:'')+(o.rw.gem?' 💎'+o.rw.gem:'')+' <small>⭐'+o.rw.xp+'</small></div><button data-s="'+i+'"'+(can?'':' disabled')+'>보내기</button><button class="del" data-d="'+i+'" aria-label="버리기">🗑</button></div>'}).join('')+'</div>';
-  h+='<p class="role">보내면 1분 뒤 새 주문이 와요 · 버리면 5분 · 칸은 정류장 레벨에 따라 3~9칸</p>';
+  h+='<p class="role">주민이 주문한 물건을 창고에서 꺼내 배달하면 🫧 진주와 ⭐ 명성을 받아요 · 마을의 주 수입이에요</p>';h+='<div class="ords">'+G.ord.map(function(o,i){if(!o.it)return '<div class="ord wait">🐢<br><small>'+(NOW()<o.at?'오는 중 '+dur((o.at-NOW())/1000):'물건을 기다려요')+'</small></div>';
+    var can=ordCan(o);return '<div class="ord'+(can?' can':'')+'"><small class="who">'+(o.who||'🐟 주민')+'의 주문</small><div class="its">'+Object.keys(o.it).map(function(k){var ok=(G.res[k]||0)>=o.it[k];return '<span class="'+(ok?'ok':'no')+'">'+ICON[k]+' '+o.it[k]+'</span>'}).join('')+'</div>'+
+      '<div class="rw">🫧'+o.rw.pearl+(o.rw.brick?' 🧱'+o.rw.brick:'')+(o.rw.gem?' 💎'+o.rw.gem:'')+' <small>⭐'+o.rw.xp+'</small></div><button data-s="'+i+'"'+(can?'':' disabled')+'>배달</button><button class="del" data-d="'+i+'" aria-label="주문 취소">🗑</button></div>'}).join('')+'</div>';
+  h+='<p class="role">배달하면 1분 뒤 새 주문 · 취소하면 5분 뒤 · 주문 칸은 배달소 레벨에 따라 3~9칸</p>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;el.querySelectorAll('[data-s]').forEach(function(b){b.onclick=function(){ordSend(G.ord[+b.dataset.s])}});el.querySelectorAll('[data-d]').forEach(function(b){b.onclick=function(){ordDrop(G.ord[+b.dataset.d])}});panelFor='ord'}
 
 /* --- ⭐ 명성: 거의 모든 일에서 조금씩 → 레벨마다 💎 · 🫧 선물 --- */
@@ -264,27 +265,27 @@ function storePanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button
   ['stone','brick','nail','kelp','dango','cloth'].forEach(function(k){var c=cap(k),v=G.res[k]||0;h+='<div class="srow">'+ICON[k]+' '+RNAME[k]+'<span class="meter"><i style="width:'+Math.min(100,v/c*100)+'%;background:'+(v>=c*.95?'#E5484D':'#4fc36b')+'"></i></span><b>'+fmt(v)+'</b><small>/'+fmt(c)+'</small></div>'});
   h+='</div><p class="role">가득 차면 건물 말풍선에 쌓인 채로 기다려요 · 조개 창고를 올리면 넓어져요</p>';el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 function menuPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>☰ 메뉴</h2><div class="mgrid">'+
-  '<button data-m="life">🐟<b>살림</b><small>물고기 · 일 · 장보기</small></button><button data-m="todo">🎯<b>할 일</b><small>다음 산호궁까지</small></button><button data-m="help">📖<b>도움말</b><small>마을이 도는 법</small></button><button data-m="snd">'+(SND?'🔊':'🔇')+'<b>소리</b><small>'+(SND?'켜져 있어요':'꺼져 있어요')+'</small></button><button data-m="pro">📜<b>이야기</b><small>처음 이야기 다시 보기</small></button><button data-m="reset">↺<b>처음부터</b><small>시험판 전용</small></button></div>';
+  '<button data-m="life">🐟<b>마을 현황</b><small>인구 · 일자리 · 수요</small></button><button data-m="todo">🎯<b>할 일</b><small>다음 산호궁까지</small></button><button data-m="help">📖<b>도움말</b><small>마을이 도는 법</small></button><button data-m="snd">'+(SND?'🔊':'🔇')+'<b>소리</b><small>'+(SND?'켜져 있어요':'꺼져 있어요')+'</small></button><button data-m="pro">📜<b>이야기</b><small>처음 이야기 다시 보기</small></button><button data-m="reset">↺<b>처음부터</b><small>시험판 전용</small></button></div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;el.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){var m=b.dataset.m;if(m==='life')lifePanel();else if(m==='todo')todoPanel();else if(m==='help')helpPanel();else if(m==='snd'){sndToggle();menuPanel()}else if(m==='pro'){closePanel();prologue(0)}else if(confirm('마을을 처음부터 다시 시작할까요? (진주 · 보석은 그대로)')){localStorage.removeItem(KEY);location.reload()}}})}
 function todoPanel(){var el=$('panel'),L=hallLv(),h='<button class="x" id="pX">✕</button><h2>🎯 할 일</h2>';
   if(L<D.HMAX){var nl=needList('hall',L+1),c=D.cost('hall',L+1);h+='<div class="box"><b>🏛 산호궁 Lv.'+(L+1)+'</b><ul class="req">'+nl.map(function(n){return '<li class="'+(n.ok?'ok':'no')+'" data-k="'+n.k+'">'+(n.ok?'✓':'○')+' '+reqTxt(n)+'</li>'}).join('')+'</ul><div class="cost">'+costHtml(c)+'</div></div>'}
-  var tips=[];if(!CS.food)tips.push('🍡 경단이 떨어졌어요 · 경단 공장 말풍선을 받아요');if(CS.pop>=CS.lim)tips.push('🐟 물고기 한도가 찼어요 · 식당 · 학교 · 병원을 올려요');if(CS.w<.7)tips.push('👷 일꾼이 모자라요 · 집 구역을 더 칠해요');if(CS.dem.C>.3)tips.push('🛍 장터가 모자라요');if(ordReady())tips.push('🐢 보낼 수 있는 주문이 '+ordReady()+'개 있어요');
+  var tips=[];if(!CS.food)tips.push('🍡 경단이 떨어졌어요 · 경단 공장 말풍선을 받아요');if(CS.pop>=CS.lim)tips.push('🐟 인구 한도가 찼어요 · 식당 · 학교 · 병원을 올려요');if(CS.w<.7)tips.push('👷 일꾼이 모자라요 · 주거 구역을 더 지정해요');if(CS.dem.C>.3)tips.push('🛍 상업 구역이 모자라요');if(ordReady())tips.push('🐢 배달할 수 있는 주문이 '+ordReady()+'개 있어요');
   G.b.forEach(function(b){if(bufReady(b)&&tips.length<8&&!isZ(b.k))tips.push(ICON[bufReady(b)]+' '+B[b.k].n+' 말풍선을 받아요')});
   h+='<div class="box">'+(tips.length?tips.map(function(t){return '<div>'+t+'</div>'}).join(''):'지금은 잘 돌아가고 있어요 ✨')+'</div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;el.querySelectorAll('.req li').forEach(function(li){li.onclick=function(){if(li.dataset.k==='pop'){lifePanel();return}var t=bOf(li.dataset.k);if(t){focus(t);SEL=t;openPanel(t)}else openBuild(CATOF[li.dataset.k])}})}
 function helpPanel(){var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📖 마을이 도는 법</h2><div class="box help">'+
-  '<p><b>🏛 산호궁</b>이 모든 걸 열어요. 올리려면 정해진 건물 레벨 · 물고기 수 · 진주가 필요해요. 다른 건물은 산호궁보다 높게 못 올려요.</p>'+
+  '<p><b>🏛 산호궁</b>이 모든 걸 열어요. 올리려면 정해진 건물 레벨 · 인구 · 진주가 필요해요. 다른 건물은 산호궁보다 높게 못 올려요.</p>'+
   '<p><b>🫧 진주 · 💎 보석</b>은 아가미 파이터와 같은 지갑이에요. 진주로 짓고, 보석으로 공사를 바로 끝내요(5분 이하는 무료).</p>'+
-  '<p><b>🏘 구역</b>을 칠하면 물고기들이 집 · 장터 · 공방을 지어요. 길과 숨샘 산소가 닿아야 해요.</p>'+
-  '<p><b>🐟 물고기</b>가 일하면 생산이 빨라지고, 장터에서 🍡 경단 · 👕 옷을 사면 행복해져 집이 자라요.</p>'+
-  '<p><b>🐢 주문판</b>에 물건을 보내면 진주 · 명성을 받아요. 명성 레벨마다 💎 선물이 있어요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
+  '<p><b>🏘 구역</b>을 칠하면 물고기들이 주택 · 상점 · 공장을 지어요. 도로와 산소 펌프의 산소가 닿아야 해요.</p>'+
+  '<p><b>🐟 물고기</b>가 일하면 생산이 빨라지고, 상점에서 🍡 경단 · 👕 옷을 사면 행복해져 집이 자라요.</p>'+
+  '<p><b>🐢 주문</b>대로 물건을 배달하면 진주 · 명성을 받아요. 진주는 주로 여기서 벌어요. 명성 레벨마다 💎 선물이 있어요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 $('bBuild').onclick=function(){if(TAB)closeBuild();else openBuild()};$('bOrd').onclick=function(){closeBuild();orderPanel()};$('bStore').onclick=function(){closeBuild();storePanel()};$('bMenu').onclick=function(){closeBuild();menuPanel()};
 
 function placeBar(){var el=$('place');if(isD(GH.k))return placeDecoBar(el);var c=D.cost(GH.k,1),why=siteWhy(GH.k,GH.x,GH.y);el.hidden=false;
   el.innerHTML='<div class="pt"><b>'+(DESC[GH.k]?DESC[GH.k].ic+' ':'')+B[GH.k].n+'</b> <span class="ds">'+(DESC[GH.k]?DESC[GH.k].s:'')+'</span><br>🫧'+fmt(c.pearl)+' 🪨'+fmt(c.stone)+' · ⏱'+dur(D.time(GH.k,1))+'<br><small>'+(why||'여기에 지을 수 있어요 · 건물을 끌거나 다른 칸을 눌러 옮겨요')+'</small></div>';ghBtns(why,'짓기');
   $('pNo').onclick=function(){var k=GH.k;GH=null;el.hidden=true;$('ghb').hidden=true;openBuild(CATOF[k])};
   $('pOk').onclick=function(){var k=GH.k,w=canStart(k,1);if(siteWhy(k,GH.x,GH.y))return;if(w.length){toast(w[0]);return}pushUndo(B[k].n+' 짓기');setTimeout(endAct,0);var b={id:G.nid++,k:k,x:GH.x,y:GH.y,lv:0,buf:{}};G.b.push(b);occ();startJob(b,1);GH=null;el.hidden=true;$('ghb').hidden=true;FLOATU={id:b.id,until:NOW()+8000};setTab(null);toast('🦀 게 일꾼이 '+B[k].n+'을(를) 짓기 시작했어요')}}
-function placeDecoBar(el){var d=DEC[GH.k],why=siteWhy(GH.k,GH.x,GH.y);if(why==='길에 붙여 지어야 해요')why='';el.hidden=false;GH.why=why;
+function placeDecoBar(el){var d=DEC[GH.k],why=siteWhy(GH.k,GH.x,GH.y);if(why==='도로에 붙여 지어야 해요')why='';el.hidden=false;GH.why=why;
   el.innerHTML='<div class="pt"><b>'+d.n+'</b> · 🫧'+fmt(d.c)+'<br><small>'+(why||'칸을 눌러 옮겨요 · 놓은 뒤에도 계속 놓을 수 있어요')+'</small></div>';ghBtns(why,'놓기');
   $('pNo').onclick=function(){GH=null;el.hidden=true;$('ghb').hidden=true;openBuild('deco')};$('pOk').onclick=function(){if(GH.why)return;if(placeDeco(GH.k,GH.x,GH.y)){GH.x+=1;placeBar()}}}
 function ghBtns(why,lab){var g=$('ghb');g.hidden=false;g.innerHTML='<button id="pNo" class="gx" aria-label="취소">↶</button><button id="pOk" class="gok" aria-label="'+lab+'"'+(why?' disabled':'')+'>✓</button>'}
@@ -299,11 +300,11 @@ function openPanel(b){if(isZ(b.k))return zonePanel(b);if(isD(b.k))return decoPan
   if(b.job){var left=(b.job.end-NOW())/1000,g=D.rushGems(left);h+='<div class="box">Lv.'+b.job.L+'로 올리는 중 · 남은 시간 <b>'+dur(left)+'</b></div><div class="row"><button class="main" id="pRush">'+(g?'💎 '+g+' 바로 완성':'무료로 바로 완성')+'</button></div>'}
   else if(L>=D.HMAX)h+='<div class="box">최고 단계예요 ✨</div>';
   else{var N2=L+1,c=D.cost(k,N2),nl=needList(k,N2),why=canStart(k,N2);
-    h+='<div class="box"><b>Lv.'+N2+'로 올리기</b><div class="cost">'+costHtml(c)+' · ⏱ '+dur(D.time(k,N2))+'</div>'+
+    h+='<div class="box"><b>Lv.'+N2+'로 업그레이드</b><div class="cost">'+costHtml(c)+' · ⏱ '+dur(D.time(k,N2))+'</div>'+
       '<ul class="req">'+nl.map(function(n){return '<li class="'+(n.ok?'ok':'no')+'" data-k="'+n.k+'">'+(n.ok?'✓':'○')+' '+reqTxt(n)+' <small>(지금 '+(n.k==='pop'?CS.pop:lvOf(n.k))+')</small></li>'}).join('')+'</ul></div>'+
-      '<div class="row"><button class="main" id="pUp"'+(why.length?' disabled':'')+'>⬆ 올리기</button></div>'+(why.length?'<p class="why">'+why.join(' · ')+'</p>':'')}
+      '<div class="row"><button class="main" id="pUp"'+(why.length?' disabled':'')+'>⬆ 업그레이드</button></div>'+(why.length?'<p class="why">'+why.join(' · ')+'</p>':'')}
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};
-  if($('pUp'))$('pUp').onclick=function(){var w=canStart(k,L+1);if(w.length){toast(w[0]);return}pushUndo(B[k].n+' 올리기');setTimeout(endAct,0);startJob(b,L+1);openPanel(b);toast('🦀 Lv.'+(L+1)+' 공사 시작')};
+  if($('pUp'))$('pUp').onclick=function(){var w=canStart(k,L+1);if(w.length){toast(w[0]);return}pushUndo(B[k].n+' 업그레이드');setTimeout(endAct,0);startJob(b,L+1);openPanel(b);toast('🦀 Lv.'+(L+1)+' 공사 시작')};
   if($('pRush'))$('pRush').onclick=function(){rush(b)};if($('pTrain'))$('pTrain').onclick=function(){trainPanel(b)};if($('pPort'))$('pPort').onclick=function(){portPanel(b)};
   el.querySelectorAll('.req li').forEach(function(li){li.onclick=function(){if(li.dataset.k==='pop'){lifePanel();return}var t=bOf(li.dataset.k);if(t){focus(t);SEL=t;openPanel(t)}else{openBuild(CATOF[li.dataset.k])}}});
   panelFor=b}

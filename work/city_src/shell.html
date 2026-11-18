@@ -77,7 +77,8 @@ body,button{font-family:"Jua",-apple-system,"Apple SD Gothic Neo",sans-serif}
 #toolbar .main{flex:0 0 auto;height:44px;padding:0 12px;border:2.5px solid var(--ink);border-radius:12px;background:#ffd54a;font:inherit;font-weight:900;font-size:15px}
 #panel,#place{bottom:calc(env(safe-area-inset-bottom) + 78px)!important}
 .ords{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.ord{position:relative;border:2px solid var(--ink);border-radius:12px;background:#fff;padding:6px 4px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:13px;min-height:104px}
-.ord.can{background:#f0fff4}.ord.wait{justify-content:center;text-align:center;font-size:22px;background:#eef3f8;color:#5a6a88}.ord.wait small{font-size:12px;font-weight:700}
+.ord.can{background:#f0fff4}
+.ord .who{font-size:11px;font-weight:700;color:#5a6a88;align-self:flex-start;padding:0 20px 0 2px;line-height:1.15}.ord.wait{justify-content:center;text-align:center;font-size:22px;background:#eef3f8;color:#5a6a88}.ord.wait small{font-size:12px;font-weight:700}
 .ord .its{display:flex;flex-direction:column;align-items:center;font-weight:800}.ord .rw{font-size:12px;font-weight:800}.ord .rw small{color:#c98a00}
 .ord button{width:100%;height:30px;border:2px solid var(--ink);border-radius:9px;background:#ffd54a;font:inherit;font-weight:900;font-size:13px}.ord button:disabled{background:#e6e9ef;opacity:.6}
 .ord .del{position:absolute;right:-6px;top:-8px;width:24px;height:24px;padding:0;font-size:12px;background:#fff;border-radius:50%}
@@ -103,7 +104,7 @@ body,button{font-family:"Jua",-apple-system,"Apple SD Gothic Neo",sans-serif}
 <div id="goal"></div><div id="tut" hidden></div>
 <div id="side"><span id="dem" title="수요"><i><b id="dR"></b></i><i><b id="dC"></b></i><i><b id="dI"></b></i></span><button id="home" aria-label="산호궁으로">🏛</button><button id="bView" aria-label="현황 지도">🗺</button><button id="bTut" aria-label="도미 비서" hidden>🐠</button><button id="bEvt" aria-label="축제" style="position:relative;flex-direction:column;background:#fff2c2">🎐<em id="evN" hidden></em></button></div><div id="legend" hidden></div>
 <div id="tray" hidden></div><div id="place" hidden></div><div id="panel" hidden></div>
-<button id="bUndo" hidden>↶</button><div id="ghb" hidden></div><button id="bUndo2" hidden aria-label="되돌리기">↶</button><div id="arrN" hidden></div><div id="pro" hidden></div><div id="dock"><div class="lb"><button id="bOrd" class="round" aria-label="주문판">🐢<em id="ordN" hidden></em><small>주문</small></button><button id="bStore" class="round" aria-label="창고">📦<small>창고</small></button></div><button id="bBuild" class="big">🔨 짓기</button><button id="bMenu" class="round" aria-label="메뉴">☰<small>메뉴</small></button></div><div id="toolbar" hidden></div>
+<button id="bUndo" hidden>↶</button><div id="ghb" hidden></div><button id="bUndo2" hidden aria-label="되돌리기">↶</button><div id="arrN" hidden></div><div id="pro" hidden></div><div id="dock"><div class="lb"><button id="bOrd" class="round" aria-label="주문">🐢<em id="ordN" hidden></em><small>주문</small></button><button id="bStore" class="round" aria-label="창고">📦<small>창고</small></button></div><button id="bBuild" class="big">🔨 짓기</button><button id="bMenu" class="round" aria-label="메뉴">☰<small>메뉴</small></button></div><div id="toolbar" hidden></div>
 <div id="toast"></div>
 <script>
 /*ART*/

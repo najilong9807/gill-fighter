@@ -1,10 +1,10 @@
 /* ===== 꾸미기 · 해류 열차 · 돌아왔을 때 정산 · 도미 비서 ===== */
-/* --- 🌸 꾸미기: 땅값을 올려 집이 3단계까지 자라게 --- */
+/* --- 🌸 장식: 땅값을 올려 집이 3단계까지 자라게 --- */
 var DEC={d_coral:{n:'산호 화단',s:1,c:30,at:1,v:6,r:2},d_kelp:{n:'다시마 정원',s:1,c:40,at:1,v:6,r:2},d_bench:{n:'조개 벤치',s:1,c:80,at:3,v:8,r:2},d_lamp:{n:'해파리 가로등',s:1,c:120,at:5,v:9,r:3},
   d_fount:{n:'진주 분수',s:2,c:400,at:8,v:16,r:4},d_statue:{n:'황금 물고기상',s:2,c:1500,at:12,v:24,r:5}};
 function isD(k){return !!DEC[k]}
 function placeDeco(k,x,y){pushUndo(DEC[k].n+' 놓기');setTimeout(endAct,0);if(DEC[k].gift){G.inv=G.inv||{};if(!(G.inv[k]>0)){toast('보관한 것이 없어요');return false}G.inv[k]--}else{if(WAL.get('pearl')<DEC[k].c){toast('진주가 모자라요');return false}WAL.add('pearl',-DEC[k].c)}snd('pop');var b={id:G.nid++,k:k,x:x,y:y,lv:1,buf:{},xpd:1};G.b.push(b);occ();var c=centerOf(b);dust(c.x,c.y,10,1);sparkle(c.x,c.y-30*cam.z,8);addXP(2);cityF=0;save();return true}
-function decoPanel(b){var d=DEC[b.k],el=$('panel'),h='<button class="x" id="pX">✕</button><h2>🌸 '+d.n+'</h2><p class="prod">주변 '+d.r+'칸 땅값 +'+d.v+' · 집이 더 크게 자라요</p><div class="row"><button class="sub" id="pDel">'+(d.gift?'보관함으로 넣기':'치우기 (🫧'+Math.floor(d.c/2)+' 돌려받음)')+'</button></div>';
+function decoPanel(b){var d=DEC[b.k],el=$('panel'),h='<button class="x" id="pX">✕</button><h2>🌸 '+d.n+'</h2><p class="prod">주변 '+d.r+'칸 땅값 +'+d.v+' · 주택이 더 크게 자라요</p><div class="row"><button class="sub" id="pDel">'+(d.gift?'보관함으로 넣기':'철거 (🫧'+Math.floor(d.c/2)+' 환급)')+'</button></div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){G.b.splice(G.b.indexOf(b),1);occ();if(d.gift){G.inv=G.inv||{};G.inv[b.k]=(G.inv[b.k]|0)+1}else WAL.add('pearl',Math.floor(d.c/2));SEL=null;closePanel();cityF=0;save()};panelFor=null}
 function dArt(k,bp){var p=pal(bp),cx=GX,cy=GY,g='',d=DEC[k];
   if(d.s===1)g+=box(p,cx,cy,40,4,sp(p,'#f2f6fa'),sp(p,'#dde6f0'),sp(p,'#b9c8dc'));else g+=box(p,cx,cy,88,6,sp(p,'#f2f6fa'),sp(p,'#dde6f0'),sp(p,'#b9c8dc'));var y=cy-4;
@@ -41,7 +41,7 @@ function trainTrip(){return 1800+lvOf('train')*60}
 /* --- 돌아왔을 때 정산 창 --- */
 function settle(awaySec,done){if(awaySec<300)return;var sum={};G.b.forEach(function(b){for(var k in b.buf){var v=Math.floor(b.buf[k]);if(v>0)sum[k]=(sum[k]||0)+v}});
   var el=$('panel'),h='<h2>🐠 다녀오셨어요!</h2><p class="role">'+dur(awaySec)+' 동안 마을 소식이에요</p><div class="box">'+(done?'<div>🔨 공사 '+done+'개가 끝났어요</div>':'')+
-    (Object.keys(sum).length?'<div>쌓인 것: '+Object.keys(sum).map(function(k){return ICON[k]+' '+fmt(sum[k])}).join(' · ')+'</div>':'')+(ordReady()?'<div>🐢 보낼 수 있는 주문 '+ordReady()+'개</div>':'')+(G.tr&&G.tr.st==='back'?'<div>🚋 열차가 돌아왔어요</div>':'')+'</div>'+
+    (Object.keys(sum).length?'<div>쌓인 것: '+Object.keys(sum).map(function(k){return ICON[k]+' '+fmt(sum[k])}).join(' · ')+'</div>':'')+(ordReady()?'<div>🐢 배달할 수 있는 주문 '+ordReady()+'개</div>':'')+(G.tr&&G.tr.st==='back'?'<div>🚋 열차가 돌아왔어요</div>':'')+'</div>'+
     '<div class="row"><button id="sAll">모두 받기</button></div>';el.innerHTML=h;el.hidden=false;panelFor=null;
   $('sAll').onclick=function(){G.b.forEach(function(b){if(bufReady(b))collect(b)});closePanel()}}
 
@@ -49,12 +49,12 @@ function settle(awaySec,done){if(awaySec<300)return;var sum={};G.b.forEach(funct
 var TUT=[
  {t:'산호궁 옆에 <b>산호 광산</b>을 지어 봐요',h:'🔨 짓기 → 🏭 생산',ok:function(){return !!bOf('quarry')},go:function(){openBuild('prod')},rw:50},
  {t:'광산 머리 위 <b>🪨 동그라미(말풍선)</b>를 눌러 산호석을 받아요',h:'노란 화살표가 가리키는 곳을 눌러요',ok:function(){return G.tutC},go:function(){var q=bOf('quarry');if(q)focus(q)},rw:30},
- {t:'<b>🏛 산호궁</b>을 Lv.2로 올려요',h:'산호궁을 눌러 ⬆ 올리기',ok:function(){return hallLv()>=2||!!bOf('hall').job},go:function(){var h=bOf('hall');focus(h);SEL=h;openPanel(h)},rw:80},
- {t:'길 옆에 <b>🏠 집 구역</b>을 4칸 칠해요',h:'🔨 짓기 → 🏘 구역 → 집, 끌어서 칠하기',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){startTool('zR')},rw:50},
- {t:'<b>숨샘</b>을 지어 산소를 넓혀요',h:'🔨 짓기 → ⚙ 기반',ok:function(){return !!bOf('pump')},go:function(){openBuild('base')},rw:60},
- {t:'물고기 <b>10마리</b>가 이사 오게 해요',h:'집이 길 · 산소에 닿아야 물고기가 와요',ok:function(){return CS.pop>=10},go:function(){lifePanel()},rw:80},
+ {t:'<b>🏛 산호궁</b>을 Lv.2로 업그레이드해요',h:'산호궁을 눌러 ⬆ 업그레이드',ok:function(){return hallLv()>=2||!!bOf('hall').job},go:function(){var h=bOf('hall');focus(h);SEL=h;openPanel(h)},rw:80},
+ {t:'도로 옆에 <b>🏠 주거 구역</b>을 4칸 지정해요',h:'🔨 짓기 → 🏘 구역 → 주거, 끌어서 지정',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){startTool('zR')},rw:50},
+ {t:'<b>산소 펌프</b>를 지어 산소를 넓혀요',h:'🔨 짓기 → ⚙ 기반',ok:function(){return !!bOf('pump')},go:function(){openBuild('base')},rw:60},
+ {t:'물고기 <b>10마리</b>가 입주하게 해요',h:'주택이 도로 · 산소에 닿아야 물고기가 와요',ok:function(){return CS.pop>=10},go:function(){lifePanel()},rw:80},
  {t:'<b>경단 공장</b>을 지어 주민 밥을 만들어요',h:'다시마 농장 → 경단 공장',ok:function(){return !!bOf('factory')},go:function(){openBuild('prod')},rw:100},
- {t:'<b>거북 택배</b>로 주문을 하나 보내요',h:'🔨 짓기 → 🐢 교역 → 거북 택배 정류장',ok:function(){return (G.ordSent|0)>0},go:function(){if(bOf('turtle'))orderPanel();else openBuild('trade')},rw:150}];
+ {t:'<b>거북 배달소</b>에서 주문을 하나 배달해요',h:'🔨 짓기 → 🐢 교역 → 거북 배달소',ok:function(){return (G.ordSent|0)>0},go:function(){if(bOf('turtle'))orderPanel();else openBuild('trade')},rw:150}];
 function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length){el.hidden=true;return}var s=TUT[i];
   if(s.ok()){G.tut=i+1;WAL.add('pearl',s.rw);toast('🐠 잘했어요! 🫧'+s.rw);addXP(5);save();return tutPaint()}
   $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;var hh2='<span class="av">🐠</span><div><small>도미 비서 · '+(i+1)+'/'+TUT.length+'</small><p>'+s.t+'</p><i>'+s.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh2){el.dataset.h=hh2;el.innerHTML=hh2}}

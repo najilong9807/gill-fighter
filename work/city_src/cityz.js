@@ -1,5 +1,5 @@
 /* ===== 도시: 구역 · 주민 · 살림 (집 → 물고기 → 일 · 장 → 생산 효율 · 행복 → 집이 자람) ===== */
-var ZN={R:{n:'집',c:'67,196,107',cap:[0,4,10,24,48,90],at:1,ic:'🏠'},C:{n:'장터',c:'61,155,255',jobs:[0,3,8,18,32,55],serve:[0,12,30,70,130,220],at:2,ic:'🛍'},I:{n:'공방',c:'255,176,46',jobs:[0,5,12,24,40,64],at:4,ic:'🔧'}};
+var ZN={R:{n:'주거',c:'67,196,107',cap:[0,4,10,24,48,90],at:1,ic:'🏠'},C:{n:'상업',c:'61,155,255',jobs:[0,3,8,18,32,55],serve:[0,12,30,70,130,220],at:2,ic:'🛍'},I:{n:'산업',c:'255,176,46',jobs:[0,5,12,24,40,64],at:4,ic:'🔧'}};
 var ZBT=[0,20,60,150,300,600],ZST=[0,0,40,150,300,600],ZBR=[0,0,0,0,40,100],ZLV=[0,45,58,66,74],ZHL=[0,6,12,16,20];
 function isZ(k){return !!k&&k.charAt(0)==='z'}
 function zMax(){var L=hallLv();return L>=20?5:L>=16?4:L>=12?3:L>=6?2:1}
@@ -10,7 +10,7 @@ var JOBS={quarry:3,farm:3,factory:4,sew:4,kiln:4,pearl:3,turtle:2,train:4,port:5
 var CS={pop:0,lim:20,workers:0,jobs:0,w:1,dem:{R:.6,C:0,I:0},capC:0,served:0,happy:60,food:true,cloth:true,eat:0,wear:0};
 var O2={},LVM={};
 function NM(k){return k==='pop'?'🐟 물고기':B[k]?B[k].n:ZN[k.charAt(1)]?ZN[k.charAt(1)].n:k}
-function reqTxt(n){return n.k==='pop'?'🐟 물고기 '+n.lv+'마리':NM(n.k)+' Lv.'+n.lv}
+function reqTxt(n){return n.k==='pop'?'🐟 인구 '+n.lv:NM(n.k)+' Lv.'+n.lv}
 function fields(){covCalc();O2={};LVM={};G.b.forEach(function(b){if(!b.lv)return;var s=sz(b.k),cx=b.x+(s-1)/2,cy=b.y+(s-1)/2,r=0,v=0;
     if(b.k==='pump'){r=3+Math.floor(b.lv/3);for(var i=-r;i<=r;i++)for(var j=-r;j<=r;j++)if(Math.abs(i)+Math.abs(j)<=r*1.3)O2[Math.round(cx+i)+','+Math.round(cy+j)]=1}
     if(b.k==='hall'){for(i=-4;i<=4;i++)for(j=-4;j<=4;j++)if(Math.abs(i)+Math.abs(j)<=5)O2[Math.round(cx+i)+','+Math.round(cy+j)]=1;r=6;v=10}
@@ -25,7 +25,7 @@ function cityTick(now){if(now-cityT<1000)return;var dt=Math.min(5,(now-(cityT||n
   G.b.forEach(function(b){if(!b.lv)return;if(PUB[b.k])lim+=PUB[b.k]*b.lv;if(JOBS[b.k])jobs+=JOBS[b.k]+b.lv;
     if(isZ(b.k)){var z=b.k.charAt(1),L=b.lv;if(z==='R'){pop+=b.occ|0}else if(z==='C'){jC+=ZN.C.jobs[L];capC+=ZN.C.serve[L]}else jI+=ZN.I.jobs[L]}});
   jobs+=jC+jI;var workers=Math.round(pop*.7),w=jobs?Math.min(1,workers/jobs):1,served=Math.min(pop,capC);
-  /* 먹고 입기: 장터에서 산 만큼 창고의 경단 · 옷이 줄어요 */
+  /* 먹고 입기: 상점에서 산 만큼 창고의 경단 · 옷이 줄어요 */
   var clothOn=hallLv()>=5,eat=served*.06*dt/3600,wear=clothOn?served*.03*dt/3600:0;
   G.res.dango=Math.max(0,(G.res.dango||0)-eat);G.res.cloth=Math.max(0,(G.res.cloth||0)-wear);
   var food=hallLv()<3||pop===0||(G.res.dango||0)>0,cloth=!clothOn||pop===0||(G.res.cloth||0)>0,avgLV=0,nR=0;
@@ -93,13 +93,13 @@ function zonePanel(b){var el=$('panel'),z=b.k.charAt(1),Z=ZN[z],L=b.lv,lv=landVa
   if(b.job)h+='<div class="box">'+(b.job.L===1?'물고기들이 짓는 중':'Lv.'+b.job.L+'로 올리는 중')+' · '+dur((b.job.end-NOW())/1000)+'</div>';
   if(z==='R')h+='<p class="prod">🐟 사는 물고기 '+(b.occ|0)+' / '+Z.cap[Math.max(1,L)]+'</p>';else if(z==='C')h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 물고기 '+Z.serve[Math.max(1,L)]+'마리가 와서 경단 · 옷을 사요</p>';else h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 일꾼이 차면 마을 생산이 빨라져요</p>';
   h+='<p class="prod">땅값 '+lv+'<span class="meter"><i style="width:'+lv+'%;background:'+(lv>=62?'#35C27A':lv>=45?'#F2B233':'#E5484D')+'"></i></span></p>';
-  if(!O2[b.x+','+b.y])h+='<p class="why">산소가 안 닿아요 · 숨샘을 가까이 지어요</p>';if(!roadAdj(b.x,b.y))h+='<p class="why">길이 안 닿아요</p>';
+  if(!O2[b.x+','+b.y])h+='<p class="why">산소가 안 닿아요 · 산소 펌프를 가까이 지어요</p>';if(!roadAdj(b.x,b.y))h+='<p class="why">길이 안 닿아요</p>';
   if(L&&!b.job){var why=zUpWhy(b);h+='<div class="box"><b>'+(L>=5?'최고 단계':'Lv.'+(L+1)+'로 자라려면')+'</b>'+(L<5?'<ul class="req">'+(why.length?why.map(function(s){return '<li class="no">○ '+s+'</li>'}).join(''):'<li class="ok">✓ 곧 저절로 올라가요</li>')+'</ul>':'')+'</div>'}
   h+='<div class="row"><button id="pDel" class="sub">구역 지우기</button></div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){var k=b.x+','+b.y;delete G.zone[k];G.b.splice(G.b.indexOf(b),1);occ();SEL=null;closePanel();save()};panelFor=b}
 function lifePanel(){var el=$('panel'),c=CS,h='<button class="x" id="pX">✕</button><h2>🐟 살림</h2>';
   function bar(v){var x=Math.round((v+1)*50);return '<span class="meter"><i style="width:'+x+'%;background:'+(v>.1?'#35C27A':v<-.1?'#E5484D':'#F2B233')+'"></i></span>'}
-  h+='<div class="box">물고기 <b>'+c.pop+' / '+c.lim+'</b> <small>(한도는 식당 · 학교 · 병원 · 명소가 올려요)</small><br>일꾼 '+c.workers+' / 일자리 '+c.jobs+' → 생산 효율 <b>'+Math.round((.5+.5*c.w)*100)+'%</b><br>장터에서 장보는 물고기 '+c.served+' / '+c.pop+'<br>🍡 경단 '+fmt(G.res.dango||0)+' <small>(시간당 −'+c.eat.toFixed(1)+')</small>'+(c.clothOn?' · 👕 옷 '+fmt(G.res.cloth||0)+' <small>(−'+c.wear.toFixed(1)+')</small>':'')+'<br>행복 <b>'+c.happy+'</b>'+(c.food?'':' · <span class="no">배고파요! 경단 공장을 돌려요</span>')+(c.cloth?'':' · <span class="no">옷이 없어요</span>')+'</div>';
-  h+='<div class="box">수요<br>🏠 집 '+bar(c.dem.R)+'<br>🛍 장터 '+bar(c.dem.C)+'<br>🔧 공방 '+bar(c.dem.I)+'</div>';
-  var L=hallLv();if(L<D.HMAX)h+='<p class="role">🏛 산호궁 Lv.'+(L+1)+'에는 물고기 '+POPREQ(L+1)+'마리가 필요해요</p>';
+  h+='<div class="box">물고기 <b>'+c.pop+' / '+c.lim+'</b> <small>(한도는 식당 · 학교 · 병원 · 랜드마크가 올려요)</small><br>일꾼 '+c.workers+' / 일자리 '+c.jobs+' → 생산 효율 <b>'+Math.round((.5+.5*c.w)*100)+'%</b><br>상점에서 장보는 물고기 '+c.served+' / '+c.pop+'<br>🍡 경단 '+fmt(G.res.dango||0)+' <small>(시간당 −'+c.eat.toFixed(1)+')</small>'+(c.clothOn?' · 👕 옷 '+fmt(G.res.cloth||0)+' <small>(−'+c.wear.toFixed(1)+')</small>':'')+'<br>행복 <b>'+c.happy+'</b>'+(c.food?'':' · <span class="no">배고파요! 경단 공장을 돌려요</span>')+(c.cloth?'':' · <span class="no">옷이 없어요</span>')+'</div>';
+  h+='<div class="box">수요<br>🏠 주거 '+bar(c.dem.R)+'<br>🛍 상업 '+bar(c.dem.C)+'<br>🔧 공방 '+bar(c.dem.I)+'</div>';
+  var L=hallLv();if(L<D.HMAX)h+='<p class="role">🏛 산호궁 Lv.'+(L+1)+'에는 인구 '+POPREQ(L+1)+'이(가) 필요해요</p>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){closePanel()};panelFor=null}

@@ -1,5 +1,5 @@
 /* ===== 고래 항구 교역 · 현황 지도 · 소리 ===== */
-/* --- 🐋 고래 항구: 상자를 채워 먼 바다 마을에 보내면 진주 못 · 보석 · 희귀 꾸미기 --- */
+/* --- 🐋 고래 항구: 상자를 채워 먼 바다 마을에 보내면 진주 못 · 보석 · 희귀 장식 --- */
 DEC.d_whale={n:'고래 조각상',s:2,c:0,at:1,v:22,r:5,gift:1};DEC.d_shipw={n:'가라앉은 배',s:2,c:0,at:1,v:18,r:4,gift:1};
 function giftArt(k,bp){var p=pal(bp),cx=GX,cy=GY,g=box(p,cx,cy,88,6,sp(p,'#f2f6fa'),sp(p,'#dde6f0'),sp(p,'#b9c8dc')),y=cy-6;
   if(k==='d_whale'){g+='<path d="M'+(cx-60)+','+(y-10)+' q40,-70 104,-20 q14,12 -4,26 q-50,22 -100,-6Z" fill="'+sp(p,'#6f8fc9')+'"'+S(p)+'/>'+'<path d="M'+(cx+44)+','+(y-4)+' l26,-24 l2,30Z" fill="'+sp(p,'#6f8fc9')+'"'+S(p)+'/>'+(p.bp?'':'<path d="M'+(cx-46)+','+(y-4)+' q40,12 86,-2" fill="none" stroke="#e8f0ff" stroke-width="5" stroke-linecap="round"/><circle cx="'+(cx-30)+'" cy="'+(y-28)+'" r="3.5" fill="'+OUT+'"/><path d="M'+(cx-10)+','+(y-58)+' q-6,-20 6,-30 M'+(cx-10)+','+(y-58)+' q10,-16 22,-14" stroke="#bff3ff" stroke-width="4" fill="none" stroke-linecap="round"/>')}
@@ -19,10 +19,10 @@ function portPanel(b){var el=$('panel'),T=G.pt,h='<button class="x" id="pX">✕<
   else if(T.st==='away')h+='<div class="box">🐋 먼 바다 마을로 가는 중 · <b>'+dur((T.back-NOW())/1000)+'</b></div><div class="row"><button id="xRush">💎 '+D.rushGems((T.back-NOW())/1000)+' 바로 돌아오기</button></div>';
   else if(T.st==='back')h+='<div class="box">🐋 돌아왔어요! 📌 '+T.rw.nail+' · 💎 '+T.rw.gem+(T.rw.gift?' · 🎁 '+DEC[T.rw.gift].n:'')+' · ⭐'+T.rw.xp+'</div><div class="row"><button id="xGet">받기</button></div>';
   else{h+='<div class="cars">'+T.bx.map(function(c,i){return '<div class="car'+(c.full?' full':'')+'">'+Object.keys(c.it).map(function(k){var ok=(G.res[k]||0)>=c.it[k];return '<b class="'+(c.full||ok?'':'no')+'">'+ICON[k]+' '+c.it[k]+'</b>'}).join('')+(c.full?'<small>✓ 채웠어요</small>':'<button data-x="'+i+'"'+(boxOk(c)?'':' disabled')+'>채우기</button>')+'</div>'}).join('')+'</div>';
-    h+='<p class="role">상자를 다 채우면 2시간 다녀와요 · 📌 '+T.rw.nail+' · 💎 '+T.rw.gem+' · ⭐'+T.rw.xp+(T.rw.gift?' · 🎁 희귀 꾸미기 「'+DEC[T.rw.gift].n+'」':'')+'</p>'}
+    h+='<p class="role">상자를 다 채우면 2시간 다녀와요 · 📌 '+T.rw.nail+' · 💎 '+T.rw.gem+' · ⭐'+T.rw.xp+(T.rw.gift?' · 🎁 희귀 장식 「'+DEC[T.rw.gift].n+'」':'')+'</p>'}
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};
   el.querySelectorAll('[data-x]').forEach(function(x){x.onclick=function(){var c=T.bx[+x.dataset.x];if(!boxOk(c))return;for(var k in c.it)G.res[k]-=c.it[k];c.full=true;snd('load');if(T.bx.every(function(q){return q.full})){T.st='away';T.back=NOW()+portTrip()*1000;toast('🐋 고래 배가 떠났어요');snd('go')}save();portPanel(b)}});
-  if($('xGet'))$('xGet').onclick=function(){G.res.nail+=T.rw.nail;WAL.add('gem',T.rw.gem);addXP(T.rw.xp);evtAdd(25);if(T.rw.gift){G.inv=G.inv||{};G.inv[T.rw.gift]=(G.inv[T.rw.gift]|0)+1;toast('🎁 '+DEC[T.rw.gift].n+'을(를) 받았어요 · 짓기 → 꾸미기에서 놓아요')}snd('coin');G.pt=portNew();save();portPanel(b)};
+  if($('xGet'))$('xGet').onclick=function(){G.res.nail+=T.rw.nail;WAL.add('gem',T.rw.gem);addXP(T.rw.xp);evtAdd(25);if(T.rw.gift){G.inv=G.inv||{};G.inv[T.rw.gift]=(G.inv[T.rw.gift]|0)+1;toast('🎁 '+DEC[T.rw.gift].n+'을(를) 받았어요 · 짓기 → 장식에서 놓아요')}snd('coin');G.pt=portNew();save();portPanel(b)};
   if($('xRush'))$('xRush').onclick=function(){var g=D.rushGems((T.back-NOW())/1000);if(g>WAL.get('gem')){toast('보석이 모자라요');return}WAL.add('gem',-g);T.back=NOW();T.st='back';save();portPanel(b)};panelFor={pt:b}}
 
 /* --- 🗺 현황 지도: 산소 · 땅값 · 행복(집) 겹쳐 보기 --- */

@@ -1,5 +1,5 @@
 /* ===== 되돌리기 · 바로 옆에 짓기 · 프롤로그 · 길잡이 화살표 ===== */
-/* --- ↶ 되돌리기: 짓기 · 올리기 · 길 · 구역 · 꾸미기 · 정리 · 땅을 1분 안에는 되돌려요(쓴 진주 · 보석도 돌려받음) --- */
+/* --- ↶ 되돌리기: 짓기 · 업그레이드 · 도로 · 구역 · 장식 · 철거 · 영토 확장을 1분 안에는 되돌려요(쓴 진주 · 보석도 환급) --- */
 var UNDO=[],ACT=null;
 (function(){var _a=WAL.add;WAL.add=function(k,n){if(ACT)ACT.d[k]=(ACT.d[k]||0)+n;_a(k,n)}})();
 function pushUndo(lab){var e={lab:lab,g:JSON.stringify(G),d:{},at:NOW()};UNDO.push(e);if(UNDO.length>12)UNDO.shift();ACT=e;return e}
@@ -9,8 +9,8 @@ function doUndo(){var e=undoOk();if(!e){toast('되돌릴 게 없어요');return}
 function undoBtn(){var e=undoOk(),b=$('bUndo');if(!b)return;b.hidden=!e;if(e)b.innerHTML='↶<small>'+e.lab+'</small>'}
 $('bUndo').onclick=doUndo;$('bUndo2').onclick=function(){FLOATU=null;doUndo()};
 
-/* --- 짓기: 카드를 누르면 화면 가운데에서 가장 가까운 빈자리(길 옆)에 바로 놓이고, 끌어서 옮겨요 --- */
-function okSpot(k,x,y){var w=siteWhy(k,x,y);if(isD(k)&&w==='길에 붙여 지어야 해요')w='';return !w}
+/* --- 짓기: 카드를 누르면 화면 가운데에서 가장 가까운 빈자리(도로 옆)에 바로 놓이고, 끌어서 옮겨요 --- */
+function okSpot(k,x,y){var w=siteWhy(k,x,y);if(isD(k)&&w==='도로에 붙여 지어야 해요')w='';return !w}
 function findSpot(k){var s=sz(k),cs=[tileAt(VW/2,VH*.45)],h=bOf('hall');if(h)cs.push({i:h.x+1,j:h.y+1});
   for(var q=0;q<cs.length;q++){var c=cs[q];for(var r=0;r<26;r++)for(var dx=-r;dx<=r;dx++)for(var dy=-r;dy<=r;dy++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;var x=c.i+dx-Math.floor((s-1)/2),y=c.j+dy-Math.floor((s-1)/2);if(okSpot(k,x,y))return {x:x,y:y}}}
   var c0=cs[0];return {x:c0.i,y:c0.j}}
@@ -22,8 +22,8 @@ function ghostHit(x,y){if(!GH)return false;var t=tileAt(x,y),s=sz(GH.k);return t
 var PRO=[
  {img:'d_shipw',t:'깊고 푸른 바닷속',p:'아주 오래전, 이곳엔 물고기들이 모여 사는 산호 마을이 있었어요. 큰 해류가 휩쓸고 간 뒤로 텅 비어 버렸지요.'},
  {img:'hall',t:'남은 건 작은 산호궁 하나',p:'지금은 분홍 산호궁 하나만 남았어요. 바다 물고기들이 다시 모여 살 곳을 찾아 헤매고 있어요.'},
- {img:'zR0',t:'당신은 새 촌장!',p:'진주로 건물을 짓고, 길 옆에 집 구역을 칠하면 물고기들이 이사 와요. 마을 입구를 지난 물고기는 다리가 쑥 자라 주민이 돼요.'},
- {img:'quarry',t:'모으고, 만들고, 키우고',p:'건물 머리 위에 뜨는 동그란 말풍선(🪨 🌿 🫧)을 눌러 재료를 받아요. 재료로 건물을 올리고, 주문을 보내 진주를 벌어요.'},
+ {img:'zR0',t:'당신은 새 촌장!',p:'진주로 건물을 짓고, 도로 옆에 주거 구역을 지정하면 물고기들이 입주해요. 마을 입구를 지난 물고기는 다리가 쑥 자라 주민이 돼요.'},
+ {img:'quarry',t:'모으고, 만들고, 키우고',p:'건물 머리 위에 뜨는 동그란 말풍선(🪨 🌿 🫧)을 눌러 재료를 받아요. 재료로 건물을 올리고, 주문을 배달해 진주를 벌어요.'},
  {img:'pal25',t:'목표는 용궁!',p:'산호궁을 올릴수록 새 건물 · 땅 · 고층 건물이 열려요. 25단계가 되면 반짝이는 용궁이 돼요.'},
  {img:'dom',t:'제가 도와드릴게요',p:'저는 도미 비서예요. 화면 위 노란 말풍선과 깜빡이는 화살표를 따라오시면 돼요. 그럼 시작해 볼까요?'}];
 function proImg(k){if(k==='dom')return '<div class="proav">🐠</div>';if(k==='pal25'){var r=palaceL(25);return '<img src="data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="'+(GX-170)+' '+(r.top-10)+' 340 '+(GY+90-r.top+10)+'">'+DEFS+r.svg+'</svg>')+'">'}return '<img src="'+thumb(k)+'">'}
@@ -36,7 +36,7 @@ function tutTarget(){var i=G.tut|0;if(G.tutMin||i>=TUT.length||!$('pro').hidden)
   if(i===0){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?'.card[data-k=quarry]':'.pills [data-c=prod]'};return {dom:'#bBuild'}}
   if(i===1){var q=bOf('quarry');if(!q)return null;var bb=BUBS.find(function(x){return x.b===q});if(bb)return {x:bb.x,y:bb.y-26,txt:'눌러요!'};var c=centerOf(q);return {x:c.x,y:c.y-90*cam.z,txt:q.job?'다 지어지면 여기 말풍선이 떠요':'곧 말풍선이 떠요'}}
   if(i===2){if(!$('panel').hidden)return {dom:'#pUp'};var h=bOf('hall'),c2=centerOf(h);return {x:c2.x,y:c2.y-140*cam.z,txt:'산호궁을 눌러요'}}
-  if(i===3){if(TOOL==='zR')return {txt2:'길 옆 칸을 손가락으로 쭉 끌어요'};if(!$('tray').hidden)return {dom:CAT==='zone'?'[data-tool=zR]':'.pills [data-c=zone]'};return {dom:'#bBuild'}}
+  if(i===3){if(TOOL==='zR')return {txt2:'도로 옆 칸을 손가락으로 쭉 끌어요'};if(!$('tray').hidden)return {dom:CAT==='zone'?'[data-tool=zR]':'.pills [data-c=zone]'};return {dom:'#bBuild'}}
   if(i===4){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='base'?'.card[data-k=pump]':'.pills [data-c=base]'};return {dom:'#bBuild'}}
   if(i===5)return {dom:'#hF'};
   if(i===6){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?(bOf('farm')?'.card[data-k=factory]':'.card[data-k=farm]'):'.pills [data-c=prod]'};return {dom:'#bBuild'}}

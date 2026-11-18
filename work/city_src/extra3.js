@@ -1,4 +1,4 @@
-/* ===== 공공 서비스 범위(소방 · 순찰 · 병원) · 땅 넓히기 ===== */
+/* ===== 공공 서비스 범위(소방 · 순찰 · 병원) · 영토 확장 ===== */
 var SVC={fire:{b:1,n:'🚒 소방',ic:'🚒'},police:{b:2,n:'👮 순찰',ic:'👮'},clinic:{b:4,n:'🏥 병원',ic:'🏥'}},COV={};
 function svcR(lv){return 5+Math.floor(lv*.7)}
 function covCalc(){COV={};G.b.forEach(function(b){var S2=SVC[b.k];if(!S2||!b.lv)return;var s=sz(b.k),cx=b.x+(s-1)/2,cy=b.y+(s-1)/2,r=svcR(b.lv);
@@ -16,8 +16,8 @@ function buyable(a,b){if(G.own[a+','+b]||a<0||b<0||a>=N/CK||b>=N/CK)return false
 var SIGNS=[];
 function drawLand(){SIGNS=[];var M=N/CK,c=chunkCost();for(var a=0;a<M;a++)for(var b=0;b<M;b++){if(!buyable(a,b))continue;var p=sc(a*CK+CK/2-.5,b*CK+CK/2-.5);if(p.x<-60||p.x>VW+60||p.y<-60||p.y>VH+60)continue;
   var ok=hallLv()>=c.lv;ctx.save();ctx.translate(p.x,p.y);ctx.fillStyle=ok?'#fffdf7':'#e6e9ef';ctx.strokeStyle=OUT;ctx.lineWidth=2.5;rr(-46,-34,92,40,12);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-6,6);ctx.lineTo(0,16);ctx.lineTo(6,6);ctx.fill();ctx.stroke();
-  ctx.font='800 13px "Jua",-apple-system,sans-serif';ctx.textAlign='center';ctx.fillStyle=OUT;ctx.fillText(ok?'🗺 땅 넓히기':'🔒 🏛Lv.'+c.lv,0,-17);ctx.fillText(ok?'🫧'+fmt(c.pearl):'에 열려요',0,-2);ctx.restore();SIGNS.push({a:a,b:b,x:p.x,y:p.y-14})}}
-function landPanel(sg){var c=chunkCost(),el=$('panel'),ok=hallLv()>=c.lv,h='<button class="x" id="pX">✕</button><h2>🗺 땅 넓히기</h2><div class="box">16×16칸 새 땅을 열어요 · 바위 · 덤불이 있어요<div class="cost">'+costHtml({pearl:c.pearl})+' · 🏛 산호궁 Lv.'+c.lv+(ok?' ✓':'')+'</div></div><div class="row"><button id="lBuy"'+(ok&&WAL.get('pearl')>=c.pearl?'':' disabled')+'>열기</button></div>'+(ok?'':'<p class="why">산호궁 Lv.'+c.lv+'이 되면 열 수 있어요</p>');
-  el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;$('lBuy').onclick=function(){if(WAL.get('pearl')<c.pearl||hallLv()<c.lv)return;pushUndo('땅 넓히기');setTimeout(endAct,0);WAL.add('pearl',-c.pearl);G.own[sg.a+','+sg.b]=1;closePanel();snd('done');sparkle(sg.x,sg.y,24);toast('🗺 새 땅이 열렸어요!');addXP(20);save()}}
+  ctx.font='800 13px "Jua",-apple-system,sans-serif';ctx.textAlign='center';ctx.fillStyle=OUT;ctx.fillText(ok?'🗺 영토 확장':'🔒 🏛Lv.'+c.lv,0,-17);ctx.fillText(ok?'🫧'+fmt(c.pearl):'에 열려요',0,-2);ctx.restore();SIGNS.push({a:a,b:b,x:p.x,y:p.y-14})}}
+function landPanel(sg){var c=chunkCost(),el=$('panel'),ok=hallLv()>=c.lv,h='<button class="x" id="pX">✕</button><h2>🗺 영토 확장</h2><div class="box">16×16칸 새 땅을 열어요 · 바위 · 덤불이 있어요<div class="cost">'+costHtml({pearl:c.pearl})+' · 🏛 산호궁 Lv.'+c.lv+(ok?' ✓':'')+'</div></div><div class="row"><button id="lBuy"'+(ok&&WAL.get('pearl')>=c.pearl?'':' disabled')+'>열기</button></div>'+(ok?'':'<p class="why">산호궁 Lv.'+c.lv+'이 되면 열 수 있어요</p>');
+  el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;$('lBuy').onclick=function(){if(WAL.get('pearl')<c.pearl||hallLv()<c.lv)return;pushUndo('영토 확장');setTimeout(endAct,0);WAL.add('pearl',-c.pearl);G.own[sg.a+','+sg.b]=1;closePanel();snd('done');sparkle(sg.x,sg.y,24);toast('🗺 새 땅이 열렸어요!');addXP(20);save()}}
 function fogTile(key,i,j,p,w,h){if(own(i,j)||G.groad&&G.groad[key])return;diamond(p.x,p.y,w+1,h+1);ctx.fillStyle='rgba(12,40,70,.42)';ctx.fill()}
 ownInit();

@@ -33,7 +33,7 @@ function cityTick(now){if(now-cityT<1000)return;var dt=Math.min(5,(now-(cityT||n
   var happy=Math.round(Math.max(0,Math.min(100,35+(pop?25*served/pop:20)+(food?15:-20)+(cloth?10:-15)+avgLV*.2)));
   var dR=Math.max(-1,Math.min(1,((jobs+12)-workers)/25));if(pop>=lim)dR=Math.min(dR,-.3);if(!food)dR-=.4;
   var dC=hallLv()>=ZN.C.at?Math.max(-1,Math.min(1,(pop*.22-jC)/10+(pop>capC?.3:0))):0,dI=hallLv()>=ZN.I.at?Math.max(-1,Math.min(1,(pop*.3-jI)/12)):0;
-  CS={pop:pop,lim:lim,workers:workers,jobs:jobs,w:w,dem:{R:dR,C:dC,I:dI},capC:capC,served:served,happy:happy,food:food,cloth:cloth,clothOn:clothOn,eat:served*.06,wear:clothOn?served*.03:0};
+  G.taxH=Math.round(served*TAXR*happy)/100;CS={tax:G.taxH,pop:pop,lim:lim,workers:workers,jobs:jobs,w:w,dem:{R:dR,C:dC,I:dI},capC:capC,served:served,happy:happy,food:food,cloth:cloth,clothOn:clothOn,eat:served*.06,wear:clothOn?served*.03:0};
   /* 새 건물이 올라감 */
   if(now-cityG>2500){cityG=now;var busy=G.b.filter(function(b){return isZ(b.k)&&b.job}).length;
     ['R','C','I'].forEach(function(z){if(CS.dem[z]<=.1||busy>=2+pop/40||Math.random()>.6)return;var L=[];for(var key in G.zone){if(G.zone[key]!==z||OCC[key])continue;var q=key.split(','),x=+q[0],y=+q[1];if(O2[key]&&roadAdj(x,y))L.push([x,y])}
@@ -97,9 +97,9 @@ function zonePanel(b){var el=$('panel'),z=b.k.charAt(1),Z=ZN[z],L=b.lv,lv=landVa
   if(L&&!b.job){var why=zUpWhy(b);h+='<div class="box"><b>'+(L>=5?'최고 단계':'Lv.'+(L+1)+'로 자라려면')+'</b>'+(L<5?'<ul class="req">'+(why.length?why.map(function(s){return '<li class="no">○ '+s+'</li>'}).join(''):'<li class="ok">✓ 곧 저절로 올라가요</li>')+'</ul>':'')+'</div>'}
   h+='<div class="row"><button id="pDel" class="sub">구역 지우기</button></div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){var k=b.x+','+b.y;delete G.zone[k];G.b.splice(G.b.indexOf(b),1);occ();SEL=null;closePanel();save()};panelFor=b}
-function lifePanel(){var el=$('panel'),c=CS,h='<button class="x" id="pX">✕</button><h2>🐟 살림</h2>';
+function lifePanel(){var el=$('panel'),c=CS,h='<button class="x" id="pX">✕</button><h2>🐟 마을 현황</h2>';
   function bar(v){var x=Math.round((v+1)*50);return '<span class="meter"><i style="width:'+x+'%;background:'+(v>.1?'#35C27A':v<-.1?'#E5484D':'#F2B233')+'"></i></span>'}
-  h+='<div class="box">물고기 <b>'+c.pop+' / '+c.lim+'</b> <small>(한도는 식당 · 학교 · 병원 · 랜드마크가 올려요)</small><br>일꾼 '+c.workers+' / 일자리 '+c.jobs+' → 생산 효율 <b>'+Math.round((.5+.5*c.w)*100)+'%</b><br>상점에서 장보는 물고기 '+c.served+' / '+c.pop+'<br>🍡 경단 '+fmt(G.res.dango||0)+' <small>(시간당 −'+c.eat.toFixed(1)+')</small>'+(c.clothOn?' · 👕 옷 '+fmt(G.res.cloth||0)+' <small>(−'+c.wear.toFixed(1)+')</small>':'')+'<br>행복 <b>'+c.happy+'</b>'+(c.food?'':' · <span class="no">배고파요! 경단 공장을 돌려요</span>')+(c.cloth?'':' · <span class="no">옷이 없어요</span>')+'</div>';
-  h+='<div class="box">수요<br>🏠 주거 '+bar(c.dem.R)+'<br>🛍 상업 '+bar(c.dem.C)+'<br>🔧 공방 '+bar(c.dem.I)+'</div>';
+  h+='<div class="box">인구 <b>'+c.pop+' / '+c.lim+'</b> <small>(한도는 식당 · 학교 · 병원 · 랜드마크가 올려요)</small><br>일꾼 '+c.workers+' / 일자리 '+c.jobs+' → 생산 효율 <b>'+Math.round((.5+.5*c.w)*100)+'%</b><br>상점에서 장보는 인구 '+c.served+' / '+c.pop+'<br>🍡 경단 '+fmt(G.res.dango||0)+' <small>(시간당 −'+c.eat.toFixed(1)+')</small>'+(c.clothOn?' · 👕 옷 '+fmt(G.res.cloth||0)+' <small>(−'+c.wear.toFixed(1)+')</small>':'')+'<br>행복 <b>'+c.happy+'</b>'+(c.food?'':' · <span class="no">배고파요! 경단 공장을 돌려요</span>')+(c.cloth?'':' · <span class="no">옷이 없어요</span>')+'<br>🧾 세금 시간당 <b>'+c.tax.toFixed(1)+'🫧</b> <small>(장보는 인구 × 행복 · 산호궁 말풍선으로 걷어요)</small></div>';
+  h+='<div class="box">수요<br>🏠 주거 '+bar(c.dem.R)+'<br>🛍 상업 '+bar(c.dem.C)+'<br>🔧 산업 '+bar(c.dem.I)+'</div>';
   var L=hallLv();if(L<D.HMAX)h+='<p class="role">🏛 산호궁 Lv.'+(L+1)+'에는 인구 '+POPREQ(L+1)+'이(가) 필요해요</p>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){closePanel()};panelFor=null}

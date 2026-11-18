@@ -10,7 +10,8 @@ var SZ={hall:3,palace:3,pump:1};function sz(k){return SZ[k]||(typeof DEC!=='unde
 var ICON={pearl:'🫧',gem:'💎',stone:'🪨',brick:'🧱',nail:'📌',kelp:'🌿',dango:'🍡',cloth:'👕'};
 var RNAME={pearl:'진주',gem:'보석',stone:'산호석',brick:'산호 벽돌',nail:'진주 못',kelp:'다시마',dango:'경단',cloth:'옷'};
 /* 생산: 시간당 · 버퍼는 8시간치까지 쌓이고 눌러서 받음 */
-function rates(b){var L=b.lv||0;if(!L||isZ(b.k)||isD(b.k)||b.job&&b.job.L===1)return {};var p=D.prodPerHour(b.k,L),o={};
+var TAXR=.05; /* 세금: 장보는 인구 1명 · 시간당 진주 TAXR × 행복% (시뮬 village-sim.js와 같은 값) */
+function rates(b){var L=b.lv||0;if(b.k==='hall'){var tx=G.taxH||0;return tx>0?{pearl:tx}:{}}if(!L||isZ(b.k)||isD(b.k)||b.job&&b.job.L===1)return {};var p=D.prodPerHour(b.k,L),o={};
   if(b.k==='quarry')o.stone=p.stone;if(b.k==='kiln')o.brick=p.brick;if(b.k==='pearl'){o.pearl=p.pearl;o.nail=p.nail}if(b.k==='farm')o.kelp=p.kelp;
   if(b.k==='factory')o.dango=2*L*(1+L*.08);if(b.k==='sew')o.cloth=1.5*L*(1+L*.08);
   var m=.5+.5*(CS.w==null?1:CS.w);for(var q in o)o[q]*=m;return o}
@@ -72,7 +73,7 @@ var QUIET=0;
 function collect(b){var got=[],c=centerOf(b);for(var k in b.buf){var v=Math.floor(b.buf[k]);if(v<1)continue;
     if(k==='pearl'){WAL.add('pearl',v);b.buf[k]-=v;got.push('+'+v+ICON[k])}
     else{var room=Math.floor(cap(k)-G.res[k]);if(room<=0){toast(RNAME[k]+' 창고가 가득 찼어요 · 조개 창고를 올려요');continue}var t=Math.min(v,room);G.res[k]+=t;b.buf[k]-=t;got.push('+'+t+ICON[k])}}
-  if(got.length){snd('pop');addXP(1);if(Math.random()<.2)evtAdd(1,c.x+24,c.y-50*cam.z);G.tutC=true;float(c.x,c.y-70*cam.z,got.join(' '));bubbleFx(c.x,c.y-60*cam.z);save()}}
+  if(got.length){snd('pop');addXP(1);if(Math.random()<.2)evtAdd(1,c.x+24,c.y-50*cam.z);G.tutC=true;float(c.x,c.y-70*cam.z,(b.k==='hall'?'세금 ':'')+got.join(' '));bubbleFx(c.x,c.y-60*cam.z);save()}}
 function bufReady(b){var r=rates(b);for(var k in b.buf)if(b.buf[k]>=Math.max(1,(r[k]||1)*.25))return k;return null}
 
 /* --- 짓기 · 올리기 --- */
@@ -239,7 +240,7 @@ function ordSlots(){var L=lvOf('turtle');return L?Math.min(9,3+Math.floor(L/2)):
 function goodsPool(){var L=hallLv(),p=[];if(lvOf('farm'))p.push('kelp');if(lvOf('quarry'))p.push('stone');if(lvOf('factory'))p.push('dango');if(lvOf('sew'))p.push('cloth');if(lvOf('kiln'))p.push('brick');if(lvOf('pearl')&&L>=12)p.push('nail');return p}
 function genOrder(){var L=hallLv(),pool=goodsPool(),n=Math.min(pool.length,1+Math.floor(Math.random()*Math.min(3,1+L/5))),it={},val=0;pool=pool.slice().sort(function(){return Math.random()-.5});
   for(var i=0;i<n;i++){var g=pool[i],a=Math.max(1,Math.round(GB[g]*(1+L*.35)*(.7+Math.random()*.6)));it[g]=a;val+=a*GV[g]}
-  var rw={pearl:Math.max(10,Math.round(val*.7/5)*5),xp:Math.round(val/3)+3};if(Math.random()<.12&&L>=7)rw.brick=Math.max(2,Math.round(L/2));else if(Math.random()<.05)rw.gem=1;return {id:G.nid++,it:it,rw:rw,at:0,who:ORDWHO[Math.floor(Math.random()*ORDWHO.length)]}}
+  var rw={pearl:Math.max(10,Math.round(val*.5/5)*5),xp:Math.round(val/3)+3};if(Math.random()<.12&&L>=7)rw.brick=Math.max(2,Math.round(L/2));else if(Math.random()<.05)rw.gem=1;return {id:G.nid++,it:it,rw:rw,at:0,who:ORDWHO[Math.floor(Math.random()*ORDWHO.length)]}}
 var ORDWHO=['🐡 복어 아주머니','🐠 흰동가리 남매','🦐 새우 요리사','🐙 문어 선생님','🦀 꽃게 목수','🐟 고등어 반장','🦑 오징어 화가','🐚 소라 할머니','🐬 돌고래 우체부','🦞 가재 대장장이'];
 function ordTick(now){var n=ordSlots();G.ord=G.ord||[];while(G.ord.length<n)G.ord.push({id:G.nid++,it:null,at:now});G.ord.forEach(function(o){if(!o.it&&now>=o.at&&goodsPool().length){var g=genOrder();o.it=g.it;o.rw=g.rw;o.who=g.who}})}
 function ordCan(o){if(!o.it)return false;for(var k in o.it)if((G.res[k]||0)<o.it[k])return false;return true}
@@ -250,7 +251,7 @@ function ordDrop(o){o.it=null;o.at=NOW()+5*60000;save();orderPanel()}
 function orderPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>🐢 주문 배달</h2>';
   if(!lvOf('turtle')){h+='<div class="box">거북 배달소를 지으면 주민 주문이 들어오고, 배달하면 진주를 벌어요 · 🏛 산호궁 Lv.3에 열려요</div>';el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;return}
   if(!goodsPool().length)h+='<div class="box">다시마 농장이나 산호 광산이 있어야 주문이 들어와요</div>';
-  h+='<p class="role">주민이 주문한 물건을 창고에서 꺼내 배달하면 🫧 진주와 ⭐ 명성을 받아요 · 마을의 주 수입이에요</p>';h+='<div class="ords">'+G.ord.map(function(o,i){if(!o.it)return '<div class="ord wait">🐢<br><small>'+(NOW()<o.at?'오는 중 '+dur((o.at-NOW())/1000):'물건을 기다려요')+'</small></div>';
+  h+='<p class="role">주민이 주문한 물건을 창고에서 꺼내 배달하면 🫧 진주와 ⭐ 명성을 받아요</p>';h+='<div class="ords">'+G.ord.map(function(o,i){if(!o.it)return '<div class="ord wait">🐢<br><small>'+(NOW()<o.at?'오는 중 '+dur((o.at-NOW())/1000):'물건을 기다려요')+'</small></div>';
     var can=ordCan(o);return '<div class="ord'+(can?' can':'')+'"><small class="who">'+(o.who||'🐟 주민')+'의 주문</small><div class="its">'+Object.keys(o.it).map(function(k){var ok=(G.res[k]||0)>=o.it[k];return '<span class="'+(ok?'ok':'no')+'">'+ICON[k]+' '+o.it[k]+'</span>'}).join('')+'</div>'+
       '<div class="rw">🫧'+o.rw.pearl+(o.rw.brick?' 🧱'+o.rw.brick:'')+(o.rw.gem?' 💎'+o.rw.gem:'')+' <small>⭐'+o.rw.xp+'</small></div><button data-s="'+i+'"'+(can?'':' disabled')+'>배달</button><button class="del" data-d="'+i+'" aria-label="주문 취소">🗑</button></div>'}).join('')+'</div>';
   h+='<p class="role">배달하면 1분 뒤 새 주문 · 취소하면 5분 뒤 · 주문 칸은 배달소 레벨에 따라 3~9칸</p>';
@@ -276,9 +277,10 @@ function todoPanel(){var el=$('panel'),L=hallLv(),h='<button class="x" id="pX">�
 function helpPanel(){var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📖 마을이 도는 법</h2><div class="box help">'+
   '<p><b>🏛 산호궁</b>이 모든 걸 열어요. 올리려면 정해진 건물 레벨 · 인구 · 진주가 필요해요. 다른 건물은 산호궁보다 높게 못 올려요.</p>'+
   '<p><b>🫧 진주 · 💎 보석</b>은 아가미 파이터와 같은 지갑이에요. 진주로 짓고, 보석으로 공사를 바로 끝내요(5분 이하는 무료).</p>'+
-  '<p><b>🏘 구역</b>을 칠하면 물고기들이 주택 · 상점 · 공장을 지어요. 도로와 산소 펌프의 산소가 닿아야 해요.</p>'+
+  '<p><b>🏘 구역</b>을 지정하면 물고기들이 주택 · 상점 · 공장을 지어요. 도로와 산소 펌프의 산소가 닿아야 해요.</p>'+
   '<p><b>🐟 물고기</b>가 일하면 생산이 빨라지고, 상점에서 🍡 경단 · 👕 옷을 사면 행복해져 집이 자라요.</p>'+
-  '<p><b>🐢 주문</b>대로 물건을 배달하면 진주 · 명성을 받아요. 진주는 주로 여기서 벌어요. 명성 레벨마다 💎 선물이 있어요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
+  '<p><b>🧾 세금</b>은 상점에서 장을 본 인구 × 행복만큼 🏛 산호궁에 쌓여요(8시간치까지). 산호궁 위 🫧 말풍선을 눌러 걷어요.</p>'+
+  '<p><b>🐢 주문</b>대로 물건을 배달하면 진주 · 명성을 받아요. 세금과 함께 마을의 두 가지 수입이에요. 명성 레벨마다 💎 선물이 있어요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 $('bBuild').onclick=function(){if(TAB)closeBuild();else openBuild()};$('bOrd').onclick=function(){closeBuild();orderPanel()};$('bStore').onclick=function(){closeBuild();storePanel()};$('bMenu').onclick=function(){closeBuild();menuPanel()};
 
 function placeBar(){var el=$('place');if(isD(GH.k))return placeDecoBar(el);var c=D.cost(GH.k,1),why=siteWhy(GH.k,GH.x,GH.y);el.hidden=false;
@@ -295,7 +297,7 @@ function floatUI(){var g=$('ghb');if(GH&&!g.hidden){var s=sz(GH.k),c=sc(GH.x+(s-
 function costHtml(c){return Object.keys(c).map(function(k){var ok=have(k)>=c[k];return '<span class="'+(ok?'ok':'no')+'">'+ICON[k]+' '+fmt(c[k])+'</span>'}).join(' ')}
 function openPanel(b){if(isZ(b.k))return zonePanel(b);if(isD(b.k))return decoPanel(b);var el=$('panel'),k=b.k,L=b.lv,h='<button class="x" id="pX">✕</button><h2>'+(DESC[k]?DESC[k].ic+' ':'')+B[k].n+' <small>Lv.'+L+'</small></h2>';
   h+=descBox(k,L);
-  var r=rates(b),rk=Object.keys(r);if(rk.length)h+='<p class="prod">'+rk.map(function(q){return ICON[q]+' 시간당 '+(r[q]<10?r[q].toFixed(1):fmt(r[q]))}).join(' · ')+' <small>(8시간치까지 쌓여요)</small></p>';
+  var r=rates(b),rk=Object.keys(r);if(rk.length)h+='<p class="prod">'+(k==='hall'?'🧾 세금 ':'')+rk.map(function(q){return ICON[q]+' 시간당 '+(r[q]<10?r[q].toFixed(1):fmt(r[q]))}).join(' · ')+' <small>(8시간치까지 쌓여요)</small></p>';
   if(k==='port'&&L&&!(b.job&&b.job.L===1))h+='<div class="row"><button class="sub" id="pPort">🐋 고래 배 보기'+(G.pt&&G.pt.st==='back'?' · 돌아왔어요!':'')+'</button></div>';if(k==='train'&&L&&!(b.job&&b.job.L===1))h+='<div class="row"><button class="sub" id="pTrain">🚋 열차 보기'+(G.tr&&G.tr.st==='back'?' · 돌아왔어요!':'')+'</button></div>';if(k==='crab')h+='<p class="prod">🦀 게 일꾼 '+crabsMax()+'마리</p>';if(k==='store')h+='<p class="prod">🪨 '+fmt(cap('stone'))+'까지 · 🧱 '+fmt(cap('brick'))+' · 📌 '+fmt(cap('nail'))+'</p>';
   if(b.job){var left=(b.job.end-NOW())/1000,g=D.rushGems(left);h+='<div class="box">Lv.'+b.job.L+'로 올리는 중 · 남은 시간 <b>'+dur(left)+'</b></div><div class="row"><button class="main" id="pRush">'+(g?'💎 '+g+' 바로 완성':'무료로 바로 완성')+'</button></div>'}
   else if(L>=D.HMAX)h+='<div class="box">최고 단계예요 ✨</div>';

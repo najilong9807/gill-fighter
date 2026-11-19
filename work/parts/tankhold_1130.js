@@ -91,6 +91,9 @@ var decoStartCH=decoStart;decoStart=function(){cancel();barHide();return decoSta
 /* --- 처음 한 번 알려 주기(수족관에 들어갈 때) --- */
 var toTankCH=toTank;toTank=function(){var r=toTankCH.apply(this,arguments);try{if(!save.tkHoldT&&DS().placed.length){setTimeout(function(){if(page==='tank'&&!deco.on){save.tkHoldT=1;persist();banner(w5('tip'),'')}},1600)}}catch(e){}return r};
 
+/* 꾸미기 도구 이름: 영어 'Low/High'(그래픽 설정 낱말과 겹침) · 스페인어 보관 'Tienda'(상점) 등 바로잡기 */
+(function(){var D={en:['Smaller','Bigger','Put away'],ja:['小さく','大きく',null],es:['Reducir','Ampliar','Guardar'],vi:['Nhỏ lại','To lên',null]}[SUBL||LANG];if(!D)return;
+  function fx(){['dtSmall','dtBig','dtStore'].forEach(function(id,i){try{var s=D[i]&&$(id)&&$(id).querySelector('span');if(s&&s.textContent!==D[i]){s.textContent=D[i];if(D[i].length>6){s.style.fontSize='10px';s.style.letterSpacing='-.4px'}}}catch(e){}})}fx();setTimeout(fx,0);setTimeout(fx,2500)})();
 /* 게임 안 1.1.30 소식에 한 줄 */
 try{var NK='수족관: 소품 · 반짝 산호를 꾹 누르면 들어서 옮기고, 놓은 뒤 「회수」로 보관함에 넣을 수 있어요',NV={en:'Aquarium: press and hold a decoration or the Twinkle Coral to pick it up and move it, then tap 「Put away」 to store it',ja:'水族館：小物やキラキラサンゴを長押しで持ち上げて動かせます。置いたあと「しまう」で収納できます',es:'Acuario: mantén pulsado un adorno o el Coral brillante para levantarlo y moverlo; luego toca 「Guardar」 para guardarlo',vi:'Bể cá: nhấn giữ đồ trang trí hoặc San hô lấp lánh để nhấc lên và di chuyển, rồi chạm 「Cất」 để cất vào kho'};
   try{TRT[NK]=NV.en}catch(e){}try{TRJ[NK]=NV.ja}catch(e){}try{if(SUBL&&NV[SUBL])TRX[NK]=NV[SUBL]}catch(e){}

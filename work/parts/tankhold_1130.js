@@ -92,6 +92,8 @@ var decoStartCH=decoStart;decoStart=function(){cancel();barHide();return decoSta
 var toTankCH=toTank;toTank=function(){var r=toTankCH.apply(this,arguments);try{if(!save.tkHoldT&&DS().placed.length){setTimeout(function(){if(page==='tank'&&!deco.on){save.tkHoldT=1;persist();banner(w5('tip'),'')}},1600)}}catch(e){}return r};
 
 /* 꾸미기 도구 이름: 영어 'Low/High'(그래픽 설정 낱말과 겹침) · 스페인어 보관 'Tienda'(상점) 등 바로잡기 */
+/* 번역 바로잡기(낱말 표 점검 1.1.30): 스 '보관'이 '상점'으로 · 베 '먹은 수'가 '먹힌 수'로 나오던 것 등 */
+try{var FXT={es:{'보관':'Guardar','보관 ':'Guardados ','먹은 수':'Comidos'},vi:{'먹은 수':'Đã ăn','블루탱':'Cá đuôi gai xanh','빙글빙글':'Xoay vòng vui','용궁택배':'Bưu tá Long Cung'}}[SUBL];if(FXT)for(var fk in FXT)TRX[fk]=FXT[fk]}catch(e){}
 (function(){var D={en:['Smaller','Bigger','Put away'],ja:['小さく','大きく',null],es:['Reducir','Ampliar','Guardar'],vi:['Nhỏ lại','To lên',null]}[SUBL||LANG];if(!D)return;
   function fx(){['dtSmall','dtBig','dtStore'].forEach(function(id,i){try{var s=D[i]&&$(id)&&$(id).querySelector('span');if(s&&s.textContent!==D[i]){s.textContent=D[i];if(D[i].length>6){s.style.fontSize='10px';s.style.letterSpacing='-.4px'}}}catch(e){}})}fx();setTimeout(fx,0);setTimeout(fx,2500)})();
 /* 게임 안 1.1.30 소식에 한 줄 */

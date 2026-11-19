@@ -328,6 +328,7 @@ $('home').onclick=function(){focus(bOf('hall'))};
 /*EXTRA3*/
 /*EXTRA4*/
 /*VISIT*/
+/*PLACE*/
 /*UX*/
 $('hF').onclick=function(){lifePanel()};
 /* --- 돌리기 --- */

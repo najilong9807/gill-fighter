@@ -10,6 +10,30 @@
 },
 "t": [
 [
+"다음 단계에 땅값 (\\d+) 필요",
+"next level needs land value $1"
+],
+[
+"🏷 땅값 (\\d+)</b> = 기본 (\\d+)",
+"🏷 Land value $1</b> = base $2"
+],
+[
+"🏭 둘레 (\\d+)칸 땅값 −",
+"🏭 Land value − within $1 tiles"
+],
+[
+"🌿 둘레 (\\d+)칸 땅값 \\+",
+"🌿 Land value + within $1 tiles"
+],
+[
+"이 자리면 (\\d+)채가 다음 단계에 닿아요",
+"here $1 of them reach the next level"
+],
+[
+"🏠 둘레 집 (\\d+)채 땅값 ([+−])(\\d+)",
+"🏠 $1 homes nearby: land value $2$3"
+],
+[
 "🐟 새 물고기 (.+?) 마을로 이사 왔어요! ⭐\\+(\\d+)",
 "🐟 New fish $1 moved to town! ⭐+$2"
 ],
@@ -638,6 +662,11 @@
 "아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. It's linked to your Gill Fighter aquarium, so you can visit it anytime.",
 "🐠 내 수족관 보러 가기": "🐠 Visit my aquarium",
 "💤 오늘은 실컷 놀았어요": "💤 Played enough today",
-" · 창고가 가득 찬 재료는 일부만": " · storage full, some was left"
+" · 창고가 가득 찬 재료는 일부만": " · storage full, some was left",
+" · 아직 영향 받는 집이 없어요": " · no homes affected yet",
+" · 집에서 떨어뜨리면 덜 깎여요": " · farther from homes costs less",
+"장식 · 학교 · 식당 · 명소 가까이면 오르고, 광산 · 가마 · 공장 가까이면 내려가요": "Decor, schools, diners and landmarks nearby raise it; quarries, kilns and factories lower it",
+"😊 행복": "😊 Happiness",
+"🌿 다시마 덤불": "🌿 Kelp bush"
 }
 }

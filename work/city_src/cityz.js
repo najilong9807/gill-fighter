@@ -13,10 +13,11 @@ function NM(k){return k==='pop'?'🐟 물고기':B[k]?B[k].n:ZN[k.charAt(1)]?ZN[
 function reqTxt(n){return n.k==='pop'?'🐟 인구 '+n.lv:NM(n.k)+' Lv.'+n.lv}
 function fields(){covCalc();O2={};LVM={};G.b.forEach(function(b){if(!b.lv)return;var s=sz(b.k),cx=b.x+(s-1)/2,cy=b.y+(s-1)/2,r=0,v=0;
     if(b.k==='pump'){r=3+Math.floor(b.lv/3);for(var i=-r;i<=r;i++)for(var j=-r;j<=r;j++)if(Math.abs(i)+Math.abs(j)<=r*1.3)O2[Math.round(cx+i)+','+Math.round(cy+j)]=1}
-    if(b.k==='hall'){for(i=-4;i<=4;i++)for(j=-4;j<=4;j++)if(Math.abs(i)+Math.abs(j)<=5)O2[Math.round(cx+i)+','+Math.round(cy+j)]=1;r=6;v=10}
-    if(DEC[b.k]){r=DEC[b.k].r;v=DEC[b.k].v}if(PUB[b.k]){r=5;v=8+b.lv}if(b.k==='park'){r=4;v=10}if(b.k==='aqua'||b.k==='palace'){r=7;v=14+b.lv}
-    if(b.k==='quarry'||b.k==='kiln'||b.k==='factory'){r=3;v=-14}
+    if(b.k==='hall'){for(i=-4;i<=4;i++)for(j=-4;j<=4;j++)if(Math.abs(i)+Math.abs(j)<=5)O2[Math.round(cx+i)+','+Math.round(cy+j)]=1}
+    var ef=effOf(b.k,b.lv);r=ef[0];v=ef[1];
     if(r&&v)for(i=-r;i<=r;i++)for(j=-r;j<=r;j++){var d=Math.abs(i)+Math.abs(j);if(d>r)continue;var key=Math.round(cx+i)+','+Math.round(cy+j);LVM[key]=(LVM[key]||0)+v*(1-d/(r+1))}})}
+/* 땅값에 주는 영향 [범위, 세기] — 장식 · 공공 · 명소는 +, 광산 · 가마 · 공장은 − (배치 미리보기 · 땅값 내역도 이것을 씀) */
+function effOf(k,L){var r=0,v=0;if(k==='hall'){r=6;v=10}if(DEC[k]){r=DEC[k].r;v=DEC[k].v}if(PUB[k]){r=5;v=8+L}if(k==='park'){r=4;v=10}if(k==='aqua'||k==='palace'){r=7;v=14+L}if(k==='quarry'||k==='kiln'||k==='factory'){r=3;v=-14}return [r,v]}
 function landVal(x,y){var v=40+(LVM[x+','+y]||0),near=0;for(var i=-2;i<=2;i++)for(var j=-2;j<=2;j++)if(G.ter[(x+i)+','+(y+j)]===2)near++;v+=Math.min(8,near*2)+Math.max(0,((CS&&CS.happy)||60)-60)/5;return Math.max(0,Math.min(100,Math.round(v)))}
 function roadAdj(x,y,s){s=s||1;for(var i=-1;i<=s;i++)for(var j=-1;j<=s;j++){if((i<0||i>=s)&&(j<0||j>=s))continue;if(i>=0&&i<s&&j>=0&&j<s)continue;if(isRoad(x+i,y+j))return true}return false}
 var cityT=0,cityF=0,cityG=0,cityU=0;

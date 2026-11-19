@@ -39,7 +39,7 @@
 ],
 [
 "판에서 모은 재료 상자 (\\d+)개 열기",
-"Open $1 supply crates from your runs"
+"Open supply crates from your runs ($1)"
 ],
 [
 "장식 (\\d+)개 놓기",
@@ -95,11 +95,11 @@
 ],
 [
 "📦 재료 상자 (\\d+)개를 열었어요 (.*?)( · 창고가 가득 찬 재료는 일부만)?$",
-"📦 Opened $1 supply crates $2$3"
+"📦 Supply crates opened ($1): $2$3"
 ],
 [
 "📦 판에서 모은 재료 상자 (\\d+)개 <b>받기 ›</b>",
-"📦 $1 supply crates from your runs <b>Open ›</b>"
+"📦 Supply crates from your runs: $1 <b>Open ›</b>"
 ],
 [
 "🐠 내 물고기 (.+?) 놀러 왔어요 <b>보러 가기 ›</b>",

@@ -10,6 +10,18 @@
 },
 "t": [
 [
+"🐟 새 물고기 (.+?) 마을로 이사 왔어요! ⭐\\+(\\d+)",
+"🐟 ¡Nuevo pez $1 se mudó al pueblo! ⭐+$2"
+],
+[
+"📦 재료 상자 (\\d+)개를 열었어요 (.*?)( · 창고가 가득 찬 재료는 일부만)?$",
+"📦 Abriste $1 cajas de materiales $2$3"
+],
+[
+"📦 판에서 모은 재료 상자 (\\d+)개 <b>받기 ›</b>",
+"📦 $1 cajas de materiales de tus partidas <b>Abrir ›</b>"
+],
+[
 "🐠 내 물고기 (.+?) 놀러 왔어요 <b>보러 가기 ›</b>",
 "🐠 Tu pez $1 vino de visita <b>Ir a ver ›</b>"
 ],
@@ -625,6 +637,7 @@
 "다 실으면 떠나요 · 돌아오면": "Sale al cargar todo · Vuelve con",
 "아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "El Acuario Gill. Sube mucho el valor del suelo en un área amplia y aumenta el límite de población. Está conectado con tu acuario de Gill Fighter: visítalo cuando quieras.",
 "🐠 내 수족관 보러 가기": "🐠 Ver mi acuario",
-"💤 오늘은 실컷 놀았어요": "💤 Ya jugó bastante hoy"
+"💤 오늘은 실컷 놀았어요": "💤 Ya jugó bastante hoy",
+" · 창고가 가득 찬 재료는 일부만": " · almacén lleno, solo una parte"
 }
 }

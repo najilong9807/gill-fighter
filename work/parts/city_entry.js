@@ -36,14 +36,16 @@
       '#cityOv .cwait i{display:flex;gap:8px}#cityOv .cwait i s{width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #0B2C4A;animation:cwb 1s ease-in-out infinite}'+
       '#cityOv .cwait i s:nth-child(2){animation-delay:.15s}#cityOv .cwait i s:nth-child(3){animation-delay:.3s}'+
       '@keyframes cwb{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-9px);opacity:1}}'+
-      '@media (prefers-reduced-motion:reduce){#cityOv .cwait i s{animation:none}#cityOv iframe{transition:none}}';
+      '@media (prefers-reduced-motion:reduce){#cityOv .cwait i s{animation:none}#cityOv iframe{transition:none}}'+
+      'body.cityOn #banner.low{bottom:calc(env(safe-area-inset-bottom,0px) + 150px)!important}'+
+      'li.cityg{background:#E3F6EC!important;box-shadow:inset 0 0 0 2px #2E9B55!important}li.cityg b{color:#1F7A42}';
     document.head.appendChild(st)}
 
   /* 마을 화면 열고 닫기 */
   var ov=null,fr=null;
   function satPx(){var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;height:env(safe-area-inset-top);width:env(safe-area-inset-left);visibility:hidden;pointer-events:none';document.body.appendChild(d);var r=[d.offsetHeight|0,d.offsetWidth|0];d.remove();return r}
   function fit(){if(!ov)return;var t=document.getElementById('tabs'),h=t&&!t.hidden?Math.max(0,innerHeight-t.getBoundingClientRect().top):0;ov.style.bottom=h+'px'}
-  function shut(){if(!ov)return;try{if(fr&&fr.contentWindow&&fr.contentWindow.GF_CITY_SAVE)fr.contentWindow.GF_CITY_SAVE()}catch(e){}ov.remove();ov=null;fr=null;if(tb)tb.removeAttribute('aria-current');removeEventListener('resize',fit);setTimeout(dot,300)}
+  function shut(){if(!ov)return;try{if(fr&&fr.contentWindow&&fr.contentWindow.GF_CITY_SAVE)fr.contentWindow.GF_CITY_SAVE()}catch(e){}ov.remove();ov=null;fr=null;document.body.classList.remove('cityOn');if(tb)tb.removeAttribute('aria-current');removeEventListener('resize',fit);setTimeout(dot,300)}
   function open(){
     if(ov)return;try{crumb('tab:city')}catch(e){}
     /* 다른 화면과 같은 정리(판 · 꾸미기 · 창 닫기) 뒤, 홈은 감추고 마을만 */
@@ -61,7 +63,7 @@
     fr.src='city.html?lang='+l+'&tab=1&sat='+sa[0]+'&sal='+sa[1];
     var shown=false,show=function(){if(shown||!ov)return;shown=true;ov.classList.add('on')};
     fr.addEventListener('load',function(){setTimeout(show,180)});setTimeout(show,2500);
-    ov.appendChild(fr);document.body.appendChild(ov);fit();addEventListener('resize',fit);
+    ov.appendChild(fr);document.body.appendChild(ov);document.body.classList.add('cityOn');fit();addEventListener('resize',fit);
     try{localStorage.removeItem('gfcity.hint')}catch(e){}dot()}
   window.GF_CITY_TAB=true;
   window.GF_GO=function(t){try{if(t==='tank')toTank();else if(t==='home')toHome();else showTab(t)}catch(e){}};
@@ -69,6 +71,18 @@
   window.GF_MYFISH=function(){try{var ids=tankIds();if(!ids.length&&sel)ids=[sel];return ids.slice(0,12).map(function(id){var L=byId(id);return L&&SPRITE_SRC[id]?{id:id,n:L.name,src:SPRITE_SRC[id],lv:affLv(affOf(id))}:null}).filter(Boolean)}catch(e){return []}};
   window.GF_PET=function(id){try{var o=AB(),a=o.aff[id];if(!a||typeof a!=='object')a=o.aff[id]={n:0,d:'',c:0};if(a.d!==o.d){a.d=o.d;a.c=0}
     if(a.c>=AFF_DAY)return {tired:1,lv:affLv(a.n)};var l0=affLv(a.n);a.n++;a.c++;var l1=affLv(a.n),g=0;if(l1>l0){g=5*l1;save.pearls+=g}persist();return {lv:l1,up:l1>l0,g:g}}catch(e){return null}};
+  /* 본게임 → 마을 ①: 20초 넘게 한 판(싱글 · 대전 · 심해 생존 모두)마다 '마을 재료 상자' 1개, 하루 6개까지.
+     상자는 localStorage 'gfcity.gift' {n} 에 쌓이고, 마을이 열릴 때 산호궁 단계에 맞는 재료로 바꿔 받음. 결과 창에 한 줄 */
+  var GBX=6;function cgDay(){var d=today(),o=save.cityG;if(!o||o.d!==d)o=save.cityG={d:d,n:0};return o}
+  function cgAdd(){var o=cgDay();if(o.n>=GBX)return 0;o.n++;try{var g=JSON.parse(localStorage.getItem('gfcity.gift')||'{}');g.n=(g.n|0)+1;g.at=Date.now();localStorage.setItem('gfcity.gift',JSON.stringify(g))}catch(e){}persist();return o.n}
+  var _erC=endRun;endRun=function(){var st0=state,t0=P?(P.time||0):0,done=P&&P.cityG;var r=_erC.apply(this,arguments);
+    try{if(st0==='play'&&state!=='play'&&!done&&t0>=20&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)){P.cityG=1;var n=cgAdd();
+      if(n&&save.cityIn){var rec=document.getElementById('oRec');if(rec){var li=document.createElement('li');li.className='cityg';var sp=document.createElement('span'),b=document.createElement('b');sp.textContent=T(CGT);b.textContent='+1 · '+n+' / '+GBX;li.appendChild(sp);li.appendChild(b);rec.appendChild(li)}}
+      setTimeout(dot,200)}}catch(e){}return r};
+  var CGT='🏘 마을 재료 상자',CGV={en:'🏘 Town supply crate',ja:'🏘 町の資材箱',es:'🏘 Caja de materiales del pueblo',vi:'🏘 Thùng vật liệu làng'};
+  try{TRT[CGT]=CGV.en}catch(e){}try{TRJ[CGT]=CGV.ja}catch(e){}try{if(SUBL&&CGV[SUBL])TRX[CGT]=CGV[SUBL]}catch(e){}
+  /* 본게임 → 마을 ②: 가진 물고기 전부(새로 모은 물고기는 마을로 이사 옴) */
+  window.GF_OWNED=function(){try{return ownedIds().map(function(id){var L=byId(id);return L&&SPRITE_SRC[id]?{id:id,n:L.name,src:SPRITE_SRC[id],lv:affLv(affOf(id))}:null}).filter(Boolean)}catch(e){return []}};
   window.GF_BUZZ=function(v){try{buzz(v)}catch(e){}};
   window.GF_CITY_OPEN=open;
   window.GF_CITY_CLOSE=function(){shut();try{toHome()}catch(e){}};
@@ -93,7 +107,7 @@
   /* 빨간 점: 아직 한 번도 안 들어가 봤거나, 마을에 받을 것이 생겼을 때 */
   function dot(){var d=document.getElementById('cityDot');if(!d)return;var on=false;
     if(!ov){if(!save.cityIn&&(save.runs|0)>=1)on=true;
-      else{try{var h=JSON.parse(localStorage.getItem('gfcity.hint')||'null');if(h&&h.next&&Date.now()>=h.next)on=true}catch(e){}}}
+      else{try{var h=JSON.parse(localStorage.getItem('gfcity.hint')||'null');if(h&&h.next&&Date.now()>=h.next)on=true;var gg=JSON.parse(localStorage.getItem('gfcity.gift')||'null');if(gg&&gg.n>0)on=true}catch(e){}}}
     d.hidden=!on}
   /* 게임 안 소식: 마을이 처음 들어가는 버전(CITY_VER)에 두 줄을 덧붙임(같은 버전의 다른 소식 뒤에) */
   try{var CITY_VER='1.1.30',NA="🏘 새 메뉴 「마을」: 아래 탭에서 바닷속 물고기 마을 아가미시티를 지어요 · 진주 · 보석은 아가미 파이터와 같이 써요",NB="오늘의 미션에 「마을에서 생산품 3번 받기」가 나와요 · 마을 수족관에서 내 수족관으로 바로 가요";

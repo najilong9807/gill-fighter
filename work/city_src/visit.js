@@ -41,3 +41,27 @@ function visPet(){var v=VIS,s=visScreen(),r=null;try{r=window.parent.GF_PET(v.f.
 var _tapV=tap;tap=function(x,y){if(VIS&&visHit(x,y)){visPet();return}return _tapV.apply(this,arguments)};
 var _drawWorldV=drawWorld,_visT=0;drawWorld=function(t,now){var r=_drawWorldV.apply(this,arguments);var dt=_visT?Math.min(.05,(t-_visT)/1000):0;_visT=t;try{visTick(dt,NOW());visDraw()}catch(e){}return r};
 window.__vis=function(){var s=visScreen();return s?{x:s.x,y:s.y,st:VIS.st,n:VIS.f.n,lv:VIS.f.lv}:null};
+
+/* ===== 본게임 → 마을 (늑구 '본게임을 하면 마을에 생기는 일'):
+   ① 판에서 모은 '마을 재료 상자'(본게임이 'gfcity.gift' 에 쌓음, 20초 넘는 판마다 1개 · 하루 6개)
+      → 마을 위 알림 '📦 재료 상자 n개 · 받기' → 산호궁 단계에 맞는 재료(산호석 · 다시마 · 7단계부터 벽돌 · 8단계부터 못), 창고 한도까지
+      상자 하나 = 광산 · 농장 Lv(산호궁) 1.2시간치. 명성 +3 · 축제 토큰 +3 씩
+   ② 새로 모은 물고기는 마을로 이사: 처음 연 날 가진 물고기는 조용히 등록(G.kf), 그 뒤 새로 생긴 물고기는 '이사 왔어요' + 명성 +10 + 다음 나들이 1순위 ===== */
+function boxWorth(){var L=Math.max(1,hallLv()),o={},q=D.prodPerHour('quarry',L),f=D.prodPerHour('farm',L);o.stone=Math.max(20,Math.round((q.stone||0)*1.2));o.kelp=Math.max(10,Math.round((f.kelp||0)*1.2));
+  if(L>=7){var k=D.prodPerHour('kiln',L);o.brick=Math.max(2,Math.round((k.brick||0)*.6))}if(L>=8){var p=D.prodPerHour('pearl',L);o.nail=Math.max(1,Math.round((p.nail||0)*1))}return o}
+function giftN(){try{var g=JSON.parse(localStorage.getItem('gfcity.gift')||'null');return g&&g.n>0?g.n|0:0}catch(e){return 0}}
+function giftEl(){var el=$('giftN');if(!el){el=document.createElement('div');el.id='giftN';el.hidden=true;document.body.appendChild(el);var st=document.createElement('style');st.textContent='#giftN{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--sat,env(safe-area-inset-top)) + 206px);background:#e3f6ec;border:2.5px solid var(--ink);border-radius:16px;padding:8px 14px;font-size:14px;box-shadow:0 3px 0 var(--ink);z-index:8;white-space:nowrap;cursor:pointer;animation:gfIn .3s ease-out}#giftN b{font-family:var(--disp);font-weight:400;color:#1f7a42}@keyframes gfIn{from{transform:translate(-50%,-10px);opacity:0}}';document.head.appendChild(st);el.onclick=giftTake}return el}
+function giftShow(){var n=giftN(),el=giftEl();if(!n||!G.gate&&!hallLv()){el.hidden=true;return}var t='📦 판에서 모은 재료 상자 '+n+'개 <b>받기 ›</b>';if(el.dataset.t!==t){el.dataset.t=t;el.innerHTML=t}el.hidden=false}
+function giftTake(){var n=giftN();$('giftN').hidden=true;if(!n)return;try{localStorage.setItem('gfcity.gift',JSON.stringify({n:0,at:Date.now()}))}catch(e){}
+  var w=boxWorth(),got=[],full=[];for(var k in w){var add=w[k]*n,room=Math.max(0,Math.floor(cap(k)-(G.res[k]||0))),t=Math.min(add,room);G.res[k]=(G.res[k]||0)+t;if(t>0)got.push(ICON[k]+'+'+fmt(t));if(t<add)full.push(RNAME[k])}
+  snd('coin');addXP(3*n);try{evtAdd(3*n)}catch(e){}var h=bOf('hall');if(h){var c=centerOf(h);sparkle(c.x,c.y-60*cam.z,14+n*2);float(c.x,c.y-90*cam.z,got.join(' '),true)}
+  toast('📦 재료 상자 '+n+'개를 열었어요 '+got.join(' ')+(full.length?' · 창고가 가득 찬 재료는 일부만':''));save();hud()}
+/* ② 새 물고기 이사 */
+var VIS_NEW=[];function ownedList(){try{return EMB&&window.parent.GF_OWNED?window.parent.GF_OWNED()||[]:[]}catch(e){return []}}
+function newFishCheck(){var L=ownedList();if(!L.length)return;if(!G.kf){G.kf={};L.forEach(function(f){G.kf[f.id]=1});save();return}
+  var nw=L.filter(function(f){return !G.kf[f.id]});if(!nw.length)return;nw.forEach(function(f){G.kf[f.id]=1;VIS_NEW.push(f)});addXP(10*nw.length);save();
+  setTimeout(function(){toast('🐟 새 물고기 '+nw.map(function(f){return f.n}).join(' · ')+' 마을로 이사 왔어요! ⭐+'+10*nw.length);snd('done')},1200);VIS_NEXT=Math.min(VIS_NEXT,NOW()+4000)}
+/* 나들이 고르기: 새로 이사 온 물고기 먼저, 그다음 수족관 물고기, 수족관이 비면 가진 물고기 */
+var visListG=visList;visList=function(){if(VIS_NEW.length)return [VIS_NEW.shift()];var L=visListG();if(L.length)return L;return ownedList().slice(0,20)};
+setTimeout(function(){try{newFishCheck();giftShow()}catch(e){}},2500);setInterval(function(){try{giftShow()}catch(e){}},5000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)try{newFishCheck();giftShow()}catch(e){}});

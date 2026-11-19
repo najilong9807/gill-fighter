@@ -713,6 +713,10 @@
 "의뢰": "Requests",
 "마을 의뢰": "Town requests",
 "받음": "Claimed",
-"✓ 받음": "✓ Claimed"
+"✓ 받음": "✓ Claimed",
+"<b>📜 의뢰</b>는 산호궁 Lv.5부터 매주 월요일에 3개씩 와요. 하나에 🫧 진주, 셋 다 하면 💎 보석도 받아요.": "<b>📜 Requests</b> arrive every Monday from Coral Hall Lv.5, 3 at a time. Each gives 🫧 Pearls, and finishing all three adds 💎 Gems.",
+"<b>🏷 땅값</b>은 장식 · 학교 · 식당 · 명소가 가까우면 오르고 광산 · 가마 · 공장이 가까우면 내려가요. 건물을 놓기 전에 초록 · 빨강 칸과 집 위 숫자로 미리 볼 수 있어요. 땅값이 높아야 집이 높이 자라요.": "<b>🏷 Land value</b> rises near decor, schools, diners and landmarks, and falls near quarries, kilns and factories. Before placing a building you can preview it with green/red tiles and numbers over homes. Homes grow taller where land value is high.",
+"<b>📦 재료 상자</b>는 아가미 파이터에서 20초 넘게 한 판 할 때마다 1개씩(하루 6개) 와요. <b>🐠 내 물고기</b>는 가끔 마을에 놀러 오고, 쓰다듬으면 수족관 친밀도가 올라요.": "<b>📦 Supply crates</b> arrive for every Gill Fighter run longer than 20 seconds (up to 6 a day). <b>🐠 Your fish</b> sometimes visit town — pet them to raise their aquarium friendship.",
+"🏛 산호궁 최고 단계예요 ✨": "🏛 Coral Hall is at max level ✨"
 }
 }

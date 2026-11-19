@@ -203,7 +203,7 @@ function hud(){var L=hallLv();$('hLv').innerHTML='🏛 <b>Lv.'+L+'</b>';$('hX').
   $('hS').innerHTML='🪨 <b>'+fmtS(G.res.stone)+'</b>';$('hB').hidden=L<7;$('hB').innerHTML='🧱 <b>'+fmtS(G.res.brick)+'</b>';$('hN').hidden=L<8;$('hN').innerHTML='📌 <b>'+fmtS(G.res.nail)+'</b>';
   $('hF').innerHTML='🐟 <b>'+CS.pop+'</b><small>/'+CS.lim+'</small>';['R','C','I'].forEach(function(z){var d=CS.dem[z],el=$('d'+z);el.style.height=Math.round(Math.max(.08,(d+1)/2)*100)+'%';el.style.background=d>.1?'#35C27A':d<-.1?'#E5484D':'#F2B233'});
   $('crabs').innerHTML='🦀 <b>'+jobs().length+'/'+crabsMax()+'</b>';goal();tutPaint();evtTick();undoBtn();var an=$('arrN');if(an)an.style.visibility=(!$('panel').hidden||!$('tray').hidden||TOOL)?'hidden':''}
-function goal(){var L=hallLv(),el=$('goal');if(L>=D.HMAX){el.innerHTML='🏛 산호궁 최고 단계! 용궁 완성';return}
+function goal(){var L=hallLv(),el=$('goal');if(L>=D.HMAX){el.innerHTML='🏛 산호궁 최고 단계예요 ✨';return}
   var h=bOf('hall'),list=needList('hall',L+1);if(h.job){el.innerHTML='🏛 산호궁 Lv.'+(L+1)+' 공사 중 · '+dur((h.job.end-NOW())/1000);return}
   el.innerHTML='<span class="gt">🏛 Lv.'+(L+1)+' 조건</span>'+list.map(function(n){return '<span class="'+(n.ok?'ok':'no')+'" data-k="'+n.k+'">'+(n.ok?'✓':'○')+' '+reqTxt(n)+'</span>'}).join('')}
 $('goal').onclick=function(e){var k=e.target.dataset&&e.target.dataset.k;if(k==='pop'){lifePanel();return}if(!k){var h=bOf('hall');focus(h);SEL=h;openPanel(h);return}var b=bOf(k);if(b){focus(b);SEL=b;openPanel(b)}else{openBuild(CATOF[k]);toast(NM(k)+'을(를) 먼저 지어요')}};
@@ -273,7 +273,7 @@ function storePanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button
   ['stone','brick','nail','kelp','dango','cloth'].forEach(function(k){var c=cap(k),v=G.res[k]||0;h+='<div class="srow">'+ICON[k]+' '+RNAME[k]+'<span class="meter"><i style="width:'+Math.min(100,v/c*100)+'%;background:'+(v>=c*.95?'#E5484D':'#4fc36b')+'"></i></span><b>'+fmt(v)+'</b><small>/'+fmt(c)+'</small></div>'});
   h+='</div><p class="role">가득 차면 건물 말풍선에 쌓인 채로 기다려요 · 조개 창고를 올리면 넓어져요</p>';el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 function menuPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>☰ 메뉴</h2><div class="mgrid">'+
-  '<button data-m="life">🐟<b>마을 현황</b><small>인구 · 일자리 · 수요</small></button><button data-m="todo">🎯<b>할 일</b><small>다음 산호궁까지</small></button><button data-m="help">📖<b>도움말</b><small>마을이 도는 법</small></button><button data-m="snd">'+(SND?'🔊':'🔇')+'<b>소리</b><small>'+(SND?'켜져 있어요':'꺼져 있어요')+'</small></button><button data-m="pro">📜<b>이야기</b><small>처음 이야기 다시 보기</small></button><button data-m="reset">↺<b>처음부터</b><small>시험판 전용</small></button></div>';
+  '<button data-m="life">🐟<b>마을 현황</b><small>인구 · 일자리 · 수요</small></button><button data-m="todo">🎯<b>할 일</b><small>다음 산호궁까지</small></button><button data-m="help">📖<b>도움말</b><small>마을이 도는 법</small></button><button data-m="snd">'+(SND?'🔊':'🔇')+'<b>소리</b><small>'+(SND?'켜져 있어요':'꺼져 있어요')+'</small></button><button data-m="pro">📜<b>이야기</b><small>처음 이야기 다시 보기</small></button>'+(EMB?'':'<button data-m="reset">↺<b>처음부터</b><small>시험판 전용</small></button>')+'</div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;el.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){var m=b.dataset.m;if(m==='life')lifePanel();else if(m==='todo')todoPanel();else if(m==='help')helpPanel();else if(m==='snd'){sndToggle();menuPanel()}else if(m==='pro'){closePanel();prologue(0)}else if(confirm('마을을 처음부터 다시 시작할까요? (진주 · 보석은 그대로)')){localStorage.removeItem(KEY);location.reload()}}})}
 function todoPanel(){var el=$('panel'),L=hallLv(),h='<button class="x" id="pX">✕</button><h2>🎯 할 일</h2>';
   if(L<D.HMAX){var nl=needList('hall',L+1),c=D.cost('hall',L+1);h+='<div class="box"><b>🏛 산호궁 Lv.'+(L+1)+'</b><ul class="req">'+nl.map(function(n){return '<li class="'+(n.ok?'ok':'no')+'" data-k="'+n.k+'">'+(n.ok?'✓':'○')+' '+reqTxt(n)+'</li>'}).join('')+'</ul><div class="cost">'+costHtml(c)+'</div></div>'}
@@ -287,7 +287,10 @@ function helpPanel(){var el=$('panel');el.innerHTML='<button class="x" id="pX">�
   '<p><b>🏘 구역</b>을 지정하면 물고기들이 주택 · 상점 · 공장을 지어요. 도로와 산소 펌프의 산소가 닿아야 해요.</p>'+
   '<p><b>🐟 물고기</b>가 일하면 생산이 빨라지고, 상점에서 🍡 경단 · 👕 옷을 사면 행복해져 주택이 자라요.</p>'+
   '<p><b>🧾 세금</b>은 상점에서 장을 본 인구 × 행복만큼 🏛 산호궁에 쌓여요(8시간치까지). 산호궁 위 🫧 말풍선을 눌러 걷어요.</p>'+
-  '<p><b>🐢 주문</b>대로 물건을 배달하면 진주 · 명성을 받아요. 세금과 함께 마을의 두 가지 수입이에요. 명성 레벨마다 💎 선물이 있어요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
+  '<p><b>🐢 주문</b>대로 물건을 배달하면 진주 · 명성을 받아요. 세금과 함께 마을의 두 가지 수입이에요. 명성 레벨마다 💎 선물이 있어요.</p>'+
+  '<p><b>📜 의뢰</b>는 산호궁 Lv.5부터 매주 월요일에 3개씩 와요. 하나에 🫧 진주, 셋 다 하면 💎 보석도 받아요.</p>'+
+  '<p><b>🏷 땅값</b>은 장식 · 학교 · 식당 · 명소가 가까우면 오르고 광산 · 가마 · 공장이 가까우면 내려가요. 건물을 놓기 전에 초록 · 빨강 칸과 집 위 숫자로 미리 볼 수 있어요. 땅값이 높아야 집이 높이 자라요.</p>'+(EMB?
+  '<p><b>📦 재료 상자</b>는 아가미 파이터에서 20초 넘게 한 판 할 때마다 1개씩(하루 6개) 와요. <b>🐠 내 물고기</b>는 가끔 마을에 놀러 오고, 쓰다듬으면 수족관 친밀도가 올라요.</p>':'')+'</div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 $('bBuild').onclick=function(){if(TAB)closeBuild();else openBuild()};$('bOrd').onclick=function(){closeBuild();orderPanel()};$('bStore').onclick=function(){closeBuild();storePanel()};$('bMenu').onclick=function(){closeBuild();menuPanel()};
 
 function placeBar(){var el=$('place');if(isD(GH.k))return placeDecoBar(el);var c=D.cost(GH.k,1),why=siteWhy(GH.k,GH.x,GH.y);el.hidden=false;

@@ -1,4 +1,4 @@
-/* 아가미시티(물고기 마을) 입구 — 1.1.31 예정(1.1.30은 트리 고침만 따로 나감)
+/* 아가미시티(물고기 마을) 입구 — 1.1.30
    - 아래 메뉴 탭에 🏘 '마을'을 다섯째 칸(수족관 옆)으로: 플레이 · 수족관처럼 본게임의 한 화면으로 열림
    - 마을은 탭 막대 위 화면을 채운 iframe(city.html). 다른 탭을 누르면 마을을 저장하고 닫음
    - 진주 · 보석은 아가미 파이터와 같은 지갑(window.GF_WALLET)
@@ -92,7 +92,7 @@
       else{try{var h=JSON.parse(localStorage.getItem('gfcity.hint')||'null');if(h&&h.next&&Date.now()>=h.next)on=true}catch(e){}}}
     d.hidden=!on}
   /* 게임 안 소식: 마을이 처음 들어가는 버전(CITY_VER)에 두 줄을 덧붙임(같은 버전의 다른 소식 뒤에) */
-  try{var CITY_VER='1.1.31',NA="🏘 새 메뉴 「마을」: 아래 탭에서 바닷속 물고기 마을 아가미시티를 지어요 · 진주 · 보석은 아가미 파이터와 같이 써요",NB="오늘의 미션에 「마을에서 생산품 3번 받기」가 나와요 · 마을 수족관에서 내 수족관으로 바로 가요";
+  try{var CITY_VER='1.1.30',NA="🏘 새 메뉴 「마을」: 아래 탭에서 바닷속 물고기 마을 아가미시티를 지어요 · 진주 · 보석은 아가미 파이터와 같이 써요",NB="오늘의 미션에 「마을에서 생산품 3번 받기」가 나와요 · 마을 수족관에서 내 수족관으로 바로 가요";
     var NT={en:["🏘 New menu 「Town」: build Gill City, an undersea fish town, from the bottom tab · Pearls and Gems are shared with Gill Fighter","Today's missions can include 「Collect goods in Town 3 times」 · jump from the Town aquarium straight to your own aquarium"],
       ja:["🏘 新メニュー「町」：下のタブから海の中の魚の町エラシティを作ろう・真珠とジェムはエラファイターと共通","今日のミッションに「町で生産品を3回受け取る」が登場・町の水族館から自分の水族館へすぐ行けます"],
       es:["🏘 Nuevo menú 「Pueblo」: construye Gill City, un pueblo de peces bajo el mar, desde la pestaña de abajo · las Perlas y Gemas se comparten con Gill Fighter","Las misiones de hoy pueden incluir 「Recoge productos en el pueblo 3 veces」 · desde el acuario del pueblo vas directo a tu acuario"],

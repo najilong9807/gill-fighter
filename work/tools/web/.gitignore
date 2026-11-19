@@ -1,0 +1,9 @@
+*.png
+*.jpg
+*.log
+node_modules/
+fonts/
+main.js
+c[0-9].js
+town_shot.html
+ptest/

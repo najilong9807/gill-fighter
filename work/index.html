@@ -17388,6 +17388,8 @@ var decoStartCH=decoStart;decoStart=function(){cancel();barHide();return decoSta
 /* --- 처음 한 번 알려 주기(수족관에 들어갈 때) --- */
 var toTankCH=toTank;toTank=function(){var r=toTankCH.apply(this,arguments);try{if(!save.tkHoldT&&DS().placed.length){setTimeout(function(){if(page==='tank'&&!deco.on){save.tkHoldT=1;persist();banner(w5('tip'),'')}},1600)}}catch(e){}return r};
 
+/* 트리 장식 미리 읽기: 1.1.29에 그림이 바뀐 장식(p_ · g_ · l_ · q_ · r_)은 orn_*.webp 파일이 없어 켤 때마다 36번 헛요청 → 건너뜀(그리기는 XT_ART 그림 · 줄 · 전구는 코드로, 결과는 전과 같음) */
+try{var _xmSprH=xmSpr;xmSpr=function(k){try{if(typeof k==='string'&&/^orn_[a-z]_/.test(k))return null}catch(e){}return _xmSprH.apply(this,arguments)}}catch(e){}
 /* 꾸미기 도구 이름: 영어 'Low/High'(그래픽 설정 낱말과 겹침) · 스페인어 보관 'Tienda'(상점) 등 바로잡기 */
 /* 번역 바로잡기(낱말 표 점검 1.1.30): 스 '보관'이 '상점'으로 · 베 '먹은 수'가 '먹힌 수'로 나오던 것 등 */
 try{var FXT={es:{'보관':'Guardar','보관 ':'Guardados ','먹은 수':'Comidos'},vi:{'먹은 수':'Đã ăn','블루탱':'Cá đuôi gai xanh','빙글빙글':'Xoay vòng vui','용궁택배':'Bưu tá Long Cung'}}[SUBL];if(FXT)for(var fk in FXT)TRX[fk]=FXT[fk]}catch(e){}

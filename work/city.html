@@ -137,7 +137,13 @@ try{var m=/[?&]lang=(ko|en|ja|es|vi)/.exec(location.search||'');if(m)L=m[1];
   else{var r=JSON.parse(localStorage.getItem('fishproto.save2')||'{}');if(r&&/^(ko|en|ja|es|vi)$/.test(r.lang))L=r.lang;
     else{var n=(((navigator.languages&&navigator.languages[0])||navigator.language||'en')+'').toLowerCase();L=n.indexOf('ko')===0?'ko':n.indexOf('ja')===0?'ja':n.indexOf('es')===0?'es':n.indexOf('vi')===0?'vi':'en'}}}catch(e){}
 window.CITY_LANG=L;try{document.documentElement.lang=L}catch(e){}
-if(L==='ko'||typeof I18N==='undefined'||!I18N[L]){window.CITY_TR=function(s){return s};return}
+/* 한국어: 이름 뒤 '을(를) · 이(가)'를 받침 보고 바로 고쳐 보여 줌(원문은 다른 언어 번역 열쇠라 그대로 둠) */
+if(L==='ko'){var JX=/([\s\S])(을\(를\)|이\(가\))/g,DB='0136780';
+  var jo=function(s){if(typeof s!=='string'||s.indexOf('(')<0||!JX.test(s))return s;JX.lastIndex=0;return s.replace(JX,function(_,c,p){var h=c.charCodeAt(0),b=null;if(h>=0xAC00&&h<=0xD7A3)b=(h-0xAC00)%28!==0;else if(/\d/.test(c))b=DB.indexOf(c)>=0;if(b===null)return _;return c+(p.charAt(0)==='을'?(b?'을':'를'):(b?'이':'가'))})};
+  window.CITY_TR=jo;try{var k1=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');Object.defineProperty(Element.prototype,'innerHTML',{get:k1.get,set:function(v){k1.set.call(this,jo(v))},configurable:true})}catch(e){}
+  try{var k2=Object.getOwnPropertyDescriptor(Node.prototype,'textContent');Object.defineProperty(Node.prototype,'textContent',{get:k2.get,set:function(v){k2.set.call(this,jo(v))},configurable:true})}catch(e){}
+  return}
+if(typeof I18N==='undefined'||!I18N[L]){window.CITY_TR=function(s){return s};return}
 /* 베트남어: 제목 글꼴(Black Han Sans · Jua)에 성조 글자가 없어 글자가 섞여 보임 → 기기 글꼴로 */
 if(L==='vi'){try{var st=document.createElement('style');st.textContent=':root{--disp:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}body,button,input{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}.card b,h2,.main,#bBuild{font-weight:800!important}';document.head.appendChild(st)}catch(e){}}
 /* 일본어는 띄어쓰기가 없어 낱말 단위 줄바뀜을 끈다 */

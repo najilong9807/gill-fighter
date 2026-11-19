@@ -10,6 +10,18 @@
 },
 "t": [
 [
+"🐠 내 물고기 (.+?) 놀러 왔어요 <b>보러 가기 ›</b>",
+"🐠 Cá của bạn $1 đến chơi <b>Đi xem ›</b>"
+],
+[
+"💗 (.+?) ♥(\\d+) · 더 친해졌어요! 🫧\\+(\\d+)",
+"💗 $1 ♥$2 · thân hơn rồi! 🫧+$3"
+],
+[
+"🐠 내 물고기 (.+?) 놀러 왔어요 · 눌러서 쓰다듬어요",
+"🐠 Cá của bạn $1 đến chơi · chạm để vuốt ve"
+],
+[
 "(\\d+)회차",
 "Vòng $1"
 ],
@@ -612,6 +624,7 @@
 "<small>다녀오는 데": "<small>Chuyến đi mất",
 "다 실으면 떠나요 · 돌아오면": "Chất đủ là khởi hành · Khi về nhận",
 "아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "Bể cá Gill. Tăng mạnh giá đất trên vùng rộng và tăng giới hạn dân số. Được nối với Bể cá của bạn trong Gill Fighter, ghé xem bất cứ lúc nào.",
-"🐠 내 수족관 보러 가기": "🐠 Xem bể cá của tôi"
+"🐠 내 수족관 보러 가기": "🐠 Xem bể cá của tôi",
+"💤 오늘은 실컷 놀았어요": "💤 Hôm nay chơi đủ rồi"
 }
 }

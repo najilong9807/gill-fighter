@@ -10,6 +10,18 @@
 },
 "t": [
 [
+"🐠 내 물고기 (.+?) 놀러 왔어요 <b>보러 가기 ›</b>",
+"🐠 Your fish $1 came to visit <b>Go see ›</b>"
+],
+[
+"💗 (.+?) ♥(\\d+) · 더 친해졌어요! 🫧\\+(\\d+)",
+"💗 $1 ♥$2 · closer friends! 🫧+$3"
+],
+[
+"🐠 내 물고기 (.+?) 놀러 왔어요 · 눌러서 쓰다듬어요",
+"🐠 Your fish $1 came to visit · tap to pet it"
+],
+[
 "(\\d+)회차",
 "Round $1"
 ],
@@ -612,6 +624,7 @@
 "<small>다녀오는 데": "<small>Trip takes",
 "다 실으면 떠나요 · 돌아오면": "Departs when fully loaded · Returns with",
 "아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. It's linked to your Gill Fighter aquarium, so you can visit it anytime.",
-"🐠 내 수족관 보러 가기": "🐠 Visit my aquarium"
+"🐠 내 수족관 보러 가기": "🐠 Visit my aquarium",
+"💤 오늘은 실컷 놀았어요": "💤 Played enough today"
 }
 }

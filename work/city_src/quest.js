@@ -27,17 +27,18 @@ function wqPanel(){var S=wqState(),el=$('panel'),W=wqWeek();if(!S)return;var rw=
   var allOk=S.q.every(function(q){return q.got});h+='<div class="wqr all'+(S.all?' got':allOk?' can':'')+'"><span class="ic">🎁</span><div class="tx"><b>의뢰 3개 모두 끝내기</b><small>💎5 · 🫧'+fmt(Math.round(rw*1.5))+'</small></div>'+(S.all?'<em>✓ 받음</em>':'<button data-w="all"'+(allOk?'':' disabled')+'>받기</button>')+'</div></div>';
   el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;
   el.querySelectorAll('[data-w]').forEach(function(b){b.onclick=function(){var w=b.dataset.w,c=centerOf(bOf('hall'));if(w==='all'){if(S.all||!allOk)return;S.all=1;WAL.add('gem',5);WAL.add('pearl',Math.round(rw*1.5));addXP(30);snd('lvl');sparkle(VW/2,VH*.35,30);toast('🎁 이번 주 의뢰를 다 끝냈어요! 💎5 · 🫧'+fmt(Math.round(rw*1.5)))}
-    else{var q=S.q[+w];if(q.got||wqVal(q)<q.goal)return;q.got=1;WAL.add('pearl',rw);addXP(15);snd('coin');sparkle(VW/2,VH*.4,14);toast('📜 의뢰 완료! 🫧+'+fmt(rw))}save();wqPanel();wqDot();hud()}})}
+    else{var q=S.q[+w];if(q.got||wqVal(q)<q.goal)return;q.got=1;WAL.add('pearl',rw);addXP(15);snd('coin');sparkle(VW/2,VH*.4,14);toast('📜 의뢰 완료! 🫧+'+fmt(rw))}save();gfEv('wq');wqPanel();wqDot();hud()}})}
 /* 버튼(축제 버튼 위) */
 (function(){var s=$('side'),ev=$('bEvt');if(!s||$('bWq'))return;var b=document.createElement('button');b.id='bWq';b.setAttribute('aria-label','마을 의뢰');b.style.cssText='position:relative;flex-direction:column;background:#e8f1ff';b.innerHTML='📜<small>의뢰</small><em hidden></em>';s.insertBefore(b,ev||null);b.onclick=function(){closeBuild();wqPanel()};
   var st=document.createElement('style');st.textContent='#bWq em{position:absolute;right:-5px;top:-5px;width:14px;height:14px;border-radius:7px;background:#ff5d5d;border:2px solid var(--ink)}#bWq small{font-size:10px}'+
    '.wq{display:flex;flex-direction:column;gap:7px}.wqr{display:flex;align-items:center;gap:9px;padding:8px 9px;border:2px solid var(--ink);border-radius:13px;background:#fff}.wqr.can{background:#fff7d6}.wqr.got{opacity:.6}.wqr.all{background:#eef6ff}.wqr .ic{font-size:22px;width:28px;text-align:center}'+
    '.wqr .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.wqr .tx b{font-size:14px;word-break:keep-all}.wqr .bar{display:block;height:8px;border-radius:5px;background:#e3e8f0;overflow:hidden}.wqr .bar u{display:block;height:100%;background:linear-gradient(90deg,#4fb3ff,#2e9b55)}.wqr small{font-size:11.5px;color:#5a6a88}'+
    '.wqr button{flex:none;height:36px;padding:0 12px;border:2px solid var(--ink);border-radius:10px;background:#ffd54a;font:inherit;font-weight:900}.wqr button:disabled{background:#eceff4;color:#9aa3b5}.wqr em{font-style:normal;font-size:12px;color:#2e9b55;font-weight:800}';document.head.appendChild(st);setTimeout(wqDot,500);setInterval(wqDot,3000)})();
-/* 세기: 함수 감싸기 */
+/* 세기: 함수 감싸기 (본게임 사용 기록 GF_CITY_EV 도 여기서) */
+function gfEv(k,n){try{if(EMB&&window.parent.GF_CITY_EV&&k!=='collect')window.parent.GF_CITY_EV(k,n||1)}catch(e){}}
 var _collectQ=collect;collect=function(b){var before=JSON.stringify(b.buf);var r=_collectQ.apply(this,arguments);try{if(JSON.stringify(b.buf)!==before)wqAdd('col',1)}catch(e){}return r};
-var _ordSendQ=ordSend;ordSend=function(o){var n0=G.ordSent|0;var r=_ordSendQ.apply(this,arguments);if((G.ordSent|0)>n0)wqAdd('ord',1);return r};
-var _startJobQ=startJob;startJob=function(b,L){var r=_startJobQ.apply(this,arguments);try{if(L>1&&!isZ(b.k)&&!isD(b.k))wqAdd('up',1)}catch(e){}return r};
-var _placeDecoQ=placeDeco;placeDeco=function(){var r=_placeDecoQ.apply(this,arguments);if(r)wqAdd('dec',1);return r};
-var _giftTakeQ=giftTake;giftTake=function(){var n=giftN();var r=_giftTakeQ.apply(this,arguments);if(n)wqAdd('box',n);return r};
+var _ordSendQ=ordSend;ordSend=function(o){var n0=G.ordSent|0;var r=_ordSendQ.apply(this,arguments);if((G.ordSent|0)>n0){wqAdd('ord',1);gfEv('ord')}return r};
+var _startJobQ=startJob;startJob=function(b,L){var r=_startJobQ.apply(this,arguments);try{if(L>1&&!isZ(b.k)&&!isD(b.k))wqAdd('up',1);if(!isZ(b.k))gfEv('build')}catch(e){}return r};
+var _placeDecoQ=placeDeco;placeDeco=function(){var r=_placeDecoQ.apply(this,arguments);if(r){wqAdd('dec',1);gfEv('dec')}return r};
+var _giftTakeQ=giftTake;giftTake=function(){var n=giftN();var r=_giftTakeQ.apply(this,arguments);if(n){wqAdd('box',n);gfEv('box',n)}return r};
 window.__wq=function(){var S=wqState();return S?S.q.map(function(q){return q.k+':'+wqVal(q)+'/'+q.goal+(q.got?'✓':'')}).join(' '):null};

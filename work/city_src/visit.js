@@ -36,7 +36,7 @@ function visHit(x,y){var s=visScreen();if(!s||VIS.al<.5)return false;return Math
 function visPet(){var v=VIS,s=visScreen(),r=null;try{r=window.parent.GF_PET(v.f.id)}catch(e){}v.hop=1;
   if(!r){sparkle(s.x,s.y,6);return}
   if(r.tired){float(s.x,s.y-30,'💤 오늘은 실컷 놀았어요');snd('tap');return}
-  v.f.lv=r.lv;snd('pop');sparkle(s.x,s.y,10);float(s.x,s.y-34,'♥ +1',true);addXP(2);if(v.st==='stay')v.stay=Math.max(v.stay,8);
+  v.f.lv=r.lv;try{window.parent.GF_CITY_EV('pet')}catch(e){}snd('pop');sparkle(s.x,s.y,10);float(s.x,s.y-34,'♥ +1',true);addXP(2);if(v.st==='stay')v.stay=Math.max(v.stay,8);
   if(r.up)toast('💗 '+v.f.n+' ♥'+r.lv+' · 더 친해졌어요! 🫧+'+r.g);save()}
 var _tapV=tap;tap=function(x,y){if(VIS&&visHit(x,y)){visPet();return}return _tapV.apply(this,arguments)};
 var _drawWorldV=drawWorld,_visT=0;drawWorld=function(t,now){var r=_drawWorldV.apply(this,arguments);var dt=_visT?Math.min(.05,(t-_visT)/1000):0;_visT=t;try{visTick(dt,NOW());visDraw()}catch(e){}return r};

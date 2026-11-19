@@ -45,7 +45,8 @@
   var ov=null,fr=null;
   function satPx(){var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;height:env(safe-area-inset-top);width:env(safe-area-inset-left);visibility:hidden;pointer-events:none';document.body.appendChild(d);var r=[d.offsetHeight|0,d.offsetWidth|0];d.remove();return r}
   function fit(){if(!ov)return;var t=document.getElementById('tabs'),h=t&&!t.hidden?Math.max(0,innerHeight-t.getBoundingClientRect().top):0;ov.style.bottom=h+'px'}
-  function shut(){if(!ov)return;try{if(fr&&fr.contentWindow&&fr.contentWindow.GF_CITY_SAVE)fr.contentWindow.GF_CITY_SAVE()}catch(e){}ov.remove();ov=null;fr=null;document.body.classList.remove('cityOn');if(tb)tb.removeAttribute('aria-current');removeEventListener('resize',fit);setTimeout(dot,300)}
+  var openAt=0;
+  function shut(){if(!ov)return;try{var sec=Math.round((Date.now()-openAt)/1000);if(openAt&&sec>0&&sec<6*3600)cms('citySec',sec);openAt=0;var cg=JSON.parse(localStorage.getItem(CK)||'null'),hl=0;if(cg&&cg.b)cg.b.forEach(function(b){if(b.k==='hall')hl=b.lv|0});if(hl&&typeof msS==='function'){var o=msS();if((o.c.cityHall|0)<hl){o.c.cityHall=hl;persist()}}}catch(e){}try{if(fr&&fr.contentWindow&&fr.contentWindow.GF_CITY_SAVE)fr.contentWindow.GF_CITY_SAVE()}catch(e){}ov.remove();ov=null;fr=null;document.body.classList.remove('cityOn');if(tb)tb.removeAttribute('aria-current');removeEventListener('resize',fit);setTimeout(dot,300)}
   function open(){
     if(ov)return;try{crumb('tab:city')}catch(e){}
     /* 다른 화면과 같은 정리(판 · 꾸미기 · 창 닫기) 뒤, 홈은 감추고 마을만 */
@@ -55,7 +56,8 @@
     ['over','pause','sheet','hud','skill','hint','home','tankUI','menu','sea','rec','setp'].forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=true});
     var t=document.getElementById('tabs');if(t)t.hidden=false;
     ['home','tank','dex','sea'].forEach(function(k){var b=document.getElementById('tab-'+k);if(b)b.removeAttribute('aria-current')});if(tb)tb.setAttribute('aria-current','page');
-    if(!save.cityIn){save.cityIn=Date.now();try{persist()}catch(e){}}
+    if(!save.cityIn){save.cityIn=Date.now();try{persist()}catch(e){}try{if(typeof nfEv==='function')nfEv('city1')}catch(e){}}
+    cms('cityOpen');openAt=Date.now();
     var sa=satPx(),l=lg();
     ov=document.createElement('div');ov.id='cityOv';
     ov.innerHTML='<div class="cwait" aria-hidden="true"><b></b><i><s></s><s></s><s></s></i></div>';ov.querySelector('b').textContent=NM[l];
@@ -103,7 +105,10 @@
   var HK=' · 홈으로 돌아가면 자동으로 받아요',HT={en:' · auto-collected when you go Home',ja:' · ホームに戻ると自動で受け取ります',es:' · se recoge solo al volver al inicio',vi:' · tự nhận khi về Trang chính'};
   try{TRT[HK]=HT.en}catch(e){}try{TRJ[HK]=HT.ja}catch(e){}try{if(SUBL&&HT[SUBL])TRX[HK]=HT[SUBL]}catch(e){}
   try{var _rbh=rbxHint;rbxHint=function(){if(page==='city'&&rbxAutoOn())return T(HK);return _rbh.apply(this,arguments)}}catch(e){}
-  window.GF_CITY_EV=function(k,n){try{if(k==='collect')dmAdd('town',n||1)}catch(e){}};
+  /* 사용 기록(1.1.30): 하루치 횟수만 msEv(kind 'ms' · 3시간에 한 번 · 누구인지 없음)로. 마을 안 행동은 마을이 GF_CITY_EV 로 알려 줌 */
+  var CEV={collect:'cityCol',ord:'cityOrd',box:'cityBox',build:'cityBuild',dec:'cityDec',pet:'cityPet',wq:'cityWq'};
+  function cms(k,n){try{if(typeof msEv==='function')msEv(k,n)}catch(e){}}
+  window.GF_CITY_EV=function(k,n){try{if(k==='collect')dmAdd('town',n||1)}catch(e){}if(CEV[k])cms(CEV[k],n||1)};
   /* 빨간 점: 아직 한 번도 안 들어가 봤거나, 마을에 받을 것이 생겼을 때 */
   function dot(){var d=document.getElementById('cityDot');if(!d)return;var on=false;
     if(!ov){if(!save.cityIn&&(save.runs|0)>=1)on=true;

@@ -45,13 +45,13 @@ function loop(){if(!TB2||TB2.hidden)return;if(!okHere()||deco.on||performance.no
 function act(a){var k=TBK;if(!k)return;buzz(10);
   if(a==='ret'&&k.k==='it'){var p=DS().placed,i=p.indexOf(k.it);if(i<0){barHide();return}var it=p[i],d=DS();
     if(it.k==='chest'){try{chestCollect(it)}catch(e){}delete it.t}p.splice(i,1);d.inv[it.k]=(d.inv[it.k]||0)+1;try{aqPrune()}catch(e){}
-    persist();refreshTank();barHide();try{svSnd('bub')}catch(e){}banner(((decoById(it.k)||{}).name||'')+' · '+w5('stored'),w5('storedS'));return}
+    persist();refreshTank();barHide();try{msEv('tkRet')}catch(e){}try{svSnd('bub')}catch(e){}banner(((decoById(it.k)||{}).name||'')+' · '+w5('stored'),w5('storedS'));return}
   if(a==='edit'&&k.k==='it'){var j=DS().placed.indexOf(k.it);barHide();decoStart();if(j>=0){deco.sel=j;decoTools()}return}
   if(a==='home'&&k.k==='coral'){delete AB().cx;persist();barHide();try{svSnd('bub')}catch(e){}return}}
 
 /* --- 꾹 누르기 → 집기 → 끌기 --- */
 function grab(){var h=HD;if(!h||h.on)return;h.on=true;ringHide();barHide();
-  try{tpan=null;camVel=0}catch(e){}buzz([12,20,12]);try{svSnd('bub',.8)}catch(e){}
+  try{tpan=null;camVel=0}catch(e){}buzz([12,20,12]);try{msEv('tkHold')}catch(e){}try{svSnd('bub',.8)}catch(e){}
   if(h.k==='it'){var it=h.it;h.dx=it.x*TWW()-h.wx;h.dy=it.y*ch-h.wy}else{var c=coralPos();h.dx=c.x-h.wx;try{ABY.sq=1}catch(e){}}
   try{cv.setPointerCapture(h.id)}catch(e){}
   if(!save.tkHoldS){save.tkHoldS=1;banner(w5('tipS'),'')}}
@@ -69,7 +69,7 @@ function move(e){var h=HD;if(!h||h.id!==e.pointerId)return;
   /* 화면 끝에 가까우면 수족관이 따라 밀림 */
   var ex=e.clientX-xOff(),vw=cw-xOff();if(ex<40)tankCam=clamp(tankCam-6/tankZ,0,camMax());else if(ex>vw-40)tankCam=clamp(tankCam+6/tankZ,0,camMax())}
 function up(e){var h=HD;if(!h||h.id!==e.pointerId)return;clearTimeout(h.tm);ringHide();HD=null;
-  if(!h.on)return;persist();refreshTank();buzz(8);
+  if(!h.on)return;persist();refreshTank();buzz(8);if(h.k==='coral'&&h.moved)try{msEv('tkCoral')}catch(e){}
   barShow(h.k==='it'?{k:'it',it:h.it}:{k:'coral'})}
 cv.addEventListener('pointerdown',down);cv.addEventListener('pointermove',move);cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',function(e){var h=HD;if(h&&h.id===e.pointerId){if(h.on)persist();clearTimeout(h.tm);HD=null;ringHide()}});
 /* 집은 채로 손을 떼면 그 자리의 '누르기'(트리 창 열기 · 상자 받기 · 산호 톡톡)는 하지 않음: 판 끝(panEnd)은 tpan=null 이라 이미 안 옴 */

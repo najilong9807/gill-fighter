@@ -1,22 +1,96 @@
-/* 아가미시티(물고기 마을) 입구 — 1.1.30 시험 붙임
-   - 홈 위쪽 아이콘 줄에 🏘 '마을' 버튼
-   - 누르면 city.html을 화면 가득 띄움(iframe). 마을은 진주 · 보석을 아가미 파이터와 같은 지갑으로 씀(window.GF_WALLET)
-   - 마을 저장은 같은 기기 localStorage 'gfcity.v1'(본게임 save와 따로) · 저장 백업에는 같이 실림 */
+/* 아가미시티(물고기 마을) 입구 — 1.1.30
+   - 아래 메뉴 탭에 🏘 '마을'을 다섯째 칸(수족관 옆)으로: 플레이 · 수족관처럼 본게임의 한 화면으로 열림
+   - 마을은 탭 막대 위 화면을 채운 iframe(city.html). 다른 탭을 누르면 마을을 저장하고 닫음
+   - 진주 · 보석은 아가미 파이터와 같은 지갑(window.GF_WALLET)
+   - 마을 저장은 같은 기기 localStorage 'gfcity.v1'(본게임 save와 따로) · 저장 백업에는 같이 실림
+   - 탭 빨간 점: 처음 한 번(새 메뉴) + 마을에 받을 것이 생겼을 때(공사 끝 · 생산 가득 · 주문 도착) — 마을이 'gfcity.hint'에 다음 시각을 남김 */
 (function(){
   window.GF_WALLET={get:function(k){return k==='pearl'?(save.pearls|0):(save.gems|0)},
-    add:function(k,n){n=Math.round(n)||0;if(k==='pearl')save.pearls=Math.max(0,(save.pearls|0)+n);else save.gems=Math.max(0,(save.gems|0)+n);try{persist()}catch(e){}try{refreshHome()}catch(e){}}};
+    add:function(k,n){n=Math.round(n)||0;if(k==='pearl')save.pearls=Math.max(0,(save.pearls|0)+n);else save.gems=Math.max(0,(save.gems|0)+n);try{persist()}catch(e){}}};
   /* 저장 백업에 마을 저장도 같이: 맡길 때 save.city로 싣고, 불러올 때 'gfcity.v1'로 되돌림.
      city 칸이 없는 옛 백업이면 이 폰의 마을은 그대로 두고, 있으면(null 포함) 그 백업의 마을로 바꿈. 바꾸기 전 것은 'gfcity.v1.bak'에 한 벌 남김 */
   var CK='gfcity.v1',_cd=cloudData,_ca=cloudApply;
   cloudData=function(){var o=_cd();o.city=null;try{var c=localStorage.getItem(CK);if(c&&c.length<250000)o.city=JSON.parse(c)}catch(e){}return o};
-  cloudApply=function(code,d){try{if(d&&('city' in d)){var old=localStorage.getItem(CK);if(old)localStorage.setItem(CK+'.bak',old);if(d.city&&typeof d.city==='object')localStorage.setItem(CK,JSON.stringify(d.city));else localStorage.removeItem(CK);delete d.city}}catch(e){}_ca(code,d)};
-  var ov=null;
-  function open(){if(ov)return;ov=document.createElement('div');ov.id='cityOv';ov.style.cssText='position:fixed;inset:0;z-index:9000;background:#1d5f86';
-    var f=document.createElement('iframe');f.src='city.html?lang='+((typeof SUBL==='string'&&SUBL)||LANG||'ko');f.title='아가미시티';f.style.cssText='border:0;width:100%;height:100%;display:block';ov.appendChild(f);document.body.appendChild(ov);
-    try{if(window.Bgm&&Bgm.pause)Bgm.pause()}catch(e){}}
-  window.GF_CITY_CLOSE=function(){if(!ov)return;ov.remove();ov=null;try{refreshHome()}catch(e){}};
+  cloudApply=function(code,d){try{if(d&&('city' in d)){var old=localStorage.getItem(CK);if(old)localStorage.setItem(CK+'.bak',old);if(d.city&&typeof d.city==='object')localStorage.setItem(CK,JSON.stringify(d.city));else localStorage.removeItem(CK);localStorage.removeItem('gfcity.hint');delete d.city}}catch(e){}_ca(code,d)};
+
+  var LAB={ko:'마을',en:'Town',ja:'町',es:'Pueblo',vi:'Làng'},NM={ko:'아가미시티',en:'Gill City',ja:'エラシティ',es:'Gill City',vi:'Gill City'};
+  function lg(){var l=(typeof SUBL==='string'&&SUBL)||LANG||'ko';return LAB[l]?l:'en'}
+  /* 탭 막대: 수족관 다음 칸에 '마을' */
+  var tabs=document.getElementById('tabs'),tk=document.getElementById('tab-tank'),tb=null;
+  if(tabs&&tk&&!document.getElementById('tab-city')){
+    tb=document.createElement('button');tb.className='tab';tb.id='tab-city';tb.type='button';tb.setAttribute('data-tab','city');
+    tb.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6.6 14.6V26.4a1.4 1.4 0 0 0 1.4 1.4h16a1.4 1.4 0 0 0 1.4-1.4V14.6" fill="currentColor" stroke="#0B2C4A" stroke-width="2.4" stroke-linejoin="round"/><path d="M3.4 15.6 16 5.2l12.6 10.4" fill="none" stroke="#0B2C4A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.2" y="19.2" width="5.6" height="8.6" rx="2.8" fill="#0B2C4A"/><circle cx="24.6" cy="5.4" r="2.2" fill="#fff" stroke="#0B2C4A" stroke-width="1.6"/><circle cx="28.4" cy="9.6" r="1.3" fill="#fff" stroke="#0B2C4A" stroke-width="1.3"/></svg><span></span><i class="tab-dot" id="cityDot" hidden></i>';
+    tb.querySelector('span').textContent=LAB[lg()];
+    /* 다른 탭처럼 입체 아이콘(svart/ic_town.webp) — 그림을 못 읽으면 위 SVG 그대로 */
+    try{if(typeof icImg==='function'){var im=icImg('town'),sv=tb.querySelector('svg');im.onerror=function(){if(im.parentNode){im.parentNode.replaceChild(sv,im);tb.classList.remove('has3d')}};tb.replaceChild(im,sv);tb.classList.add('has3d')}}catch(e){}tb.setAttribute('aria-label',NM[lg()]);
+    tk.parentNode.insertBefore(tb,tk.nextSibling);tabs.classList.add('t5');
+    var st=document.createElement('style');st.textContent=
+      '#tabs.t5{grid-template-columns:repeat(5,1fr)!important;gap:2px!important;padding-inline:6px!important}'+
+      '#tabs.t5 .tab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}'+
+      '#cityOv{position:fixed;left:0;right:0;top:0;z-index:29;background:#1d5f86;overflow:hidden}'+
+      '#cityOv iframe{border:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .28s ease-out}'+
+      '#cityOv.on iframe{opacity:1}'+
+      '#cityOv .cwait{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff;background:radial-gradient(120% 80% at 50% 30%,#3FA9D6 0%,#1d5f86 60%,#0D3159 100%);transition:opacity .3s}'+
+      '#cityOv.on .cwait{opacity:0;pointer-events:none}'+
+      '#cityOv .cwait b{font-size:26px;letter-spacing:.02em;text-shadow:0 3px 0 #0B2C4A,0 0 18px rgba(255,255,255,.25)}'+
+      '#cityOv .cwait i{display:flex;gap:8px}#cityOv .cwait i s{width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #0B2C4A;animation:cwb 1s ease-in-out infinite}'+
+      '#cityOv .cwait i s:nth-child(2){animation-delay:.15s}#cityOv .cwait i s:nth-child(3){animation-delay:.3s}'+
+      '@keyframes cwb{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-9px);opacity:1}}'+
+      '@media (prefers-reduced-motion:reduce){#cityOv .cwait i s{animation:none}#cityOv iframe{transition:none}}';
+    document.head.appendChild(st)}
+
+  /* 마을 화면 열고 닫기 */
+  var ov=null,fr=null;
+  function satPx(){var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;height:env(safe-area-inset-top);width:env(safe-area-inset-left);visibility:hidden;pointer-events:none';document.body.appendChild(d);var r=[d.offsetHeight|0,d.offsetWidth|0];d.remove();return r}
+  function fit(){if(!ov)return;var t=document.getElementById('tabs'),h=t&&!t.hidden?Math.max(0,innerHeight-t.getBoundingClientRect().top):0;ov.style.bottom=h+'px'}
+  function shut(){if(!ov)return;try{if(fr&&fr.contentWindow&&fr.contentWindow.GF_CITY_SAVE)fr.contentWindow.GF_CITY_SAVE()}catch(e){}ov.remove();ov=null;fr=null;if(tb)tb.removeAttribute('aria-current');removeEventListener('resize',fit);setTimeout(dot,300)}
+  function open(){
+    if(ov)return;try{crumb('tab:city')}catch(e){}
+    /* 다른 화면과 같은 정리(판 · 꾸미기 · 창 닫기) 뒤, 홈은 감추고 마을만 */
+    try{if(typeof deco!=='undefined'&&deco.on)decoEnd()}catch(e){}
+    try{pgImgsFree('')}catch(e){}
+    page='city';state='menu';try{P.dead=true}catch(e){}joy=null;
+    ['over','pause','sheet','hud','skill','hint','home','tankUI','menu','sea','rec','setp'].forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=true});
+    var t=document.getElementById('tabs');if(t)t.hidden=false;
+    ['home','tank','dex','sea'].forEach(function(k){var b=document.getElementById('tab-'+k);if(b)b.removeAttribute('aria-current')});if(tb)tb.setAttribute('aria-current','page');
+    if(!save.cityIn){save.cityIn=Date.now();try{persist()}catch(e){}}
+    var sa=satPx(),l=lg();
+    ov=document.createElement('div');ov.id='cityOv';
+    ov.innerHTML='<div class="cwait" aria-hidden="true"><b></b><i><s></s><s></s><s></s></i></div>';ov.querySelector('b').textContent=NM[l];
+    fr=document.createElement('iframe');fr.title=NM[l];
+    fr.src='city.html?lang='+l+'&tab=1&sat='+sa[0]+'&sal='+sa[1];
+    var shown=false,show=function(){if(shown||!ov)return;shown=true;ov.classList.add('on')};
+    fr.addEventListener('load',function(){setTimeout(show,180)});setTimeout(show,2500);
+    ov.appendChild(fr);document.body.appendChild(ov);fit();addEventListener('resize',fit);
+    try{localStorage.removeItem('gfcity.hint')}catch(e){}dot()}
+  window.GF_CITY_TAB=true;
+  window.GF_GO=function(t){try{if(t==='tank')toTank();else if(t==='home')toHome();else showTab(t)}catch(e){}};
+  window.GF_BUZZ=function(v){try{buzz(v)}catch(e){}};
   window.GF_CITY_OPEN=open;
-  var rb=document.getElementById('rbxBtn');if(rb&&!document.getElementById('cityBtn')){var b=document.createElement('button');b.className='iconbtn';b.id='cityBtn';b.type='button';b.setAttribute('aria-label','아가미시티');b.setAttribute('data-lab','마을');
-    b.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="7" y="15" width="18" height="12" rx="2" fill="#FFD7E0" stroke="#0B2C4A" stroke-width="2.4"/><path d="M8 16 Q16 3 24 16Z" fill="#FFD04A" stroke="#0B2C4A" stroke-width="2.4" stroke-linejoin="round"/><rect x="14" y="20" width="4" height="7" rx="2" fill="#7A4A3A"/><circle cx="16" cy="6" r="2" fill="#fff" stroke="#0B2C4A" stroke-width="1.6"/></svg>';
-    b.onclick=open;rb.parentNode.insertBefore(b,rb)}
+  window.GF_CITY_CLOSE=function(){shut();try{toHome()}catch(e){}};
+  /* 다른 탭 · 다른 화면으로 가면 마을을 먼저 저장하고 닫음 */
+  var _sh=showTab,_th=toHome,_tt=toTank;
+  showTab=function(p){shut();return _sh.apply(this,arguments)};
+  toHome=function(){shut();return _th.apply(this,arguments)};
+  toTank=function(){shut();return _tt.apply(this,arguments)};
+  if(tb)tb.addEventListener('click',function(){if(ov)return;try{buzz(8)}catch(e){}open()});
+
+  /* 오늘의 미션에 마을 한 줄: '마을에서 생산품 3번 받기'(진주 120). 마을이 말풍선을 걷을 때마다 GF_CITY_EV('collect') */
+  var MK='마을에서 생산품 3번 받기',MT={en:'Collect goods in Town 3 times',ja:'町で生産品を3回受け取る',es:'Recoge productos en el pueblo 3 veces',vi:'Thu hoạch trong làng 3 lần'};
+  try{if(!dmDef('town'))DM_POOL.push({k:'town',goal:3,txt:MK,p:120})}catch(e){}
+  try{TRT[MK]=MT.en}catch(e){}try{TRJ[MK]=MT.ja}catch(e){}try{if(SUBL&&MT[SUBL])TRX[MK]=MT[SUBL]}catch(e){}
+  try{if(typeof DMI3!=='undefined')DMI3.town='town'}catch(e){}
+  try{DM_ICO.town='<path d="M5 11.5V20h14v-8.5M3.5 12 12 4.5l8.5 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><rect x="10" y="14" width="4" height="6" rx="2" fill="currentColor"/>'}catch(e){}
+  /* 마을에서 미션을 채우면 '판이 끝나면 받아요' 대신 '홈으로 돌아가면 받아요'(보상함 자동 받기는 홈에 갈 때 돈다) */
+  var HK=' · 홈으로 돌아가면 자동으로 받아요',HT={en:' · auto-collected when you go Home',ja:' · ホームに戻ると自動で受け取ります',es:' · se recoge solo al volver al inicio',vi:' · tự nhận khi về Trang chính'};
+  try{TRT[HK]=HT.en}catch(e){}try{TRJ[HK]=HT.ja}catch(e){}try{if(SUBL&&HT[SUBL])TRX[HK]=HT[SUBL]}catch(e){}
+  try{var _rbh=rbxHint;rbxHint=function(){if(page==='city'&&rbxAutoOn())return T(HK);return _rbh.apply(this,arguments)}}catch(e){}
+  window.GF_CITY_EV=function(k,n){try{if(k==='collect')dmAdd('town',n||1)}catch(e){}};
+  /* 빨간 점: 아직 한 번도 안 들어가 봤거나, 마을에 받을 것이 생겼을 때 */
+  function dot(){var d=document.getElementById('cityDot');if(!d)return;var on=false;
+    if(!ov){if(!save.cityIn&&(save.runs|0)>=1)on=true;
+      else{try{var h=JSON.parse(localStorage.getItem('gfcity.hint')||'null');if(h&&h.next&&Date.now()>=h.next)on=true}catch(e){}}}
+    d.hidden=!on}
+  var _rh=refreshHome;refreshHome=function(){var r=_rh.apply(this,arguments);try{dot()}catch(e){}return r};
+  setInterval(dot,30000);document.addEventListener('visibilitychange',function(){if(!document.hidden)dot()});setTimeout(dot,800);
 })();

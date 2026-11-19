@@ -10,6 +10,14 @@
 },
 "t": [
 [
+"(\\d+)회차",
+"Ronda $1"
+],
+[
+"💎 (\\d+)개를 써서 바로 끝낼까요\\?\\n보석은 아가미 파이터와 같이 써요",
+"¿Gastar 💎 $1 para terminar ya?\nLas gemas se comparten con Gill Fighter."
+],
+[
 "(주거|상업|산업) 구역은 🏛 (?:산호궁 )?Lv\\.(\\d+)에 열려요",
 "Zona $1: se abre con 🏛 Palacio de Coral Lv.$2"
 ],
@@ -393,7 +401,6 @@
 "산호석을 캐요 · 거의 모든 공사 재료": "Extrae Piedra de coral · material de casi todas las obras",
 "상자": "Cajas",
 "상자를 채워 고래 배를 먼 바다 마을로 보내요. 2시간 뒤 진주 못 · 보석 · 명성을 받고, 가끔 희귀 장식이 와요.": "Llena las cajas para enviar el barco ballena a un pueblo lejano. Tras 2 horas recibes Clavos de perla, Gemas y Fama, y a veces decoración rara.",
-"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 나중에 아가미 파이터 수족관과 이어질 자리예요.": "El Acuario Gill. Sube mucho el valor del suelo en un área amplia y aumenta el límite de población. Más adelante se conectará con tu Acuario de Gill Fighter.",
 "아픈 물고기를 돌봐요. 인구 한도를 늘리고, 범위 안 구역 건물이 5단계로 자랄 수 있게 해요.": "Cuida a los peces enfermos. Aumenta el límite de población y permite que los edificios de zona en su alcance crezcan a Lv.5.",
 "열차 칸마다 물건을 실어 보내면 30분쯤 다녀와서 벽돌 · 못 · 명성을 줘요. 레벨 10에 4칸, 18에 5칸.": "Carga todos los vagones y el tren vuelve en unos 30 minutos con ladrillos, clavos y Fama. 4 vagones en Lv.10, 5 en Lv.18.",
 "열차 칸을 채워 보내면 벽돌 · 못": "Llena los vagones y recibe ladrillos y clavos",
@@ -603,6 +610,8 @@
 "벽돌": "Ladrillos",
 "○ 표시한 조건을 먼저 채워요": "Cumple primero las condiciones marcadas con ○",
 "<small>다녀오는 데": "<small>El viaje dura",
-"다 실으면 떠나요 · 돌아오면": "Sale al cargar todo · Vuelve con"
+"다 실으면 떠나요 · 돌아오면": "Sale al cargar todo · Vuelve con",
+"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "El Acuario Gill. Sube mucho el valor del suelo en un área amplia y aumenta el límite de población. Está conectado con tu acuario de Gill Fighter: visítalo cuando quieras.",
+"🐠 내 수족관 보러 가기": "🐠 Ver mi acuario"
 }
 }

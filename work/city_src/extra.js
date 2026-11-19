@@ -35,7 +35,7 @@ function trainPanel(b){var el=$('panel'),T=G.tr,tl=lvOf('train'),h='<button clas
   h+='<p class="role">'+(B.train.role||'')+'</p>';el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};
   el.querySelectorAll('[data-c]').forEach(function(x){x.onclick=function(){var c=T.cars[+x.dataset.c],k=Object.keys(c.it)[0];if((G.res[k]||0)<c.it[k])return;G.res[k]-=c.it[k];c.full=true;snd('load');if(T.cars.every(function(q){return q.full})){T.st='away';T.back=NOW()+trainTrip()*1000;toast('🚋 열차가 떠났어요');var cc=centerOf(b);dust(cc.x,cc.y,14,1.2)}save();trainPanel(b)}});
   if($('tGet'))$('tGet').onclick=function(){G.res.brick+=T.rw.brick;G.res.nail+=T.rw.nail;addXP(T.rw.xp);evtAdd(10);var cc=centerOf(b);float(cc.x,cc.y-70*cam.z,'+'+T.rw.brick+'🧱');G.tr=trainNew();save();trainPanel(b)};
-  if($('tRush'))$('tRush').onclick=function(){var g=D.rushGems((T.back-NOW())/1000);if(g>WAL.get('gem')){toast('보석이 모자라요');return}WAL.add('gem',-g);T.back=NOW();T.st='back';save();trainPanel(b)};panelFor={tr:b}}
+  if($('tRush'))$('tRush').onclick=function(){var g=D.rushGems((T.back-NOW())/1000);if(!gemPay(g))return;T.back=NOW();T.st='back';save();trainPanel(b)};panelFor={tr:b}}
 function trainTrip(){return 1800+lvOf('train')*60}
 
 /* --- 돌아왔을 때 정산 창 --- */

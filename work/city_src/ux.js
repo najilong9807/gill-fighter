@@ -50,4 +50,6 @@ var HSTEP=-1,HT0=0;function drawHint(t){var g=tutTarget();hintEl(g&&g.dom?g.dom:
 if(!G.pro)setTimeout(function(){prologue(0)},400);
 
 /* --- 아가미 파이터 안에서 열렸을 때: 나가기 버튼 --- */
-if(EMB){var bb=document.createElement('button');bb.id='bBack';bb.innerHTML='‹<small>나가기</small>';bb.setAttribute('aria-label','아가미 파이터로 돌아가기');$('side').insertBefore(bb,$('side').firstChild);bb.onclick=function(){save();try{window.parent.GF_CITY_CLOSE&&window.parent.GF_CITY_CLOSE()}catch(e){}}}
+window.GF_CITY_SAVE=function(){try{G.cam=cam}catch(e){}save()};
+var INTAB=/[?&]tab=1/.test(location.search||'');
+if(EMB&&!INTAB){var bb=document.createElement('button');bb.id='bBack';bb.innerHTML='‹<small>나가기</small>';bb.setAttribute('aria-label','아가미 파이터로 돌아가기');$('side').insertBefore(bb,$('side').firstChild);bb.onclick=function(){save();try{window.parent.GF_CITY_CLOSE&&window.parent.GF_CITY_CLOSE()}catch(e){}}}

@@ -10,6 +10,14 @@
 },
 "t": [
 [
+"(\\d+)회차",
+"Vòng $1"
+],
+[
+"💎 (\\d+)개를 써서 바로 끝낼까요\\?\\n보석은 아가미 파이터와 같이 써요",
+"Dùng 💎 $1 để xong ngay?\nĐá quý dùng chung với Gill Fighter."
+],
+[
 "(주거|상업|산업) 구역은 🏛 (?:산호궁 )?Lv\\.(\\d+)에 열려요",
 "Khu $1 mở ở 🏛 Cung San Hô Lv.$2"
 ],
@@ -393,7 +401,6 @@
 "산호석을 캐요 · 거의 모든 공사 재료": "Khai thác Đá san hô · nguyên liệu của hầu hết công trình",
 "상자": "Thùng",
 "상자를 채워 고래 배를 먼 바다 마을로 보내요. 2시간 뒤 진주 못 · 보석 · 명성을 받고, 가끔 희귀 장식이 와요.": "Chất đầy thùng để đưa tàu cá voi đến thị trấn ở biển xa. Sau 2 giờ bạn nhận Đinh ngọc trai, Đá quý và Danh tiếng, đôi khi có trang trí hiếm.",
-"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 나중에 아가미 파이터 수족관과 이어질 자리예요.": "Bể cá Gill. Tăng mạnh giá đất trên vùng rộng và tăng giới hạn dân số. Sau này sẽ nối với Bể cá trong Gill Fighter.",
 "아픈 물고기를 돌봐요. 인구 한도를 늘리고, 범위 안 구역 건물이 5단계로 자랄 수 있게 해요.": "Chăm sóc cá bị ốm. Tăng giới hạn dân số và cho công trình khu trong phạm vi lớn đến Lv.5.",
 "열차 칸마다 물건을 실어 보내면 30분쯤 다녀와서 벽돌 · 못 · 명성을 줘요. 레벨 10에 4칸, 18에 5칸.": "Chất hàng lên từng toa, tàu đi khoảng 30 phút rồi mang về gạch, đinh và Danh tiếng. Lv.10 có 4 toa, Lv.18 có 5 toa.",
 "열차 칸을 채워 보내면 벽돌 · 못": "Chất đầy toa tàu để nhận gạch · đinh",
@@ -603,6 +610,8 @@
 "벽돌": "Gạch",
 "○ 표시한 조건을 먼저 채워요": "Hãy đáp ứng các điều kiện đánh dấu ○ trước",
 "<small>다녀오는 데": "<small>Chuyến đi mất",
-"다 실으면 떠나요 · 돌아오면": "Chất đủ là khởi hành · Khi về nhận"
+"다 실으면 떠나요 · 돌아오면": "Chất đủ là khởi hành · Khi về nhận",
+"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "Bể cá Gill. Tăng mạnh giá đất trên vùng rộng và tăng giới hạn dân số. Được nối với Bể cá của bạn trong Gill Fighter, ghé xem bất cứ lúc nào.",
+"🐠 내 수족관 보러 가기": "🐠 Xem bể cá của tôi"
 }
 }

@@ -10,6 +10,14 @@
 },
 "t": [
 [
+"(\\d+)회차",
+"Round $1"
+],
+[
+"💎 (\\d+)개를 써서 바로 끝낼까요\\?\\n보석은 아가미 파이터와 같이 써요",
+"Spend 💎 $1 to finish now?\nGems are shared with Gill Fighter."
+],
+[
 "(주거|상업|산업) 구역은 🏛 (?:산호궁 )?Lv\\.(\\d+)에 열려요",
 "$1 zones unlock at 🏛 Coral Hall Lv.$2"
 ],
@@ -393,7 +401,6 @@
 "산호석을 캐요 · 거의 모든 공사 재료": "Mines Coral Stone · used in almost all construction",
 "상자": "Crates",
 "상자를 채워 고래 배를 먼 바다 마을로 보내요. 2시간 뒤 진주 못 · 보석 · 명성을 받고, 가끔 희귀 장식이 와요.": "Fill the crates to send the whale ship to a faraway town. After 2 hours you get Pearl Nails, Gems and Fame, and sometimes rare decor.",
-"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 나중에 아가미 파이터 수족관과 이어질 자리예요.": "The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. It will later link to your Gill Fighter aquarium.",
 "아픈 물고기를 돌봐요. 인구 한도를 늘리고, 범위 안 구역 건물이 5단계로 자랄 수 있게 해요.": "Cares for sick fish. Raises the population cap and lets zone buildings in range grow to Lv.5.",
 "열차 칸마다 물건을 실어 보내면 30분쯤 다녀와서 벽돌 · 못 · 명성을 줘요. 레벨 10에 4칸, 18에 5칸.": "Load every train car and it returns in about 30 minutes with bricks, nails and Fame. 4 cars at Lv.10, 5 at Lv.18.",
 "열차 칸을 채워 보내면 벽돌 · 못": "Fill the train cars for bricks and nails",
@@ -603,6 +610,8 @@
 "벽돌": "Bricks",
 "○ 표시한 조건을 먼저 채워요": "Meet the conditions marked ○ first",
 "<small>다녀오는 데": "<small>Trip takes",
-"다 실으면 떠나요 · 돌아오면": "Departs when fully loaded · Returns with"
+"다 실으면 떠나요 · 돌아오면": "Departs when fully loaded · Returns with",
+"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. It's linked to your Gill Fighter aquarium, so you can visit it anytime.",
+"🐠 내 수족관 보러 가기": "🐠 Visit my aquarium"
 }
 }

@@ -25,7 +25,10 @@ function fresh(){var g={v:1,seed:Math.floor(Math.random()*1e6),t:NOW(),res:{ston
   for(var i=0;i<N;i++)for(var j=0;j<N;j++){var d=Math.max(Math.abs(i-c-1),Math.abs(j-c-1));if(d<5)continue;var r=hh(g.seed+i*31+j*57);if(r<.09)g.ter[i+','+j]=1;else if(r<.15)g.ter[i+','+j]=2}
   g.b.push({id:g.nid++,k:'hall',x:c,y:c,lv:1,buf:{}});return g}
 function load(){try{var s=JSON.parse(localStorage.getItem(KEY));if(s&&s.v===1){if((s.N||36)<N){for(var i=0;i<N;i++)for(var j=0;j<N;j++){if(i<(s.N||36)&&j<(s.N||36))continue;var r=hh(s.seed+i*31+j*57);if(r<.09)s.ter[i+','+j]=1;else if(r<.15)s.ter[i+','+j]=2}s.N=N}return s}}catch(e){}return fresh()}
-function save(){G.t=NOW();try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}}
+function save(){G.t=NOW();try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}try{hint()}catch(e){}}
+/* 본게임 탭 빨간 점용: 다음에 받을 것이 생기는 시각(공사 끝 · 생산 8시간치 가득) */
+function hint(){var now=NOW(),nx=Infinity;G.b.forEach(function(b){if(b.job){nx=Math.min(nx,b.job.end);return}var r=rates(b);for(var k in r)if(r[k]>0){var left=(r[k]*BUFH-((b.buf&&b.buf[k])||0))/r[k];nx=Math.min(nx,now+Math.max(0,left)*3600000)}});
+  try{localStorage.setItem('gfcity.hint',JSON.stringify({next:isFinite(nx)?Math.round(nx):0,at:now}))}catch(e){}}
 G=load();
 var $=function(i){return document.getElementById(i)};
 function lvOf(k){var m=0;G.b.forEach(function(b){if(b.k===k)m=Math.max(m,b.lv||0)});return m}
@@ -75,7 +78,7 @@ var QUIET=0;
 function collect(b){var got=[],c=centerOf(b);for(var k in b.buf){var v=Math.floor(b.buf[k]);if(v<1)continue;
     if(k==='pearl'){WAL.add('pearl',v);b.buf[k]-=v;got.push('+'+v+ICON[k])}
     else{var room=Math.floor(cap(k)-G.res[k]);if(room<=0){toast(RNAME[k]+' 창고가 가득 찼어요 · 조개 창고를 올려요');continue}var t=Math.min(v,room);G.res[k]+=t;b.buf[k]-=t;got.push('+'+t+ICON[k])}}
-  if(got.length){snd('pop');addXP(1);if(Math.random()<.2)evtAdd(1,c.x+24,c.y-50*cam.z);G.tutC=true;float(c.x,c.y-70*cam.z,(b.k==='hall'?'세금 ':'')+got.join(' '));bubbleFx(c.x,c.y-60*cam.z);save()}}
+  if(got.length){snd('pop');addXP(1);if(Math.random()<.2)evtAdd(1,c.x+24,c.y-50*cam.z);G.tutC=true;float(c.x,c.y-70*cam.z,(b.k==='hall'?'세금 ':'')+got.join(' '));bubbleFx(c.x,c.y-60*cam.z);save();try{if(EMB&&window.parent.GF_CITY_EV)window.parent.GF_CITY_EV('collect',1)}catch(e){}}}
 function bufReady(b){var r=rates(b);for(var k in b.buf)if(b.buf[k]>=Math.max(1,(r[k]||1)*.25))return k;return null}
 
 /* --- 짓기 · 올리기 --- */
@@ -84,7 +87,9 @@ function canStart(k,L){var why=[];if(L>D.HMAX)return ['최고 단계예요'];if(
   if(!payOk(D.cost(k,L)))why.push('재료가 모자라요');if(jobs().length>=crabsMax())why.push('게 일꾼이 다 바빠요 🦀');return why}
 function startJob(b,L){var c=D.cost(b.k,L);pay(c);snd('build');var t=D.time(b.k,L)*1000,now=NOW();b.job={L:L,start:now,end:now+t};
   var p=centerOf(b);dust(p.x,p.y+10,14,1.2);save()}
-function rush(b){if(!b.job)return;var left=(b.job.end-NOW())/1000,g=D.rushGems(left);if(g>WAL.get('gem')){toast('보석이 모자라요');return}if(g)WAL.add('gem',-g);b.job.end=NOW();closePanel();save()}
+/* 보석으로 바로 끝내기: 20개 이상이면 한 번 물어봄(아가미 파이터와 같은 지갑이라 실수로 크게 쓰지 않게) */
+function gemPay(g){if(g>WAL.get('gem')){toast('보석이 모자라요');return false}if(g>=20&&!confirm('💎 '+g+'개를 써서 바로 끝낼까요?\n보석은 아가미 파이터와 같이 써요'))return false;if(g){WAL.add('gem',-g);snd('coin')}return true}
+function rush(b){if(!b.job)return;var left=(b.job.end-NOW())/1000,g=D.rushGems(left);if(!gemPay(g))return;b.job.end=NOW();closePanel();save()}
 
 /* --- 입자 --- */
 function dust(x,y,n,s){for(var i=0;i<n;i++){var a=Math.random()*6.28,v=(s||1)*(.6+Math.random());FX.push({k:'d',x:x,y:y,vx:Math.cos(a)*v*2.2,vy:Math.sin(a)*v*.9-.4,r:6+Math.random()*9,l:1,dl:.018+Math.random()*.012})}}
@@ -194,7 +199,7 @@ function tap(x,y){
 
 /* --- 화면 틀 --- */
 function toast(s){var el=$('toast');el.textContent=s;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove('on')},1800)}
-function hud(){var L=hallLv();$('hLv').innerHTML='🏛 <b>Lv.'+L+'</b>';$('hX').innerHTML='⭐ <b>'+(G.xl||1)+'</b><span class="xpb"><i style="width:'+Math.min(100,(G.xp||0)/xpNeed(G.xl||1)*100)+'%"></i></span>';var on=ordReady();$('ordN').textContent=on||'';$('ordN').hidden=!on;$('hP').innerHTML='🫧 <b>'+fmt(WAL.get('pearl'))+'</b>';$('hG').innerHTML='💎 <b>'+fmt(WAL.get('gem'))+'</b>';
+function hud(){var L=hallLv();$('hLv').innerHTML='🏛 <b>Lv.'+L+'</b>';$('hX').innerHTML='⭐ <b>'+(G.xl||1)+'</b><span class="xpb"><i style="width:'+Math.min(100,(G.xp||0)/xpNeed(G.xl||1)*100)+'%"></i></span>';var on=ordReady();$('ordN').textContent=on||'';$('ordN').hidden=!on;var IT=document.documentElement.classList.contains('intab'),hp=(IT?'':'🫧 ')+'<b>'+fmt(WAL.get('pearl'))+'</b>',hg=(IT?'':'💎 ')+'<b>'+fmt(WAL.get('gem'))+'</b>';if(hud.p!==hp){hud.p=hp;$('hP').innerHTML=hp}if(hud.g!==hg){hud.g=hg;$('hG').innerHTML=hg} /* 본게임 탭 안: 진주 · 보석은 본게임과 같은 그림(svart) */
   $('hS').innerHTML='🪨 <b>'+fmtS(G.res.stone)+'</b>';$('hB').hidden=L<7;$('hB').innerHTML='🧱 <b>'+fmtS(G.res.brick)+'</b>';$('hN').hidden=L<8;$('hN').innerHTML='📌 <b>'+fmtS(G.res.nail)+'</b>';
   $('hF').innerHTML='🐟 <b>'+CS.pop+'</b><small>/'+CS.lim+'</small>';['R','C','I'].forEach(function(z){var d=CS.dem[z],el=$('d'+z);el.style.height=Math.round(Math.max(.08,(d+1)/2)*100)+'%';el.style.background=d>.1?'#35C27A':d<-.1?'#E5484D':'#F2B233'});
   $('crabs').innerHTML='🦀 <b>'+jobs().length+'/'+crabsMax()+'</b>';goal();tutPaint();evtTick();undoBtn();var an=$('arrN');if(an)an.style.visibility=(!$('panel').hidden||!$('tray').hidden||TOOL)?'hidden':''}
@@ -300,6 +305,7 @@ function costHtml(c){return Object.keys(c).map(function(k){var ok=have(k)>=c[k];
 function openPanel(b){if(isZ(b.k))return zonePanel(b);if(isD(b.k))return decoPanel(b);var el=$('panel'),k=b.k,L=b.lv,h='<button class="x" id="pX">✕</button><h2>'+(DESC[k]?DESC[k].ic+' ':'')+B[k].n+' <small>Lv.'+L+'</small></h2>';
   h+=descBox(k,L);
   var r=rates(b),rk=Object.keys(r);if(rk.length)h+='<p class="prod">'+(k==='hall'?'🧾 세금 ':'')+rk.map(function(q){return ICON[q]+' 시간당 '+(r[q]<10?r[q].toFixed(1):fmt(r[q]))}).join(' · ')+' <small>(8시간치까지 쌓여요)</small></p>';
+  if(k==='aqua'&&L&&EMB&&window.parent.GF_GO)h+='<div class="row"><button class="sub" id="pAqua">🐠 내 수족관 보러 가기</button></div>'; /* 본게임 수족관 탭으로 */
   if(k==='port'&&L&&!(b.job&&b.job.L===1))h+='<div class="row"><button class="sub" id="pPort">🐋 고래 배 보기'+(G.pt&&G.pt.st==='back'?' · 돌아왔어요!':'')+'</button></div>';if(k==='train'&&L&&!(b.job&&b.job.L===1))h+='<div class="row"><button class="sub" id="pTrain">🚋 열차 보기'+(G.tr&&G.tr.st==='back'?' · 돌아왔어요!':'')+'</button></div>';if(k==='crab')h+='<p class="prod">🦀 게 일꾼 '+crabsMax()+'마리</p>';if(k==='store')h+='<p class="prod">🪨 '+fmt(cap('stone'))+'까지 · 🧱 '+fmt(cap('brick'))+' · 📌 '+fmt(cap('nail'))+'</p>';
   if(b.job){var left=(b.job.end-NOW())/1000,g=D.rushGems(left);h+='<div class="box">Lv.'+b.job.L+'로 올리는 중 · 남은 시간 <b>'+dur(left)+'</b></div><div class="row"><button class="main" id="pRush">'+(g?'💎 '+g+' 바로 완성':'무료로 바로 완성')+'</button></div>'}
   else if(L>=D.HMAX)h+='<div class="box">최고 단계예요 ✨</div>';
@@ -309,7 +315,7 @@ function openPanel(b){if(isZ(b.k))return zonePanel(b);if(isD(b.k))return decoPan
       '<div class="row"><button class="main" id="pUp"'+(why.length?' disabled':'')+'>⬆ 업그레이드</button></div>'+(function(){var rest=why.filter(function(s){return !/ 필요$/.test(s)}),un=nl.some(function(n){return !n.ok});if(un)rest.unshift('○ 표시한 조건을 먼저 채워요');return rest.length?'<p class="why">'+rest.join(' · ')+'</p>':''})()}
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};
   if($('pUp'))$('pUp').onclick=function(){var w=canStart(k,L+1);if(w.length){toast(w[0]);return}pushUndo(B[k].n+' 업그레이드');setTimeout(endAct,0);startJob(b,L+1);openPanel(b);toast('🦀 Lv.'+(L+1)+' 공사 시작')};
-  if($('pRush'))$('pRush').onclick=function(){rush(b)};if($('pTrain'))$('pTrain').onclick=function(){trainPanel(b)};if($('pPort'))$('pPort').onclick=function(){portPanel(b)};
+  if($('pRush'))$('pRush').onclick=function(){rush(b)};if($('pTrain'))$('pTrain').onclick=function(){trainPanel(b)};if($('pPort'))$('pPort').onclick=function(){portPanel(b)};if($('pAqua'))$('pAqua').onclick=function(){save();try{window.parent.GF_GO('tank')}catch(e){}};
   el.querySelectorAll('.req li').forEach(function(li){li.onclick=function(){if(li.dataset.k==='pop'){lifePanel();return}var t=bOf(li.dataset.k);if(t){focus(t);SEL=t;openPanel(t)}else{openBuild(CATOF[li.dataset.k])}}});
   panelFor=b}
 var panelFor=null;function closePanel(){$('panel').hidden=true;panelFor=null}

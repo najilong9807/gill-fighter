@@ -1,17 +1,17 @@
-/* ===== 🎐 축제 이벤트: 8일 열리고 3일 쉼 · 겨울엔 아가미 파이터 크리스마스와 같은 기간(11/8~12/30) ===== */
+/* ===== 🎐 축제 이벤트: 8일 열리고 3일 쉼 · 겨울엔 아가미 파이터 크리스마스와 같은 기간(11/8~12/30), 8일마다 새 회차 ===== */
 var EVT_THEMES=[{id:'seal',n:'🦭 바다사자 축제',tk:'🎐',tn:'조개 방울',col:'#4fb3ff',deco:['d_seal','d_balloon','d_stage']},{id:'lantern',n:'🏮 해파리 등불 축제',tk:'🏮',tn:'등불',col:'#ff9f43',deco:['d_jlan','d_balloon','d_stage']}];
 var EVT_WINTER={id:'winter',n:'🎄 바닷속 겨울 축제',tk:'❄',tn:'눈송이',col:'#7fd3ff',deco:['d_xtree','d_snow','d_ice']};
 DEC.d_xtree={n:'산호 트리',s:1,c:0,at:1,v:12,r:3,gift:1};DEC.d_snow={n:'바다 눈사람',s:1,c:0,at:1,v:10,r:2,gift:1};DEC.d_ice={n:'얼음 산호 궁',s:2,c:0,at:1,v:26,r:5,gift:1};
 DEC.d_seal={n:'바다사자 분수',s:1,c:0,at:1,v:12,r:3,gift:1};DEC.d_jlan={n:'해파리 등불 탑',s:1,c:0,at:1,v:12,r:3,gift:1};DEC.d_balloon={n:'거품 풍선',s:1,c:0,at:1,v:10,r:2,gift:1};DEC.d_stage={n:'축제 무대',s:2,c:0,at:1,v:26,r:5,gift:1};
 function evtNow(){var d=new Date(NOW()),y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();
-  if(m===11&&day>=8||m===12&&day<=30){var s=new Date(y,10,8),e=new Date(y,11,31);return {th:EVT_WINTER,key:'winter'+y,start:+s,end:+e}}
+  if(m===11&&day>=8||m===12&&day<=30){var s=+new Date(y,10,8),e=+new Date(y,11,31),R=8*864e5,k=Math.floor((NOW()-s)/R),st=s+k*R;return {th:EVT_WINTER,key:'winter'+y+'r'+k,rd:k+1,start:st,end:Math.min(e,st+R)}} /* 겨울 축제는 아가미 파이터 크리스마스와 같은 기간(11/8~12/30). 8일마다 새 회차로 보상 줄을 다시 채움 */
   var base=+new Date(2026,0,1),cyc=11*864e5,k=Math.floor((NOW()-base)/cyc),st=base+k*cyc,on=NOW()<st+8*864e5;if(!on)return {off:true,next:st+cyc,th:EVT_THEMES[(k+1)%2]};return {th:EVT_THEMES[k%2],key:'e'+k,start:st,end:st+8*864e5}}
 var EVT_TRACK=[[30,{pearl:300}],[80,{gem:5}],[150,{deco:0}],[250,{pearl:1200,gem:10}],[400,{deco:1}],[600,{deco:2,gem:20}]];
 function evtState(){var E=evtNow();if(E.off)return E;G.ev=G.ev||{};if(G.ev.key!==E.key)G.ev={key:E.key,tk:0,got:[]};return E}
 function evtAdd(n,x,y){var E=evtState();if(E.off||!n)return;G.ev.tk+=n;if(x!=null)float(x,y,'+'+n+E.th.tk);var nx=EVT_TRACK.find(function(t,i){return G.ev.tk>=t[0]&&G.ev.got.indexOf(i)<0});if($('evN'))$('evN').hidden=!nx}
 function evtPanel(){var E=evtState(),el=$('panel'),h='<button class="x" id="pX">✕</button>';
   if(E.off){h+='<h2>🎐 축제 쉬는 날</h2><div class="box">다음 축제 「'+E.th.n+'」까지 '+dur((E.next-NOW())/1000)+'</div>';el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;return}
-  var T=E.th;h+='<h2>'+T.n+'</h2><p class="role">끝나기까지 <b>'+dur((E.end-NOW())/1000)+'</b> · 주문 · 열차 · 고래 배 · 말풍선에서 '+T.tk+' '+T.tn+'를 모아요</p><div class="evtk" style="background:'+T.col+'22">'+T.tk+' <b>'+G.ev.tk+'</b></div><div class="track">';
+  var T=E.th;h+='<h2>'+T.n+(E.rd?' <small class="rd">'+E.rd+'회차</small>':'')+'</h2><p class="role">끝나기까지 <b>'+dur((E.end-NOW())/1000)+'</b> · 주문 · 열차 · 고래 배 · 말풍선에서 '+T.tk+' '+T.tn+'를 모아요</p><div class="evtk" style="background:'+T.col+'22">'+T.tk+' <b>'+G.ev.tk+'</b></div><div class="track">';
   EVT_TRACK.forEach(function(t,i){var r=t[1],got=G.ev.got.indexOf(i)>=0,can=G.ev.tk>=t[0]&&!got,lab=(r.pearl?'🫧'+fmt(r.pearl)+' ':'')+(r.gem?'💎'+r.gem+' ':'')+(r.deco!=null?'🎁 '+DEC[T.deco[r.deco]].n:'');
     h+='<div class="tr'+(got?' got':can?' can':'')+'"><span class="need">'+T.tk+' '+t[0]+'</span><span class="lab">'+lab+'</span>'+(got?'<i>✓ 받음</i>':'<button data-e="'+i+'"'+(can?'':' disabled')+'>받기</button>')+'</div>'});
   h+='</div><p class="role">축제 장식은 이 기간에만 받을 수 있어요 · 받은 건 짓기 → 🌸 장식에서 놓아요</p>';el.innerHTML=h;el.hidden=false;panelFor='evt';$('pX').onclick=closePanel;

@@ -74,7 +74,7 @@
   /* 내 물고기 나들이: 수족관에 넣어 둔 물고기(없으면 지금 고른 물고기)를 마을에 넘김 · 마을에서 쓰다듬으면 수족관과 같은 친밀도(abyPet 규칙: 하루 5번, 단계 오르면 진주 5×단계) */
   window.GF_MYFISH=function(){try{var ids=tankIds();if(!ids.length&&sel)ids=[sel];return ids.slice(0,12).map(function(id){var L=byId(id);return L&&SPRITE_SRC[id]?{id:id,n:L.name,src:SPRITE_SRC[id],lv:affLv(affOf(id))}:null}).filter(Boolean)}catch(e){return []}};
   window.GF_PET=function(id){try{var o=AB(),a=o.aff[id];if(!a||typeof a!=='object')a=o.aff[id]={n:0,d:'',c:0};if(a.d!==o.d){a.d=o.d;a.c=0}
-    if(a.c>=AFF_DAY)return {tired:1,lv:affLv(a.n)};var l0=affLv(a.n);a.n++;a.c++;var l1=affLv(a.n),g=0;if(l1>l0){g=5*l1;save.pearls+=g}persist();return {lv:l1,up:l1>l0,g:g}}catch(e){return null}};
+    if(a.c>=AFF_DAY)return {tired:1,lv:affLv(a.n)};var l0=affLv(a.n);a.n++;a.c++;a.tp=(a.tp|0)+1;var l1=affLv(a.n),g=0;if(l1>l0){g=5*l1;save.pearls+=g}persist();return {lv:l1,up:l1>l0,g:g}}catch(e){return null}};
   /* 본게임 → 마을 ①: 20초 넘게 한 판(싱글 · 대전 · 심해 생존 모두)마다 '마을 재료 상자' 1개, 하루 6개까지.
      상자는 localStorage 'gfcity.gift' {n} 에 쌓이고, 마을이 열릴 때 산호궁 단계에 맞는 재료로 바꿔 받음. 결과 창에 한 줄 */
   var GBX=6;function cgDay(){var d=today(),o=save.cityG;if(!o||o.d!==d)o=save.cityG={d:d,n:0};return o}

@@ -1,9 +1,9 @@
-/* 아가미시티(물고기 마을) 입구 — 1.1.30
+/* 아가미시티(물고기 마을) 입구 — 1.1.31 예정(1.1.30은 트리 고침만 따로 나감)
    - 아래 메뉴 탭에 🏘 '마을'을 다섯째 칸(수족관 옆)으로: 플레이 · 수족관처럼 본게임의 한 화면으로 열림
    - 마을은 탭 막대 위 화면을 채운 iframe(city.html). 다른 탭을 누르면 마을을 저장하고 닫음
    - 진주 · 보석은 아가미 파이터와 같은 지갑(window.GF_WALLET)
    - 마을 저장은 같은 기기 localStorage 'gfcity.v1'(본게임 save와 따로) · 저장 백업에는 같이 실림
-   - 탭 빨간 점: 처음 한 번(새 메뉴) + 마을에 받을 것이 생겼을 때(공사 끝 · 생산 가득 · 주문 도착) — 마을이 'gfcity.hint'에 다음 시각을 남김 */
+   - 탭 빨간 점: 처음 한 번(새 메뉴) + 마을에 받을 것이 생겼을 때(공사 끝 · 생산 8시간치 가득) — 마을이 'gfcity.hint'에 다음 시각을 남김 */
 (function(){
   window.GF_WALLET={get:function(k){return k==='pearl'?(save.pearls|0):(save.gems|0)},
     add:function(k,n){n=Math.round(n)||0;if(k==='pearl')save.pearls=Math.max(0,(save.pearls|0)+n);else save.gems=Math.max(0,(save.gems|0)+n);try{persist()}catch(e){}}};
@@ -91,6 +91,14 @@
     if(!ov){if(!save.cityIn&&(save.runs|0)>=1)on=true;
       else{try{var h=JSON.parse(localStorage.getItem('gfcity.hint')||'null');if(h&&h.next&&Date.now()>=h.next)on=true}catch(e){}}}
     d.hidden=!on}
+  /* 게임 안 소식: 마을이 처음 들어가는 버전(CITY_VER)에 두 줄을 덧붙임(같은 버전의 다른 소식 뒤에) */
+  try{var CITY_VER='1.1.31',NA="🏘 새 메뉴 「마을」: 아래 탭에서 바닷속 물고기 마을 아가미시티를 지어요 · 진주 · 보석은 아가미 파이터와 같이 써요",NB="오늘의 미션에 「마을에서 생산품 3번 받기」가 나와요 · 마을 수족관에서 내 수족관으로 바로 가요";
+    var NT={en:["🏘 New menu 「Town」: build Gill City, an undersea fish town, from the bottom tab · Pearls and Gems are shared with Gill Fighter","Today's missions can include 「Collect goods in Town 3 times」 · jump from the Town aquarium straight to your own aquarium"],
+      ja:["🏘 新メニュー「町」：下のタブから海の中の魚の町エラシティを作ろう・真珠とジェムはエラファイターと共通","今日のミッションに「町で生産品を3回受け取る」が登場・町の水族館から自分の水族館へすぐ行けます"],
+      es:["🏘 Nuevo menú 「Pueblo」: construye Gill City, un pueblo de peces bajo el mar, desde la pestaña de abajo · las Perlas y Gemas se comparten con Gill Fighter","Las misiones de hoy pueden incluir 「Recoge productos en el pueblo 3 veces」 · desde el acuario del pueblo vas directo a tu acuario"],
+      vi:["🏘 Menu mới 「Làng」: xây Gill City, làng cá dưới biển, từ tab bên dưới · Ngọc trai và Đá quý dùng chung với Gill Fighter","Nhiệm vụ hôm nay có thể có 「Thu hoạch trong làng 3 lần」 · từ bể cá của làng đi thẳng tới bể cá của bạn"]};
+    try{TRT[NA]=NT.en[0];TRT[NB]=NT.en[1]}catch(e){}try{TRJ[NA]=NT.ja[0];TRJ[NB]=NT.ja[1]}catch(e){}try{if(SUBL&&NT[SUBL]){TRX[NA]=NT[SUBL][0];TRX[NB]=NT[SUBL][1]}}catch(e){}
+    NEWS[CITY_VER]=[T(NA),T(NB)].concat(NEWS[CITY_VER]||[])}catch(e){}
   var _rh=refreshHome;refreshHome=function(){var r=_rh.apply(this,arguments);try{dot()}catch(e){}return r};
   setInterval(dot,30000);document.addEventListener('visibilitychange',function(){if(!document.hidden)dot()});setTimeout(dot,800);
 })();

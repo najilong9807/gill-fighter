@@ -116,6 +116,7 @@ html,body,button{word-break:keep-all;overflow-wrap:break-word}
 html.intab #hP::before,html.intab #hG::before{content:"";display:inline-block;width:19px;height:19px;margin:0 3px 0 -2px;vertical-align:-4px;background:center/contain no-repeat}html.intab #hP::before{background-image:url(svart/ic_orb.webp)}html.intab #hG::before{background-image:url(svart/ic_gem.webp)}
 .round small{white-space:nowrap;letter-spacing:-.2px}html[lang=ja] .round small,html[lang=vi] .round small,html[lang=es] .round small{font-size:10px;letter-spacing:-.4px} /* 둥근 버튼 이름은 한 줄(メニュー · Đơn hàng) */
 .ord .who{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;text-overflow:clip;min-height:2.3em;overflow-wrap:anywhere}html:not([lang=ko]) .ord .who{font-size:10px;letter-spacing:-.2px;padding-right:14px;max-width:100%} /* 주문자 이름: 긴 언어는 두 줄까지(… 로 잘리던 것) */
+@media (max-height:480px){#side{flex-flow:column wrap-reverse;max-height:calc(100vh - var(--sat,0px) - 196px);align-content:flex-start}} /* 가로 화면: 오른쪽 버튼이 짓기 줄에 가리지 않게 두 줄로 */
 </style></head><body>
 <canvas id="cv"></canvas>
 <div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1 r2"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>

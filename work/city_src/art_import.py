@@ -50,6 +50,14 @@ def main():
         prev=re.search(r't:\[([\d,]*)\]',old.get(i,'')) ;keep=[int(x) for x in prev.group(1).split(',') if x] if prev else []
         ts=sorted(set(keep+ts));extra=re.sub(r't:\[[\d,]*\],?','',old.get(i,'{}')[1:-1]).strip(',')
         old[i]='{t:['+','.join(map(str,ts))+']'+(','+extra if extra else '')+'}'
+    # 구역 집: zR0 처럼 0번만 그렸으면 색 다른 1 · 2번도 같은 그림을 씀(a)
+    for i in list(old):
+        m2=re.match(r'^z([RCI])0$',i)
+        if m2:
+            tt=re.search(r't:\[([\d,]*)\]',old[i]).group(1)
+            for v in '12':
+                j='z'+m2.group(1)+v
+                if j not in got: old[j]="{t:["+tt+"],a:'"+i+"'}"
     body='\n'+',\n'.join(" %s:%s"%(k if re.match(r'^[A-Za-z_]\w*$',k) else "'%s'"%k,old[k]) for k in sorted(old))
     s=s[:m.start()]+'var CITY_ART={'+body+'\n};'+s[m.end():]
     if not dry:open(js,'w',encoding='utf-8').write(s)

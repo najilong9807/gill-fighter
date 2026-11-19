@@ -13,14 +13,14 @@ var IM={t:new Image(),g:new Image()};IM.t.src='svart/pet_turtle.webp';IM.g.src='
 var PO=null,WAIT=0,DAYN=3,COOL=3*3600e3,MISS=180e3;
 function dayK(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function st(){var o=save.tkPost;if(!o||typeof o!=='object')o=save.tkPost={d:'',n:0,at:0,miss:0};if(o.d!==dayK()){o.d=dayK();o.n=0}return o}
-function hallLv(){try{var g=JSON.parse(localStorage.getItem('gfcity.v1')||'null'),L=0;if(g&&g.b)g.b.forEach(function(b){if(b.k==='hall')L=Math.max(L,b.lv|0)});return L}catch(e){return 0}}
+var HL={v:0,at:0};function hallLv(){var now=Date.now();if(now-HL.at<15000)return HL.v;HL.at=now;try{var g=JSON.parse(localStorage.getItem('gfcity.v1')||'null'),L=0;if(g&&g.b)g.b.forEach(function(b){if(b.k==='hall')L=Math.max(L,b.lv|0)});return HL.v=L}catch(e){return HL.v=0}}
 function gain(){return Math.min(250,40+10*hallLv())}
 function canSpawn(){if(page!=='tank'||deco.on||VIEWM||(typeof VISIT!=='undefined'&&VISIT)||document.hidden)return false;if(typeof ABY==='object'&&ABY&&ABY.vis)return false;
   var o=st(),now=Date.now();if(o.n>=DAYN||now-(o.at||0)<COOL||now-(o.miss||0)<MISS)return false;return hallLv()>=2}
 function spawn(){var dir=Math.random()<.5?1:-1,vw=viewW();PO={dir:dir,x:dir>0?tankCam-70:tankCam+vw+70,y:ch*(.5+Math.random()*.12),ph:Math.random()*6,t:0,out:0};
   try{banner(TX[2],TX[3]);svSnd('bub',.7)}catch(e){}try{crumb('tkPost')}catch(e){}}
 function tick(dt){if(!PO){if(!canSpawn()){WAIT=0;return}WAIT+=dt;if(WAIT>25+Math.random()*2){WAIT=0;spawn()}return}
-  if(page!=='tank'||VIEWM||deco.on){PO=null;return}
+  if(page!=='tank'||VIEWM||deco.on||(typeof VISIT!=='undefined'&&VISIT)){PO=null;return}
   PO.t+=dt;if(PO.out){PO.y-=70*dt;if(PO.t>1.2)PO=null;return}
   PO.x+=PO.dir*36*dt;var vw=viewW();if((PO.dir>0&&PO.x>tankCam+vw+90)||(PO.dir<0&&PO.x<tankCam-90)){st().miss=Date.now();persist();PO=null}}
 function draw(){if(!PO)return;var a=PO.out?Math.max(0,1-PO.t/1.2):Math.min(1,PO.t*2),bob=Math.sin(t*2.2+PO.ph)*5,w=74,h=w*89/120,x=PO.x,y=PO.y+bob;
@@ -38,7 +38,7 @@ var LAST=0;var _dtpP=drawTankPops;drawTankPops=function(){if(page==='tank'){try{
 var _ttP=tankTap;tankTap=function(wx,wy){try{if(!VIEWM&&!deco.on&&hit(wx,wy)){take();return}}catch(e){}return _ttP.apply(this,arguments)};
 window.__tkPost={dbg:function(){return JSON.stringify({dU:decoU(),z:tankZ,ch:ch,cw:cw,vw:viewW(),fl:typeof floorY==='function'?floorY():null})},spawn:function(){spawn()},st:function(){return {po:PO,s:st(),hl:hallLv()}},sc:function(){return PO?{x:(PO.x-tankCam)*tankZ+xOff(),y:PO.y*tankZ-decoVo+zOff()}:null}};
 /* 게임 안 1.1.30 소식에 한 줄 */
-try{var NK3='수족관: 마을 산호궁이 Lv.2가 넘으면 「마을 택배」 거북이 가끔 지나가요 · 누르면 주민들이 보낸 진주 선물(하루 3번)',NV3={en:'Aquarium: once your Coral Hall passes Lv 2, a Town parcel turtle swims by now and then · tap it for a pearl gift from your residents (3 a day)',ja:'水族館：町のサンゴ宮がLv2を超えると「町の宅配便」のカメがときどき通ります・タップで住民からの真珠プレゼント（1日3回）',es:'Acuario: cuando tu Palacio de Coral pase del Nv 2, a veces pasará la tortuga del Paquete del pueblo · tócala para recibir perlas de tus habitantes (3 al día)',vi:'Bể cá: khi Cung San Hô của làng vượt Lv 2, rùa Bưu kiện của làng thỉnh thoảng bơi qua · chạm vào để nhận ngọc trai cư dân gửi (3 lần mỗi ngày)'};
+try{var NK3='수족관: 마을 산호궁이 Lv.2가 되면 「마을 택배」 거북이 가끔 지나가요 · 누르면 주민들이 보낸 진주 선물(하루 3번)',NV3={en:'Aquarium: once your Coral Hall reaches Lv 2, a Town parcel turtle swims by now and then · tap it for a pearl gift from your residents (3 a day)',ja:'水族館：町のサンゴ宮がLv2になると「町の宅配便」のカメがときどき通ります・タップで住民からの真珠プレゼント（1日3回）',es:'Acuario: cuando tu Palacio de Coral llegue al Nv 2, a veces pasará la tortuga del Paquete del pueblo · tócala para recibir perlas de tus habitantes (3 al día)',vi:'Bể cá: khi Cung San Hô của làng đạt Lv 2, rùa Bưu kiện của làng thỉnh thoảng bơi qua · chạm vào để nhận ngọc trai cư dân gửi (3 lần mỗi ngày)'};
   try{TRT[NK3]=NV3.en}catch(e){}try{TRJ[NK3]=NV3.ja}catch(e){}try{if(SUBL&&NV3[SUBL])TRX[NK3]=NV3[SUBL]}catch(e){}
   NEWS['1.1.30']=(NEWS['1.1.30']||[]).concat([T(NK3)])}catch(e){}
 })();

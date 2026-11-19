@@ -46,7 +46,7 @@
   function satPx(){var d=document.createElement('div');d.style.cssText='position:fixed;top:0;left:0;height:env(safe-area-inset-top);width:env(safe-area-inset-left);visibility:hidden;pointer-events:none';document.body.appendChild(d);var r=[d.offsetHeight|0,d.offsetWidth|0];d.remove();return r}
   function fit(){if(!ov)return;var t=document.getElementById('tabs'),h=t&&!t.hidden?Math.max(0,innerHeight-t.getBoundingClientRect().top):0;ov.style.bottom=h+'px'}
   var openAt=0;
-  function shut(){if(!ov)return;try{var sec=Math.round((Date.now()-openAt)/1000);if(openAt&&sec>0&&sec<6*3600)cms('citySec',sec);openAt=0;var cg=JSON.parse(localStorage.getItem(CK)||'null'),hl=0;if(cg&&cg.b)cg.b.forEach(function(b){if(b.k==='hall')hl=b.lv|0});if(hl&&typeof msS==='function'){var o=msS();if((o.c.cityHall|0)<hl){o.c.cityHall=hl;persist()}}}catch(e){}try{if(fr&&fr.contentWindow&&fr.contentWindow.GF_CITY_SAVE)fr.contentWindow.GF_CITY_SAVE()}catch(e){}ov.remove();ov=null;fr=null;document.body.classList.remove('cityOn');if(tb)tb.removeAttribute('aria-current');removeEventListener('resize',fit);setTimeout(dot,300)}
+  function shut(){if(!ov)return;setTimeout(function(){try{cityAqRead()}catch(e){}},50);try{var sec=Math.round((Date.now()-openAt)/1000);if(openAt&&sec>0&&sec<6*3600)cms('citySec',sec);openAt=0;var cg=JSON.parse(localStorage.getItem(CK)||'null'),hl=0;if(cg&&cg.b)cg.b.forEach(function(b){if(b.k==='hall')hl=b.lv|0});if(hl&&typeof msS==='function'){var o=msS();if((o.c.cityHall|0)<hl){o.c.cityHall=hl;persist()}}}catch(e){}try{if(fr&&fr.contentWindow&&fr.contentWindow.GF_CITY_SAVE)fr.contentWindow.GF_CITY_SAVE()}catch(e){}ov.remove();ov=null;fr=null;document.body.classList.remove('cityOn');if(tb)tb.removeAttribute('aria-current');removeEventListener('resize',fit);setTimeout(dot,300)}
   function open(){
     if(ov)return;try{crumb('tab:city')}catch(e){}
     /* 다른 화면과 같은 정리(판 · 꾸미기 · 창 닫기) 뒤, 홈은 감추고 마을만 */
@@ -85,6 +85,25 @@
   try{TRT[CGT]=CGV.en}catch(e){}try{TRJ[CGT]=CGV.ja}catch(e){}try{if(SUBL&&CGV[SUBL])TRX[CGT]=CGV[SUBL]}catch(e){}
   /* 본게임 → 마을 ②: 가진 물고기 전부(새로 모은 물고기는 마을로 이사 옴) */
   window.GF_OWNED=function(){try{return ownedIds().map(function(id){var L=byId(id);return L&&SPRITE_SRC[id]?{id:id,n:L.name,src:SPRITE_SRC[id],lv:affLv(affOf(id))}:null}).filter(Boolean)}catch(e){return []}};
+  /* ===== 마을 ↔ 수족관 (1.1.30) =====
+     ① 마을 '수족관 공방'에서만 만드는 수족관 전용 소품 6종(상점엔 없음 · 가진 것만 서랍에 보임). 그림은 기존 소품을 색 바꿔 구운 svart/dc_town_*.webp
+     ③ 마을 '아가미 수족관' 건물 레벨 L → 소품 칸 40+2L · 집 진주 샘 +L% (마을 저장 gfcity.v1 을 읽어 save.cityAq) */
+  var TD=[['town_bluelight','푸른 등대','lighthouse',.17,1.9,{fx:'beam',kw:1.4,hk:1.2}],['town_kelpcottage','다시마 지붕 오두막','cottage',.26,.92,{g:['190,255,170',.1,-.05,.55,.18]}],
+    ['town_brickcastle','산호 벽돌 성','sandcastle',.34,.8,{g:['255,170,120',0,0,.5,.14]}],['town_pearltable','진주빛 테이블산호','tablecoral',.24,1.28,{kw:1.03}],
+    ['town_goldarch','황금 산호 아치','coralarch',.34,.86,{kw:1.02,fx:'spark'}],['town_goldbrain','황금 뇌산호','braincoral',.24,.93,{kw:1.02,fx:'spark'}]];
+  var TDN={'푸른 등대':['Blue Lighthouse','青い灯台','Faro azul','Hải đăng xanh'],'다시마 지붕 오두막':['Kelp-Roof Cottage','コンブ屋根の小屋','Cabaña de techo de algas','Nhà mái tảo bẹ'],'산호 벽돌 성':['Coral Brick Castle','サンゴれんがの城','Castillo de ladrillo de coral','Lâu đài gạch san hô'],
+    '진주빛 테이블산호':['Pearly Table Coral','真珠色のテーブルサンゴ','Coral mesa perlado','San hô bàn ánh ngọc'],'황금 산호 아치':['Golden Coral Arch','金のサンゴアーチ','Arco de coral dorado','Cổng san hô vàng'],'황금 뇌산호':['Golden Brain Coral','金の脳サンゴ','Coral cerebro dorado','San hô não vàng'],
+    '마을 공방에서 만든 소품':['Made in the Town workshop','町の工房で作った小物','Hecho en el taller del pueblo','Làm ở xưởng của làng']};
+  try{for(var tk in TDN){TRT[tk]=TDN[tk][0];TRJ[tk]=TDN[tk][1];if(SUBL==='es')TRX[tk]=TDN[tk][2];else if(SUBL==='vi')TRX[tk]=TDN[tk][3]}}catch(e){}
+  try{TD.forEach(function(q){DART[q[0]]=q[5];if(!DECO_DRAW[q[0]])DECO_DRAW[q[0]]=DECO_DRAW[q[2]]||function(){};if(!decoById(q[0])||decoById(q[0]).id!==q[0])DECOR.push({id:q[0],name:T(q[1]),w:q[3],ar:q[4],draw:q[0],c:{cur:'gems',price:0},town:1,desc:T('마을 공방에서 만든 소품')})});
+    var _hwTD=hwList;hwList=function(arr,own){var r=_hwTD.apply(this,arguments);return r.filter(function(o){return !o.town||own(o)})}}catch(e){}
+  window.GF_AQGIFT=function(id){try{if(!TD.some(function(q){return q[0]===id}))return false;var d=DS();d.inv[id]=(d.inv[id]||0)+1;save.cityGot=(save.cityGot||0)+1;persist();cms('cityCraft');setTimeout(function(){try{var t=document.getElementById('tankDot');if(t)t.hidden=false}catch(e){}},300);return true}catch(e){return false}};
+  function cityAqRead(){try{var g=JSON.parse(localStorage.getItem(CK)||'null'),L=0;if(g&&g.b)g.b.forEach(function(b){if(b.k==='aqua')L=Math.max(L,b.lv|0)});if((save.cityAq|0)!==L){save.cityAq=L;persist()}}catch(e){}aqApply()}
+  function aqApply(){try{DECO_MAX=40+2*(save.cityAq|0)}catch(e){}}
+  try{var _hrAQ=houseRateAt;houseRateAt=function(){var r=_hrAQ.apply(this,arguments);var L=save.cityAq|0;return r&&L?Math.max(1,Math.round(r*(1+L*.01))):r}}catch(e){}
+  setTimeout(cityAqRead,1500);
+  var AQB='🏘 마을 아가미 수족관 Lv.',AQS=' · 소품 칸 +',AQV={en:['🏘 Town Gill Aquarium Lv.',' · decor slots +',' · pearl spring +'],ja:['🏘 町のエラ水族館 Lv.','・小物の枠 +','・真珠の泉 +'],es:['🏘 Acuario Gill del pueblo Nv.',' · espacios de adornos +',' · fuente de perlas +'],vi:['🏘 Bể cá Gill của làng Lv.',' · ô trang trí +',' · suối ngọc +']};
+  var _ttAQ=toTank;toTank=function(){var r=_ttAQ.apply(this,arguments);try{cms('tankOpen');var L=save.cityAq|0;if(L>(save.cityAqSeen|0)){save.cityAqSeen=L;persist();var l=lg(),w=l==='ko'?[AQB,AQS,' · 진주 샘 +']:AQV[l]||AQV.en;setTimeout(function(){if(page==='tank')banner(w[0]+L+w[1]+(2*L)+w[2]+L+'%','')},7000)}}catch(e){}return r};
   window.GF_BUZZ=function(v){try{buzz(v)}catch(e){}};
   window.GF_CITY_OPEN=open;
   window.GF_CITY_CLOSE=function(){shut();try{toHome()}catch(e){}};

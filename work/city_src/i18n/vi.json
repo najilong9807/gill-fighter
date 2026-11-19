@@ -10,6 +10,22 @@
 },
 "t": [
 [
+"🐠 (.+?) · 내 수족관으로 보냈어요",
+"🐠 $1 · đã gửi về bể cá"
+],
+[
+"진주 샘 \\+(\\d+)%",
+"suối ngọc +$1%"
+],
+[
+"내 수족관 소품 칸 \\+(\\d+)",
+"ô trang trí +$1"
+],
+[
+"💗 (.+?) ♥(\\d+) · 마을을 응원해요 · 행복 \\+(\\d+) \\(15분\\)",
+"💗 $1 ♥$2 đang cổ vũ làng · hạnh phúc +$3 (15 phút)"
+],
+[
 "📜 의뢰 완료! 🫧\\+(\\S+)",
 "📜 Xong nhiệm vụ! 🫧+$1"
 ],
@@ -699,7 +715,6 @@
 "○ 표시한 조건을 먼저 채워요": "Hãy đáp ứng các điều kiện đánh dấu ○ trước",
 "<small>다녀오는 데": "<small>Chuyến đi mất",
 "다 실으면 떠나요 · 돌아오면": "Chất đủ là khởi hành · Khi về nhận",
-"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "Bể cá Gill. Tăng mạnh giá đất trên vùng rộng và tăng giới hạn dân số. Được nối với Bể cá của bạn trong Gill Fighter, ghé xem bất cứ lúc nào.",
 "🐠 내 수족관 보러 가기": "🐠 Xem bể cá của tôi",
 "💤 오늘은 실컷 놀았어요": "💤 Hôm nay chơi đủ rồi",
 " · 창고가 가득 찬 재료는 일부만": " · kho đầy, chỉ nhận một phần",
@@ -717,6 +732,18 @@
 "<b>📜 의뢰</b>는 산호궁 Lv.5부터 매주 월요일에 3개씩 와요. 하나에 🫧 진주, 셋 다 하면 💎 보석도 받아요.": "<b>📜 Nhiệm vụ</b> đến mỗi thứ Hai từ Cung San Hô Lv.5, mỗi lần 3 cái. Mỗi cái cho 🫧 ngọc trai, xong cả ba được thêm 💎 đá quý.",
 "<b>🏷 땅값</b>은 장식 · 학교 · 식당 · 명소가 가까우면 오르고 광산 · 가마 · 공장이 가까우면 내려가요. 건물을 놓기 전에 초록 · 빨강 칸과 집 위 숫자로 미리 볼 수 있어요. 땅값이 높아야 집이 높이 자라요.": "<b>🏷 Giá đất</b> tăng khi gần đồ trang trí, trường, quán ăn, công trình nổi bật và giảm khi gần mỏ, lò, nhà máy. Trước khi đặt có thể xem trước bằng ô xanh/đỏ và số trên nhà. Giá đất cao thì nhà mọc cao hơn.",
 "<b>📦 재료 상자</b>는 아가미 파이터에서 20초 넘게 한 판 할 때마다 1개씩(하루 6개) 와요. <b>🐠 내 물고기</b>는 가끔 마을에 놀러 오고, 쓰다듬으면 수족관 친밀도가 올라요.": "<b>📦 Thùng vật liệu</b> đến sau mỗi ván Gill Fighter dài hơn 20 giây (tối đa 6/ngày). <b>🐠 Cá của bạn</b> thỉnh thoảng đến chơi làng — vuốt ve để tăng độ thân thiết ở bể cá.",
-"🏛 산호궁 최고 단계예요 ✨": "🏛 Cung San Hô đã đạt cấp tối đa ✨"
+"🏛 산호궁 최고 단계예요 ✨": "🏛 Cung San Hô đã đạt cấp tối đa ✨",
+"🐠 수족관 공방": "🐠 Xưởng bể cá",
+"만들기": "Làm",
+"지금은 보낼 수 없어요": "Giờ chưa gửi được",
+"푸른 등대": "Hải đăng xanh",
+"다시마 지붕 오두막": "Nhà mái tảo bẹ",
+"산호 벽돌 성": "Lâu đài gạch san hô",
+"진주빛 테이블산호": "San hô bàn ánh ngọc",
+"황금 산호 아치": "Cổng san hô vàng",
+"황금 뇌산호": "San hô não vàng",
+"마을 재료로 <b>내 수족관 전용 소품</b>을 만들어 보내요 · 수족관 › 꾸미기 › 소품에 들어가요": "Dùng vật liệu của làng làm <b>đồ trang trí riêng cho bể cá</b> · vào Bể cá › Trang trí › Đồ",
+"랜드마크 · 땅값 + · 인구 한도 + · 내 수족관 넓히기": "Công trình · giá đất + · giới hạn dân + · mở rộng bể cá",
+"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 레벨마다 아가미 파이터 내 수족관의 소품 칸이 2칸, 집 진주 샘이 1% 늘어요.": "Bể cá Gill. Tăng mạnh giá đất vùng rộng và giới hạn dân số. Mỗi cấp thêm 2 ô trang trí và +1% suối ngọc cho bể cá trong Gill Fighter."
 }
 }

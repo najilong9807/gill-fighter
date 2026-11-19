@@ -10,6 +10,22 @@
 },
 "t": [
 [
+"🐠 (.+?) · 내 수족관으로 보냈어요",
+"🐠 $1 · enviado a tu acuario"
+],
+[
+"진주 샘 \\+(\\d+)%",
+"fuente de perlas +$1%"
+],
+[
+"내 수족관 소품 칸 \\+(\\d+)",
+"espacios de adornos +$1"
+],
+[
+"💗 (.+?) ♥(\\d+) · 마을을 응원해요 · 행복 \\+(\\d+) \\(15분\\)",
+"💗 $1 ♥$2 anima al pueblo · felicidad +$3 (15 min)"
+],
+[
 "📜 의뢰 완료! 🫧\\+(\\S+)",
 "📜 ¡Encargo hecho! 🫧+$1"
 ],
@@ -699,7 +715,6 @@
 "○ 표시한 조건을 먼저 채워요": "Cumple primero las condiciones marcadas con ○",
 "<small>다녀오는 데": "<small>El viaje dura",
 "다 실으면 떠나요 · 돌아오면": "Sale al cargar todo · Vuelve con",
-"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "El Acuario Gill. Sube mucho el valor del suelo en un área amplia y aumenta el límite de población. Está conectado con tu acuario de Gill Fighter: visítalo cuando quieras.",
 "🐠 내 수족관 보러 가기": "🐠 Ver mi acuario",
 "💤 오늘은 실컷 놀았어요": "💤 Ya jugó bastante hoy",
 " · 창고가 가득 찬 재료는 일부만": " · almacén lleno, solo una parte",
@@ -717,6 +732,18 @@
 "<b>📜 의뢰</b>는 산호궁 Lv.5부터 매주 월요일에 3개씩 와요. 하나에 🫧 진주, 셋 다 하면 💎 보석도 받아요.": "<b>📜 Los encargos</b> llegan cada lunes desde el Palacio de Coral Nv.5, de 3 en 3. Cada uno da 🫧 perlas y completar los tres suma 💎 gemas.",
 "<b>🏷 땅값</b>은 장식 · 학교 · 식당 · 명소가 가까우면 오르고 광산 · 가마 · 공장이 가까우면 내려가요. 건물을 놓기 전에 초록 · 빨강 칸과 집 위 숫자로 미리 볼 수 있어요. 땅값이 높아야 집이 높이 자라요.": "<b>🏷 El valor del suelo</b> sube cerca de adornos, escuelas, comedores y monumentos, y baja cerca de minas, hornos y fábricas. Antes de colocar un edificio puedes verlo con casillas verdes/rojas y números sobre las casas. Las casas crecen más donde el suelo vale más.",
 "<b>📦 재료 상자</b>는 아가미 파이터에서 20초 넘게 한 판 할 때마다 1개씩(하루 6개) 와요. <b>🐠 내 물고기</b>는 가끔 마을에 놀러 오고, 쓰다듬으면 수족관 친밀도가 올라요.": "<b>📦 Las cajas de materiales</b> llegan por cada partida de Gill Fighter de más de 20 segundos (hasta 6 al día). <b>🐠 Tus peces</b> a veces visitan el pueblo: acarícialos para subir su amistad del acuario.",
-"🏛 산호궁 최고 단계예요 ✨": "🏛 El Palacio de Coral está al máximo ✨"
+"🏛 산호궁 최고 단계예요 ✨": "🏛 El Palacio de Coral está al máximo ✨",
+"🐠 수족관 공방": "🐠 Taller del acuario",
+"만들기": "Hacer",
+"지금은 보낼 수 없어요": "Ahora no se puede enviar",
+"푸른 등대": "Faro azul",
+"다시마 지붕 오두막": "Cabaña de techo de algas",
+"산호 벽돌 성": "Castillo de ladrillo de coral",
+"진주빛 테이블산호": "Coral mesa perlado",
+"황금 산호 아치": "Arco de coral dorado",
+"황금 뇌산호": "Coral cerebro dorado",
+"마을 재료로 <b>내 수족관 전용 소품</b>을 만들어 보내요 · 수족관 › 꾸미기 › 소품에 들어가요": "Con materiales del pueblo haz <b>adornos solo para tu acuario</b> · van a Acuario › Decorar › Adornos",
+"랜드마크 · 땅값 + · 인구 한도 + · 내 수족관 넓히기": "Monumento · valor del suelo + · población + · acuario más grande",
+"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 레벨마다 아가미 파이터 내 수족관의 소품 칸이 2칸, 집 진주 샘이 1% 늘어요.": "El Acuario Gill. Sube mucho el valor del suelo en un área amplia y el límite de población. Cada nivel añade 2 espacios de adornos y +1% a la fuente de perlas de tu acuario de Gill Fighter."
 }
 }

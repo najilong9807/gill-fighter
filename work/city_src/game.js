@@ -333,6 +333,7 @@ $('home').onclick=function(){focus(bOf('hall'))};
 /*VISIT*/
 /*PLACE*/
 /*QUEST*/
+/*AQLINK*/
 /*UX*/
 $('hF').onclick=function(){lifePanel()};
 /* --- 돌리기 --- */

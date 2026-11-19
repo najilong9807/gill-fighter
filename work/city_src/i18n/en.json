@@ -10,6 +10,22 @@
 },
 "t": [
 [
+"🐠 (.+?) · 내 수족관으로 보냈어요",
+"🐠 $1 · sent to your aquarium"
+],
+[
+"진주 샘 \\+(\\d+)%",
+"pearl spring +$1%"
+],
+[
+"내 수족관 소품 칸 \\+(\\d+)",
+" aquarium decor slots +$1"
+],
+[
+"💗 (.+?) ♥(\\d+) · 마을을 응원해요 · 행복 \\+(\\d+) \\(15분\\)",
+"💗 $1 ♥$2 is cheering the town · happiness +$3 (15 min)"
+],
+[
 "📜 의뢰 완료! 🫧\\+(\\S+)",
 "📜 Request done! 🫧+$1"
 ],
@@ -699,7 +715,6 @@
 "○ 표시한 조건을 먼저 채워요": "Meet the conditions marked ○ first",
 "<small>다녀오는 데": "<small>Trip takes",
 "다 실으면 떠나요 · 돌아오면": "Departs when fully loaded · Returns with",
-"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 아가미 파이터의 내 수족관과 이어져 있어 바로 구경 갈 수 있어요.": "The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. It's linked to your Gill Fighter aquarium, so you can visit it anytime.",
 "🐠 내 수족관 보러 가기": "🐠 Visit my aquarium",
 "💤 오늘은 실컷 놀았어요": "💤 Played enough today",
 " · 창고가 가득 찬 재료는 일부만": " · storage full, some was left",
@@ -717,6 +732,18 @@
 "<b>📜 의뢰</b>는 산호궁 Lv.5부터 매주 월요일에 3개씩 와요. 하나에 🫧 진주, 셋 다 하면 💎 보석도 받아요.": "<b>📜 Requests</b> arrive every Monday from Coral Hall Lv.5, 3 at a time. Each gives 🫧 Pearls, and finishing all three adds 💎 Gems.",
 "<b>🏷 땅값</b>은 장식 · 학교 · 식당 · 명소가 가까우면 오르고 광산 · 가마 · 공장이 가까우면 내려가요. 건물을 놓기 전에 초록 · 빨강 칸과 집 위 숫자로 미리 볼 수 있어요. 땅값이 높아야 집이 높이 자라요.": "<b>🏷 Land value</b> rises near decor, schools, diners and landmarks, and falls near quarries, kilns and factories. Before placing a building you can preview it with green/red tiles and numbers over homes. Homes grow taller where land value is high.",
 "<b>📦 재료 상자</b>는 아가미 파이터에서 20초 넘게 한 판 할 때마다 1개씩(하루 6개) 와요. <b>🐠 내 물고기</b>는 가끔 마을에 놀러 오고, 쓰다듬으면 수족관 친밀도가 올라요.": "<b>📦 Supply crates</b> arrive for every Gill Fighter run longer than 20 seconds (up to 6 a day). <b>🐠 Your fish</b> sometimes visit town — pet them to raise their aquarium friendship.",
-"🏛 산호궁 최고 단계예요 ✨": "🏛 Coral Hall is at max level ✨"
+"🏛 산호궁 최고 단계예요 ✨": "🏛 Coral Hall is at max level ✨",
+"🐠 수족관 공방": "🐠 Aquarium workshop",
+"만들기": "Make",
+"지금은 보낼 수 없어요": "Can't send right now",
+"푸른 등대": "Blue Lighthouse",
+"다시마 지붕 오두막": "Kelp-Roof Cottage",
+"산호 벽돌 성": "Coral Brick Castle",
+"진주빛 테이블산호": "Pearly Table Coral",
+"황금 산호 아치": "Golden Coral Arch",
+"황금 뇌산호": "Golden Brain Coral",
+"마을 재료로 <b>내 수족관 전용 소품</b>을 만들어 보내요 · 수족관 › 꾸미기 › 소품에 들어가요": "Use town materials to make <b>decorations only for your aquarium</b> · they go to Aquarium › Decorate › Decor",
+"랜드마크 · 땅값 + · 인구 한도 + · 내 수족관 넓히기": "Landmark · land value + · population cap + · bigger aquarium",
+"아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 레벨마다 아가미 파이터 내 수족관의 소품 칸이 2칸, 집 진주 샘이 1% 늘어요.": "The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. Each level adds 2 decor slots and +1% pearl spring to your Gill Fighter aquarium."
 }
 }

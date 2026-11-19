@@ -87,7 +87,7 @@
 ],
 [
 "🏠 둘레 집 (\\d+)채 땅값 ([+−])(\\d+)",
-"🏠 $1 homes nearby: land value $2$3"
+"🏠 Homes nearby: $1 · land value $2$3"
 ],
 [
 "🐟 새 물고기 (.+?) 마을로 이사 왔어요! ⭐\\+(\\d+)",
@@ -151,11 +151,11 @@
 ],
 [
 "자는 동안 공사 (\\d+)개가 끝났어요",
-"$1 builds finished while you were away"
+"Builds finished while you were away: $1"
 ],
 [
 "🔨 공사 (\\d+)개가 끝났어요",
-"🔨 $1 builds finished"
+"🔨 Builds finished: $1"
 ],
 [
 "🎁 (\\d+)개 있어요",
@@ -203,7 +203,7 @@
 ],
 [
 "🐢 배달할 수 있는 주문이? (\\d+)개(?: 있어요)?",
-"🐢 $1 orders ready to deliver"
+"🐢 Orders ready to deliver: $1"
 ],
 [
 "칸 (\\d+)개",

@@ -393,7 +393,7 @@ def step_terr(api):
     try:
         av = api.get('apps/%s/appAvailabilityV2' % APP)
         aid = (av.get('data') or {}).get('id')
-        ts = api.all('appAvailabilities/%s/territoryAvailabilities?limit=200&include=territory' % aid)
+        ts = api.all('https://api.appstoreconnect.apple.com/v2/appAvailabilities/%s/territoryAvailabilities?limit=200&include=territory' % aid)
         on = [t for t in ts if t['attributes'].get('available')]
         log('INSPECT terr total', len(ts), 'available', len(on))
         for t in ts:

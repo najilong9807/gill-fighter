@@ -10,6 +10,14 @@
 },
 "t": [
 [
+"주변 (\\d+)칸 산소 · 여러 개 지어요",
+"Oxygen within $1 tiles · build several"
+],
+[
+"주변 (\\d+)칸에 산소를 퍼뜨려요 · 구역이 자라는 범위가 넓어져요",
+"Spreads oxygen within $1 tiles · zones can grow in a wider area"
+],
+[
 "🌫 집 근처 물이 탁해요\\(행복 −(\\d+)\\) · ⚙ 기반 → 🫧 물 거르개",
 "🌫 The water near homes is murky (happiness −$1) · ⚙ Utilities → 🫧 Water Filter"
 ],
@@ -939,6 +947,9 @@
 "<i style=\"background:#5ac8ff\"></i> 맑음 <i style=\"background:#8c8c5a\"></i> 조금 <i style=\"background:#a05a32\"></i> 탁함 · 집 3단계 40 · 4단계 25 · 5단계 15 이하 · 🫧 물 거르개로 맑게": "<i style=\"background:#5ac8ff\"></i> Clear <i style=\"background:#8c8c5a\"></i> A little <i style=\"background:#a05a32\"></i> Murky · homes Lv.3 ≤40 · Lv.4 ≤25 · Lv.5 ≤15 · clean it with 🫧 Water Filters",
 "<b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.": "<b>🌫 Murky water</b>: water around quarries, kilns, factories, workshops, ports and industrial zones gets cloudy. Murky water near homes means fewer residents and less happiness, and homes need 40 or less for Lv.3, 25 for Lv.4 and 15 for Lv.5. Build several <b>🫧 Water Filters</b> from ⚙ Utilities to clean it, and check it on the 🗺 map.",
 "<b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.": "<b>⚖ Town Policies</b> (☰ Menu) unlock at Coral Hall Lv.6. Each policy has a benefit and a cost. You get one more slot at Lv.10 and Lv.15.",
-"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Town incidents</b>: from Coral Hall Lv.6, sharks, hot water vents, colds and red tides sometimes happen. Inside the range of a 🚒 Fire Station, 👮 Patrol or 🏥 Clinic they are stopped automatically; otherwise tap the building to fix it or wait 2 hours."
+"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Town incidents</b>: from Coral Hall Lv.6, sharks, hot water vents, colds and red tides sometimes happen. Inside the range of a 🚒 Fire Station, 👮 Patrol or 🏥 Clinic they are stopped automatically; otherwise tap the building to fix it or wait 2 hours.",
+"숨샘": "Breath Spring",
+"큰 숨탑": "Big Breath Tower",
+"<b>💨 숨샘 · 큰 숨탑</b>(⚙ 기반)은 여러 개 지을 수 있어요. 산소 펌프만으로 모자란 곳에 놓아 구역이 자라는 범위를 넓혀요.": "<b>💨 Breath Springs · Big Breath Towers</b> (⚙ Utilities) can be built as many times as you like. Place them where the Oxygen Pump does not reach to widen the area where zones can grow."
 }
 }

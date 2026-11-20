@@ -10,6 +10,14 @@
 },
 "t": [
 [
+"주변 (\\d+)칸 산소 · 여러 개 지어요",
+"Oxy trong $1 ô · xây được nhiều cái"
+],
+[
+"주변 (\\d+)칸에 산소를 퍼뜨려요 · 구역이 자라는 범위가 넓어져요",
+"Tỏa oxy trong $1 ô · vùng khu dân cư phát triển rộng hơn"
+],
+[
 "🌫 집 근처 물이 탁해요\\(행복 −(\\d+)\\) · ⚙ 기반 → 🫧 물 거르개",
 "🌫 Nước gần nhà bị đục (hạnh phúc −$1) · ⚙ Hạ tầng → 🫧 Máy lọc nước"
 ],
@@ -939,6 +947,9 @@
 "<i style=\"background:#5ac8ff\"></i> 맑음 <i style=\"background:#8c8c5a\"></i> 조금 <i style=\"background:#a05a32\"></i> 탁함 · 집 3단계 40 · 4단계 25 · 5단계 15 이하 · 🫧 물 거르개로 맑게": "<i style=\"background:#5ac8ff\"></i> Trong <i style=\"background:#8c8c5a\"></i> Hơi đục <i style=\"background:#a05a32\"></i> Đục · nhà cấp 3 ≤40 · cấp 4 ≤25 · cấp 5 ≤15 · làm trong bằng 🫧 Máy lọc nước",
 "<b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.": "<b>🌫 Nước đục</b>: nước quanh mỏ, lò, nhà máy, xưởng, cảng và khu công nghiệp bị đục. Gần nhà mà đục thì ít cư dân hơn và giảm hạnh phúc; nhà cấp 3 cần từ 40 trở xuống, cấp 4 là 25, cấp 5 là 15. Xây nhiều <b>🫧 Máy lọc nước</b> ở ⚙ Hạ tầng và xem trên 🗺 bản đồ.",
 "<b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.": "<b>⚖ Chính sách làng</b> (☰ Menu) bật được từ Cung San Hô Lv.6. Mỗi chính sách có lợi và có cái giá. Thêm 1 ô ở Lv.10 và Lv.15.",
-"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Sự cố trong làng</b>: từ Cung San Hô Lv.6 thỉnh thoảng có cá mập, nước nóng, cảm cúm hay thủy triều đỏ. Trong phạm vi 🚒 cứu hỏa, 👮 tuần tra hay 🏥 bệnh viện sẽ tự chặn; nếu không, chạm công trình để xử lý hoặc chờ 2 giờ."
+"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Sự cố trong làng</b>: từ Cung San Hô Lv.6 thỉnh thoảng có cá mập, nước nóng, cảm cúm hay thủy triều đỏ. Trong phạm vi 🚒 cứu hỏa, 👮 tuần tra hay 🏥 bệnh viện sẽ tự chặn; nếu không, chạm công trình để xử lý hoặc chờ 2 giờ.",
+"숨샘": "Suối thở",
+"큰 숨탑": "Tháp thở lớn",
+"<b>💨 숨샘 · 큰 숨탑</b>(⚙ 기반)은 여러 개 지을 수 있어요. 산소 펌프만으로 모자란 곳에 놓아 구역이 자라는 범위를 넓혀요.": "<b>💨 Suối thở · Tháp thở lớn</b> (⚙ Hạ tầng) xây được nhiều cái. Đặt ở nơi Máy bơm oxy không tới để mở rộng vùng khu dân cư phát triển."
 }
 }

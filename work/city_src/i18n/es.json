@@ -10,8 +10,16 @@
 },
 "t": [
 [
+"주변 (\\d+)칸 산소 · 여러 개 지어요",
+"Oxígeno en $1 casillas · construye varios"
+],
+[
+"주변 (\\d+)칸에 산소를 퍼뜨려요 · 구역이 자라는 범위가 넓어져요",
+"Esparce oxígeno en $1 casillas · las zonas pueden crecer en un área mayor"
+],
+[
 "🌫 집 근처 물이 탁해요\\(행복 −(\\d+)\\) · ⚙ 기반 → 🫧 물 거르개",
-"🌫 El agua cerca de las casas está turbia (felicidad −$1) · ⚙ Servicios → 🫧 Filtro de agua"
+"🌫 El agua cerca de las casas está turbia (felicidad −$1) · ⚙ Servicios básicos → 🫧 Filtro de agua"
 ],
 [
 "⚠ (\\S+) ([^<>·]+?) · ([^<>]+?)을\\(를\\) 눌러 해결해요",
@@ -932,13 +940,16 @@
 "탁한 물에 붉은 물이 끼어 일이 멈췄어요": "Se formó agua roja en la turbiedad y el trabajo se detuvo",
 "🫧 물 거르개": "🫧 Filtro de agua",
 "정책은 🏛 산호궁 Lv.6에 열려요 · 좋은 점과 대가가 같이 있어요": "Las políticas se abren con el 🏛 Palacio de Coral Nv 6 · cada una tiene ventaja y coste",
-"막으려면: 🌫 탁한 물 45 밑으로 · ⚙ 기반 → 🫧 물 거르개": "Para evitarlo: mantén el 🌫 agua turbia por debajo de 45 · ⚙ Servicios → 🫧 Filtro de agua",
+"막으려면: 🌫 탁한 물 45 밑으로 · ⚙ 기반 → 🫧 물 거르개": "Para evitarlo: mantén el 🌫 agua turbia por debajo de 45 · ⚙ Servicios básicos → 🫧 Filtro de agua",
 "⚠ 사건 🔒 🏛Lv.6": "⚠ Incidentes 🔒 🏛Nv.6",
 "⚖ 정책 🔒 🏛Lv.6": "⚖ Políticas 🔒 🏛Nv.6",
 "🏛 Lv.6에 열려요": "Se abre en 🏛 Nv 6",
 "<i style=\"background:#5ac8ff\"></i> 맑음 <i style=\"background:#8c8c5a\"></i> 조금 <i style=\"background:#a05a32\"></i> 탁함 · 집 3단계 40 · 4단계 25 · 5단계 15 이하 · 🫧 물 거르개로 맑게": "<i style=\"background:#5ac8ff\"></i> Limpia <i style=\"background:#8c8c5a\"></i> Algo <i style=\"background:#a05a32\"></i> Turbia · casas Nv 3 ≤40 · Nv 4 ≤25 · Nv 5 ≤15 · límpiala con 🫧 Filtros de agua",
-"<b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.": "<b>🌫 Agua turbia</b>: el agua alrededor de canteras, hornos, fábricas, talleres, puertos y zonas industriales se enturbia. Cerca de las casas reduce los habitantes y la felicidad, y las casas necesitan 40 o menos para Nv 3, 25 para Nv 4 y 15 para Nv 5. Construye varios <b>🫧 Filtros de agua</b> desde ⚙ Servicios y revísalo en el 🗺 mapa.",
+"<b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.": "<b>🌫 Agua turbia</b>: el agua alrededor de canteras, hornos, fábricas, talleres, puertos y zonas industriales se enturbia. Cerca de las casas reduce los habitantes y la felicidad, y las casas necesitan 40 o menos para Nv 3, 25 para Nv 4 y 15 para Nv 5. Construye varios <b>🫧 Filtros de agua</b> desde ⚙ Servicios básicos y revísalo en el 🗺 mapa.",
 "<b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.": "Las <b>⚖ Políticas del pueblo</b> (☰ Menú) se activan desde el Palacio de Coral Nv 6. Cada una tiene ventaja y coste. Ganas un hueco más en Nv 10 y Nv 15.",
-"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Incidentes</b>: desde el Palacio de Coral Nv 6 a veces hay tiburones, agua caliente, resfriados o marea roja. Dentro del alcance de 🚒 bomberos, 👮 patrulla o 🏥 clínica se evitan solos; si no, toca el edificio para resolverlo o espera 2 horas."
+"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Incidentes</b>: desde el Palacio de Coral Nv 6 a veces hay tiburones, agua caliente, resfriados o marea roja. Dentro del alcance de 🚒 bomberos, 👮 patrulla o 🏥 clínica se evitan solos; si no, toca el edificio para resolverlo o espera 2 horas.",
+"숨샘": "Manantial de aire",
+"큰 숨탑": "Gran torre de aire",
+"<b>💨 숨샘 · 큰 숨탑</b>(⚙ 기반)은 여러 개 지을 수 있어요. 산소 펌프만으로 모자란 곳에 놓아 구역이 자라는 범위를 넓혀요.": "Los <b>💨 Manantiales de aire · Grandes torres de aire</b> (⚙ Servicios básicos) se pueden construir varias veces. Ponlos donde no llega la Bomba de Oxígeno para ampliar la zona donde crecen las zonas."
 }
 }

@@ -15,7 +15,9 @@ function murkCalc(){var M={},cl={};G.b.forEach(function(b){if(!b.lv&&!(DEC[b.k])
     if(!r||!v)return;for(var i=-r;i<=r;i++)for(var j=-r;j<=r;j++){var d=Math.abs(i)+Math.abs(j);if(d>r)continue;var key=Math.round(cx+i)+','+Math.round(cy+j),val=neg?v:v*(1-d/(r+1));if(neg)cl[key]=Math.max(cl[key]||0,val);else M[key]=(M[key]||0)+val}});
   for(var k in M){var m=M[k]-(cl[k]||0);if(m<1)delete M[k];else M[k]=Math.min(100,m)}MURK=M}
 function murkAt(x,y){return MURK?Math.round(MURK[x+','+y]||0):0}
-var _fieldsM=fields;fields=function(){_fieldsM.apply(this,arguments);try{murkCalc()}catch(e){}};
+/* 💨 숨샘 · 큰 숨탑(40차): 산소 펌프 말고도 여러 개 놓아 산소 범위를 넓힘 */
+function o2Extra(){G.b.forEach(function(b){var d=DEC[b.k];if(!d||!d.o2r)return;var s=sz(b.k),cx=b.x+(s-1)/2,cy=b.y+(s-1)/2,r=d.o2r;for(var i=-r;i<=r;i++)for(var j=-r;j<=r;j++)if(Math.abs(i)+Math.abs(j)<=r*1.3)O2[Math.round(cx+i)+','+Math.round(cy+j)]=1})}
+var _fieldsM=fields;fields=function(){_fieldsM.apply(this,arguments);try{o2Extra()}catch(e){}try{murkCalc()}catch(e){}};
 
 /* --- 2) 정책 --- */
 var POLS=[

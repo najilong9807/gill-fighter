@@ -1,0 +1,537 @@
+[
+[
+0,
+"주변 (\\d+)칸 길 막힘 −35% · 여러 개 지어요",
+"Road jams −35% within $1 tiles · build several"
+],
+[
+1,
+"주변 (\\d+)칸 길의 오가는 양 −35% · 막힌 길이 풀려요",
+"Traffic −35% on roads within $1 tiles · eases jams"
+],
+[
+2,
+"🚦 길이 막혀요\\(막힘 ([\\d.]+)\\) · 길 넓히기 · 🚌 버스 정류장",
+"🚦 Road jammed ($1) · widen roads · 🚌 bus stop"
+],
+[
+3,
+"🏛 산호궁 Lv\\.(\\d+)에 (.+?)이\\(가\\) 열려요",
+"$2 unlocks at 🏛 Coral Hall Lv.$1"
+],
+[
+4,
+"🪨 산호석이 모자라요",
+"Not enough 🪨 Coral Stone"
+],
+[
+5,
+"주변 (\\d+)칸 산소 · 여러 개 지어요",
+"Oxygen within $1 tiles · build several"
+],
+[
+6,
+"주변 (\\d+)칸에 산소를 퍼뜨려요 · 구역이 자라는 범위가 넓어져요",
+"Spreads oxygen within $1 tiles · zones can grow in a wider area"
+],
+[
+7,
+"🌫 집 근처 물이 탁해요\\(행복 −(\\d+)\\) · ⚙ 기반 → 🫧 물 거르개",
+"🌫 The water near homes is murky (happiness −$1) · ⚙ Utilities → 🫧 Water Filter"
+],
+[
+8,
+"⚠ (\\S+) ([^<>·]+?) · ([^<>]+?)을\\(를\\) 눌러 해결해요",
+"⚠ $1 $2 · tap $3 to fix it"
+],
+[
+9,
+"⚖ 켤 수 있는 정책이 (\\d+)개 있어요 · ☰ 메뉴 → 마을 정책",
+"⚖ You can turn on $1 more policies · ☰ Menu → Town Policies"
+],
+[
+10,
+"마을 사건 (\\d+)번 막아 내기",
+"Block $1 town incidents"
+],
+[
+11,
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 여러 개 지어요",
+"Murky water −$2 within $1 tiles · build several"
+],
+[
+12,
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 지금 이 자리 🌫 (\\d+)",
+"Murky water −$2 within $1 tiles · here now 🌫 $3"
+],
+[
+13,
+"([^<>]+?) 뒤엔 저절로 지나가요",
+"It passes by itself in $1"
+],
+[
+14,
+"켤 수 있는 정책 <b>(\\d+) / (\\d+)</b> · Lv\\.10 · Lv\\.15에 한 칸씩 늘어요",
+"Active policies <b>$1 / $2</b> · one more slot at Lv.10 and Lv.15"
+],
+[
+15,
+" · 다시 바꾸기까지 ([^<]+)",
+" · can change again in $1"
+],
+[
+16,
+"켜진 정책 (\\d+) / (\\d+)",
+"Active $1 / $2"
+],
+[
+17,
+"⚖ 정책을 켰어요 · (.+)",
+"⚖ Policy on · $1"
+],
+[
+18,
+"⚖ 정책을 껐어요 · (.+)",
+"⚖ Policy off · $1"
+],
+[
+19,
+"⚖ 정책 (\\d+) / (\\d+)",
+"⚖ Policies $1 / $2"
+],
+[
+20,
+"🌫 탁한 물 때문에 행복 <b>−(\\d+)</b>",
+"🌫 Happiness lost to murky water <b>−$1</b>"
+],
+[
+21,
+"⚠ 사건 지금 (\\d+)개 · 막아 낸 사건 (\\d+)번",
+"⚠ Incidents now $1 · blocked $2 times"
+],
+[
+22,
+"⚠ (\\S+) ([^<>!]+?)! · 건물을 눌러 해결해요",
+"⚠ $1 $2! · Tap the building to fix it"
+],
+[
+23,
+"✓ (\\S+) ([^<>!]+?) 해결!",
+"✓ $1 $2 fixed!"
+],
+[
+24,
+"🛡 (.+?) 범위라 (\\S+) (.+?)을\\(를\\) 막았어요",
+"🛡 $2 $3 stopped · it was in range of $1"
+],
+[
+25,
+"막으려면: (.+?) 범위 안에 두면 다음엔 저절로 막아요",
+"To prevent: keep it in range of $1 and it is blocked automatically next time"
+],
+[
+26,
+"🫧(\\S+) 들여 해결",
+"Fix for 🫧$1"
+],
+[
+27,
+"(\\S+) ([^<>·]+?) · 저절로 지나갔어요",
+"$1 $2 · passed by itself"
+],
+[
+28,
+"🌫 탁한 물 (\\d+) 이하\\(지금 (\\d+)\\)",
+"🌫 Murky water $1 or less (now $2)"
+],
+[
+29,
+"산호궁 Lv\\.(\\d+) 만들기",
+"Reach Coral Hall Lv.$1"
+],
+[
+30,
+"주민 (\\d+)마리 모으기",
+"Gather $1 residents"
+],
+[
+31,
+"명성 Lv\\.(\\d+) 되기",
+"Reach Fame Lv.$1"
+],
+[
+32,
+"주문 (\\d+)번 배달하기",
+"Deliver $1 orders"
+],
+[
+33,
+"구역 건물 단계 합 (\\d+) 만들기",
+"Zone building levels total $1"
+],
+[
+34,
+"열차 · 고래 배 (\\d+)번 다녀오기",
+"Complete $1 train or whale ship trips"
+],
+[
+35,
+"주간 의뢰 3개를 (\\d+)주 다 끝내기",
+"Finish all 3 weekly requests in $1 weeks"
+],
+[
+36,
+"마을에 놀러 온 내 물고기 (\\d+)번 쓰다듬기",
+"Pet your visiting fish $1 times"
+],
+[
+37,
+"받을 도장 (\\d+)개",
+"$1 stamps to claim"
+],
+[
+38,
+"도장 <b>(\\d+) / (\\d+)</b>",
+"Stamps <b>$1 / $2</b>"
+],
+[
+39,
+"🏆 도장 받기! (.+?) · 💎(\\d+)",
+"🏆 Stamp earned! $1 · 💎$2"
+],
+[
+40,
+"🐠 (.+?) · 내 수족관으로 보냈어요",
+"🐠 $1 · sent to your aquarium"
+],
+[
+41,
+"진주 샘 \\+(\\d+)%",
+"pearl spring +$1%"
+],
+[
+42,
+"내 수족관 소품 칸 \\+(\\d+)",
+" aquarium decor slots +$1"
+],
+[
+43,
+"💗 (.+?) ♥(\\d+) · 마을을 응원해요 · 행복 \\+(\\d+) \\(15분\\)",
+"💗 $1 ♥$2 is cheering the town · happiness +$3 (15 min)"
+],
+[
+44,
+"📜 의뢰 완료! 🫧\\+(\\S+)",
+"📜 Request done! 🫧+$1"
+],
+[
+45,
+"🎁 이번 주 의뢰를 다 끝냈어요! 💎5 · 🫧(\\S+)",
+"🎁 All of this week's requests done! 💎5 · 🫧$1"
+],
+[
+46,
+"새 의뢰까지 <b>(.+?)</b> · 하나에 🫧(\\S+) · 셋 다 하면 💎5 \\+ 🫧(\\S+)",
+"New requests in <b>$1</b> · 🫧$2 each · all three: 💎5 + 🫧$3"
+],
+[
+47,
+"판에서 모은 재료 상자 (\\d+)개 열기",
+"Open supply crates from your runs ($1)"
+],
+[
+48,
+"장식 (\\d+)개 놓기",
+"Place $1 decorations"
+],
+[
+49,
+"인구 (\\d+) 만들기",
+"Reach population $1"
+],
+[
+50,
+"구역 건물 단계 (\\d+)번 올리기",
+"Raise zone buildings $1 levels"
+],
+[
+51,
+"건물 (\\d+)번 업그레이드하기",
+"Upgrade buildings $1 times"
+],
+[
+52,
+"건물 말풍선 (\\d+)번 받기",
+"Collect building bubbles $1 times"
+],
+[
+53,
+"거북 배달소에서 주문 (\\d+)개 배달하기",
+"Deliver $1 orders at the Turtle Depot"
+],
+[
+54,
+"다음 단계에 땅값 (\\d+) 필요",
+"next level needs land value $1"
+],
+[
+55,
+"🏷 땅값 (\\d+)</b> = 기본 (\\d+)",
+"🏷 Land value $1</b> = base $2"
+],
+[
+56,
+"🏭 둘레 (\\d+)칸 땅값 −",
+"🏭 Land value − within $1 tiles"
+],
+[
+57,
+"🌿 둘레 (\\d+)칸 땅값 \\+",
+"🌿 Land value + within $1 tiles"
+],
+[
+58,
+"이 자리면 (\\d+)채가 다음 단계에 닿아요",
+"here $1 of them reach the next level"
+],
+[
+59,
+"🏠 둘레 집 (\\d+)채 땅값 ([+−])(\\d+)",
+"🏠 Homes nearby: $1 · land value $2$3"
+],
+[
+60,
+"🐟 새 물고기 (.+?) 마을로 이사 왔어요! ⭐\\+(\\d+)",
+"🐟 New fish $1 moved to town! ⭐+$2"
+],
+[
+61,
+"📦 재료 상자 (\\d+)개를 열었어요 (.*?)( · 창고가 가득 찬 재료는 일부만)?$",
+"📦 Supply crates opened ($1): $2$3"
+],
+[
+62,
+"📦 판에서 모은 재료 상자 (\\d+)개 <b>받기 ›</b>",
+"📦 Supply crates from your runs: $1 <b>Open ›</b>"
+],
+[
+63,
+"🐠 내 물고기 (.+?) 놀러 왔어요 <b>보러 가기 ›</b>",
+"🐠 Your fish $1 came to visit <b>Go see ›</b>"
+],
+[
+64,
+"💗 (.+?) ♥(\\d+) · 더 친해졌어요! 🫧\\+(\\d+)",
+"💗 $1 ♥$2 · closer friends! 🫧+$3"
+],
+[
+65,
+"🐠 내 물고기 (.+?) 놀러 왔어요 · 눌러서 쓰다듬어요",
+"🐠 Your fish $1 came to visit · tap to pet it"
+],
+[
+66,
+"(\\d+)회차",
+"Round $1"
+],
+[
+67,
+"💎 (\\d+)개를 써서 바로 끝낼까요\\?\\n보석은 아가미 파이터와 같이 써요",
+"Spend 💎 $1 to finish now?\nGems are shared with Gill Fighter."
+],
+[
+68,
+"(주거|상업|산업) 구역은 🏛 (?:산호궁 )?Lv\\.(\\d+)에 열려요",
+"$1 zones unlock at 🏛 Coral Hall Lv.$2"
+],
+[
+69,
+"🏛 산호궁 Lv\\.(\\d+)에 열려요",
+"Unlocks at 🏛 Coral Hall Lv.$1"
+],
+[
+70,
+"🏛 산호궁 Lv\\.(\\d+)에는 인구 (\\d+)이\\(가\\) 필요해요",
+"🏛 Coral Hall Lv.$1 needs a population of $2"
+],
+[
+71,
+"산호궁 Lv\\.(\\d+)이 되면 열 수 있어요",
+"Opens at Coral Hall Lv.$1"
+],
+[
+72,
+"🦀 게 일꾼이 ([^<>]+?)을\\(를\\) 짓기 시작했어요",
+"🦀 The crabs started building $1"
+],
+[
+73,
+"([^<>·]+?)이\\(가\\) 먼저 필요해요",
+"$1 is needed first"
+],
+[
+74,
+"([^<>·]+?)을\\(를\\) 먼저 지어요",
+"Build $1 first"
+],
+[
+75,
+"자는 동안 공사 (\\d+)개가 끝났어요",
+"Builds finished while you were away: $1"
+],
+[
+76,
+"🔨 공사 (\\d+)개가 끝났어요",
+"🔨 Builds finished: $1"
+],
+[
+77,
+"🎁 (\\d+)개 있어요",
+"🎁 You have $1"
+],
+[
+78,
+"Lv\\.(\\d+)로 올리는 중 · 남은 시간",
+"Upgrading to Lv.$1 · Time left"
+],
+[
+79,
+"Lv\\.(\\d+)로 올리는 중",
+"Upgrading to Lv.$1"
+],
+[
+80,
+"Lv\\.(\\d+)로 업그레이드</b>",
+"Upgrade to Lv.$1</b>"
+],
+[
+81,
+"Lv\\.(\\d+)로 자라려면",
+"To grow to Lv.$1"
+],
+[
+82,
+"진주 (\\d+) 필요해요",
+"Need $1 Pearls"
+],
+[
+83,
+"([^<>·]+?) 창고가 가득 찼어요 · 조개 창고를 올려요",
+"$1 storage is full · Upgrade the Clam Warehouse"
+],
+[
+84,
+"([^<>·]+?) Lv\\.(\\d+) 완성!",
+"$1 Lv.$2 complete!"
+],
+[
+85,
+"([^<>·]+?) 말풍선을 받아요",
+"Collect the bubble: $1"
+],
+[
+86,
+"주변 (\\d+)칸 땅값 \\+(\\d+)",
+"Land value +$2 within $1 tiles"
+],
+[
+87,
+">([^<>]+)의 주문</small>",
+">Order from $1</small>"
+],
+[
+88,
+"🐢 배달할 수 있는 주문이? (\\d+)개(?: 있어요)?",
+"🐢 Orders ready to deliver: $1"
+],
+[
+89,
+"칸 (\\d+)개",
+"$1 cars"
+],
+[
+90,
+"상자 (\\d+)개",
+"$1 crates"
+],
+[
+91,
+"산호석 ([\\d,.만]+)까지",
+"Coral Stone up to $1"
+],
+[
+92,
+"🪨 ([\\d,.만]+)까지",
+"🪨 up to $1"
+],
+[
+93,
+"최대 (산호석|다시마|경단|옷|벽돌|진주) 시간당 ([\\d.,]+)",
+"Max $1 $2/h"
+],
+[
+94,
+"게 일꾼 (\\d+)마리",
+"$1 crab workers"
+],
+[
+95,
+"일자리 (\\d+) · 물고기 (\\d+)마리가 와서 경단 · 옷을 사요",
+"Jobs $1 · $2 residents shop here for dumplings and clothes"
+],
+[
+96,
+"땅값 (\\d+) 이상\\(지금 (\\d+)\\)",
+"Land value $1+ (now $2)"
+],
+[
+97,
+"행복 55 이상\\(지금 (\\d+)\\)",
+"Happiness 55+ (now $1)"
+],
+[
+98,
+"다음 축제 「([^」]+)」까지",
+"Next festival “$1” in"
+],
+[
+99,
+"🎁 희귀 장식 「([^」]+)」",
+"🎁 Rare decor “$1”"
+],
+[
+100,
+"([^<>·]+?)을\\(를\\) 받았어요 · 짓기 → 장식에서 놓아요",
+"Got $1 · Place it from Build → Decor"
+],
+[
+101,
+"([^<>·]+?)을\\(를\\) 받았어요",
+"Got $1"
+],
+[
+102,
+"주문 · 열차 · 고래 배 · 말풍선에서 ([^<>]+?)를 모아요",
+"Collect $1 from orders, trains, whale ships and bubbles"
+],
+[
+103,
+"([^<>]+?) 동안 마을 소식이에요",
+"Town news from the last $1"
+],
+[
+104,
+"\\(다녀오는 데 ([^<>)]+)\\)",
+"(trip takes $1)"
+],
+[
+105,
+"철거 \\(🫧([\\d,]+) 환급\\)",
+"Demolish (🫧$1 refund)"
+],
+[
+106,
+"물고기 <b>10마리</b>가 입주하게 해요",
+"Get <b>10 residents</b> to move in"
+]
+]

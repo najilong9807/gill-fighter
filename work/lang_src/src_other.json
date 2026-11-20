@@ -1,0 +1,3576 @@
+{
+"city_d": [
+[
+0,
+"<b>Sound</b>"
+],
+[
+1,
+"Mark <b>🏘 zones</b> and the fish build homes, shops and factories themselves. Zones need a road and oxygen from an Oxygen Pump."
+],
+[
+2,
+"<b>🏛 Coral Hall Lv."
+],
+[
+3,
+"The <b>🏛 Coral Hall</b> unlocks everything. Upgrading it needs certain building levels, population and Pearls. No building can be a higher level than the Coral Hall."
+],
+[
+4,
+"When <b>🐟 residents</b> work, production speeds up. When they buy 🍡 dumplings and 👕 clothes at shops, they get happier and homes grow."
+],
+[
+5,
+"Deliver goods for <b>🐢 orders</b> to earn Pearls and Fame. Together with taxes, this is the town's income. Every Fame level comes with a 💎 gift."
+],
+[
+6,
+"<b>🛣 Build Road</b><i>Drag to lay road · per tile"
+],
+[
+7,
+"<b>🧹 Demolish</b><i>Rock 60🫧 · Bush 25🫧 · Road (half refunded)</i>"
+],
+[
+8,
+"<b>🧽 Unzone</b><i>Clear zoning</i>"
+],
+[
+9,
+"<b>🧾 Taxes</b> build up at the 🏛 Coral Hall based on shoppers × happiness (up to 8 hours). Tap the 🫧 bubble above the Coral Hall to collect."
+],
+[
+10,
+"<b>🫧 Pearls · 💎 Gems</b> are shared with Gill Fighter. Build with Pearls and finish construction instantly with Gems (free under 5 minutes)."
+],
+[
+11,
+"<small>(stores up to 8 hours)</small>"
+],
+[
+12,
+"<small>(now"
+],
+[
+13,
+"<small>Nearby"
+],
+[
+14,
+"– Normal"
+],
+[
+15,
+"↺<b>Start over</b><small>Test build only</small>"
+],
+[
+16,
+"▲ High"
+],
+[
+17,
+"▼ None"
+],
+[
+18,
+"☰ Menu"
+],
+[
+19,
+"⚙ Utilities"
+],
+[
+20,
+"✓ Done"
+],
+[
+21,
+"✨ Landmarks"
+],
+[
+22,
+"⬆ Upgrade"
+],
+[
+23,
+"⭐ Fame Lv."
+],
+[
+24,
+"When full, goods wait in the building bubbles · Upgrade the Clam Warehouse for more room"
+],
+[
+25,
+" owned"
+],
+[
+26,
+" finished"
+],
+[
+27,
+"Build the Turtle Depot to receive resident orders and earn Pearls by delivering · Unlocks at 🏛 Coral Hall Lv.3"
+],
+[
+28,
+"Buildings and zones must touch a road to work. Roads connect and shape themselves automatically."
+],
+[
+29,
+"You can't demolish the last road connected to a building"
+],
+[
+30,
+"All crab workers are busy 🦀"
+],
+[
+31,
+"Dumplings"
+],
+[
+32,
+"Start building"
+],
+[
+33,
+"Under construction"
+],
+[
+34,
+"Zoning"
+],
+[
+35,
+"zones: 🏛 Lv."
+],
+[
+36,
+"zones: 🏛 Coral Hall Lv."
+],
+[
+37,
+" max · 🧱"
+],
+[
+38,
+"Off"
+],
+[
+39,
+"Drag to lay road"
+],
+[
+40,
+"Drag to zone · 5🫧"
+],
+[
+41,
+"placed"
+],
+[
+42,
+"Tap to view</i>"
+],
+[
+43,
+"Tap to demolish"
+],
+[
+44,
+"Another building is in the way"
+],
+[
+45,
+"Kelp"
+],
+[
+46,
+"Orders arrive once you have a Kelp Farm or Coral Quarry"
+],
+[
+47,
+"Kelp bushes slightly raise nearby land value. Only clear the ones in your way."
+],
+[
+48,
+"Can't build on a road"
+],
+[
+49,
+"Must be built next to a road"
+],
+[
+50,
+"It's back!"
+],
+[
+51,
+"Outside the map"
+],
+[
+52,
+" upgrade</b>"
+],
+[
+53,
+" upgrading · Time left"
+],
+[
+54,
+"Restart the town from scratch? (Pearls and Gems are kept)"
+],
+[
+55,
+"Collect the bubble"
+],
+[
+56,
+"Finish now for free"
+],
+[
+57,
+"Waiting for goods"
+],
+[
+58,
+"Finish now"
+],
+[
+59,
+"Clear the rocks and bushes first"
+],
+[
+60,
+"Deliver"
+],
+[
+61,
+"New order 1 min after delivery · 5 min after cancelling · 3–9 order slots depending on Depot level"
+],
+[
+62,
+"Gems"
+],
+[
+63,
+"Not enough Gems"
+],
+[
+64,
+"Coral Bricks"
+],
+[
+65,
+"Coral Stone"
+],
+[
+66,
+"Tax"
+],
+[
+67,
+"Demand"
+],
+[
+68,
+"per hour:"
+],
+[
+69,
+"This land isn't yours yet"
+],
+[
+70,
+"This land isn't yours yet · Expand your territory"
+],
+[
+71,
+"upgrade"
+],
+[
+72,
+"to unlock"
+],
+[
+73,
+"You can build here · Drag the building or tap another tile to move it"
+],
+[
+74,
+"Arriving in"
+],
+[
+75,
+"Clothes"
+],
+[
+76,
+"complete!"
+],
+[
+77,
+" must be built first"
+],
+[
+78,
+" is now under construction"
+],
+[
+79,
+"'s order</small>"
+],
+[
+80,
+" is needed first"
+],
+[
+81,
+"Pan with two fingers</small>"
+],
+[
+82,
+"Builds finished while away:"
+],
+[
+83,
+"Decor doesn't need a road · Higher land value lets homes grow to Lv.2–3"
+],
+[
+84,
+"Not enough materials"
+],
+[
+85,
+"needs"
+],
+[
+86,
+"Cancel order"
+],
+[
+87,
+"Deliver the goods residents ordered from your warehouse to earn 🫧 Pearls and ⭐ Fame"
+],
+[
+88,
+"Everything is running smoothly ✨"
+],
+[
+89,
+"Zoned tiles with a road, oxygen (Oxygen Pump) and demand are built by the fish themselves · 5🫧 per tile"
+],
+[
+90,
+"Pearls"
+],
+[
+91,
+"Pearl Nails"
+],
+[
+92,
+"Not enough Pearls"
+],
+[
+93,
+"built"
+],
+[
+94,
+"storage is full · Upgrade the Clam Warehouse"
+],
+[
+95,
+"Not enough goods in the warehouse"
+],
+[
+96,
+"Max level"
+],
+[
+97,
+"Max level ✨"
+],
+[
+98,
+"Cancel"
+],
+[
+99,
+" tiles: land value +"
+],
+[
+100,
+"Tap a tile to move it · You can keep placing more"
+],
+[
+101,
+"On"
+],
+[
+102,
+"required"
+],
+[
+103,
+"required</i>"
+],
+[
+104,
+"required"
+],
+[
+105,
+"🌸 Decor"
+],
+[
+106,
+"🍡 Out of dumplings · Collect from the Dumpling Factory"
+],
+[
+107,
+"🎯 To-do"
+],
+[
+108,
+"🎯<b>To-do</b><small>Until the next Coral Hall</small>"
+],
+[
+109,
+"🏘 Zones"
+],
+[
+110,
+"🏛 Coral Hall Lv."
+],
+[
+111,
+"🏛 Coral Hall at max level! The Dragon Palace is complete"
+],
+[
+112,
+"🏠 Residential"
+],
+[
+113,
+"🏫 Services"
+],
+[
+114,
+"🏭 Production"
+],
+[
+115,
+"🐋 View whale ship"
+],
+[
+116,
+"🐙 Teacher Octopus"
+],
+[
+117,
+"🐚 Granny Conch"
+],
+[
+118,
+"🐟 Foreman Mackerel"
+],
+[
+119,
+"🐟 Population cap reached · Upgrade the diner, school or clinic"
+],
+[
+120,
+"🐟 Resident"
+],
+[
+121,
+"🐟<b>Town Status</b><small>Population · Jobs · Demand</small>"
+],
+[
+122,
+"🐠 Clownfish Siblings"
+],
+[
+123,
+"🐡 Auntie Puffer"
+],
+[
+124,
+"🐢 Trade"
+],
+[
+125,
+"🐢 Orders ready to deliver:"
+],
+[
+126,
+"🐢 Order Delivery"
+],
+[
+127,
+"🐬 Postman Dolphin"
+],
+[
+128,
+"👷 Not enough workers · Zone more residential"
+],
+[
+129,
+"📖 How the town works"
+],
+[
+130,
+"📖<b>Help</b><small>How the town works</small>"
+],
+[
+131,
+"📜<b>Story</b><small>Replay the intro</small>"
+],
+[
+132,
+"📦 Storage <small>Clam Warehouse Lv."
+],
+[
+133,
+"🔧 Industrial"
+],
+[
+134,
+"🚋 View train"
+],
+[
+135,
+"🛍 Commercial"
+],
+[
+136,
+"🛍 Not enough commercial zones"
+],
+[
+137,
+"🛣 Roads"
+],
+[
+138,
+"🛣 Build Road"
+],
+[
+139,
+"🦀 Crab workers"
+],
+[
+140,
+"🦀 Crab workers"
+],
+[
+141,
+"🦀 Carpenter Crab"
+],
+[
+142,
+"🦐 Chef Shrimp"
+],
+[
+143,
+"🦑 Painter Squid"
+],
+[
+144,
+"🦞 Blacksmith Lobster"
+],
+[
+145,
+"🧹 Demolish"
+],
+[
+146,
+"🧽 Unzone"
+],
+[
+147,
+"🧾 Tax"
+],
+[
+148,
+"%</b><br>Residents shopping"
+],
+[
+149,
+"/ Jobs"
+],
+[
+150,
+"<small>(per hour −"
+],
+[
+151,
+"<small>(raise the cap with diners, schools, clinics and landmarks)</small><br>Workers"
+],
+[
+152,
+"→ Production efficiency"
+],
+[
+153,
+"✓ Will grow on its own soon"
+],
+[
+154,
+"Unzone"
+],
+[
+155,
+"No road access"
+],
+[
+156,
+"Land value"
+],
+[
+157,
+" upgrading"
+],
+[
+158,
+" growth needs"
+],
+[
+159,
+" residents shop here for dumplings and clothes"
+],
+[
+160,
+"Residents"
+],
+[
+161,
+"The fish are building"
+],
+[
+162,
+"Hungry! Run the Dumpling Factory"
+],
+[
+163,
+"No oxygen · Build an Oxygen Pump nearby"
+],
+[
+164,
+"Industrial"
+],
+[
+165,
+"Commercial"
+],
+[
+166,
+"Demand<br>🏠 Residential"
+],
+[
+167,
+"No demand"
+],
+[
+168,
+" needs population"
+],
+[
+169,
+"No clothes"
+],
+[
+170,
+" required"
+],
+[
+171,
+"+ (now"
+],
+[
+172,
+"Population"
+],
+[
+173,
+"Fully staffed jobs speed up town production"
+],
+[
+174,
+"Jobs"
+],
+[
+175,
+"Residential"
+],
+[
+176,
+"More residents must move in"
+],
+[
+177,
+"Max level"
+],
+[
+178,
+"Happiness"
+],
+[
+179,
+"Happiness 55+ (now"
+],
+[
+180,
+"🍡 Dumplings"
+],
+[
+181,
+"🐟 Town Status"
+],
+[
+182,
+"🐟 Residents"
+],
+[
+183,
+"🐟 Residents living here"
+],
+[
+184,
+"🐟 Population"
+],
+[
+185,
+"👕 Clothes"
+],
+[
+186,
+"🔧 Industrial"
+],
+[
+187,
+"🛍 Commercial"
+],
+[
+188,
+"🧾 Tax per hour:"
+],
+[
+189,
+"🫧</b> <small>(shoppers × happiness · collect from the Coral Hall bubble)</small>"
+],
+[
+190,
+"〰 Sea 〰"
+],
+[
+191,
+"It grew legs!"
+],
+[
+192,
+"Poof!"
+],
+[
+193,
+"Gill City"
+],
+[
+194,
+"🐟 A new fish is at the gate <b>Go see ›</b>"
+],
+[
+195,
+"🐟 A new resident is walking home"
+],
+[
+196,
+"🐟 The first resident is entering Gill City!"
+],
+[
+197,
+"The Bubble Fire Station. Only homes, shops and factories within range can grow to Lv.3 or higher. Upgrading widens the range."
+],
+[
+198,
+"Crab workers"
+],
+[
+199,
+"More crab workers to build several things at once"
+],
+[
+200,
+"Home of the crab workers. You get 2 at Lv.3, 3 at Lv.10 and 4 at Lv.18, so more buildings can go up at the same time."
+],
+[
+201,
+"Whale ship trade · Nails · Gems · Rare decor"
+],
+[
+202,
+" max"
+],
+[
+203,
+"Turns kelp into dumplings to feed residents"
+],
+[
+204,
+"Makes clothes from kelp (needed from Coral Hall Lv.5)"
+],
+[
+205,
+"Makes seaweed clothes from kelp. From Coral Hall Lv.5, residents also need clothes to stay happy. Used for trains and orders too."
+],
+[
+206,
+"Turns kelp into dumplings. Residents buy them at shops; if you run out they go hungry and stop moving in. Also used for orders. Slightly lowers nearby land value."
+],
+[
+207,
+"Grows kelp · used for dumplings and clothes"
+],
+[
+208,
+"Grows kelp. The Dumpling Factory and Seaweed Workshop use it up. Often needed for orders and trains."
+],
+[
+209,
+"A cozy diner. Raises the population cap and nearby land value."
+],
+[
+210,
+"Landmark · Wide land value + · Population cap +"
+],
+[
+211,
+"Heart of the town · Unlocks every building and stage"
+],
+[
+212,
+"Mines the Coral Stone used in all construction. Tap the bubble to collect. It slightly lowers nearby land value, so build it away from homes."
+],
+[
+213,
+"Nails"
+],
+[
+214,
+"Range"
+],
+[
+215,
+"Zone buildings in range can grow to Lv.3"
+],
+[
+216,
+"Zone buildings in range can grow to Lv.4"
+],
+[
+217,
+"Oxygen range"
+],
+[
+218,
+"Spreads oxygen so zones can grow"
+],
+[
+219,
+"The Coral Hall level is your town's stage. No building can be a higher level, and new buildings, zone levels and land expansion unlock with it. Upgrading needs certain building levels and population. Resident taxes also build up here: the more shoppers and the happier they are, the more you collect."
+],
+[
+220,
+"Bakes 4 Coral Stone into 1 brick. Construction needs bricks from Coral Hall Lv.8. Slightly lowers nearby land value."
+],
+[
+221,
+"Raises the storage cap for Coral Stone, bricks, nails, kelp, dumplings and clothes. When full, goods wait in the bubbles."
+],
+[
+222,
+"Bakes Coral Stone into bricks · needed from Lv.8"
+],
+[
+223,
+"Mines Coral Stone · used in almost all construction"
+],
+[
+224,
+"Crates"
+],
+[
+225,
+"Fill the crates to send the whale ship to a faraway town. After 2 hours you get Pearl Nails, Gems and Fame, and sometimes rare decor."
+],
+[
+226,
+"Cares for sick fish. Raises the population cap and lets zone buildings in range grow to Lv.5."
+],
+[
+227,
+"Load every train car and it returns in about 30 minutes with bricks, nails and Fame. 4 cars at Lv.10, 5 at Lv.18."
+],
+[
+228,
+"Fill the train cars for bricks and nails"
+],
+[
+229,
+"The Dragon King's Palace. The town's greatest landmark, greatly raising land value over a wide area and the population cap."
+],
+[
+230,
+"Population cap +"
+],
+[
+231,
+"Population cap + · Nearby land value +"
+],
+[
+232,
+"Population cap + · Lv.5 buildings in range"
+],
+[
+233,
+"Max when all jobs are filled · Worker efficiency now"
+],
+[
+234,
+"Increases material storage"
+],
+[
+235,
+"Orders"
+],
+[
+236,
+"Deliver orders to earn Pearls"
+],
+[
+237,
+"Turtles deliver the goods residents order (kelp, Coral Stone, dumplings, clothes…) from your warehouse. Every delivery earns Pearls and Fame. Along with taxes this is the town's income, so think of it as turning what your production buildings make into Pearls. Upgrading adds order slots (3–9)."
+],
+[
+238,
+"Releases oxygen around it. Nothing gets built in zones without oxygen. Upgrading widens the range and is required to unlock the Pearl Farm."
+],
+[
+239,
+"Now:"
+],
+[
+240,
+"Slowly produces Pearls and Pearl Nails"
+],
+[
+241,
+"Raises pearl oysters for a trickle of Pearls and makes the Pearl Nails needed from Lv.14. Pearls from here can be spent in Gill Fighter too."
+],
+[
+242,
+"Max Dumplings per hour:"
+],
+[
+243,
+"Max Kelp per hour:"
+],
+[
+244,
+"Max Bricks per hour:"
+],
+[
+245,
+"Max Coral Stone per hour:"
+],
+[
+246,
+"Max Clothes per hour:"
+],
+[
+247,
+"Max Pearls per hour:"
+],
+[
+248,
+"Final landmark · Huge population cap"
+],
+[
+249,
+"Teacher Seahorse's school. Greatly raises the population cap and nearby land value."
+],
+[
+250,
+"The Seahorse Patrol. Zone buildings in range can grow to Lv.4 (high-rise)."
+],
+[
+251,
+"(trip takes"
+],
+[
+252,
+"Deliver one order at the <b>Turtle Depot</b>"
+],
+[
+253,
+"Build a <b>Dumpling Factory</b> to feed residents"
+],
+[
+254,
+"Build an <b>Oxygen Pump</b> to spread oxygen"
+],
+[
+255,
+"Upgrade the <b>🏛 Coral Hall</b> to Lv.2"
+],
+[
+256,
+"<small>✓ Loaded</small>"
+],
+[
+257,
+"<small>Secretary Bream"
+],
+[
+258,
+"Tap the <b>🪨 bubble</b> above the quarry to collect Coral Stone"
+],
+[
+259,
+"Tap where the yellow arrow points"
+],
+[
+260,
+"Departs when fully loaded · Returns with 🧱"
+],
+[
+261,
+"Kelp Farm → Dumpling Factory"
+],
+[
+262,
+"Kelp Garden"
+],
+[
+263,
+"Zone 4 tiles of <b>🏠 Residential</b> next to a road"
+],
+[
+264,
+" of town news"
+],
+[
+265,
+"Collect all"
+],
+[
+266,
+"Get <b>10 residents</b> to move in"
+],
+[
+267,
+"Return now"
+],
+[
+268,
+"Collect"
+],
+[
+269,
+"Nothing in storage"
+],
+[
+270,
+"Put into storage"
+],
+[
+271,
+"Coral Flowerbed"
+],
+[
+272,
+"Build a <b>Coral Quarry</b> next to the Coral Hall"
+],
+[
+273,
+"Tap the Coral Hall, then ⬆ Upgrade"
+],
+[
+274,
+"Load"
+],
+[
+275,
+"Waiting to collect:"
+],
+[
+276,
+"The train arrives once the station is built"
+],
+[
+277,
+"Clam Bench"
+],
+[
+278,
+"Nearby"
+],
+[
+279,
+"Homes grow bigger"
+],
+[
+280,
+"Homes need a road and oxygen before fish move in"
+],
+[
+281,
+"Pearl Fountain"
+],
+[
+282,
+"Demolish (🫧"
+],
+[
+283,
+"Jellyfish Lamp"
+],
+[
+284,
+" refund)"
+],
+[
+285,
+"Golden Fish Statue"
+],
+[
+286,
+"🐠 Welcome back!"
+],
+[
+287,
+"🐠 Well done! 🫧"
+],
+[
+288,
+"🐢 Orders ready to deliver:"
+],
+[
+289,
+"🔨 Builds"
+],
+[
+290,
+"🔨 Build → ⚙ Utilities"
+],
+[
+291,
+"🔨 Build → 🏘 Zones → Residential, then drag"
+],
+[
+292,
+"🔨 Build → 🏭 Production"
+],
+[
+293,
+"🔨 Build → 🐢 Trade → Turtle Depot"
+],
+[
+294,
+"🚋 Off to the far sea · Back in"
+],
+[
+295,
+"🚋 The train is back"
+],
+[
+296,
+"🚋 The train is back! 🧱"
+],
+[
+297,
+"🚋 The train has left"
+],
+[
+298,
+"🚋 Current Train Station <small>Lv."
+],
+[
+299,
+"3 · Lv.3 🚒 · Lv.4 +👮 · Lv.5 +🏥"
+],
+[
+300,
+"<small>✓ Filled</small>"
+],
+[
+301,
+"Sunken Ship"
+],
+[
+302,
+"Whale Statue"
+],
+[
+303,
+"Low"
+],
+[
+304,
+"High (homes grow at 45 · 58)"
+],
+[
+305,
+"Services in reach (🚒 · 👮 · 🏥)"
+],
+[
+306,
+"Medium"
+],
+[
+307,
+"Oxygen"
+],
+[
+308,
+"Oxygen"
+],
+[
+309,
+"Fill every crate for a 2-hour trip · 📌"
+],
+[
+310,
+"Services"
+],
+[
+311,
+"None"
+],
+[
+312,
+" received · Place it from Build → Decor"
+],
+[
+313,
+"Fill"
+],
+[
+314,
+"The whale ship arrives once the port is built"
+],
+[
+315,
+"🎁 Rare decor “"
+],
+[
+316,
+"🐋 The whale ship has left"
+],
+[
+317,
+"🐋 Whale Port <small>Lv."
+],
+[
+318,
+"🐋 It's back! 📌"
+],
+[
+319,
+"🐋 Sailing to a faraway town"
+],
+[
+320,
+"🔇 Sound off"
+],
+[
+321,
+"🔊 Sound on"
+],
+[
+322,
+"Opens a new 16×16 plot · It has rocks and bushes"
+],
+[
+323,
+"Coral Hall Lv."
+],
+[
+324,
+"Open"
+],
+[
+325,
+"Expand Land"
+],
+[
+326,
+" to open"
+],
+[
+327,
+"🏥 Clinic"
+],
+[
+328,
+"🏥 Must be within Clinic range"
+],
+[
+329,
+"👮 Patrol"
+],
+[
+330,
+"👮 Must be within Patrol range"
+],
+[
+331,
+"🗺 New land opened!"
+],
+[
+332,
+"🗺 Expand Land"
+],
+[
+333,
+"🚒 Fire"
+],
+[
+334,
+"🚒 Must be within Fire Station range"
+],
+[
+335,
+"<i>✓ Claimed</i>"
+],
+[
+336,
+"” in"
+],
+[
+337,
+"Bubble Balloon"
+],
+[
+338,
+"Ends in"
+],
+[
+339,
+"Snowflakes"
+],
+[
+340,
+"Next festival “"
+],
+[
+341,
+"Lanterns"
+],
+[
+342,
+""
+],
+[
+343,
+"Sea Snowman"
+],
+[
+344,
+"Sea Lion Fountain"
+],
+[
+345,
+"Coral Tree"
+],
+[
+346,
+"Ice Coral Palace"
+],
+[
+347,
+" received"
+],
+[
+348,
+"d</small>"
+],
+[
+349,
+"Shell Bells"
+],
+[
+350,
+"Collect from orders, trains, whale ships and bubbles:"
+],
+[
+351,
+"Festival Stage"
+],
+[
+352,
+"Festival decor is only available during the event · Place it from Build → 🌸 Decor"
+],
+[
+353,
+"Jellyfish Lantern Tower"
+],
+[
+354,
+"🎄 Undersea Winter Festival"
+],
+[
+355,
+"🎐 Festival Break"
+],
+[
+356,
+"🎐<small>Break</small>"
+],
+[
+357,
+"🏮 Jellyfish Lantern Festival"
+],
+[
+358,
+"🦭 Sea Lion Festival"
+],
+[
+359,
+"‹<small>Exit</small>"
+],
+[
+360,
+"Skip"
+],
+[
+361,
+"Tap the round bubbles (🪨 🌿 🫧) above buildings to collect materials. Use them to upgrade buildings and deliver orders to earn Pearls."
+],
+[
+362,
+"A bubble will appear soon"
+],
+[
+363,
+"Deep in the blue sea"
+],
+[
+364,
+"Only a small Coral Hall remains"
+],
+[
+365,
+"Tap!"
+],
+[
+366,
+"A bubble appears here when it's built"
+],
+[
+367,
+"Next ›"
+],
+[
+368,
+"You're the new mayor!"
+],
+[
+369,
+"Drag your finger across tiles next to the road"
+],
+[
+370,
+"undone"
+],
+[
+371,
+"Nothing to undo"
+],
+[
+372,
+"Collect, make, grow"
+],
+[
+373,
+"The goal: the Dragon Palace!"
+],
+[
+374,
+"Tap the Coral Hall"
+],
+[
+375,
+"Each Coral Hall upgrade unlocks new buildings, land and high-rises. At Lv.25 it becomes the shining Dragon Palace."
+],
+[
+376,
+"Let's start!"
+],
+[
+377,
+"Back to Gill Fighter"
+],
+[
+378,
+"Long ago, a coral town full of fish stood here. Then a great current swept through and left it empty."
+],
+[
+379,
+"I'm Secretary Bream. Just follow the yellow note at the top and the blinking arrow. Shall we begin?"
+],
+[
+380,
+"I'll help you"
+],
+[
+381,
+"Now only one pink Coral Hall is left. The fish of the sea are wandering, looking for a place to live together again."
+],
+[
+382,
+"Build with Pearls and zone residential land beside roads, and fish will move in. Fish that pass the town gate sprout legs and become residents."
+],
+[
+383,
+"<small>Orders</small>"
+],
+[
+384,
+"☰<small>Menu</small>"
+],
+[
+385,
+"Secretary Bream"
+],
+[
+386,
+"Undo"
+],
+[
+387,
+"Menu"
+],
+[
+388,
+"Go to Coral Hall"
+],
+[
+389,
+"Storage"
+],
+[
+390,
+"Festival"
+],
+[
+391,
+"Map overlays"
+],
+[
+392,
+"📦<small>Storage</small>"
+],
+[
+393,
+"🔨 Build"
+],
+[
+394,
+"Turtle Depot"
+],
+[
+395,
+"Bubble Fire Station"
+],
+[
+396,
+"Crab Workers' Lodge"
+],
+[
+397,
+"Dumpling Factory"
+],
+[
+398,
+"Whale Port"
+],
+[
+399,
+"Tourists → Pearls · Links to your aquarium"
+],
+[
+400,
+"Kelp → Dumplings (🍡 food · orders)"
+],
+[
+401,
+"Kelp → Clothes (👕)"
+],
+[
+402,
+"Kelp Farm"
+],
+[
+403,
+"Produces kelp"
+],
+[
+404,
+"Number of builds at once"
+],
+[
+405,
+"Anemone Diner"
+],
+[
+406,
+"Far-sea trade · Rare materials"
+],
+[
+407,
+"Buildings in range grow to Lv.3+"
+],
+[
+408,
+"Buildings in range grow to Lv.4+"
+],
+[
+409,
+"Brick Kiln"
+],
+[
+410,
+"Starfish Clinic"
+],
+[
+411,
+"Oxygen · Range where zones grow"
+],
+[
+412,
+"Oxygen Pump"
+],
+[
+413,
+"Coral Quarry"
+],
+[
+414,
+"Coral Hall"
+],
+[
+415,
+"Coral Stone → Coral Bricks (🧱)"
+],
+[
+416,
+"Produces Coral Stone"
+],
+[
+417,
+"Gill Aquarium"
+],
+[
+418,
+"Train orders → Bricks · Nails"
+],
+[
+419,
+"Dragon King's Palace"
+],
+[
+420,
+"Population cap + · Land value +"
+],
+[
+421,
+"Population cap + · Happiness +"
+],
+[
+422,
+"Material storage cap"
+],
+[
+423,
+"Clam Warehouse"
+],
+[
+424,
+"Order delivery → Pearl income"
+],
+[
+425,
+"Produces Pearls (shared) · Pearl Nails (📌)"
+],
+[
+426,
+"Pearl Farm"
+],
+[
+427,
+"Final landmark · Town-wide Pearls +"
+],
+[
+428,
+"Current Train Station"
+],
+[
+429,
+"Seahorse Patrol"
+],
+[
+430,
+"Seahorse School"
+],
+[
+431,
+"Seaweed Workshop"
+],
+[
+432,
+"Bricks"
+],
+[
+433,
+"Meet the conditions marked ○ first"
+],
+[
+434,
+"<small>Trip takes"
+],
+[
+435,
+"Departs when fully loaded · Returns with"
+],
+[
+436,
+"🐠 Visit my aquarium"
+],
+[
+437,
+"💤 Played enough today"
+],
+[
+438,
+" · storage full, some was left"
+],
+[
+439,
+" · no homes affected yet"
+],
+[
+440,
+" · farther from homes costs less"
+],
+[
+441,
+"Decor, schools, diners and landmarks nearby raise it; quarries, kilns and factories lower it"
+],
+[
+442,
+"😊 Happiness"
+],
+[
+443,
+"🌿 Kelp bush"
+],
+[
+444,
+"📜 This week's town requests"
+],
+[
+445,
+"Finish all 3 requests"
+],
+[
+446,
+"Requests"
+],
+[
+447,
+"Town requests"
+],
+[
+448,
+"Claimed"
+],
+[
+449,
+"✓ Claimed"
+],
+[
+450,
+"<b>📜 Requests</b> arrive every Monday from Coral Hall Lv.5, 3 at a time. Each gives 🫧 Pearls, and finishing all three adds 💎 Gems."
+],
+[
+451,
+"<b>🏷 Land value</b> rises near decor, schools, diners and landmarks, and falls near quarries, kilns and factories. Before placing a building you can preview it with green/red tiles and numbers over homes. Homes grow taller where land value is high."
+],
+[
+452,
+"<b>📦 Supply crates</b> arrive for every Gill Fighter run longer than 20 seconds (up to 6 a day). <b>🐠 Your fish</b> sometimes visit town — pet them to raise their aquarium friendship."
+],
+[
+453,
+"🏛 Coral Hall is at max level ✨"
+],
+[
+454,
+"🐠 Aquarium workshop"
+],
+[
+455,
+"Make"
+],
+[
+456,
+"Can't send right now"
+],
+[
+457,
+"Blue Lighthouse"
+],
+[
+458,
+"Kelp-Roof Cottage"
+],
+[
+459,
+"Coral Brick Castle"
+],
+[
+460,
+"Pearly Table Coral"
+],
+[
+461,
+"Golden Coral Arch"
+],
+[
+462,
+"Golden Brain Coral"
+],
+[
+463,
+"Use town materials to make <b>decorations only for your aquarium</b> · they go to Aquarium › Decorate › Decor"
+],
+[
+464,
+"Landmark · land value + · population cap + · bigger aquarium"
+],
+[
+465,
+"The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. Each level adds 2 decor slots and +1% pearl spring to your Gill Fighter aquarium."
+],
+[
+466,
+"🏆 Town Records"
+],
+[
+467,
+"Town Records"
+],
+[
+468,
+"Collect stamps"
+],
+[
+469,
+"✓ Complete"
+],
+[
+470,
+"Rename town"
+],
+[
+471,
+"Each stage you pass gives 💎 and ⭐ Fame"
+],
+[
+472,
+"Town name (up to 10 characters)"
+],
+[
+473,
+"<b>🐠 Aquarium workshop</b> (below 📦 Storage) turns spare materials into decor made only for your aquarium. Once you build the <b>🐢 Turtle Depot</b>, the <b>🐢 Town parcel</b> turtle sometimes visits your aquarium with pearls from your residents (3 times a day)."
+],
+[
+474,
+"<b>🏆 Town Records</b> (☰ Menu) are stamps you collect over time. Each stage you pass gives 💎 and ⭐ Fame, and the ✏ at the top lets you name your town."
+],
+[
+475,
+"Sea Festival Nights"
+],
+[
+476,
+"Shell Recycling"
+],
+[
+477,
+"Dumpling Sharing"
+],
+[
+478,
+"Early Shifts"
+],
+[
+479,
+"Night Lamps"
+],
+[
+480,
+"Crab Night Shift"
+],
+[
+481,
+"Safety Drills"
+],
+[
+482,
+"Happiness +8"
+],
+[
+483,
+"Happiness +6"
+],
+[
+484,
+"Happiness −7"
+],
+[
+485,
+"Happiness −5"
+],
+[
+486,
+"Taxes −15%"
+],
+[
+487,
+"Taxes −10%"
+],
+[
+488,
+"Murky water −30%"
+],
+[
+489,
+"Production −10%"
+],
+[
+490,
+"Production −5%"
+],
+[
+491,
+"Production +15%"
+],
+[
+492,
+"Dumplings eaten ×1.6"
+],
+[
+493,
+"All land value +4"
+],
+[
+494,
+"Build time −20%"
+],
+[
+495,
+"Incidents −40%"
+],
+[
+496,
+"⚖ Town Policies"
+],
+[
+497,
+"Town Policies"
+],
+[
+498,
+"⚖ Policies"
+],
+[
+499,
+"Turn off"
+],
+[
+500,
+"Turn on"
+],
+[
+501,
+"View building"
+],
+[
+502,
+"💎1 now"
+],
+[
+503,
+"Clear"
+],
+[
+504,
+"A little"
+],
+[
+505,
+"Murky"
+],
+[
+506,
+"Murky water"
+],
+[
+507,
+"Water Filter"
+],
+[
+508,
+"Big Water Filter"
+],
+[
+509,
+"🗺 Show murky water"
+],
+[
+510,
+"(average near homes · 🗺 Map → Murky water)"
+],
+[
+511,
+"Shark Sighting"
+],
+[
+512,
+"Hot Water Vent"
+],
+[
+513,
+"Fish Cold"
+],
+[
+514,
+"Red Tide"
+],
+[
+515,
+"A shark showed up and half the residents are hiding"
+],
+[
+516,
+"Hot water is bursting from the floor and work has stopped"
+],
+[
+517,
+"A cold is going around and half the residents are resting"
+],
+[
+518,
+"Red water has built up in the murk and work has stopped"
+],
+[
+519,
+"🫧 Water Filter"
+],
+[
+520,
+"Policies unlock at 🏛 Coral Hall Lv.6 · each has a benefit and a cost"
+],
+[
+521,
+"To prevent: keep 🌫 murky water under 45 · ⚙ Utilities → 🫧 Water Filter"
+],
+[
+522,
+"⚠ Incidents 🔒 🏛Lv.6"
+],
+[
+523,
+"⚖ Policies 🔒 🏛Lv.6"
+],
+[
+524,
+"Opens at 🏛 Lv.6"
+],
+[
+525,
+"<i style=\"background:#5ac8ff\"></i> Clear <i style=\"background:#8c8c5a\"></i> A little <i style=\"background:#a05a32\"></i> Murky · homes Lv.3 ≤40 · Lv.4 ≤25 · Lv.5 ≤15 · clean it with 🫧 Water Filters"
+],
+[
+526,
+"<b>🌫 Murky water</b>: water around quarries, kilns, factories, workshops, ports and industrial zones gets cloudy. Murky water near homes means fewer residents and less happiness, and homes need 40 or less for Lv.3, 25 for Lv.4 and 15 for Lv.5. Build several <b>🫧 Water Filters</b> from ⚙ Utilities to clean it, and check it on the 🗺 map."
+],
+[
+527,
+"<b>⚖ Town Policies</b> (☰ Menu) unlock at Coral Hall Lv.6. Each policy has a benefit and a cost. You get one more slot at Lv.10 and Lv.15."
+],
+[
+528,
+"<b>⚠ Town incidents</b>: from Coral Hall Lv.6, sharks, hot water vents, colds and red tides sometimes happen. Inside the range of a 🚒 Fire Station, 👮 Patrol or 🏥 Clinic they are stopped automatically; otherwise tap the building to fix it or wait 2 hours."
+],
+[
+529,
+"Breath Spring"
+],
+[
+530,
+"Big Breath Tower"
+],
+[
+531,
+"<b>💨 Breath Springs · Big Breath Towers</b> (⚙ Utilities) can be built as many times as you like. Place them where the Oxygen Pump does not reach to widen the area where zones can grow."
+],
+[
+532,
+"A shark is right outside my home! I’m too scared to go in"
+],
+[
+533,
+"Cough… a cold is going around my neighborhood"
+],
+[
+534,
+"Hot water is coming out of the floor!"
+],
+[
+535,
+"The red water makes it hard to breathe"
+],
+[
+536,
+"The water is so murky my gills sting… I wish we had a water filter"
+],
+[
+537,
+"The water’s been a bit cloudy lately"
+],
+[
+538,
+"I’m hungry… they say the shops are out of dumplings"
+],
+[
+539,
+"My clothes are worn out. I want new ones"
+],
+[
+540,
+"My friends want to move here, but they say the town is full"
+],
+[
+541,
+"There aren’t enough shops. The lines are so long"
+],
+[
+542,
+"Plenty of jobs, but not enough homes"
+],
+[
+543,
+"Sea Festival Nights are the best! I wish it was every day"
+],
+[
+544,
+"Coming out so early makes me sleepy… yawn"
+],
+[
+545,
+"The crab workers hammer all night. Bang bang!"
+],
+[
+546,
+"I love how bright the streets are at night"
+],
+[
+547,
+"They say land value in my neighborhood went way up!"
+],
+[
+548,
+"I’m so happy to live in Gill City!"
+],
+[
+549,
+"The town feels a bit down lately"
+],
+[
+550,
+"I’d love to visit an aquarium if we get one"
+],
+[
+551,
+"Swimming hard again today!"
+],
+[
+552,
+"The Coral Hall is so pretty"
+],
+[
+553,
+"I wonder when the turtle delivery comes"
+],
+[
+554,
+"I love the smell of kelp"
+],
+[
+555,
+"I’m going for a swim with friends this weekend"
+],
+[
+556,
+"🏠 Home:"
+],
+[
+557,
+"💼 Work:"
+],
+[
+558,
+"Mood:"
+],
+[
+559,
+"😄 Great"
+],
+[
+560,
+"🙂 Good"
+],
+[
+561,
+"😐 So-so"
+],
+[
+562,
+"😟 Not good"
+],
+[
+563,
+"🏠 See home"
+],
+[
+564,
+"💼 See workplace"
+],
+[
+565,
+"Tap a <b>🐟 resident</b> to see their name, home, workplace and mood, and hear what they have to say. Their words tell you what the town is missing."
+],
+[
+566,
+"⬆ Widen roads"
+],
+[
+567,
+"Widen roads"
+],
+[
+568,
+"Traffic"
+],
+[
+569,
+"Gravel road"
+],
+[
+570,
+"Coral avenue"
+],
+[
+571,
+"Current Bus Stop"
+],
+[
+572,
+"Clear"
+],
+[
+573,
+"Busy"
+],
+[
+574,
+"Jammed"
+],
+[
+575,
+"Drag to widen roads · Gravel 40🫧 🪨20 · Coral avenue 120🫧 🪨60 · move with two fingers"
+],
+[
+576,
+"Turn jammed roads into gravel or coral avenues"
+],
+[
+577,
+"<i style=\"background:#46c86e\"></i> Clear <i style=\"background:#ffc83c\"></i> Busy <i style=\"background:#eb463c\"></i> Jammed · fix with ⬆ Widen roads · 🚌 Bus stops"
+],
+[
+578,
+"<b>🚦 Traffic</b>: roads crowded with homes, shops, workshops and workplaces get jammed. Next to a jammed road, production, move-ins and happiness drop, and zones need unjammed roads to reach Lv.4+. Use <b>⬆ Widen roads</b> in the 🛣 Roads tab for gravel roads (Lv.5) and coral avenues (Lv.12), or place <b>🚌 Current Bus Stops</b> from ⚙ Utilities. Check it on 🗺 Map → Traffic."
+]
+],
+"city_t": [
+[
+0,
+"Road jams −35% within $1 tiles · build several"
+],
+[
+1,
+"Traffic −35% on roads within $1 tiles · eases jams"
+],
+[
+2,
+"🚦 Road jammed ($1) · widen roads · 🚌 bus stop"
+],
+[
+3,
+"$2 unlocks at 🏛 Coral Hall Lv.$1"
+],
+[
+4,
+"Not enough 🪨 Coral Stone"
+],
+[
+5,
+"Oxygen within $1 tiles · build several"
+],
+[
+6,
+"Spreads oxygen within $1 tiles · zones can grow in a wider area"
+],
+[
+7,
+"🌫 The water near homes is murky (happiness −$1) · ⚙ Utilities → 🫧 Water Filter"
+],
+[
+8,
+"⚠ $1 $2 · tap $3 to fix it"
+],
+[
+9,
+"⚖ You can turn on $1 more policies · ☰ Menu → Town Policies"
+],
+[
+10,
+"Block $1 town incidents"
+],
+[
+11,
+"Murky water −$2 within $1 tiles · build several"
+],
+[
+12,
+"Murky water −$2 within $1 tiles · here now 🌫 $3"
+],
+[
+13,
+"It passes by itself in $1"
+],
+[
+14,
+"Active policies <b>$1 / $2</b> · one more slot at Lv.10 and Lv.15"
+],
+[
+15,
+" · can change again in $1"
+],
+[
+16,
+"Active $1 / $2"
+],
+[
+17,
+"⚖ Policy on · $1"
+],
+[
+18,
+"⚖ Policy off · $1"
+],
+[
+19,
+"⚖ Policies $1 / $2"
+],
+[
+20,
+"🌫 Happiness lost to murky water <b>−$1</b>"
+],
+[
+21,
+"⚠ Incidents now $1 · blocked $2 times"
+],
+[
+22,
+"⚠ $1 $2! · Tap the building to fix it"
+],
+[
+23,
+"✓ $1 $2 fixed!"
+],
+[
+24,
+"🛡 $2 $3 stopped · it was in range of $1"
+],
+[
+25,
+"To prevent: keep it in range of $1 and it is blocked automatically next time"
+],
+[
+26,
+"Fix for 🫧$1"
+],
+[
+27,
+"$1 $2 · passed by itself"
+],
+[
+28,
+"🌫 Murky water $1 or less (now $2)"
+],
+[
+29,
+"Reach Coral Hall Lv.$1"
+],
+[
+30,
+"Gather $1 residents"
+],
+[
+31,
+"Reach Fame Lv.$1"
+],
+[
+32,
+"Deliver $1 orders"
+],
+[
+33,
+"Zone building levels total $1"
+],
+[
+34,
+"Complete $1 train or whale ship trips"
+],
+[
+35,
+"Finish all 3 weekly requests in $1 weeks"
+],
+[
+36,
+"Pet your visiting fish $1 times"
+],
+[
+37,
+"$1 stamps to claim"
+],
+[
+38,
+"Stamps <b>$1 / $2</b>"
+],
+[
+39,
+"🏆 Stamp earned! $1 · 💎$2"
+],
+[
+40,
+"🐠 $1 · sent to your aquarium"
+],
+[
+41,
+"pearl spring +$1%"
+],
+[
+42,
+" aquarium decor slots +$1"
+],
+[
+43,
+"💗 $1 ♥$2 is cheering the town · happiness +$3 (15 min)"
+],
+[
+44,
+"📜 Request done! 🫧+$1"
+],
+[
+45,
+"🎁 All of this week's requests done! 💎5 · 🫧$1"
+],
+[
+46,
+"New requests in <b>$1</b> · 🫧$2 each · all three: 💎5 + 🫧$3"
+],
+[
+47,
+"Open supply crates from your runs ($1)"
+],
+[
+48,
+"Place $1 decorations"
+],
+[
+49,
+"Reach population $1"
+],
+[
+50,
+"Raise zone buildings $1 levels"
+],
+[
+51,
+"Upgrade buildings $1 times"
+],
+[
+52,
+"Collect building bubbles $1 times"
+],
+[
+53,
+"Deliver $1 orders at the Turtle Depot"
+],
+[
+54,
+"next level needs land value $1"
+],
+[
+55,
+"🏷 Land value $1</b> = base $2"
+],
+[
+56,
+"🏭 Land value − within $1 tiles"
+],
+[
+57,
+"🌿 Land value + within $1 tiles"
+],
+[
+58,
+"here $1 of them reach the next level"
+],
+[
+59,
+"🏠 Homes nearby: $1 · land value $2$3"
+],
+[
+60,
+"🐟 New fish $1 moved to town! ⭐+$2"
+],
+[
+61,
+"📦 Supply crates opened ($1): $2$3"
+],
+[
+62,
+"📦 Supply crates from your runs: $1 <b>Open ›</b>"
+],
+[
+63,
+"🐠 Your fish $1 came to visit <b>Go see ›</b>"
+],
+[
+64,
+"💗 $1 ♥$2 · closer friends! 🫧+$3"
+],
+[
+65,
+"🐠 Your fish $1 came to visit · tap to pet it"
+],
+[
+66,
+"Round $1"
+],
+[
+67,
+"Spend 💎 $1 to finish now?\nGems are shared with Gill Fighter."
+],
+[
+68,
+"$1 zones unlock at 🏛 Coral Hall Lv.$2"
+],
+[
+69,
+"Unlocks at 🏛 Coral Hall Lv.$1"
+],
+[
+70,
+"🏛 Coral Hall Lv.$1 needs a population of $2"
+],
+[
+71,
+"Opens at Coral Hall Lv.$1"
+],
+[
+72,
+"🦀 The crabs started building $1"
+],
+[
+73,
+"$1 is needed first"
+],
+[
+74,
+"Build $1 first"
+],
+[
+75,
+"Builds finished while you were away: $1"
+],
+[
+76,
+"🔨 Builds finished: $1"
+],
+[
+77,
+"🎁 You have $1"
+],
+[
+78,
+"Upgrading to Lv.$1 · Time left"
+],
+[
+79,
+"Upgrading to Lv.$1"
+],
+[
+80,
+"Upgrade to Lv.$1</b>"
+],
+[
+81,
+"To grow to Lv.$1"
+],
+[
+82,
+"Need $1 Pearls"
+],
+[
+83,
+"$1 storage is full · Upgrade the Clam Warehouse"
+],
+[
+84,
+"$1 Lv.$2 complete!"
+],
+[
+85,
+"Collect the bubble: $1"
+],
+[
+86,
+"Land value +$2 within $1 tiles"
+],
+[
+87,
+">Order from $1</small>"
+],
+[
+88,
+"🐢 Orders ready to deliver: $1"
+],
+[
+89,
+"$1 cars"
+],
+[
+90,
+"$1 crates"
+],
+[
+91,
+"Coral Stone up to $1"
+],
+[
+92,
+"🪨 up to $1"
+],
+[
+93,
+"Max $1 $2/h"
+],
+[
+94,
+"$1 crab workers"
+],
+[
+95,
+"Jobs $1 · $2 residents shop here for dumplings and clothes"
+],
+[
+96,
+"Land value $1+ (now $2)"
+],
+[
+97,
+"Happiness 55+ (now $1)"
+],
+[
+98,
+"Next festival “$1” in"
+],
+[
+99,
+"🎁 Rare decor “$1”"
+],
+[
+100,
+"Got $1 · Place it from Build → Decor"
+],
+[
+101,
+"Got $1"
+],
+[
+102,
+"Collect $1 from orders, trains, whale ships and bubbles"
+],
+[
+103,
+"Town news from the last $1"
+],
+[
+104,
+"(trip takes $1)"
+],
+[
+105,
+"Demolish (🫧$1 refund)"
+],
+[
+106,
+"Get <b>10 residents</b> to move in"
+]
+],
+"city_u": {
+"일": "d",
+"시간": "h",
+"분": "m",
+"초": "s",
+"칸": " tiles",
+"개": "",
+"마리": ""
+},
+"mx": [
+[
+0,
+"Eaten"
+],
+[
+1,
+"First clear"
+],
+[
+2,
+"First clear!"
+],
+[
+3,
+"Marked with a gold ring in the sea"
+],
+[
+4,
+"Max size"
+],
+[
+5,
+"Relics"
+],
+[
+6,
+"Rewards"
+],
+[
+7,
+"Seas"
+],
+[
+8,
+"Sound"
+],
+[
+9,
+"Survival"
+],
+[
+10,
+"The sea turned out colder than you thought."
+],
+[
+11,
+"Trophies"
+],
+[
+12,
+"Weapons"
+],
+[
+13,
+"Alerts"
+],
+[
+14,
+"New"
+],
+[
+15,
+"NEW"
+],
+[
+16,
+"Again"
+],
+[
+17,
+"My"
+],
+[
+18,
+"Aquarium"
+],
+[
+19,
+"Bosses"
+],
+[
+20,
+"Challenges"
+],
+[
+21,
+"Clear"
+],
+[
+22,
+"Data"
+],
+[
+23,
+"Expedition"
+],
+[
+24,
+"Goals"
+],
+[
+25,
+"Graphics"
+],
+[
+26,
+"Grow a little to earn pearls."
+],
+[
+27,
+"Info"
+],
+[
+28,
+"Language"
+],
+[
+29,
+"MISSION"
+],
+[
+30,
+"BOSS MISSION"
+],
+[
+31,
+"Map"
+],
+[
+32,
+"No revive · boost"
+],
+[
+33,
+"Stats"
+],
+[
+34,
+"Switching reloads the screen."
+],
+[
+35,
+"Time"
+],
+[
+36,
+"Training"
+],
+[
+37,
+"Use this name"
+],
+[
+38,
+"⚡ energy back"
+],
+[
+39,
+"Clear floor 30 to open the Endless Abyss"
+],
+[
+40,
+"Deeper seas open soon…"
+],
+[
+41,
+"Dive in"
+],
+[
+42,
+"Survive"
+],
+[
+43,
+"Grow big"
+],
+[
+44,
+"Eat fish"
+],
+[
+45,
+"Fully grown!"
+],
+[
+46,
+"New star record!"
+],
+[
+47,
+"All 3 stars · replay for fun"
+],
+[
+48,
+"Follow schools of small fish"
+],
+[
+49,
+"Dodge the mouths of red-ringed fish"
+],
+[
+50,
+"Grow bigger than the boss"
+],
+[
+51,
+"Eat the small fish first and grow step by step."
+],
+[
+52,
+"Cornered? Tap the ability button to slip away."
+],
+[
+53,
+"Fish with a red outline are bigger than you — just stay clear of their mouth."
+],
+[
+54,
+"Every fish needs the same growth"
+],
+[
+55,
+"★★ time is up"
+]
+],
+"rx": [
+[
+0,
+"^All (\\d+)$",
+"Todo $1"
+],
+[
+1,
+"^BOSS (\\d+)$",
+"JEFE $1"
+],
+[
+2,
+"^CH\\. (\\d+)$",
+"CAP. $1"
+],
+[
+3,
+"^Clear Ch\\. (\\d+) to unlock$",
+"Supera el cap. $1 para abrir"
+],
+[
+4,
+"^Clear up to Ch\\. (\\d+)(.*)$",
+"Supera hasta el cap. $1$2"
+],
+[
+5,
+"^Unlock Ch\\. (\\d+)(.*)$",
+"Abre el cap. $1$2"
+],
+[
+6,
+"^Day (\\d+)$",
+"Día $1"
+],
+[
+7,
+"^Floors (\\d+)–(\\d+) · depth (.*)$",
+"Pisos $1–$2 · prof. $3"
+],
+[
+8,
+"\\bFloor (\\d+)",
+"Piso $1"
+],
+[
+9,
+"^Eat (\\d+) fish and clear$",
+"Come $1 peces y supera"
+],
+[
+10,
+"^Eat (\\d+) fish$",
+"Come $1 peces"
+],
+[
+11,
+"^Up to (.+)$",
+"Hasta $1"
+],
+[
+12,
+"^Catch (\\d+) × (.+?) → Boss (.+)$",
+"Atrapa $1 × $2 → Jefe $3"
+],
+[
+13,
+"^Catch (\\d+) × (.+)$",
+"Atrapa $1 × $2"
+],
+[
+14,
+"^Resets in (.+)$",
+"Se reinicia en $1"
+],
+[
+15,
+"^(\\d+(?: \\/ \\d+)?) fish · (\\d+) decor",
+"$1 peces · $2 deco"
+],
+[
+16,
+"^Next: ",
+"Siguiente: "
+],
+[
+17,
+"Chains to (\\d+) foes",
+"Encadena a $1 enemigos"
+],
+[
+18,
+"^Ch\\.? (\\d+)",
+"Cap. $1"
+],
+[
+19,
+"^Endless Ch (\\d+)",
+"Sin fin cap. $1"
+],
+[
+20,
+"^Hard Ch (\\d+)",
+"Difícil cap. $1"
+],
+[
+21,
+"^Eaten by ",
+"Te comió "
+],
+[
+22,
+"^Grew to ",
+"Creciste a "
+]
+],
+"mx2": [
+[
+0,
+"Floor"
+],
+[
+1,
+"Boss"
+],
+[
+2,
+"Floors"
+],
+[
+3,
+"· depth"
+],
+[
+4,
+"BOSS"
+],
+[
+5,
+"Up to"
+],
+[
+6,
+"Based on your fish ("
+],
+[
+7,
+"then eat it!"
+],
+[
+8,
+"Next:"
+],
+[
+9,
+"Ch."
+],
+[
+10,
+"Unlock Ch."
+],
+[
+11,
+"Clear Ch."
+],
+[
+12,
+"to unlock"
+],
+[
+13,
+"online now"
+],
+[
+14,
+"more pearls to unlock."
+],
+[
+15,
+"Decor"
+],
+[
+16,
+"· spring +"
+],
+[
+17,
+"kinds placed"
+],
+[
+18,
+"· next ★ at"
+],
+[
+19,
+"✓ Next run:"
+],
+[
+20,
+"fish ·"
+],
+[
+21,
+"Pearl spring +"
+],
+[
+22,
+"% for more kinds of decor"
+],
+[
+23,
+"Ch"
+],
+[
+24,
+"Pearls"
+],
+[
+25,
+"/hour"
+],
+[
+26,
+"Day"
+],
+[
+27,
+"https://apps.apple.com/app/id6816376999"
+],
+[
+28,
+"Grew to"
+],
+[
+29,
+"gift!"
+],
+[
+30,
+"Pearls ×"
+],
+[
+31,
+"Earn pearls ×"
+],
+[
+32,
+"Endless Ch"
+],
+[
+33,
+"Hard Ch"
+],
+[
+34,
+"All clear · Hard"
+],
+[
+35,
+"Next: Hard Ch"
+],
+[
+36,
+"other player"
+],
+[
+37,
+"General"
+],
+[
+38,
+"Eaten by"
+],
+[
+39,
+"Clear up to Ch."
+],
+[
+40,
+"Next: Ch."
+],
+[
+41,
+"Hard"
+],
+[
+42,
+"Endless"
+],
+[
+43,
+"All clear"
+],
+[
+44,
+"Eat"
+],
+[
+45,
+"fish and clear"
+],
+[
+46,
+"→ Boss"
+],
+[
+47,
+"fish grew up!"
+],
+[
+48,
+"opened!"
+],
+[
+49,
+"Decorate my tree"
+],
+[
+50,
+"Tap an ornament and it hangs itself · or drag it up to a spot · drag hung ones to move, off the tree to remove"
+],
+[
+51,
+"Ornaments"
+],
+[
+52,
+"My fish"
+],
+[
+53,
+"Garlands · lights"
+],
+[
+54,
+"Shop"
+],
+[
+55,
+"✨ Auto-decorate"
+],
+[
+56,
+"Remove all"
+],
+[
+57,
+"🌙 Lights off"
+],
+[
+58,
+"☀️ Lights on"
+],
+[
+59,
+"Close"
+],
+[
+60,
+"No ornaments yet · buy some in the shop or hang “My fish”"
+],
+[
+61,
+"The tree is full"
+],
+[
+62,
+"Hung"
+],
+[
+63,
+"Tree decorated!"
+],
+[
+64,
+"Nothing to hang"
+],
+[
+65,
+"Own"
+],
+[
+66,
+"Free"
+],
+[
+67,
+"Drop it on the tree"
+],
+[
+68,
+"Everything is on the tree · get more in the shop"
+],
+[
+69,
+"☀️ Sunny"
+],
+[
+70,
+"✨ Clear night"
+],
+[
+71,
+"🌨️ Light snow"
+],
+[
+72,
+"🌧️ Sleet"
+],
+[
+73,
+"❄️ Blizzard"
+],
+[
+74,
+"Snow is piling up on the sand and decor"
+],
+[
+75,
+"The snow is melting"
+],
+[
+76,
+"☃️ Snow day"
+],
+[
+77,
+"The whole aquarium is covered in snow"
+],
+[
+78,
+"Wet snow mixed with rain"
+],
+[
+79,
+"Ornament shop"
+],
+[
+80,
+"Buy with pearls and it goes straight onto the tree · drag to move it"
+],
+[
+81,
+"Drag an ornament to any spot · tap to hang it automatically · drag it off the tree to remove it"
+],
+[
+82,
+"Put away"
+],
+[
+83,
+"Decorate"
+],
+[
+84,
+"Reset spot"
+],
+[
+85,
+"Place it again from Decorate"
+],
+[
+86,
+"Press and hold a decoration or the coral to move it or put it away"
+],
+[
+87,
+"Keep holding and drag to move it"
+],
+[
+88,
+"Smaller"
+],
+[
+89,
+"Bigger"
+],
+[
+90,
+"Aquarium: press and hold a decoration or the Twinkle Coral to pick it up and move it, then tap 「Put away」 to store it"
+],
+[
+91,
+"The day we met"
+],
+[
+92,
+"Favorite things"
+],
+[
+93,
+"Best buddy"
+],
+[
+94,
+"A small gift"
+],
+[
+95,
+"Unlocks at ♥{n}"
+],
+[
+96,
+"Tap a fish to read its story"
+],
+[
+97,
+"📖 New story"
+],
+[
+98,
+"📖 {n}'s story"
+],
+[
+99,
+"📖 Story chapter {k} unlocked"
+],
+[
+100,
+"Aquarium: tap a fish in 「💗 Fish friends」 to read its story · a new chapter opens with every heart"
+],
+[
+101,
+"🐢 A parcel from Gill City!"
+],
+[
+102,
+"A gift from your town residents · Pearls +{n}"
+],
+[
+103,
+"🐢 The town delivery turtle is passing by"
+],
+[
+104,
+"Tap the turtle to get the gift"
+],
+[
+105,
+"Town parcel"
+],
+[
+106,
+"Aquarium: once you build the Turtle Depot in Town, a Town parcel turtle swims by now and then · tap it for a pearl gift from your residents (3 a day)"
+],
+[
+107,
+"Town: collect stamps in ☰ Menu → “🏆 Town Records” to earn 💎 gems · you can name your town too"
+],
+[
+108,
+"Town"
+],
+[
+109,
+"Gill City"
+],
+[
+110,
+"🏘 Town supply crate"
+],
+[
+111,
+"🏘 Town Gill Aquarium Lv."
+],
+[
+112,
+"· decor slots +"
+],
+[
+113,
+"· pearl spring +"
+],
+[
+114,
+"Collect goods in Town 3 times"
+],
+[
+115,
+"· auto-collected when you go Home"
+],
+[
+116,
+"🏘 New menu 「Town」: build Gill City, an undersea fish town, from the bottom tab · Pearls and Gems are shared with Gill Fighter"
+],
+[
+117,
+"Today's missions can include 「Collect goods in Town 3 times」 · jump from the Town aquarium straight to your own aquarium"
+]
+]
+}

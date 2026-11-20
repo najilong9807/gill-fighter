@@ -21,4 +21,11 @@ for i,r in enumerate(reps):
     cache[p]=s.replace(r['a'],r['b'])
 for p,s in cache.items():
     open(p,'w',encoding='utf-8').write(s)
+# 1.1.31 다국어 꾸러미: 저장소 lang/ 를 www/lang/ 로 그대로 복사(언어마다 300KB 넘어서 patch_add 에 넣지 않음)
+if os.path.isdir('lang'):
+    import shutil
+    os.makedirs('www/lang',exist_ok=True)
+    for f in os.listdir('lang'):
+        if f.endswith('.js'): shutil.copy(os.path.join('lang',f),os.path.join('www/lang',f))
+    print('lang files',len([f for f in os.listdir('lang') if f.endswith('.js')]))
 print('patched',len(reps),'files',len(cache))

@@ -1,0 +1,117 @@
+[
+[
+0,
+"^All (\\d+)$",
+"Todo $1"
+],
+[
+1,
+"^BOSS (\\d+)$",
+"JEFE $1"
+],
+[
+2,
+"^CH\\. (\\d+)$",
+"CAP. $1"
+],
+[
+3,
+"^Clear Ch\\. (\\d+) to unlock$",
+"Supera el cap. $1 para abrir"
+],
+[
+4,
+"^Clear up to Ch\\. (\\d+)(.*)$",
+"Supera hasta el cap. $1$2"
+],
+[
+5,
+"^Unlock Ch\\. (\\d+)(.*)$",
+"Abre el cap. $1$2"
+],
+[
+6,
+"^Day (\\d+)$",
+"Día $1"
+],
+[
+7,
+"^Floors (\\d+)–(\\d+) · depth (.*)$",
+"Pisos $1–$2 · prof. $3"
+],
+[
+8,
+"\\bFloor (\\d+)",
+"Piso $1"
+],
+[
+9,
+"^Eat (\\d+) fish and clear$",
+"Come $1 peces y supera"
+],
+[
+10,
+"^Eat (\\d+) fish$",
+"Come $1 peces"
+],
+[
+11,
+"^Up to (.+)$",
+"Hasta $1"
+],
+[
+12,
+"^Catch (\\d+) × (.+?) → Boss (.+)$",
+"Atrapa $1 × $2 → Jefe $3"
+],
+[
+13,
+"^Catch (\\d+) × (.+)$",
+"Atrapa $1 × $2"
+],
+[
+14,
+"^Resets in (.+)$",
+"Se reinicia en $1"
+],
+[
+15,
+"^(\\d+(?: \\/ \\d+)?) fish · (\\d+) decor",
+"$1 peces · $2 deco"
+],
+[
+16,
+"^Next: ",
+"Siguiente: "
+],
+[
+17,
+"Chains to (\\d+) foes",
+"Encadena a $1 enemigos"
+],
+[
+18,
+"^Ch\\.? (\\d+)",
+"Cap. $1"
+],
+[
+19,
+"^Endless Ch (\\d+)",
+"Sin fin cap. $1"
+],
+[
+20,
+"^Hard Ch (\\d+)",
+"Difícil cap. $1"
+],
+[
+21,
+"^Eaten by ",
+"Te comió "
+],
+[
+22,
+"^Grew to ",
+"Creciste a "
+]
+]

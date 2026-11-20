@@ -1,0 +1,114 @@
+{
+ "zht": [
+  "zh-Hant",
+  "Traditional Chinese (Taiwan)"
+ ],
+ "zhs": [
+  "zh-Hans",
+  "Simplified Chinese"
+ ],
+ "pt": [
+  "pt-BR",
+  "Brazilian Portuguese"
+ ],
+ "fr": [
+  "fr-FR",
+  "French"
+ ],
+ "de": [
+  "de-DE",
+  "German"
+ ],
+ "it": [
+  "it",
+  "Italian"
+ ],
+ "nl": [
+  "nl-NL",
+  "Dutch"
+ ],
+ "ru": [
+  "ru",
+  "Russian"
+ ],
+ "uk": [
+  "uk",
+  "Ukrainian"
+ ],
+ "pl": [
+  "pl",
+  "Polish"
+ ],
+ "tr": [
+  "tr",
+  "Turkish"
+ ],
+ "id": [
+  "id",
+  "Indonesian"
+ ],
+ "ms": [
+  "ms",
+  "Malay"
+ ],
+ "th": [
+  "th",
+  "Thai"
+ ],
+ "hi": [
+  "hi",
+  "Hindi"
+ ],
+ "ar": [
+  "ar-SA",
+  "Arabic"
+ ],
+ "he": [
+  "he",
+  "Hebrew"
+ ],
+ "sv": [
+  "sv",
+  "Swedish"
+ ],
+ "da": [
+  "da",
+  "Danish"
+ ],
+ "no": [
+  "no",
+  "Norwegian (Bokmål)"
+ ],
+ "fi": [
+  "fi",
+  "Finnish"
+ ],
+ "cs": [
+  "cs",
+  "Czech"
+ ],
+ "sk": [
+  "sk",
+  "Slovak"
+ ],
+ "hu": [
+  "hu",
+  "Hungarian"
+ ],
+ "ro": [
+  "ro",
+  "Romanian"
+ ],
+ "hr": [
+  "hr",
+  "Croatian"
+ ],
+ "el": [
+  "el",
+  "Greek"
+ ],
+ "ca": [
+  "ca",
+  "Catalan"
+ ]
+}

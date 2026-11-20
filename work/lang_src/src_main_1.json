@@ -1,0 +1,4460 @@
+[
+[
+2,
+"Auto-attack · survive 5 min"
+],
+[
+3,
+"Your weapons fire on their own. Just keep moving and dodge · survive 5 minutes to win!"
+],
+[
+5,
+"Solo: when eaten, continue by watching an ad or sharing (free once per run) · today's free gems now come from sharing · deep water now has plenty of fish to eat (big chasers no longer pile up, in Expedition and Arena too) · gulls start a bit later, warn for 1.7s and shrink you only 15% · skill countdown fits on one line"
+],
+[
+6,
+"Free once a day by sharing · gem packs · gem-only goods"
+],
+[
+7,
+"Continue · free once per run"
+],
+[
+8,
+"Watch ad"
+],
+[
+9,
+"Share"
+],
+[
+10,
+"Share"
+],
+[
+11,
+"Finish sharing to continue"
+],
+[
+12,
+"Share with a friend to get them once a day"
+],
+[
+13,
+"Share to get"
+],
+[
+14,
+"Finish sharing to get them"
+],
+[
+15,
+"Copied"
+],
+[
+16,
+"Paste it to send to a friend"
+],
+[
+17,
+"Play Gill Fighter with me! Eat small fish and grow in the sea"
+],
+[
+19,
+"Turn this on if the game keeps returning to the home screen. It keeps just one music track ready and draws a little less sharply to save memory"
+],
+[
+20,
+"Sorted by final size"
+],
+[
+21,
+"New Arena best! Final size "
+],
+[
+22,
+"Final size"
+],
+[
+25,
+"Bite big fish on the body!"
+],
+[
+26,
+"Dodge the mouth and chomp the body or tail — they shrink, you grow"
+],
+[
+27,
+"Comeback burp!"
+],
+[
+28,
+"× bigger!"
+],
+[
+29,
+"Deep Survival damage numbers"
+],
+[
+30,
+"Turn off to hide hit numbers and see the fight more clearly"
+],
+[
+31,
+"Big fish hunted"
+],
+[
+32,
+"Arena feel: eating a rival gives a little screen shake and a golden ring · eat again within 8s for Double and Triple burps · best streak shown on the results screen · big fish no longer slow down as much (about 60% → 80% of starting speed)"
+],
+[
+33,
+"5 new music tracks: High Tide, Lagoon Nap, Abyss, Boss Battle and Sea Festival · tap to listen and pick in Settings › Sound › Pick a song (also from in-game settings)"
+],
+[
+34,
+"Arena feel: eating a rival gives a little screen shake and a golden ring · eat again within 8s for Double and Triple burps · best streak shown on the results screen"
+],
+[
+35,
+"New players get bonus pearls in their first 3 runs (+20, +15, +10) to unlock their first fish sooner · a Start here! tag in the Solo menu"
+],
+[
+38,
+"Polish: gear names on the Deep Survival results screen and a few English lines"
+],
+[
+39,
+"You can now pick your music!"
+],
+[
+40,
+"Start here!"
+],
+[
+41,
+"Great start!"
+],
+[
+42,
+"Welcome gift: "
+],
+[
+43,
+" extra pearls. "
+],
+[
+44,
+" extra pearls. "
+],
+[
+45,
+"Double burp!"
+],
+[
+46,
+"Triple burp!"
+],
+[
+47,
+"× burp streak!"
+],
+[
+48,
+"Best burp streak: "
+],
+[
+49,
+"! "
+],
+[
+50,
+"Pick a song"
+],
+[
+51,
+"Choose the song you want. On Auto it changes with each screen"
+],
+[
+52,
+"Tap a song to hear it right away. Close when you find one you like."
+],
+[
+53,
+"Auto (per screen)"
+],
+[
+54,
+"A fitting song for Home, Solo, the deep and Arena"
+],
+[
+55,
+"Aquarium Home"
+],
+[
+56,
+"Laid-back marimba, the home screen song"
+],
+[
+57,
+"Reef Adventure"
+],
+[
+58,
+"Bouncy solo-run song"
+],
+[
+59,
+"Deep Sea"
+],
+[
+60,
+"Dark, quiet song of the deep"
+],
+[
+61,
+"Arena"
+],
+[
+62,
+"Fast, exciting arena song"
+],
+[
+63,
+"High Tide"
+],
+[
+64,
+"Breezy, fast-moving sea wind tune"
+],
+[
+65,
+"Lagoon Nap"
+],
+[
+66,
+"Calm, cozy tune for relaxing"
+],
+[
+67,
+"Abyss"
+],
+[
+68,
+"Deep, mysterious echoes"
+],
+[
+69,
+"Boss Battle"
+],
+[
+70,
+"Tense and fast"
+],
+[
+71,
+"Sea Festival"
+],
+[
+72,
+"Bright, cheerful festival tune"
+],
+[
+73,
+"♪ Playing"
+],
+[
+74,
+"Selected"
+],
+[
+75,
+"Default"
+],
+[
+76,
+"New"
+],
+[
+77,
+"Home"
+],
+[
+78,
+"Solo"
+],
+[
+79,
+"Deep"
+],
+[
+80,
+"Music is off in Light mode. Turn off Light mode in Settings › Performance to listen."
+],
+[
+84,
+"Boosters added"
+],
+[
+85,
+"Turn on the ones you want in Home › Boosters"
+],
+[
+86,
+"Food orbs are pulled in from farther away"
+],
+[
+88,
+"Boosters"
+],
+[
+89,
+" on"
+],
+[
+90,
+"Off · turn on"
+],
+[
+91,
+"Buy in Shop"
+],
+[
+92,
+"None"
+],
+[
+93,
+"Buy"
+],
+[
+94,
+"All off"
+],
+[
+95,
+"Shop"
+],
+[
+96,
+"Each booster you turn on is used once next run · on now: "
+],
+[
+97,
+"Each booster that's on is used once next run"
+],
+[
+103,
+" · now 1.5× ("
+],
+[
+104,
+" left)"
+],
+[
+105,
+" until the next feeding"
+],
+[
+106,
+" eaten"
+],
+[
+107,
+" to clear"
+],
+[
+108,
+"Pearl spring runs at 1.5× for 3 hours"
+],
+[
+109,
+"This is the biggest home!"
+],
+[
+110,
+"Watch out for gulls!"
+],
+[
+111,
+"Size lost to gulls -4%"
+],
+[
+112,
+" · up to "
+],
+[
+113,
+""
+],
+[
+114,
+"+25% vision in the dark deep for that run"
+],
+[
+115,
+"+10% growth for that run"
+],
+[
+116,
+"-15% skill cooldown for that run"
+],
+[
+117,
+"+8% swim speed for that run"
+],
+[
+118,
+"1.5× pearls for that run"
+],
+[
+119,
+"Skill Training"
+],
+[
+120,
+"Skill Charge"
+],
+[
+121,
+"Depth "
+],
+[
+122,
+"Yum"
+],
+[
+123,
+"Next level: per hour "
+],
+[
+124,
+"Tough Scales"
+],
+[
+125,
+"Lamp"
+],
+[
+126,
+"Tap the link, or enter this number with the Friends button next to Arena, and we will meet in the same sea"
+],
+[
+127,
+" fish"
+],
+[
+128,
+" fish"
+],
+[
+129,
+"School Map"
+],
+[
+130,
+"School Sense"
+],
+[
+131,
+"Food schools appear 30% more often (first one in 15s)"
+],
+[
+132,
+"Food school interval -3%"
+],
+[
+133,
+"Feed"
+],
+[
+134,
+"Feed · "
+],
+[
+135,
+"Fed! Pearls +"
+],
+[
+136,
+"Revive once after being eaten (at half size)"
+],
+[
+137,
+"King of the sea!"
+],
+[
+138,
+"Stone House"
+],
+[
+139,
+"Pearls earned +3%"
+],
+[
+140,
+"Bright Lamp"
+],
+[
+141,
+"Full ×1.5"
+],
+[
+142,
+"Survive and eat "
+],
+[
+143,
+"Shield"
+],
+[
+144,
+"10 of each of the 10 boosters"
+],
+[
+145,
+"15 of each of the 10 boosters"
+],
+[
+146,
+"2 of each of the 10 boosters"
+],
+[
+147,
+"3 of each of the 10 boosters"
+],
+[
+148,
+"40 of each of the 10 boosters"
+],
+[
+149,
+"5 of each of the 10 boosters"
+],
+[
+150,
+"Speed"
+],
+[
+151,
+"Quick Fins"
+],
+[
+152,
+"Hunter Instinct"
+],
+[
+153,
+"Coral House"
+],
+[
+154,
+"Hide settings"
+],
+[
+155,
+"Growth +10%"
+],
+[
+156,
+"Growth Boost"
+],
+[
+157,
+"More fish in the aquarium means a bit more from the spring (up to 30 fish)"
+],
+[
+158,
+"h "
+],
+[
+159,
+"Start Shield"
+],
+[
+160,
+"Starting size +3%"
+],
+[
+161,
+"Can't be eaten for 6s after starting"
+],
+[
+162,
+"Still full"
+],
+[
+163,
+"No pearls yet"
+],
+[
+164,
+"Chomp! Nibble"
+],
+[
+166,
+"Vision in the dark +4%"
+],
+[
+167,
+"Hunt pearls after full growth +5%"
+],
+[
+168,
+"Avoid the mouth!"
+],
+[
+169,
+"Growth +1.5%"
+],
+[
+170,
+"Turn on if the game closes often"
+],
+[
+171,
+"Shell Hut"
+],
+[
+172,
+"Now"
+],
+[
+173,
+"Fin Training"
+],
+[
+174,
+"1.5× Pearls"
+],
+[
+175,
+"1.5× pearl booster applied. "
+],
+[
+176,
+"Pearl spring: per hour "
+],
+[
+177,
+"Pearl Manor"
+],
+[
+178,
+"Build"
+],
+[
+179,
+"Home built! Pearls will pile up now"
+],
+[
+180,
+"Build a home and pearls pile up every hour"
+],
+[
+181,
+"Build a home to get a 1.5× pearl spring too"
+],
+[
+182,
+"Home upgraded! The pearl spring flows faster"
+],
+[
+183,
+"Home Lot"
+],
+[
+184,
+"Build → "
+],
+[
+185,
+"Watch the opening story again"
+],
+[
+186,
+"Start at 1.4× size"
+],
+[
+187,
+"s survival"
+],
+[
+188,
+"Upgrade → "
+],
+[
+189,
+"Skill cooldown -1.5%"
+],
+[
+190,
+"Strong Stomach"
+],
+[
+191,
+"Prologue"
+],
+[
+192,
+"Undersea Palace"
+],
+[
+193,
+"Swim speed +1%"
+],
+[
+194,
+"Feed your aquarium fish"
+],
+[
+195,
+"Feed"
+],
+[
+196,
+"Tap the home in the middle to collect pearls"
+],
+[
+197,
+"Collect pearls"
+],
+[
+198,
+"Build"
+],
+[
+199,
+"Close"
+],
+[
+200,
+"Controls: joystick or drag on screen · Skill: bottom-left button"
+],
+[
+201,
+"Low"
+],
+[
+202,
+"Mid"
+],
+[
+203,
+"High"
+],
+[
+204,
+"Music volume"
+],
+[
+205,
+"In the middle of the wide sea, a tiny fry was born."
+],
+[
+206,
+"Hungry! Eat fish smaller than you to grow fast."
+],
+[
+207,
+"Red-outlined fish are bigger than you. Touch their mouth and you're eaten! Dodge the mouth and nibble the tail to shrink them."
+],
+[
+208,
+"As you grow, shallow water runs out of food and gulls hunt you. Dive deeper for bigger prey and food schools."
+],
+[
+209,
+"Grow the biggest and become king of the sea! In Arena, compete with others in real time."
+],
+[
+210,
+"My records"
+],
+[
+211,
+"Last week's podium"
+],
+[
+212,
+"The food here is too small"
+],
+[
+213,
+"↓ Bigger prey lives deeper down"
+],
+[
+214,
+"A feeding school appeared!"
+],
+[
+215,
+"↓ Eat the school below to grow fast"
+],
+[
+216,
+"Gulls are hunting you!"
+],
+[
+217,
+"Shallow water is dangerous for big fish ↓"
+],
+[
+218,
+"A fishing net is coming!"
+],
+[
+219,
+"Dive away from the shallows ↓"
+],
+[
+220,
+"Pecked by a gull!"
+],
+[
+221,
+"Caught in a net!"
+],
+[
+222,
+"School"
+],
+[
+223,
+"↓ Dive deeper"
+],
+[
+226,
+"Too big for the shallows? Watch out for gulls and fishing nets"
+],
+[
+228,
+"The deeper you dive, the bigger you grow!"
+],
+[
+233,
+"Joystick"
+],
+[
+234,
+"Left"
+],
+[
+235,
+"Right"
+],
+[
+236,
+"Sound effects"
+],
+[
+237,
+"Ranking"
+],
+[
+238,
+"Controls: drag the joystick or anywhere on screen"
+],
+[
+239,
+"Skill: "
+],
+[
+240,
+"bottom-right button"
+],
+[
+241,
+"bottom-left button"
+],
+[
+243,
+"Weekly mission done!"
+],
+[
+244,
+"Monthly mission done!"
+],
+[
+245,
+"d "
+],
+[
+246,
+"h"
+],
+[
+247,
+"m"
+],
+[
+248,
+" until reset"
+],
+[
+249,
+"Claim all"
+],
+[
+250,
+"This week"
+],
+[
+251,
+"This month"
+],
+[
+252,
+"Bonus claimed"
+],
+[
+253,
+"Claim all 3 for gems"
+],
+[
+254,
+"Claim all for gems"
+],
+[
+255,
+"Today"
+],
+[
+256,
+"Weekly"
+],
+[
+257,
+"Monthly"
+],
+[
+258,
+"Play 10 solo runs"
+],
+[
+259,
+"Play 5 Arena matches"
+],
+[
+260,
+"Eat 500 fish"
+],
+[
+261,
+"Collect 1,250 pearls"
+],
+[
+262,
+"Clear 5 Expedition floors"
+],
+[
+263,
+"Finish top 3 in the Arena 3 times"
+],
+[
+264,
+"Play on 5 days"
+],
+[
+265,
+"Play on 20 days"
+],
+[
+266,
+"Eat 2,500 fish"
+],
+[
+267,
+"Play 40 solo runs"
+],
+[
+268,
+"Play 20 Arena matches"
+],
+[
+269,
+"Collect 6,000 pearls"
+],
+[
+270,
+"Clear 20 Expedition floors"
+],
+[
+271,
+"The sea turned out colder than you thought."
+],
+[
+274,
+"First clear!"
+],
+[
+275,
+"New star record!"
+],
+[
+276,
+"Fish eaten"
+],
+[
+277,
+"Max size"
+],
+[
+278,
+"BOSS MISSION"
+],
+[
+279,
+""
+],
+[
+280,
+"Marked with a gold ring in the sea"
+],
+[
+281,
+""
+],
+[
+282,
+"Every fish needs the same growth"
+],
+[
+283,
+"Grow bigger than the boss"
+],
+[
+284,
+"then eat it!"
+],
+[
+285,
+"Dodge the mouths of red-ringed fish"
+],
+[
+286,
+"Follow schools of small fish"
+],
+[
+287,
+"First clear"
+],
+[
+288,
+"⚡ refund"
+],
+[
+289,
+"No revive/booster"
+],
+[
+290,
+""
+],
+[
+291,
+"Survive long and grow huge"
+],
+[
+292,
+"Best "
+],
+[
+293,
+"Set your first record"
+],
+[
+294,
+"A new mission on every floor"
+],
+[
+295,
+"All floors cleared"
+],
+[
+296,
+"Next "
+],
+[
+297,
+"In the dark your light pulls in small fish and food orbs, shows the size of fish inside it, and you grow 20% faster"
+],
+[
+298,
+"Lures prey with its light in the dark"
+],
+[
+299,
+"Eat smaller fish and dodge the big ones'"
+],
+[
+300,
+""
+],
+[
+301,
+"Freckles"
+],
+[
+302,
+"Long Lashes"
+],
+[
+303,
+"Red Nose"
+],
+[
+304,
+"Mustache"
+],
+[
+305,
+"Nerd Glasses"
+],
+[
+306,
+"Bubble Gum"
+],
+[
+307,
+"Masquerade Mask"
+],
+[
+308,
+"Neon Visor"
+],
+[
+309,
+"Speed"
+],
+[
+310,
+"Growth"
+],
+[
+311,
+"Skill"
+],
+[
+312,
+"Treasure chest!"
+],
+[
+313,
+"You hit the score goal — pearls "
+],
+[
+314,
+" earned."
+],
+[
+315,
+"GOLD complete!"
+],
+[
+316,
+"You collected every letter — pearls "
+],
+[
+317,
+"Score"
+],
+[
+318,
+"Swap control sides"
+],
+[
+319,
+"When on, the joystick moves left and the skill button moves right"
+],
+[
+320,
+" (up to "
+],
+[
+321,
+" (now "
+],
+[
+322,
+" (best "
+],
+[
+323,
+" · +1 gem"
+],
+[
+324,
+" · gems only"
+],
+[
+325,
+" · revives "
+],
+[
+326,
+" · hunt "
+],
+[
+327,
+" · top finish!"
+],
+[
+328,
+" · dark"
+],
+[
+329,
+" · grows 15% faster here"
+],
+[
+330,
+" · pearls +"
+],
+[
+331,
+" · pearls ×"
+],
+[
+332,
+" · max "
+],
+[
+333,
+" off"
+],
+[
+334,
+" burp! Pearls +"
+],
+[
+335,
+" to go."
+],
+[
+336,
+" reached!"
+],
+[
+337,
+" tier"
+],
+[
+338,
+" tier · Lv."
+],
+[
+339,
+" ate you. "
+],
+[
+340,
+" needed"
+],
+[
+341,
+" bonus"
+],
+[
+342,
+" — dive in"
+],
+[
+343,
+" on"
+],
+[
+344,
+" · "
+],
+[
+345,
+" unlock"
+],
+[
+346,
+" needs "
+],
+[
+347,
+" can be unlocked now!"
+],
+[
+348,
+"% · speed +"
+],
+[
+349,
+"% · cooldown -"
+],
+[
+350,
+"% · pearls +"
+],
+[
+351,
+"% bigger)"
+],
+[
+352,
+", trophies +"
+],
+[
+353,
+". Jump right back in. "
+],
+[
+354,
+"$0.99"
+],
+[
+355,
+"$9.99"
+],
+[
+356,
+"10 pearls per hour"
+],
+[
+357,
+"Finished 1st! 🏆"
+],
+[
+358,
+"Leap up and stay untouchable for 1s"
+],
+[
+359,
+"Soar up and stay untouchable for 1s"
+],
+[
+360,
+"Can't be eaten for 2.5s, even when bitten"
+],
+[
+361,
+"Can't be eaten for 2.5s"
+],
+[
+362,
+"Every other fish slows down for 3.5s"
+],
+[
+363,
+"Food drifts toward you for 3.5s"
+],
+[
+364,
+"Nobody can see you for 3.5s"
+],
+[
+365,
+"One pearl added every 6 minutes"
+],
+[
+366,
+"Eat fish your own size for 3s"
+],
+[
+367,
+"Eat fish bigger than you for 3s"
+],
+[
+368,
+"Nobody can see you for 3s"
+],
+[
+369,
+"Nobody can see you for 3s (short cooldown)"
+],
+[
+370,
+"Nobody can see you for 4.5s (short cooldown)"
+],
+[
+371,
+"Pose as seaweed for 4.5s — nobody can see you"
+],
+[
+372,
+"The longest-living vertebrate — up to 400 years"
+],
+[
+373,
+"Grow twice as fast for 4s"
+],
+[
+374,
+"Speed up and eat your own size for 4s"
+],
+[
+375,
+"$4.99"
+],
+[
+376,
+"Every bite gives 1 extra pearl for 5s"
+],
+[
+377,
+"Prey doesn't notice you for 5s"
+],
+[
+378,
+"Prey is lured to your light for 5s"
+],
+[
+379,
+"Darkness lifts and every fish's size shows for 6s"
+],
+[
+380,
+"‹ Back"
+],
+[
+381,
+""
+],
+[
+382,
+"Stuns nearby fish"
+],
+[
+383,
+"Full!"
+],
+[
+384,
+"Where a sunken whale became an oasis"
+],
+[
+385,
+"The sea over a sunken wreck"
+],
+[
+386,
+"Spines up!"
+],
+[
+387,
+"Spine Puff"
+],
+[
+388,
+"Porcupinefish"
+],
+[
+389,
+"Flounder"
+],
+[
+390,
+"Deepest"
+],
+[
+391,
+"Deepest point reached: "
+],
+[
+392,
+"Largest size reached with each fish"
+],
+[
+393,
+"Owned"
+],
+[
+394,
+"False Eye"
+],
+[
+395,
+"Hairtail"
+],
+[
+396,
+"Black Seabream"
+],
+[
+397,
+"Turns deep red as it climbs the river"
+],
+[
+398,
+""
+],
+[
+399,
+" · entries "
+],
+[
+400,
+" to go."
+],
+[
+401,
+" more needed"
+],
+[
+402,
+" needed"
+],
+[
+403,
+")"
+],
+[
+404,
+" needed"
+],
+[
+405,
+" max"
+],
+[
+406,
+" can be placed"
+],
+[
+407,
+" max. Next refill in "
+],
+[
+408,
+" too. "
+],
+[
+409,
+" — "
+],
+[
+410,
+" to continue"
+],
+[
+411,
+" and start now"
+],
+[
+412,
+" added. "
+],
+[
+413,
+" gates in order!"
+],
+[
+414,
+"Developer mode"
+],
+[
+415,
+"Ocean Sunfish"
+],
+[
+416,
+"The silver scrapper of the rocks"
+],
+[
+417,
+"The silver scrapper of the rocks "
+],
+[
+418,
+"Sword Swing"
+],
+[
+419,
+"Frenzy+"
+],
+[
+420,
+"Black Dragonfish"
+],
+[
+421,
+"Gate "
+],
+[
+422,
+"Sits behind the game — separate from your tank"
+],
+[
+423,
+"The sprinter of the winter sea"
+],
+[
+424,
+"Warning Cry"
+],
+[
+425,
+"Alarm Flash"
+],
+[
+426,
+"Resume"
+],
+[
+427,
+"Mackerel"
+],
+[
+428,
+"GrilledMack"
+],
+[
+429,
+"Whale Fall"
+],
+[
+430,
+"Whale Shark"
+],
+[
+431,
+"Cat Ears"
+],
+[
+432,
+"A still whale fall"
+],
+[
+433,
+"Moray Eel"
+],
+[
+434,
+"Bubbler Stone"
+],
+[
+435,
+"A fossil fish that has lived since the age of dinosaurs"
+],
+[
+436,
+"Frenzy"
+],
+[
+437,
+"Flaps along on ear-like fins"
+],
+[
+438,
+"Ear Flap"
+],
+[
+439,
+"Hammerhead"
+],
+[
+440,
+"Food orbs are drawn to you the whole run"
+],
+[
+441,
+"Double the pearls from that run"
+],
+[
+442,
+"Greenland Shark"
+],
+[
+443,
+"Quit"
+],
+[
+444,
+"Goldfish"
+],
+[
+445,
+"A small hammerhead with a golden sheen"
+],
+[
+446,
+"Records"
+],
+[
+447,
+"No record"
+],
+[
+448,
+"Ambush"
+],
+[
+449,
+"An amber jelly that stings with long tentacles"
+],
+[
+450,
+"Swing your long blade to hunt"
+],
+[
+451,
+"Swings its long blade to hunt "
+],
+[
+452,
+"A long, strong dash"
+],
+[
+453,
+"Depth"
+],
+[
+454,
+"Chomp"
+],
+[
+455,
+"Off"
+],
+[
+456,
+"Tail Spine"
+],
+[
+457,
+"Tail Drop"
+],
+[
+458,
+"Tail Whip"
+],
+[
+459,
+"Drop your tail as bait — big fish chase it for 3.5s"
+],
+[
+460,
+"Hides a blade in its tail"
+],
+[
+461,
+"Your tail eyespot leaves a double — big fish chase it for 3.5s"
+],
+[
+462,
+"BabyShark"
+],
+[
+463,
+"Flower Pin"
+],
+[
+464,
+"Flower Crown"
+],
+[
+465,
+"CrabStew"
+],
+[
+466,
+"Decorate"
+],
+[
+467,
+"Burps "
+],
+[
+468,
+"Burp!"
+],
+[
+469,
+"Not even a bone left!"
+],
+[
+470,
+"Gulp! Aquarium"
+],
+[
+471,
+"Controls: press and drag anywhere · Skill: the button at the bottom right"
+],
+[
+472,
+"Preview"
+],
+[
+473,
+"Previewing"
+],
+[
+474,
+"Backdrop changed"
+],
+[
+475,
+"Tap again to buy"
+],
+[
+476,
+"Placed in your tank"
+],
+[
+477,
+"Cancel"
+],
+[
+478,
+"Tap a backdrop to preview, tap again to buy · the play screen uses it too"
+],
+[
+479,
+"Tap an ornament to try it in your tank, tap again to buy · drag to move"
+],
+[
+480,
+"Music"
+],
+[
+481,
+"Sound"
+],
+[
+482,
+"Music"
+],
+[
+483,
+"What's new"
+],
+[
+484,
+" — what's new"
+],
+[
+485,
+"OK"
+],
+[
+486,
+" · 5 gems"
+],
+[
+487,
+" · Boss"
+],
+[
+488,
+" · energy back"
+],
+[
+489,
+" · grow big and eat it"
+],
+[
+490,
+" locked"
+],
+[
+491,
+"Clear floors 1–30 and collect stars · ★ "
+],
+[
+492,
+"Clear it"
+],
+[
+493,
+"Next floor · ⚡1"
+],
+[
+494,
+"Clear without revives or boosters"
+],
+[
+495,
+"Goal: "
+],
+[
+496,
+"Boss"
+],
+[
+497,
+"Boss "
+],
+[
+498,
+"Boss: burp!"
+],
+[
+499,
+"Boss incoming!"
+],
+[
+500,
+"Boss defeated!"
+],
+[
+501,
+"Already cleared · try for more stars"
+],
+[
+502,
+"Locked"
+],
+[
+503,
+"First clear: pearls "
+],
+[
+504,
+"First clear: 1 energy refunded"
+],
+[
+505,
+"Start · ⚡1"
+],
+[
+506,
+"Floor clear!"
+],
+[
+507,
+"Expedition stopped"
+],
+[
+508,
+"Last played"
+],
+[
+509,
+"Score Challenge"
+],
+[
+510,
+"Chase your best score · survive long and grow big"
+],
+[
+511,
+"Deep Expedition"
+],
+[
+512,
+"Clear floors 1–30 and collect stars"
+],
+[
+513,
+"Floor map"
+],
+[
+514,
+"Next floor"
+],
+[
+515,
+"Floor 1"
+],
+[
+516,
+"Thank you, 괭이여왕님, for the great feedback! We took every word to heart in this update. Please come back… pretty please!"
+],
+[
+517,
+" changes"
+],
+[
+524,
+"Tap Solo and pick “Deep Expedition”!"
+],
+[
+530,
+"Outfit trial"
+],
+[
+531,
+"Outfit you tried this run"
+],
+[
+532,
+"See in Shop"
+],
+[
+533,
+"★★ time is up"
+],
+[
+534,
+""
+],
+[
+535,
+"Grow big"
+],
+[
+536,
+""
+],
+[
+537,
+"This fish · up to "
+],
+[
+538,
+" · marked with a gold ring in the sea"
+],
+[
+539,
+"Grow bigger than the boss, then eat it"
+],
+[
+540,
+" · outfit trial"
+],
+[
+541,
+"Deeper seas open soon…"
+],
+[
+542,
+"No revives or boosters"
+],
+[
+544,
+"Most stars first · ties go to the deeper diver"
+],
+[
+545,
+"Clear an Expedition floor to get your rank"
+],
+[
+546,
+"Head toward groups of small fish"
+],
+[
+547,
+"Eat food orbs too to grow faster"
+],
+[
+548,
+"Find the fish with a gold ring · follow the arrow"
+],
+[
+549,
+"Stay away from the mouths of red-outlined fish"
+],
+[
+550,
+"Eat small fish first, then take on the boss once you are bigger"
+],
+[
+551,
+"Eat fish"
+],
+[
+552,
+"Survive"
+],
+[
+553,
+"A burp sound when you eat a fish"
+],
+[
+554,
+"A different tune for home, solo, the deep sea and the arena"
+],
+[
+555,
+"Gill Fighter"
+],
+[
+556,
+"Gill Fighter · version 1.1.11 · saves stay on this device — back them up in Settings › Backup & account."
+],
+[
+557,
+"A solo run costs 1 energy. You regain 1 every 5 minutes, up to "
+],
+[
+558,
+"Permanently adds 1 Solo energy slot (up to 13)"
+],
+[
+559,
+"Watch an ad to continue"
+],
+[
+560,
+"Ad"
+],
+[
+561,
+"This is the web preview, so it waits 5 seconds instead of a real ad. In the app, a rewarded ad plays here."
+],
+[
+562,
+"Don't show again"
+],
+[
+563,
+"Watch the whole ad to continue"
+],
+[
+564,
+"Couldn't load an ad. You can continue with gems"
+],
+[
+565,
+"Loading ad…"
+],
+[
+566,
+"Free · once per run"
+],
+[
+567,
+"Message type"
+],
+[
+568,
+"Shell Pile"
+],
+[
+569,
+"Old Amphora"
+],
+[
+570,
+"Anchor"
+],
+[
+571,
+"Sandcastle"
+],
+[
+572,
+"Crystal Cluster"
+],
+[
+573,
+"Pearl Arch"
+],
+[
+574,
+"Golden Fish Statue"
+],
+[
+575,
+"Chef Hat"
+],
+[
+576,
+"Top Hat"
+],
+[
+577,
+"Cowboy Hat"
+],
+[
+578,
+"Beanie"
+],
+[
+579,
+"Viking Helmet"
+],
+[
+580,
+"Tiara"
+],
+[
+581,
+"Starlight Crown"
+],
+[
+582,
+"Jellyfish Hat"
+],
+[
+583,
+"Dragon Horns"
+],
+[
+584,
+"Galaxy Ring"
+],
+[
+585,
+"Bandage"
+],
+[
+586,
+"Sweat Drop"
+],
+[
+587,
+"Cat Whiskers"
+],
+[
+588,
+"Tongue Out"
+],
+[
+589,
+"Pixel Shades"
+],
+[
+590,
+"Hologram Glasses"
+],
+[
+591,
+"Laser Eye"
+],
+[
+592,
+"Golden Mask"
+],
+[
+593,
+"Leaf Trail"
+],
+[
+594,
+"Cherry Blossom Trail"
+],
+[
+595,
+"Ink Trail"
+],
+[
+596,
+"Echoes"
+],
+[
+597,
+"Prism Sparkle"
+],
+[
+598,
+"Gold Coin Trail"
+],
+[
+599,
+"Galaxy Trail"
+],
+[
+600,
+"Aurora Aura"
+],
+[
+601,
+"Phoenix Wings"
+],
+[
+602,
+"Tidebite · version 1.2.0 · saves stay on this device."
+],
+[
+603,
+"Booster pack"
+],
+[
+604,
+"5 of each of the 4 boosters"
+],
+[
+605,
+"Bigger energy tank"
+],
+[
+606,
+"Permanently adds 1 Solo energy slot (up to 8)"
+],
+[
+607,
+"Big booster bundle"
+],
+[
+608,
+"15 of each of the 4 boosters"
+],
+[
+609,
+"Got it!"
+],
+[
+610,
+"Gems only"
+],
+[
+611,
+"Maxed out"
+],
+[
+612,
+"Gem shop"
+],
+[
+613,
+"Free once a day · gem-only goods from 300 gems"
+],
+[
+614,
+"Watch an ad to get 10 free gems a day, plus gems from star rewards when you first raise a fish to full size. Spend them on gem-only fish, outfits, aquarium backdrops and ornaments, booster packs, energy tanks and pearl trades, or to continue after being eaten."
+],
+[
+615,
+"Changes both your aquarium and the play screen"
+],
+[
+616,
+"Play backdrop = aquarium backdrop"
+],
+[
+617,
+"When off, the play backdrop changes with depth"
+],
+[
+618,
+"Pink Lagoon"
+],
+[
+619,
+"Sparkling pink ripples"
+],
+[
+620,
+"Midnight Tank"
+],
+[
+621,
+"A night of drifting blue sparks"
+],
+[
+622,
+"Crystal Cave"
+],
+[
+623,
+"A cave of glittering violet crystals"
+],
+[
+624,
+"Cotton Candy Sea"
+],
+[
+625,
+"Pink and sky-blue candy waves"
+],
+[
+626,
+"Nebula Tank"
+],
+[
+627,
+"A cosmic tank of flowing nebulae"
+],
+[
+628,
+"Jade Palace"
+],
+[
+629,
+"Gold dust drifting in jade water"
+],
+[
+630,
+"Contact us"
+],
+[
+631,
+"Send bug reports, ideas or other questions to the developer. Add your email if you would like a reply."
+],
+[
+632,
+"Write"
+],
+[
+633,
+"Message the developer"
+],
+[
+634,
+"Needs an internet connection"
+],
+[
+635,
+"Your message goes to the developer by email. The developer's address stays private."
+],
+[
+636,
+"Bug"
+],
+[
+637,
+"Idea"
+],
+[
+638,
+"Other"
+],
+[
+639,
+"Message"
+],
+[
+640,
+"Email for a reply"
+],
+[
+641,
+"(optional)"
+],
+[
+642,
+"Tell us what happened in as much detail as you can"
+],
+[
+643,
+"App version, language and device type are sent along. Your email is used only to reply."
+],
+[
+644,
+"Send"
+],
+[
+645,
+"Please write at least 5 characters"
+],
+[
+646,
+"That email address doesn't look right"
+],
+[
+647,
+"Sending…"
+],
+[
+648,
+"Sent. Thank you!"
+],
+[
+649,
+"Couldn't send. Check your connection and try again"
+],
+[
+650,
+"You can send again in a moment"
+],
+[
+651,
+"Contact form is not connected yet"
+],
+[
+652,
+"Gulp! Aquarium · version 1.2.0 · saves stay on this device."
+],
+[
+653,
+"Free once a day · trade for pearls"
+],
+[
+654,
+"Gems come free once a day, or 3 at a time the first time you grow a fish all the way. Spend them on Mythic fish, continuing after being eaten, boosters, backgrounds and pearl trades."
+],
+[
+655,
+"Solo best scores"
+],
+[
+656,
+"New best! "
+],
+[
+657,
+"New Arena best! Largest size "
+],
+[
+658,
+"Keep the Arena rank list open"
+],
+[
+659,
+"When off, only your own rank shows during Arena matches (tap to expand)"
+],
+[
+660,
+"vs 9 AI fish"
+],
+[
+661,
+"Live · drop in anytime"
+],
+[
+662,
+"That name contains a word that is not allowed. Please choose another."
+],
+[
+663,
+"Arena best sizes"
+],
+[
+664,
+"In the Arena you share one sea with everyone online right now, all on equal terms — biggest wins. AI fish fill in when few people are around. Records are saved on this device. Your name and display settings live under the gear icon at the top right of the home screen."
+],
+[
+665,
+"Arena wins"
+],
+[
+666,
+"Best Arena rank"
+],
+[
+667,
+"Largest in Arena"
+],
+[
+668,
+"Arena trophies"
+],
+[
+669,
+"Go to Arena"
+],
+[
+670,
+"The Arena needs no energy — dive in any time"
+],
+[
+671,
+"No arena records yet — play a match"
+],
+[
+672,
+"Gulp! Aquarium · prototype v0.51 · saves stay in this browser only."
+],
+[
+673,
+"Burpy"
+],
+[
+674,
+"Players eaten"
+],
+[
+675,
+"When off, only your own rank shows in game (tap to expand)"
+],
+[
+676,
+"Stubbornly hard to kill"
+],
+[
+677,
+"Fully grown — 1.5× growth pearls plus hunt pearls "
+],
+[
+678,
+"Me"
+],
+[
+679,
+"Me · "
+],
+[
+680,
+"Eat fish your own size outright"
+],
+[
+681,
+"A creek with falling leaves"
+],
+[
+682,
+"Leafy Seadragon"
+],
+[
+683,
+"Butterflyfish"
+],
+[
+684,
+"Napoleon Wrasse"
+],
+[
+685,
+"Model Shipwreck"
+],
+[
+686,
+"Shipwreck Sea"
+],
+[
+687,
+"Grows 1.4× from the Shipwreck Sea down"
+],
+[
+688,
+"Grows 1.5× from the Shipwreck Sea down"
+],
+[
+689,
+"Grows 1.5× from the Shipwreck Sea down · revive once"
+],
+[
+690,
+"Grows 1.6× from the Shipwreck Sea down"
+],
+[
+691,
+"Flying Fish"
+],
+[
+692,
+"My"
+],
+[
+693,
+"Show your name above your fish"
+],
+[
+694,
+"Show your current size above your fish"
+],
+[
+695,
+"Changes your tank's water and sand — picking one here applies right away"
+],
+[
+696,
+"Show my name"
+],
+[
+697,
+"Your best "
+],
+[
+698,
+"Your best score "
+],
+[
+699,
+"Show my size"
+],
+[
+700,
+"Back tomorrow"
+],
+[
+701,
+"Rams with its broad head"
+],
+[
+702,
+"A wide flash stuns nearby fish and lights up the dark"
+],
+[
+703,
+"Halibut"
+],
+[
+704,
+"In tank"
+],
+[
+705,
+"A tank streaked with neon"
+],
+[
+706,
+"Neon Tank"
+],
+[
+707,
+"A yellow-finned traveler of the open sea"
+],
+[
+708,
+"Sunset Sea"
+],
+[
+709,
+"Snowflake Trail"
+],
+[
+710,
+"Snow falling on an icy sea"
+],
+[
+711,
+"Slow, but grows fast"
+],
+[
+712,
+"Slow-moving and precious"
+],
+[
+713,
+"Fully grown"
+],
+[
+714,
+"You crossed the line ahead of everyone else. "
+],
+[
+715,
+"Race again"
+],
+[
+716,
+"Dive back in"
+],
+[
+717,
+"Play again"
+],
+[
+718,
+"Play again · energy "
+],
+[
+719,
+"Play again · ⚡1"
+],
+[
+720,
+"Menu"
+],
+[
+721,
+"Paused"
+],
+[
+722,
+"The Arena never pauses — other fish keep moving while this menu is open"
+],
+[
+723,
+"Ranking",
+"SHORT"
+],
+[
+724,
+"Global ranking"
+],
+[
+725,
+"Everyone's best records"
+],
+[
+726,
+"Solo score"
+],
+[
+727,
+"Arena size"
+],
+[
+728,
+"My best Solo runs"
+],
+[
+729,
+"My best Arena runs"
+],
+[
+730,
+"Ranked by the biggest size reached"
+],
+[
+731,
+"Arena games"
+],
+[
+732,
+"Arena wins"
+],
+[
+733,
+" times"
+],
+[
+734,
+"The ranking shows up when you are online"
+],
+[
+735,
+"No records yet — be the first!"
+],
+[
+736,
+"My rank "
+],
+[
+737,
+" of "
+],
+[
+738,
+""
+],
+[
+739,
+"Uploading your record…"
+],
+[
+740,
+"Play a solo run to get your rank"
+],
+[
+741,
+"Play an Arena game to get your rank"
+],
+[
+742,
+"Loading ranking…"
+],
+[
+743,
+"Kelp Forest"
+],
+[
+744,
+"Next goal: hunt "
+],
+[
+745,
+"Next fish"
+],
+[
+746,
+"Next star: hunt "
+],
+[
+747,
+"Used on your next run — switch them on from the play screen"
+],
+[
+748,
+" steps"
+],
+[
+749,
+"Per step "
+],
+[
+750,
+"The sea's queen, with hard-set teeth"
+],
+[
+751,
+"Moonlit Sea"
+],
+[
+752,
+"Dash"
+],
+[
+753,
+"Dash on a short cooldown"
+],
+[
+754,
+"Giant Squid"
+],
+[
+755,
+"Giant Clam"
+],
+[
+756,
+"Arena "
+],
+[
+757,
+"Arena · no size limit"
+],
+[
+758,
+"Arena Sea"
+],
+[
+759,
+"Ranked by the largest size you reached in the Arena"
+],
+[
+760,
+"Dumbo Octopus"
+],
+[
+761,
+"Snap"
+],
+[
+762,
+"Snap!"
+],
+[
+763,
+"Dex"
+],
+[
+764,
+"Size reached"
+],
+[
+765,
+"Leap"
+],
+[
+766,
+"Go!"
+],
+[
+767,
+"Venom Slime"
+],
+[
+768,
+"Guards itself with venomous spines"
+],
+[
+769,
+"Stone Bridge"
+],
+[
+770,
+"StripeyBream"
+],
+[
+771,
+"Round Glasses"
+],
+[
+772,
+"Sailfish"
+],
+[
+773,
+"The sea's sprinter, sail raised"
+],
+[
+774,
+"This cannot be undone"
+],
+[
+775,
+"Revived!"
+],
+[
+776,
+"A clear moon drifting along"
+],
+[
+777,
+"Flip"
+],
+[
+778,
+" tier"
+],
+[
+779,
+"Lighthouse"
+],
+[
+780,
+"BlueBack"
+],
+[
+781,
+"Warm shallow water"
+],
+[
+782,
+"Decoy"
+],
+[
+783,
+"A silvery schooling fish"
+],
+[
+784,
+"Lavender Dream"
+],
+[
+785,
+"Level up"
+],
+[
+786,
+"Level up · "
+],
+[
+787,
+"Leveling up grows you faster and pays more pearls"
+],
+[
+788,
+"Rare"
+],
+[
+789,
+"Legendary"
+],
+[
+790,
+""
+],
+[
+791,
+""
+],
+[
+792,
+"Goblin Shark"
+],
+[
+793,
+""
+],
+[
+794,
+" · hunt "
+],
+[
+795,
+" fish · "
+],
+[
+796,
+" · no size limit"
+],
+[
+797,
+"!"
+],
+[
+798,
+"Marimo Ball"
+],
+[
+799,
+". "
+],
+[
+800,
+"Wizard Hat"
+],
+[
+801,
+"K"
+],
+[
+802,
+" and you can bite their tail"
+],
+[
+803,
+"Mandarinfish"
+],
+[
+804,
+"Manta Ray"
+],
+[
+805,
+"Lives tucked inside an anemone"
+],
+[
+806,
+"A clear, glassy lagoon"
+],
+[
+807,
+"Clear Lagoon"
+],
+[
+808,
+"To front"
+],
+[
+809,
+"Mangrove Lagoon"
+],
+[
+810,
+"Venom"
+],
+[
+811,
+"Venom!"
+],
+[
+812,
+"The deep-sea angler with a lamp on its head"
+],
+[
+813,
+"Ink"
+],
+[
+814,
+"Puff an ink cloud and slip away — big fish lose you inside it"
+],
+[
+815,
+"Squirts glowing slime instead of ink"
+],
+[
+816,
+"A genius of ink and disguise"
+],
+[
+817,
+"Eaten"
+],
+[
+818,
+"Pearls pile up the more it eats"
+],
+[
+819,
+"Food Sense"
+],
+[
+820,
+"Food orbs grow you more"
+],
+[
+821,
+"Food orbs grow you far more · 1.5× pearls"
+],
+[
+822,
+"Food orbs drift to you and grow you 2.5×"
+],
+[
+823,
+"Food orbs drift to you and grow you 3×"
+],
+[
+824,
+"Food orb pull range +"
+],
+[
+825,
+"Food orbs drift in from far away and grow you 4×"
+],
+[
+826,
+"Switch on a red beam that prey can't see"
+],
+[
+827,
+"Switch on a red beam that prey can't see "
+],
+[
+828,
+"Magnet"
+],
+[
+829,
+"Revive twice after being eaten"
+],
+[
+830,
+"Revive once after being eaten"
+],
+[
+831,
+"A light tap when you eat or get eaten"
+],
+[
+832,
+"Vibrate when you're eaten or fully grown"
+],
+[
+833,
+"Snatch one distant fish with a tentacle"
+],
+[
+834,
+"Arena"
+],
+[
+835,
+"Arena wins"
+],
+[
+836,
+"Arena matches are against practice bots for now. Real online matches and a global leaderboard open up once the app build connects to a server. Your name and display settings live under the gear icon at the top right of the home screen."
+],
+[
+837,
+"Arena ranking"
+],
+[
+838,
+"Arena rank #"
+],
+[
+839,
+"Best Arena rank"
+],
+[
+840,
+"Largest in Arena"
+],
+[
+841,
+"Arena trophies"
+],
+[
+842,
+"Go to Arena"
+],
+[
+843,
+"The Arena needs no energy — dive in any time"
+],
+[
+844,
+"Anchovy"
+],
+[
+845,
+" players · burps "
+],
+[
+846,
+"Equal terms"
+],
+[
+847,
+"Everyone on equal terms — size decides"
+],
+[
+848,
+"Unlock everything"
+],
+[
+849,
+"You've collected every fish."
+],
+[
+850,
+"A flat fish that turns the color of sand"
+],
+[
+851,
+"Blue polka dots hiding in the sand"
+],
+[
+852,
+"Sand Hide"
+],
+[
+853,
+"Sand Camo"
+],
+[
+854,
+"Fish collected"
+],
+[
+855,
+"Fish "
+],
+[
+856,
+"Play with friends"
+],
+[
+857,
+"Share my record"
+],
+[
+858,
+"Send the code to friends"
+],
+[
+859,
+"Copied · paste it to share"
+],
+[
+860,
+"In Gill Fighter my "
+],
+[
+861,
+" grew to "
+],
+[
+862,
+" · score "
+],
+[
+863,
+" · this week #"
+],
+[
+864,
+"Gill Fighter friends sea code: "
+],
+[
+865,
+"Code from your friend · tap Join to meet in the same sea"
+],
+[
+866,
+"Friends"
+],
+[
+867,
+"An Arena sea only for players who enter the same 4-digit code. Make a new code and share it with your friends."
+],
+[
+868,
+"New code"
+],
+[
+869,
+"Join with this code"
+],
+[
+870,
+"Sea code"
+],
+[
+871,
+"Share this number with your friends"
+],
+[
+872,
+"Enter 4 digits"
+],
+[
+873,
+"Friends sea "
+],
+[
+874,
+"You will meet friends who enter the same code"
+],
+[
+875,
+" · no size limit"
+],
+[
+876,
+"Players"
+],
+[
+877,
+"3D Glasses"
+],
+[
+878,
+"Frog Hat"
+],
+[
+879,
+"Backwards Cap"
+],
+[
+880,
+"Gamer Headset"
+],
+[
+881,
+"Police Cap"
+],
+[
+882,
+"Cat-eye Glasses"
+],
+[
+883,
+"Jester Hat"
+],
+[
+884,
+"Earmuffs"
+],
+[
+885,
+"Gold Glasses Chain"
+],
+[
+886,
+"Bee Antennae"
+],
+[
+887,
+"Butterfly Trail"
+],
+[
+888,
+"Square Glasses"
+],
+[
+889,
+"Clover Trail"
+],
+[
+890,
+"Yellow Star Trail"
+],
+[
+891,
+"Diamond Trail"
+],
+[
+892,
+"Diamond Shades"
+],
+[
+893,
+"Maple Leaf Trail"
+],
+[
+894,
+"Bandit Mask"
+],
+[
+895,
+"Round Shades"
+],
+[
+896,
+"Bandana"
+],
+[
+897,
+"Witch Hat"
+],
+[
+898,
+"Lollipop"
+],
+[
+899,
+"Rainbow Bubble Trail"
+],
+[
+900,
+"Rainbow Glasses"
+],
+[
+901,
+"Ripple Rings"
+],
+[
+902,
+"Droplet Trail"
+],
+[
+903,
+"Fireflies"
+],
+[
+904,
+"Sparkly Eyes"
+],
+[
+905,
+"Bubble Orbit"
+],
+[
+906,
+"Vampire Fangs"
+],
+[
+907,
+"Mushroom Cap"
+],
+[
+908,
+"Lightning Trail"
+],
+[
+909,
+"Star Orbit"
+],
+[
+910,
+"Star Sticker"
+],
+[
+911,
+"Star Pin"
+],
+[
+912,
+"Purple Bow"
+],
+[
+913,
+"Purple Aura"
+],
+[
+914,
+"Jewel Trail"
+],
+[
+915,
+"Aviator Shades"
+],
+[
+916,
+"Pink Ink Trail"
+],
+[
+917,
+"Pink Bubble Trail"
+],
+[
+918,
+"Pink Beanie"
+],
+[
+919,
+"Flame Trail"
+],
+[
+920,
+"Flame Crown"
+],
+[
+921,
+"Bubble Pipe"
+],
+[
+922,
+"Aviator Cap"
+],
+[
+923,
+"Glowing Eyes"
+],
+[
+924,
+"Red Lips"
+],
+[
+925,
+"Candy Trail"
+],
+[
+926,
+"Confetti Trail"
+],
+[
+927,
+"Scholar Gat"
+],
+[
+928,
+"Sailor Hat"
+],
+[
+929,
+"Sombrero"
+],
+[
+930,
+"Snorkel"
+],
+[
+931,
+"Ski Goggles"
+],
+[
+932,
+"Gentleman Mustache"
+],
+[
+933,
+"Hard Hat"
+],
+[
+934,
+"Dark Aura"
+],
+[
+935,
+"Dizzy"
+],
+[
+936,
+"Ice Crystal Trail"
+],
+[
+937,
+"Ice Crown"
+],
+[
+938,
+"Smoke Trail"
+],
+[
+939,
+"Lotus Leaf Hat"
+],
+[
+940,
+"Goatee"
+],
+[
+941,
+"Space Helmet"
+],
+[
+942,
+"Laurel Wreath"
+],
+[
+943,
+"Rose Petal Trail"
+],
+[
+944,
+"Single Rose"
+],
+[
+945,
+"War Paint"
+],
+[
+946,
+"Jokduri Crown"
+],
+[
+947,
+"Sleepy"
+],
+[
+948,
+"Pacifier"
+],
+[
+949,
+"Teal Aura"
+],
+[
+950,
+"Cherry Pin"
+],
+[
+951,
+"Green Aura"
+],
+[
+952,
+"Green Beanie"
+],
+[
+953,
+"Crescent Moon Trail"
+],
+[
+954,
+"Bunny Teeth"
+],
+[
+955,
+"Blue Bow"
+],
+[
+956,
+"Fez"
+],
+[
+957,
+"Propeller Cap"
+],
+[
+958,
+"Pixel Trail"
+],
+[
+959,
+"Heart Orbit"
+],
+[
+960,
+"Heart Sticker"
+],
+[
+961,
+"Graduation Cap"
+],
+[
+962,
+"Pumpkin Hat"
+],
+[
+963,
+"Angry"
+],
+[
+964,
+"Golden Bubble Trail"
+],
+[
+965,
+"Golden Note Trail"
+],
+[
+966,
+"Hero Mask"
+],
+[
+967,
+"Hides in its shell for 2.5s and can't be eaten"
+],
+[
+968,
+"Cuttlefish"
+],
+[
+969,
+"Boxfish"
+],
+[
+970,
+"Sky Leap"
+],
+[
+971,
+"The reef dandy with a long flag-like fin"
+],
+[
+972,
+"Moorish Idol"
+],
+[
+973,
+"Flag Fin"
+],
+[
+974,
+"Leaves a decoy with its flag fin. Big fish chase the decoy for 3.5s"
+],
+[
+975,
+"A yellow reef fish wearing a hard square shell"
+],
+[
+976,
+"Sea Bass"
+],
+[
+977,
+"Hard Shell"
+],
+[
+978,
+"Tough Teeth"
+],
+[
+979,
+"Pacific Cod"
+],
+[
+980,
+"Big Eater"
+],
+[
+981,
+"Giant Grouper"
+],
+[
+982,
+"Mahi-mahi"
+],
+[
+983,
+"Ink Screen"
+],
+[
+984,
+"Grows 2× from food orbs"
+],
+[
+985,
+"A master of disguise that changes color in a flash"
+],
+[
+986,
+"Leaps out of the water and glides fast. Can't be eaten in the air"
+],
+[
+987,
+"A hot-tempered fighter in a polka-dot suit"
+],
+[
+988,
+"Tiger Shark"
+],
+[
+989,
+"A cold-sea glutton whose big mouth eats anything"
+],
+[
+990,
+"Spotted Eagle Ray"
+],
+[
+991,
+"A green-and-gold sprinter of the open sea"
+],
+[
+992,
+"The reef giant that sucks in anything with its huge mouth"
+],
+[
+993,
+"Clown Triggerfish"
+],
+[
+994,
+"A silver hunter weaving between wave-beaten rocks"
+],
+[
+995,
+"One-Bite Gulp"
+],
+[
+996,
+"Grows 1.25× from the Sea Cave down"
+],
+[
+997,
+"A tiger-striped shark that eats anything"
+],
+[
+998,
+"A ray that seems to fly on white-spotted wings"
+],
+[
+999,
+"Popular"
+],
+[
+1000,
+"Best value"
+],
+[
+1001,
+"Gem pack"
+],
+[
+1002,
+"Purchasing…"
+],
+[
+1003,
+"Loading"
+],
+[
+1004,
+"App only"
+],
+[
+1005,
+"Thanks for your purchase!"
+],
+[
+1006,
+"Waiting for purchase approval"
+],
+[
+1007,
+"Gems arrive once it is approved"
+],
+[
+1008,
+"Purchase not completed"
+],
+[
+1009,
+"You were not charged. Please try again later"
+],
+[
+1010,
+"Free once a day with an ad · gem packs · gem-only goods"
+],
+[
+1011,
+"Booster set"
+],
+[
+1012,
+"3 of each of the 4 boosters"
+],
+[
+1013,
+"Big booster set"
+],
+[
+1014,
+"10 of each of the 4 boosters"
+],
+[
+1015,
+"Small booster bundle"
+],
+[
+1016,
+"2 of each of the 4 boosters"
+],
+[
+1017,
+"2× Pearls · 24h"
+],
+[
+1018,
+"All runs give double pearls for 24 hours (does not stack with the Double Pearls booster)"
+],
+[
+1019,
+"Giant Booster Bundle"
+],
+[
+1020,
+"40 of each of the 4 boosters"
+],
+[
+1021,
+"Active · "
+],
+[
+1022,
+" h left (buying adds 24 h)"
+],
+[
+1023,
+"Purchased gems are stored on this device. Before deleting the app or switching devices, create a backup code in Settings › Backup & account. For purchase issues, use Settings › Contact us."
+],
+[
+1024,
+"This week"
+],
+[
+1025,
+"All time"
+],
+[
+1026,
+"Resets every Monday"
+],
+[
+1027,
+" of "
+],
+[
+1028,
+"Play a run this week to get your rank"
+],
+[
+1029,
+"Last week "
+],
+[
+1030,
+"This week · Solo "
+],
+[
+1031,
+"This week · Arena "
+],
+[
+1032,
+" (up to 6 fish per use)"
+],
+[
+1033,
+" (up to 4 fish per use)"
+],
+[
+1034,
+" · cooldown "
+],
+[
+1035,
+" · buy in Shop"
+],
+[
+1036,
+"Today's missions"
+],
+[
+1037,
+"Performance"
+],
+[
+1038,
+"Light mode"
+],
+[
+1039,
+"Turn this on if the game keeps returning to the home screen. It turns off music and draws a little less sharply to save memory"
+],
+[
+1040,
+"Light mode is on"
+],
+[
+1041,
+"To reduce restarts · turn off in Settings"
+],
+[
+1042,
+"A new version is out"
+],
+[
+1043,
+"Update"
+],
+[
+1044,
+"Later"
+],
+[
+1045,
+"New version "
+],
+[
+1046,
+"A new version ("
+],
+[
+1047,
+") is out. Update to get the latest fixes and features. Your fish and records stay as they are."
+],
+[
+1048,
+"Your version "
+],
+[
+1049,
+"Daily",
+"SHORT"
+],
+[
+1050,
+"Mission complete!"
+],
+[
+1051,
+" · claim it in Daily"
+],
+[
+1052,
+"Play 2 solo runs"
+],
+[
+1053,
+"Play 1 Arena match"
+],
+[
+1054,
+"Eat 60 fish"
+],
+[
+1055,
+"Collect 150 pearls"
+],
+[
+1056,
+"Reach 100m deep in Solo"
+],
+[
+1057,
+"Finish top 3 in the Arena"
+],
+[
+1058,
+"Survive 3 minutes in one run"
+],
+[
+1059,
+"Check-in day "
+],
+[
+1060,
+""
+],
+[
+1061,
+"Claim check-in · "
+],
+[
+1062,
+"Come back tomorrow for day "
+],
+[
+1063,
+" · "
+],
+[
+1064,
+"Claim"
+],
+[
+1065,
+"Claimed"
+],
+[
+1066,
+"In progress"
+],
+[
+1067,
+"All done! New missions tomorrow"
+],
+[
+1068,
+"Claim all 3 for gems +"
+],
+[
+1069,
+"Global ranking · Solo "
+],
+[
+1070,
+"Global ranking · Arena "
+],
+[
+1071,
+"Rate"
+],
+[
+1072,
+"Rate the app"
+],
+[
+1073,
+"If you enjoy it, please leave a rating on the App Store"
+],
+[
+1074,
+"Hat"
+],
+[
+1075,
+"One hat, one face piece, one effect — they show in game and in your tank"
+],
+[
+1076,
+"Crack your body-length tail like a whip"
+],
+[
+1077,
+"Cracks its body-length tail like a whip "
+],
+[
+1078,
+"Open a mouth wider than your body"
+],
+[
+1079,
+"The biggest teeth of any fish for its size"
+],
+[
+1080,
+"Generates electricity in its body"
+],
+[
+1081,
+"Flash your body to stun nearby fish and light up the dark"
+],
+[
+1082,
+"Free"
+],
+[
+1083,
+"Claim free"
+],
+[
+1084,
+"Rainbow Trail"
+],
+[
+1085,
+"Rainbow Trout"
+],
+[
+1086,
+"OctoLegs"
+],
+[
+1087,
+"Fly up out of the water"
+],
+[
+1088,
+"SealClap"
+],
+[
+1089,
+"Ripple"
+],
+[
+1090,
+"Fish"
+],
+[
+1091,
+"Fish "
+],
+[
+1092,
+"1 fish · 3 decorations"
+],
+[
+1093,
+"Choose a fish"
+],
+[
+1094,
+"Dress up your fish"
+],
+[
+1095,
+"Fish Dex"
+],
+[
+1096,
+"Erases every fish, pearl and record and starts over."
+],
+[
+1097,
+"Records by fish"
+],
+[
+1098,
+"Soft Body"
+],
+[
+1099,
+"A soft jelly body from the deep"
+],
+[
+1100,
+"Spines block one bite (every 12s)"
+],
+[
+1101,
+"Tail sting blocks one bite (every 14s)"
+],
+[
+1102,
+"Hard head blocks one bite (every 15s)"
+],
+[
+1103,
+"Venom blocks one bite (every 10s)"
+],
+[
+1104,
+"Back spines block one bite (every 12s)"
+],
+[
+1105,
+"Tentacles block one bite (every 14s)"
+],
+[
+1106,
+"Dumpling"
+],
+[
+1107,
+"Water effects"
+],
+[
+1108,
+"Tail bites"
+],
+[
+1109,
+"KelpStem"
+],
+[
+1110,
+"Mint Jar"
+],
+[
+1111,
+"Swipe to look around, +/− to zoom · add and remove fish under Decorate"
+],
+[
+1112,
+"Straw Hat"
+],
+[
+1113,
+"Switch"
+],
+[
+1114,
+"Sea game screen"
+],
+[
+1115,
+"Ocean research"
+],
+[
+1116,
+"SeaLionRoar"
+],
+[
+1117,
+"Among the fastest in the sea"
+],
+[
+1118,
+"SeaPrince"
+],
+[
+1119,
+"The ocean's apex predator"
+],
+[
+1120,
+"A master of camouflage on the seabed"
+],
+[
+1121,
+"Blink instantly in the direction you face"
+],
+[
+1122,
+"Barracuda"
+],
+[
+1123,
+"Rock Pile"
+],
+[
+1124,
+"Rock Bite"
+],
+[
+1125,
+"Rock Garden"
+],
+[
+1126,
+"A big-eyed fish that hides in the rocks"
+],
+[
+1127,
+"The ambusher of the crevices"
+],
+[
+1128,
+"Viperfish"
+],
+[
+1129,
+"Headbutt"
+],
+[
+1130,
+"Firefly Grove"
+],
+[
+1131,
+"A grove of drifting fireflies"
+],
+[
+1132,
+"Sparkle Aura"
+],
+[
+1133,
+"A glittering golden tank"
+],
+[
+1134,
+"Pearls earned +4%"
+],
+[
+1135,
+"Flash"
+],
+[
+1136,
+"Yellowtail"
+],
+[
+1137,
+"Bubble Trail"
+],
+[
+1138,
+"Backgrounds"
+],
+[
+1139,
+"Background shimmer, bubbles and marine snow. Turn it off for a simpler, lighter screen"
+],
+[
+1140,
+"A deep-sea anchovy strung with tiny lamps"
+],
+[
+1141,
+"Great White"
+],
+[
+1142,
+"Snake Lunge"
+],
+[
+1143,
+"A living fossil that lunges like a snake"
+],
+[
+1144,
+"A living fossil that lunges like a snake "
+],
+[
+1145,
+"An ambush hunter quick as lightning"
+],
+[
+1146,
+"Ambush!"
+],
+[
+1147,
+"Lightning Aura"
+],
+[
+1148,
+"Remove"
+],
+[
+1149,
+"Cherry Blossom Tank"
+],
+[
+1150,
+"Cherry petals drift down"
+],
+[
+1151,
+"Beret"
+],
+[
+1152,
+"Betta"
+],
+[
+1153,
+"A goldfish as black as velvet"
+]
+]

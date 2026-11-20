@@ -14,7 +14,7 @@
   cloudApply=function(code,d){try{if(d&&('city' in d)){var old=localStorage.getItem(CK);if(old)localStorage.setItem(CK+'.bak',old);if(d.city&&typeof d.city==='object')localStorage.setItem(CK,JSON.stringify(d.city));else localStorage.removeItem(CK);localStorage.removeItem('gfcity.hint');delete d.city}}catch(e){}_ca(code,d)};
 
   var LAB={ko:'마을',en:'Town',ja:'町',es:'Pueblo',vi:'Làng'},NM={ko:'아가미시티',en:'Gill City',ja:'エラシティ',es:'Gill City',vi:'Gill City'};
-  function lg(){var l=(typeof SUBL==='string'&&SUBL)||LANG||'ko';return LAB[l]?l:'en'}
+  function lg(){var l=(typeof SUBL==='string'&&SUBL)||LANG||'ko';if(!LAB[l]&&window.GF_PACK&&GF_PACK.town){LAB[l]=GF_PACK.town;NM[l]=GF_PACK.city||'Gill City'}return LAB[l]?l:'en'}
   /* 탭 막대: 수족관 다음 칸에 '마을' */
   var tabs=document.getElementById('tabs'),tk=document.getElementById('tab-tank'),tb=null;
   if(tabs&&tk&&!document.getElementById('tab-city')){

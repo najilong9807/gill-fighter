@@ -16,6 +16,7 @@ var RC=[
  {k:'zone',ic:'🏘',t:function(g){return '구역 건물 단계 합 '+g+' 만들기'},s:[30,100,250,500,1000],v:function(){return zLvSum()}},
  {k:'deco',ic:'🌸',t:function(g){return '장식 '+g+'개 놓기'},s:[3,10,25,50],v:function(){return decoN()}},
  {k:'trip',ic:'🚋',t:function(g){return '열차 · 고래 배 '+g+'번 다녀오기'},s:[3,15,50,150],v:function(){return rcN('trip')}},
+ {k:'blk',ic:'🛡',t:function(g){return '마을 사건 '+g+'번 막아 내기'},s:[3,10,30,80],v:function(){return (G.inc&&G.inc.blk)|0}},
  {k:'wq',ic:'📜',t:function(g){return '주간 의뢰 3개를 '+g+'주 다 끝내기'},s:[1,4,12,26],v:function(){return rcN('wq')}},
  {k:'pet',ic:'💗',t:function(g){return '마을에 놀러 온 내 물고기 '+g+'번 쓰다듬기'},s:[5,30,100,300],v:function(){return rcN('pet')},emb:1}];
 function rcList(){return RC.filter(function(r){return !r.emb||EMB})}

@@ -10,6 +10,94 @@
 },
 "t": [
 [
+"🌫 집 근처 물이 탁해요\\(행복 −(\\d+)\\) · ⚙ 기반 → 🫧 물 거르개",
+"🌫 The water near homes is murky (happiness −$1) · ⚙ Utilities → 🫧 Water Filter"
+],
+[
+"⚠ (\\S+) ([^<>·]+?) · ([^<>]+?)을\\(를\\) 눌러 해결해요",
+"⚠ $1 $2 · tap $3 to fix it"
+],
+[
+"⚖ 켤 수 있는 정책이 (\\d+)개 있어요 · ☰ 메뉴 → 마을 정책",
+"⚖ You can turn on $1 more policies · ☰ Menu → Town Policies"
+],
+[
+"마을 사건 (\\d+)번 막아 내기",
+"Block $1 town incidents"
+],
+[
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 여러 개 지어요",
+"Murky water −$2 within $1 tiles · build several"
+],
+[
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 지금 이 자리 🌫 (\\d+)",
+"Murky water −$2 within $1 tiles · here now 🌫 $3"
+],
+[
+"([^<>]+?) 뒤엔 저절로 지나가요",
+"It passes by itself in $1"
+],
+[
+"켤 수 있는 정책 <b>(\\d+) / (\\d+)</b> · Lv\\.10 · Lv\\.15에 한 칸씩 늘어요",
+"Active policies <b>$1 / $2</b> · one more slot at Lv.10 and Lv.15"
+],
+[
+" · 다시 바꾸기까지 ([^<]+)",
+" · can change again in $1"
+],
+[
+"켜진 정책 (\\d+) / (\\d+)",
+"Active $1 / $2"
+],
+[
+"⚖ 정책을 켰어요 · (.+)",
+"⚖ Policy on · $1"
+],
+[
+"⚖ 정책을 껐어요 · (.+)",
+"⚖ Policy off · $1"
+],
+[
+"⚖ 정책 (\\d+) / (\\d+)",
+"⚖ Policies $1 / $2"
+],
+[
+"🌫 탁한 물 때문에 행복 <b>−(\\d+)</b>",
+"🌫 Happiness lost to murky water <b>−$1</b>"
+],
+[
+"⚠ 사건 지금 (\\d+)개 · 막아 낸 사건 (\\d+)번",
+"⚠ Incidents now $1 · blocked $2 times"
+],
+[
+"⚠ (\\S+) ([^<>!]+?)! · 건물을 눌러 해결해요",
+"⚠ $1 $2! · Tap the building to fix it"
+],
+[
+"✓ (\\S+) ([^<>!]+?) 해결!",
+"✓ $1 $2 fixed!"
+],
+[
+"🛡 (.+?) 범위라 (\\S+) (.+?)을\\(를\\) 막았어요",
+"🛡 $2 $3 stopped · it was in range of $1"
+],
+[
+"막으려면: (.+?) 범위 안에 두면 다음엔 저절로 막아요",
+"To prevent: keep it in range of $1 and it is blocked automatically next time"
+],
+[
+"🫧(\\S+) 들여 해결",
+"Fix for 🫧$1"
+],
+[
+"(\\S+) ([^<>·]+?) · 저절로 지나갔어요",
+"$1 $2 · passed by itself"
+],
+[
+"🌫 탁한 물 (\\d+) 이하\\(지금 (\\d+)\\)",
+"🌫 Murky water $1 or less (now $2)"
+],
+[
 "산호궁 Lv\\.(\\d+) 만들기",
 "Reach Coral Hall Lv.$1"
 ],
@@ -797,6 +885,60 @@
 "단계를 넘으면 💎 · ⭐ 명성을 받아요": "Each stage you pass gives 💎 and ⭐ Fame",
 "마을 이름 (10글자까지)": "Town name (up to 10 characters)",
 "<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. <b>🐢 거북 배달소</b>를 지으면 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "<b>🐠 Aquarium workshop</b> (below 📦 Storage) turns spare materials into decor made only for your aquarium. Once you build the <b>🐢 Turtle Depot</b>, the <b>🐢 Town parcel</b> turtle sometimes visits your aquarium with pearls from your residents (3 times a day).",
-"<b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.": "<b>🏆 Town Records</b> (☰ Menu) are stamps you collect over time. Each stage you pass gives 💎 and ⭐ Fame, and the ✏ at the top lets you name your town."
+"<b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.": "<b>🏆 Town Records</b> (☰ Menu) are stamps you collect over time. Each stage you pass gives 💎 and ⭐ Fame, and the ✏ at the top lets you name your town.",
+"바다 축제의 밤": "Sea Festival Nights",
+"조개껍데기 재활용": "Shell Recycling",
+"경단 나눔": "Dumpling Sharing",
+"일찍 출근": "Early Shifts",
+"밤길 가로등": "Night Lamps",
+"게 일꾼 야근": "Crab Night Shift",
+"안전 훈련": "Safety Drills",
+"행복 +8": "Happiness +8",
+"행복 +6": "Happiness +6",
+"행복 −7": "Happiness −7",
+"행복 −5": "Happiness −5",
+"세금 −15%": "Taxes −15%",
+"세금 −10%": "Taxes −10%",
+"탁한 물 −30%": "Murky water −30%",
+"생산 −10%": "Production −10%",
+"생산 −5%": "Production −5%",
+"생산 +15%": "Production +15%",
+"경단 먹는 양 ×1.6": "Dumplings eaten ×1.6",
+"모든 땅값 +4": "All land value +4",
+"공사 시간 −20%": "Build time −20%",
+"사건 −40%": "Incidents −40%",
+"⚖ 마을 정책": "⚖ Town Policies",
+"마을 정책": "Town Policies",
+"⚖ 정책": "⚖ Policies",
+"끄기": "Turn off",
+"켜기": "Turn on",
+"건물 보기": "View building",
+"💎1 바로": "💎1 now",
+"맑음": "Clear",
+"조금": "A little",
+"탁함": "Murky",
+"탁한 물": "Murky water",
+"물 거르개": "Water Filter",
+"큰 물 거르개": "Big Water Filter",
+"🗺 탁한 물 보기": "🗺 Show murky water",
+"(집 근처 평균 · 🗺 지도 → 탁한 물)": "(average near homes · 🗺 Map → Murky water)",
+"상어 출몰": "Shark Sighting",
+"뜨거운 물 분출": "Hot Water Vent",
+"물고기 감기": "Fish Cold",
+"적조": "Red Tide",
+"상어가 나타나 주민 절반이 숨었어요": "A shark showed up and half the residents are hiding",
+"바닥에서 뜨거운 물이 솟아 일이 멈췄어요": "Hot water is bursting from the floor and work has stopped",
+"감기가 돌아 주민 절반이 쉬고 있어요": "A cold is going around and half the residents are resting",
+"탁한 물에 붉은 물이 끼어 일이 멈췄어요": "Red water has built up in the murk and work has stopped",
+"🫧 물 거르개": "🫧 Water Filter",
+"정책은 🏛 산호궁 Lv.6에 열려요 · 좋은 점과 대가가 같이 있어요": "Policies unlock at 🏛 Coral Hall Lv.6 · each has a benefit and a cost",
+"막으려면: 🌫 탁한 물 45 밑으로 · ⚙ 기반 → 🫧 물 거르개": "To prevent: keep 🌫 murky water under 45 · ⚙ Utilities → 🫧 Water Filter",
+"⚠ 사건 🔒 🏛Lv.6": "⚠ Incidents 🔒 🏛Lv.6",
+"⚖ 정책 🔒 🏛Lv.6": "⚖ Policies 🔒 🏛Lv.6",
+"🏛 Lv.6에 열려요": "Opens at 🏛 Lv.6",
+"<i style=\"background:#5ac8ff\"></i> 맑음 <i style=\"background:#8c8c5a\"></i> 조금 <i style=\"background:#a05a32\"></i> 탁함 · 집 3단계 40 · 4단계 25 · 5단계 15 이하 · 🫧 물 거르개로 맑게": "<i style=\"background:#5ac8ff\"></i> Clear <i style=\"background:#8c8c5a\"></i> A little <i style=\"background:#a05a32\"></i> Murky · homes Lv.3 ≤40 · Lv.4 ≤25 · Lv.5 ≤15 · clean it with 🫧 Water Filters",
+"<b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.": "<b>🌫 Murky water</b>: water around quarries, kilns, factories, workshops, ports and industrial zones gets cloudy. Murky water near homes means fewer residents and less happiness, and homes need 40 or less for Lv.3, 25 for Lv.4 and 15 for Lv.5. Build several <b>🫧 Water Filters</b> from ⚙ Utilities to clean it, and check it on the 🗺 map.",
+"<b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.": "<b>⚖ Town Policies</b> (☰ Menu) unlock at Coral Hall Lv.6. Each policy has a benefit and a cost. You get one more slot at Lv.10 and Lv.15.",
+"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Town incidents</b>: from Coral Hall Lv.6, sharks, hot water vents, colds and red tides sometimes happen. Inside the range of a 🚒 Fire Station, 👮 Patrol or 🏥 Clinic they are stopped automatically; otherwise tap the building to fix it or wait 2 hours."
 }
 }

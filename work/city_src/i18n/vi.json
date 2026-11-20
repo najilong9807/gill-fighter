@@ -10,6 +10,94 @@
 },
 "t": [
 [
+"🌫 집 근처 물이 탁해요\\(행복 −(\\d+)\\) · ⚙ 기반 → 🫧 물 거르개",
+"🌫 Nước gần nhà bị đục (hạnh phúc −$1) · ⚙ Hạ tầng → 🫧 Máy lọc nước"
+],
+[
+"⚠ (\\S+) ([^<>·]+?) · ([^<>]+?)을\\(를\\) 눌러 해결해요",
+"⚠ $1 $2 · chạm $3 để xử lý"
+],
+[
+"⚖ 켤 수 있는 정책이 (\\d+)개 있어요 · ☰ 메뉴 → 마을 정책",
+"⚖ Còn bật được $1 chính sách · ☰ Menu → Chính sách làng"
+],
+[
+"마을 사건 (\\d+)번 막아 내기",
+"Chặn $1 sự cố trong làng"
+],
+[
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 여러 개 지어요",
+"Nước đục −$2 trong $1 ô · xây được nhiều cái"
+],
+[
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 지금 이 자리 🌫 (\\d+)",
+"Nước đục −$2 trong $1 ô · chỗ này bây giờ 🌫 $3"
+],
+[
+"([^<>]+?) 뒤엔 저절로 지나가요",
+"Sẽ tự qua sau $1"
+],
+[
+"켤 수 있는 정책 <b>(\\d+) / (\\d+)</b> · Lv\\.10 · Lv\\.15에 한 칸씩 늘어요",
+"Chính sách đang bật <b>$1 / $2</b> · thêm 1 ô ở Lv.10 và Lv.15"
+],
+[
+" · 다시 바꾸기까지 ([^<]+)",
+" · đổi lại được sau $1"
+],
+[
+"켜진 정책 (\\d+) / (\\d+)",
+"Đang bật $1 / $2"
+],
+[
+"⚖ 정책을 켰어요 · (.+)",
+"⚖ Đã bật chính sách · $1"
+],
+[
+"⚖ 정책을 껐어요 · (.+)",
+"⚖ Đã tắt chính sách · $1"
+],
+[
+"⚖ 정책 (\\d+) / (\\d+)",
+"⚖ Chính sách $1 / $2"
+],
+[
+"🌫 탁한 물 때문에 행복 <b>−(\\d+)</b>",
+"🌫 Hạnh phúc giảm vì nước đục <b>−$1</b>"
+],
+[
+"⚠ 사건 지금 (\\d+)개 · 막아 낸 사건 (\\d+)번",
+"⚠ Sự cố hiện $1 · đã chặn $2 lần"
+],
+[
+"⚠ (\\S+) ([^<>!]+?)! · 건물을 눌러 해결해요",
+"⚠ $1 $2! · Chạm công trình để xử lý"
+],
+[
+"✓ (\\S+) ([^<>!]+?) 해결!",
+"✓ Đã xử lý $1 $2!"
+],
+[
+"🛡 (.+?) 범위라 (\\S+) (.+?)을\\(를\\) 막았어요",
+"🛡 Đã chặn $2 $3 · nằm trong phạm vi $1"
+],
+[
+"막으려면: (.+?) 범위 안에 두면 다음엔 저절로 막아요",
+"Để phòng: đặt trong phạm vi $1, lần sau sẽ tự chặn"
+],
+[
+"🫧(\\S+) 들여 해결",
+"Xử lý với 🫧$1"
+],
+[
+"(\\S+) ([^<>·]+?) · 저절로 지나갔어요",
+"$1 $2 · đã tự qua"
+],
+[
+"🌫 탁한 물 (\\d+) 이하\\(지금 (\\d+)\\)",
+"🌫 Nước đục từ $1 trở xuống (giờ $2)"
+],
+[
 "산호궁 Lv\\.(\\d+) 만들기",
 "Nâng Cung San Hô lên Lv.$1"
 ],
@@ -797,6 +885,60 @@
 "단계를 넘으면 💎 · ⭐ 명성을 받아요": "Mỗi mốc vượt qua nhận 💎 và ⭐ Danh tiếng",
 "마을 이름 (10글자까지)": "Tên làng (tối đa 10 ký tự)",
 "<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. <b>🐢 거북 배달소</b>를 지으면 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "Ở <b>🐠 Xưởng bể cá</b> (dưới 📦 Kho) bạn dùng nguyên liệu dư để làm đồ trang trí riêng cho bể cá. Khi xây <b>🐢 Trạm giao hàng Rùa</b>, rùa <b>🐢 Bưu kiện của làng</b> thỉnh thoảng ghé bể cá mang ngọc trai cư dân gửi (3 lần mỗi ngày).",
-"<b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.": "<b>🏆 Thành tích làng</b> (☰ Menu) là các con dấu sưu tầm lâu dài. Mỗi mốc vượt qua nhận 💎 và ⭐ Danh tiếng, và nút ✏ ở trên cùng để đặt tên làng."
+"<b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.": "<b>🏆 Thành tích làng</b> (☰ Menu) là các con dấu sưu tầm lâu dài. Mỗi mốc vượt qua nhận 💎 và ⭐ Danh tiếng, và nút ✏ ở trên cùng để đặt tên làng.",
+"바다 축제의 밤": "Đêm hội biển",
+"조개껍데기 재활용": "Tái chế vỏ sò",
+"경단 나눔": "Chia sẻ bánh viên",
+"일찍 출근": "Đi làm sớm",
+"밤길 가로등": "Đèn đường ban đêm",
+"게 일꾼 야근": "Cua làm ca đêm",
+"안전 훈련": "Diễn tập an toàn",
+"행복 +8": "Hạnh phúc +8",
+"행복 +6": "Hạnh phúc +6",
+"행복 −7": "Hạnh phúc −7",
+"행복 −5": "Hạnh phúc −5",
+"세금 −15%": "Thuế −15%",
+"세금 −10%": "Thuế −10%",
+"탁한 물 −30%": "Nước đục −30%",
+"생산 −10%": "Sản xuất −10%",
+"생산 −5%": "Sản xuất −5%",
+"생산 +15%": "Sản xuất +15%",
+"경단 먹는 양 ×1.6": "Lượng bánh viên ăn ×1.6",
+"모든 땅값 +4": "Toàn bộ giá đất +4",
+"공사 시간 −20%": "Thời gian xây −20%",
+"사건 −40%": "Sự cố −40%",
+"⚖ 마을 정책": "⚖ Chính sách làng",
+"마을 정책": "Chính sách làng",
+"⚖ 정책": "⚖ Chính sách",
+"끄기": "Tắt",
+"켜기": "Bật",
+"건물 보기": "Xem công trình",
+"💎1 바로": "💎1 ngay",
+"맑음": "Trong",
+"조금": "Hơi đục",
+"탁함": "Đục",
+"탁한 물": "Nước đục",
+"물 거르개": "Máy lọc nước",
+"큰 물 거르개": "Máy lọc nước lớn",
+"🗺 탁한 물 보기": "🗺 Xem nước đục",
+"(집 근처 평균 · 🗺 지도 → 탁한 물)": "(trung bình gần nhà · 🗺 Bản đồ → Nước đục)",
+"상어 출몰": "Cá mập xuất hiện",
+"뜨거운 물 분출": "Phun nước nóng",
+"물고기 감기": "Cá bị cảm",
+"적조": "Thủy triều đỏ",
+"상어가 나타나 주민 절반이 숨었어요": "Cá mập xuất hiện, một nửa cư dân đã trốn",
+"바닥에서 뜨거운 물이 솟아 일이 멈췄어요": "Nước nóng phun từ đáy, công việc đã dừng",
+"감기가 돌아 주민 절반이 쉬고 있어요": "Cảm cúm lan ra, một nửa cư dân đang nghỉ",
+"탁한 물에 붉은 물이 끼어 일이 멈췄어요": "Nước đỏ đọng trong nước đục, công việc đã dừng",
+"🫧 물 거르개": "🫧 Máy lọc nước",
+"정책은 🏛 산호궁 Lv.6에 열려요 · 좋은 점과 대가가 같이 있어요": "Chính sách mở ở 🏛 Cung San Hô Lv.6 · mỗi chính sách có lợi và có cái giá",
+"막으려면: 🌫 탁한 물 45 밑으로 · ⚙ 기반 → 🫧 물 거르개": "Để phòng: giữ 🌫 nước đục dưới 45 · ⚙ Hạ tầng → 🫧 Máy lọc nước",
+"⚠ 사건 🔒 🏛Lv.6": "⚠ Sự cố 🔒 🏛Lv.6",
+"⚖ 정책 🔒 🏛Lv.6": "⚖ Chính sách 🔒 🏛Lv.6",
+"🏛 Lv.6에 열려요": "Mở ở 🏛 Lv.6",
+"<i style=\"background:#5ac8ff\"></i> 맑음 <i style=\"background:#8c8c5a\"></i> 조금 <i style=\"background:#a05a32\"></i> 탁함 · 집 3단계 40 · 4단계 25 · 5단계 15 이하 · 🫧 물 거르개로 맑게": "<i style=\"background:#5ac8ff\"></i> Trong <i style=\"background:#8c8c5a\"></i> Hơi đục <i style=\"background:#a05a32\"></i> Đục · nhà cấp 3 ≤40 · cấp 4 ≤25 · cấp 5 ≤15 · làm trong bằng 🫧 Máy lọc nước",
+"<b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.": "<b>🌫 Nước đục</b>: nước quanh mỏ, lò, nhà máy, xưởng, cảng và khu công nghiệp bị đục. Gần nhà mà đục thì ít cư dân hơn và giảm hạnh phúc; nhà cấp 3 cần từ 40 trở xuống, cấp 4 là 25, cấp 5 là 15. Xây nhiều <b>🫧 Máy lọc nước</b> ở ⚙ Hạ tầng và xem trên 🗺 bản đồ.",
+"<b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.": "<b>⚖ Chính sách làng</b> (☰ Menu) bật được từ Cung San Hô Lv.6. Mỗi chính sách có lợi và có cái giá. Thêm 1 ô ở Lv.10 và Lv.15.",
+"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Sự cố trong làng</b>: từ Cung San Hô Lv.6 thỉnh thoảng có cá mập, nước nóng, cảm cúm hay thủy triều đỏ. Trong phạm vi 🚒 cứu hỏa, 👮 tuần tra hay 🏥 bệnh viện sẽ tự chặn; nếu không, chạm công trình để xử lý hoặc chờ 2 giờ."
 }
 }

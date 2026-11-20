@@ -6,6 +6,7 @@ Playwright(설치돼 있음)로 `work/` 를 `http://app.local/` 처럼 열어 �
 - `node smoke.js` — 켜기 · 탭 돌기 오류 확인
 - `node cov.js 393 ko` — 큰 마을 창마다 글 넘침 · 잘림
 - `node monkey.js <seed>` — 마을 막 누르기 300번 / `node monkeytank.js <seed> <lang>` — 수족관 막 누르기(꾹 · 끌기 · 택배 거북)
+- `node depth.js <lang>` — 39차 탁한 물 · 정책 · 사건 화면 · 번역 빠짐(depth/miss_<lang>.json) / `node rec.js <lang>` — 마을 기록 / `node depot.js` — 택배 거북 조건
 - `node story.js <lang>` — 물고기 이야기 창 / `node post.js <lang> [w h]` — 마을 택배 거북
 - `node crate.js <lang>` — 본게임 판 → 마을 재료 상자
 - `node art.js` — 마을 그림 갈아끼우기 확인(CITY_ART) / `node artref.js <폴더>` — 지금 마을 그림을 투명 PNG 로(기준본)

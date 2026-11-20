@@ -18,37 +18,37 @@ function fields(){covCalc();O2={};LVM={};G.b.forEach(function(b){if(!b.lv)return
     if(r&&v)for(i=-r;i<=r;i++)for(j=-r;j<=r;j++){var d=Math.abs(i)+Math.abs(j);if(d>r)continue;var key=Math.round(cx+i)+','+Math.round(cy+j);LVM[key]=(LVM[key]||0)+v*(1-d/(r+1))}})}
 /* 땅값에 주는 영향 [범위, 세기] — 장식 · 공공 · 명소는 +, 광산 · 가마 · 공장은 − (배치 미리보기 · 땅값 내역도 이것을 씀) */
 function effOf(k,L){var r=0,v=0;if(k==='hall'){r=6;v=10}if(DEC[k]){r=DEC[k].r;v=DEC[k].v}if(PUB[k]){r=5;v=8+L}if(k==='park'){r=4;v=10}if(k==='aqua'||k==='palace'){r=7;v=14+L}if(k==='quarry'||k==='kiln'||k==='factory'){r=3;v=-14}return [r,v]}
-function landVal(x,y){var v=40+(LVM[x+','+y]||0),near=0;for(var i=-2;i<=2;i++)for(var j=-2;j<=2;j++)if(G.ter[(x+i)+','+(y+j)]===2)near++;v+=Math.min(8,near*2)+Math.max(0,((CS&&CS.happy)||60)-60)/5;return Math.max(0,Math.min(100,Math.round(v)))}
+function landVal(x,y){var v=40+(LVM[x+','+y]||0),near=0;for(var i=-2;i<=2;i++)for(var j=-2;j<=2;j++)if(G.ter[(x+i)+','+(y+j)]===2)near++;v+=Math.min(8,near*2)+Math.max(0,((CS&&CS.happy)||60)-60)/5-Math.max(0,murkAt(x,y)-20)*.3+polV('lv');return Math.max(0,Math.min(100,Math.round(v)))}
 function roadAdj(x,y,s){s=s||1;for(var i=-1;i<=s;i++)for(var j=-1;j<=s;j++){if((i<0||i>=s)&&(j<0||j>=s))continue;if(i>=0&&i<s&&j>=0&&j<s)continue;if(isRoad(x+i,y+j))return true}return false}
 var cityT=0,cityF=0,cityG=0,cityU=0;
 function cityTick(now){if(now-cityT<1000)return;var dt=Math.min(5,(now-(cityT||now))/1000);cityT=now;if(now-cityF>2000){fields();cityF=now}
   var pop=0,lim=30+hallLv()*6,jobs=0,capC=0,jC=0,jI=0,hs=0;
   G.b.forEach(function(b){if(!b.lv)return;if(PUB[b.k])lim+=PUB[b.k]*b.lv;if(JOBS[b.k])jobs+=JOBS[b.k]+b.lv;
-    if(isZ(b.k)){var z=b.k.charAt(1),L=b.lv;if(z==='R'){pop+=b.occ|0}else if(z==='C'){jC+=ZN.C.jobs[L];capC+=ZN.C.serve[L]}else jI+=ZN.I.jobs[L]}});
+    if(isZ(b.k)){var z=b.k.charAt(1),L=b.lv;if(z==='R'){pop+=b.occ|0}else if(z==='C'){jC+=ZN.C.jobs[L];capC+=ZN.C.serve[L]*(b.inc?.5:1)}else jI+=ZN.I.jobs[L]}});
   jobs+=jC+jI;var workers=Math.round(pop*.7),w=jobs?Math.min(1,workers/jobs):1,served=Math.min(pop,capC);
   /* 먹고 입기: 상점에서 산 만큼 창고의 경단 · 옷이 줄어요 */
-  var clothOn=hallLv()>=5,eat=served*.06*dt/3600,wear=clothOn?served*.03*dt/3600:0;
+  var clothOn=hallLv()>=5,eat=served*.06*polV('eat')*dt/3600,wear=clothOn?served*.03*dt/3600:0;
   G.res.dango=Math.max(0,(G.res.dango||0)-eat);G.res.cloth=Math.max(0,(G.res.cloth||0)-wear);
   var food=hallLv()<3||pop===0||(G.res.dango||0)>0,cloth=!clothOn||pop===0||(G.res.cloth||0)>0,avgLV=0,nR=0;
-  G.b.forEach(function(b){if(isZ(b.k)&&b.k.charAt(1)==='R'&&b.lv){avgLV+=landVal(b.x,b.y);nR++}});avgLV=nR?avgLV/nR:50;
-  var happy=Math.round(Math.max(0,Math.min(100,35+(pop?25*served/pop:20)+(food?15:-20)+(cloth?10:-15)+avgLV*.2+cheerV())));
+  var mkS=0,mkN=0;G.b.forEach(function(b){if(isZ(b.k)&&b.k.charAt(1)==='R'&&b.lv){avgLV+=landVal(b.x,b.y);nR++;var oc=Math.max(1,b.occ|0);mkS+=murkAt(b.x,b.y)*oc;mkN+=oc}});avgLV=nR?avgLV/nR:50;var murkH=mkN?Math.min(15,Math.round(mkS/mkN*.25)):0;
+  var happy=Math.round(Math.max(0,Math.min(100,35+(pop?25*served/pop:20)+(food?15:-20)+(cloth?10:-15)+avgLV*.2+cheerV()-murkH+polV('happy'))));
   var dR=Math.max(-1,Math.min(1,((jobs+12)-workers)/25));if(pop>=lim)dR=Math.min(dR,-.3);if(!food)dR-=.4;
   var dC=hallLv()>=ZN.C.at?Math.max(-1,Math.min(1,(pop*.22-jC)/10+(pop>capC?.3:0))):0,dI=hallLv()>=ZN.I.at?Math.max(-1,Math.min(1,(pop*.3-jI)/12)):0;
-  G.taxH=Math.round(served*TAXR*happy)/100;CS={tax:G.taxH,pop:pop,lim:lim,workers:workers,jobs:jobs,w:w,dem:{R:dR,C:dC,I:dI},capC:capC,served:served,happy:happy,food:food,cloth:cloth,clothOn:clothOn,eat:served*.06,wear:clothOn?served*.03:0};
+  G.taxH=Math.round(served*TAXR*happy*polV('tax'))/100;CS={murkH:murkH,tax:G.taxH,pop:pop,lim:lim,workers:workers,jobs:jobs,w:w,dem:{R:dR,C:dC,I:dI},capC:capC,served:served,happy:happy,food:food,cloth:cloth,clothOn:clothOn,eat:served*.06*polV('eat'),wear:clothOn?served*.03:0};
   /* 새 건물이 올라감 */
   if(now-cityG>2500){cityG=now;var busy=G.b.filter(function(b){return isZ(b.k)&&b.job}).length;
     ['R','C','I'].forEach(function(z){if(CS.dem[z]<=.1||busy>=2+pop/40||Math.random()>.6)return;var L=[];for(var key in G.zone){if(G.zone[key]!==z||OCC[key])continue;var q=key.split(','),x=+q[0],y=+q[1];if(O2[key]&&roadAdj(x,y))L.push([x,y])}
       if(!L.length)return;L.sort(function(a,b){return landVal(b[0],b[1])-landVal(a[0],a[1])});var t=L[Math.floor(Math.random()*Math.min(4,L.length))],nb={id:G.nid++,k:'z'+z+Math.floor(Math.random()*3),x:t[0],y:t[1],lv:0,occ:0,buf:{}};
       G.b.push(nb);occ();nb.job={L:1,start:now,end:now+ZBT[1]*1000*(.8+Math.random()*.4)};busy++})}
   /* 이사 오고 나감 */
-  G.b.forEach(function(b){if(!isZ(b.k)||b.k.charAt(1)!=='R'||!b.lv||b.job&&b.job.L===1)return;var ok=O2[b.x+','+b.y]&&roadAdj(b.x,b.y),cap=ZN.R.cap[b.lv],tgt=ok?Math.round(cap*Math.min(1,.45+happy/180)):0;
+  G.b.forEach(function(b){if(!isZ(b.k)||b.k.charAt(1)!=='R'||!b.lv||b.job&&b.job.L===1)return;var ok=O2[b.x+','+b.y]&&roadAdj(b.x,b.y),cap=ZN.R.cap[b.lv],tgt=ok?Math.round(cap*Math.min(1,.45+happy/180)*Math.max(.4,1-murkAt(b.x,b.y)/180)*(b.inc?.5:1)):0;
     if((b.occ|0)<tgt&&CS.pop<CS.lim&&Math.random()<.35*dt){b.occ=(b.occ|0)+1;CS.pop++;arrive(b)}else if((b.occ|0)>tgt&&Math.random()<.15*dt)b.occ--});
   /* 단계 올리기: 산호궁 · 땅값 · 행복 · 산호석 */
   if(now-cityU>4000){cityU=now;var c=G.b.filter(function(b){return isZ(b.k)&&b.lv&&!b.job&&zUpWhy(b).length===0});if(c.length){var b=c[Math.floor(Math.random()*c.length)],to=b.lv+1;G.res.stone-=ZST[to];G.res.brick-=ZBR[to];b.job={L:to,start:now,end:now+ZBT[to]*1000}}}
   walkersTick(dt)}
 function zUpWhy(b){var z=b.k.charAt(1),L=b.lv,why=[];if(L>=5)return ['최고 단계'];if(L>=zMax())why.push('🏛 산호궁 Lv.'+ZHL[L]+' 필요');
   var lv=landVal(b.x,b.y),need=ZLV[L];if(lv<need)why.push('땅값 '+need+' 이상(지금 '+lv+')');if(CS.happy<55)why.push('행복 55 이상(지금 '+CS.happy+')');
-  if(z==='R'&&(b.occ|0)<ZN.R.cap[L]*.8)why.push('주민이 더 입주해야 해요');if(CS.dem[z]<-.2)why.push(ZN[z].n+' 수요가 없어요');if((G.res.stone||0)<ZST[L+1])why.push('🪨 '+ZST[L+1]+' 필요');if(ZBR[L+1]&&(G.res.brick||0)<ZBR[L+1])why.push('🧱 '+ZBR[L+1]+' 필요');return why.concat(svcWhy(b,L+1))}
+  if(z==='R'&&(b.occ|0)<ZN.R.cap[L]*.8)why.push('주민이 더 입주해야 해요');if(CS.dem[z]<-.2)why.push(ZN[z].n+' 수요가 없어요');if((G.res.stone||0)<ZST[L+1])why.push('🪨 '+ZST[L+1]+' 필요');if(ZBR[L+1]&&(G.res.brick||0)<ZBR[L+1])why.push('🧱 '+ZBR[L+1]+' 필요');if(z!=='I'){var mk=murkAt(b.x,b.y),mx=L+1>=5?15:L+1>=4?25:L+1>=3?40:999;if(mk>mx)why.push('🌫 탁한 물 '+mx+' 이하(지금 '+mk+')')}return why.concat(svcWhy(b,L+1))}
 
 /* --- 주민: 물고기 머리 · 옷 입은 몸으로 길을 걸어요 --- */
 var WALK=[],FISHC=['#ff9f43','#ff6b8b','#4fb3ff','#ffd54a','#7ed957','#b48cff','#ff7d4d'],OUTF=['#4f8fdc','#3fae6a','#ff7d8f','#ffb347','#8a6cff','#2fb5a7'];

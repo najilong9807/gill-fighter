@@ -10,6 +10,94 @@
 },
 "t": [
 [
+"🌫 집 근처 물이 탁해요\\(행복 −(\\d+)\\) · ⚙ 기반 → 🫧 물 거르개",
+"🌫 El agua cerca de las casas está turbia (felicidad −$1) · ⚙ Servicios → 🫧 Filtro de agua"
+],
+[
+"⚠ (\\S+) ([^<>·]+?) · ([^<>]+?)을\\(를\\) 눌러 해결해요",
+"⚠ $1 $2 · toca $3 para resolverlo"
+],
+[
+"⚖ 켤 수 있는 정책이 (\\d+)개 있어요 · ☰ 메뉴 → 마을 정책",
+"⚖ Puedes activar $1 políticas más · ☰ Menú → Políticas"
+],
+[
+"마을 사건 (\\d+)번 막아 내기",
+"Evita $1 incidentes"
+],
+[
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 여러 개 지어요",
+"Agua turbia −$2 en $1 casillas · construye varios"
+],
+[
+"주변 (\\d+)칸 탁한 물 −(\\d+) · 지금 이 자리 🌫 (\\d+)",
+"Agua turbia −$2 en $1 casillas · aquí ahora 🌫 $3"
+],
+[
+"([^<>]+?) 뒤엔 저절로 지나가요",
+"Pasará solo en $1"
+],
+[
+"켤 수 있는 정책 <b>(\\d+) / (\\d+)</b> · Lv\\.10 · Lv\\.15에 한 칸씩 늘어요",
+"Políticas activas <b>$1 / $2</b> · un hueco más en Nv 10 y Nv 15"
+],
+[
+" · 다시 바꾸기까지 ([^<]+)",
+" · podrás cambiar en $1"
+],
+[
+"켜진 정책 (\\d+) / (\\d+)",
+"Activas $1 / $2"
+],
+[
+"⚖ 정책을 켰어요 · (.+)",
+"⚖ Política activada · $1"
+],
+[
+"⚖ 정책을 껐어요 · (.+)",
+"⚖ Política desactivada · $1"
+],
+[
+"⚖ 정책 (\\d+) / (\\d+)",
+"⚖ Políticas $1 / $2"
+],
+[
+"🌫 탁한 물 때문에 행복 <b>−(\\d+)</b>",
+"🌫 Felicidad perdida por agua turbia <b>−$1</b>"
+],
+[
+"⚠ 사건 지금 (\\d+)개 · 막아 낸 사건 (\\d+)번",
+"⚠ Incidentes ahora $1 · evitados $2 veces"
+],
+[
+"⚠ (\\S+) ([^<>!]+?)! · 건물을 눌러 해결해요",
+"⚠ ¡$1 $2! · Toca el edificio para resolverlo"
+],
+[
+"✓ (\\S+) ([^<>!]+?) 해결!",
+"✓ ¡$1 $2 resuelto!"
+],
+[
+"🛡 (.+?) 범위라 (\\S+) (.+?)을\\(를\\) 막았어요",
+"🛡 $2 $3 evitado · estaba en el alcance de $1"
+],
+[
+"막으려면: (.+?) 범위 안에 두면 다음엔 저절로 막아요",
+"Para evitarlo: déjalo dentro del alcance de $1 y la próxima vez se evitará solo"
+],
+[
+"🫧(\\S+) 들여 해결",
+"Resolver por 🫧$1"
+],
+[
+"(\\S+) ([^<>·]+?) · 저절로 지나갔어요",
+"$1 $2 · pasó solo"
+],
+[
+"🌫 탁한 물 (\\d+) 이하\\(지금 (\\d+)\\)",
+"🌫 Agua turbia $1 o menos (ahora $2)"
+],
+[
 "산호궁 Lv\\.(\\d+) 만들기",
 "Sube el Palacio de Coral a Lv.$1"
 ],
@@ -797,6 +885,60 @@
 "단계를 넘으면 💎 · ⭐ 명성을 받아요": "Cada etapa superada da 💎 y ⭐ Fama",
 "마을 이름 (10글자까지)": "Nombre del pueblo (hasta 10 caracteres)",
 "<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. <b>🐢 거북 배달소</b>를 지으면 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "En el <b>🐠 Taller del acuario</b> (debajo de 📦 Almacén) conviertes materiales sobrantes en adornos exclusivos para tu acuario. Cuando construyas el <b>🐢 Reparto Tortuga</b>, la tortuga del <b>🐢 Paquete del pueblo</b> visita a veces tu acuario con perlas de tus habitantes (3 veces al día).",
-"<b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.": "Los <b>🏆 Récords del pueblo</b> (☰ Menú) son sellos que juntas con el tiempo. Cada etapa superada da 💎 y ⭐ Fama, y con el ✏ de arriba le pones nombre a tu pueblo."
+"<b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.": "Los <b>🏆 Récords del pueblo</b> (☰ Menú) son sellos que juntas con el tiempo. Cada etapa superada da 💎 y ⭐ Fama, y con el ✏ de arriba le pones nombre a tu pueblo.",
+"바다 축제의 밤": "Noches de fiesta marina",
+"조개껍데기 재활용": "Reciclaje de conchas",
+"경단 나눔": "Reparto de bolitas",
+"일찍 출근": "Turno temprano",
+"밤길 가로등": "Faroles nocturnos",
+"게 일꾼 야근": "Turno nocturno de cangrejos",
+"안전 훈련": "Simulacros de seguridad",
+"행복 +8": "Felicidad +8",
+"행복 +6": "Felicidad +6",
+"행복 −7": "Felicidad −7",
+"행복 −5": "Felicidad −5",
+"세금 −15%": "Impuestos −15%",
+"세금 −10%": "Impuestos −10%",
+"탁한 물 −30%": "Agua turbia −30%",
+"생산 −10%": "Producción −10%",
+"생산 −5%": "Producción −5%",
+"생산 +15%": "Producción +15%",
+"경단 먹는 양 ×1.6": "Bolitas consumidas ×1.6",
+"모든 땅값 +4": "Todo el valor del suelo +4",
+"공사 시간 −20%": "Tiempo de obra −20%",
+"사건 −40%": "Incidentes −40%",
+"⚖ 마을 정책": "⚖ Políticas del pueblo",
+"마을 정책": "Políticas",
+"⚖ 정책": "⚖ Políticas",
+"끄기": "Desactivar",
+"켜기": "Activar",
+"건물 보기": "Ver edificio",
+"💎1 바로": "💎1 ya",
+"맑음": "Limpia",
+"조금": "Algo",
+"탁함": "Turbia",
+"탁한 물": "Agua turbia",
+"물 거르개": "Filtro de agua",
+"큰 물 거르개": "Filtro de agua grande",
+"🗺 탁한 물 보기": "🗺 Ver agua turbia",
+"(집 근처 평균 · 🗺 지도 → 탁한 물)": "(media cerca de las casas · 🗺 Mapa → Agua turbia)",
+"상어 출몰": "Tiburón a la vista",
+"뜨거운 물 분출": "Chorro de agua caliente",
+"물고기 감기": "Resfriado de peces",
+"적조": "Marea roja",
+"상어가 나타나 주민 절반이 숨었어요": "Apareció un tiburón y la mitad de los habitantes se esconde",
+"바닥에서 뜨거운 물이 솟아 일이 멈췄어요": "Brota agua caliente del suelo y el trabajo se detuvo",
+"감기가 돌아 주민 절반이 쉬고 있어요": "Hay un resfriado y la mitad de los habitantes descansa",
+"탁한 물에 붉은 물이 끼어 일이 멈췄어요": "Se formó agua roja en la turbiedad y el trabajo se detuvo",
+"🫧 물 거르개": "🫧 Filtro de agua",
+"정책은 🏛 산호궁 Lv.6에 열려요 · 좋은 점과 대가가 같이 있어요": "Las políticas se abren con el 🏛 Palacio de Coral Nv 6 · cada una tiene ventaja y coste",
+"막으려면: 🌫 탁한 물 45 밑으로 · ⚙ 기반 → 🫧 물 거르개": "Para evitarlo: mantén el 🌫 agua turbia por debajo de 45 · ⚙ Servicios → 🫧 Filtro de agua",
+"⚠ 사건 🔒 🏛Lv.6": "⚠ Incidentes 🔒 🏛Nv.6",
+"⚖ 정책 🔒 🏛Lv.6": "⚖ Políticas 🔒 🏛Nv.6",
+"🏛 Lv.6에 열려요": "Se abre en 🏛 Nv 6",
+"<i style=\"background:#5ac8ff\"></i> 맑음 <i style=\"background:#8c8c5a\"></i> 조금 <i style=\"background:#a05a32\"></i> 탁함 · 집 3단계 40 · 4단계 25 · 5단계 15 이하 · 🫧 물 거르개로 맑게": "<i style=\"background:#5ac8ff\"></i> Limpia <i style=\"background:#8c8c5a\"></i> Algo <i style=\"background:#a05a32\"></i> Turbia · casas Nv 3 ≤40 · Nv 4 ≤25 · Nv 5 ≤15 · límpiala con 🫧 Filtros de agua",
+"<b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.": "<b>🌫 Agua turbia</b>: el agua alrededor de canteras, hornos, fábricas, talleres, puertos y zonas industriales se enturbia. Cerca de las casas reduce los habitantes y la felicidad, y las casas necesitan 40 o menos para Nv 3, 25 para Nv 4 y 15 para Nv 5. Construye varios <b>🫧 Filtros de agua</b> desde ⚙ Servicios y revísalo en el 🗺 mapa.",
+"<b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.": "Las <b>⚖ Políticas del pueblo</b> (☰ Menú) se activan desde el Palacio de Coral Nv 6. Cada una tiene ventaja y coste. Ganas un hueco más en Nv 10 y Nv 15.",
+"<b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.": "<b>⚠ Incidentes</b>: desde el Palacio de Coral Nv 6 a veces hay tiburones, agua caliente, resfriados o marea roja. Dentro del alcance de 🚒 bomberos, 👮 patrulla o 🏥 clínica se evitan solos; si no, toca el edificio para resolverlo o espera 2 horas."
 }
 }

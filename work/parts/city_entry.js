@@ -4,7 +4,7 @@
    - 진주 · 보석은 아가미 파이터와 같은 지갑(window.GF_WALLET)
    - 마을 저장은 같은 기기 localStorage 'gfcity.v1'(본게임 save와 따로) · 저장 백업에는 같이 실림
    - 탭 빨간 점: 처음 한 번(새 메뉴) + 마을에 받을 것이 생겼을 때(공사 끝 · 생산 8시간치 가득) — 마을이 'gfcity.hint'에 다음 시각을 남김 */
-(function(){
+(function(){if(window.GF_TOWN_OFF)return; /* 1.1.30 출시엔 마을 끔(맨 앞 GF_TOWN_OFF) */
   window.GF_WALLET={get:function(k){return k==='pearl'?(save.pearls|0):(save.gems|0)},
     add:function(k,n){n=Math.round(n)||0;if(k==='pearl')save.pearls=Math.max(0,(save.pearls|0)+n);else save.gems=Math.max(0,(save.gems|0)+n);try{persist()}catch(e){}}};
   /* 저장 백업에 마을 저장도 같이: 맡길 때 save.city로 싣고, 불러올 때 'gfcity.v1'로 되돌림.

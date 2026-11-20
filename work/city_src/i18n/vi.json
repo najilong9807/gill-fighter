@@ -789,13 +789,14 @@
 "마을 재료로 <b>내 수족관 전용 소품</b>을 만들어 보내요 · 수족관 › 꾸미기 › 소품에 들어가요": "Dùng vật liệu của làng làm <b>đồ trang trí riêng cho bể cá</b> · vào Bể cá › Trang trí › Đồ",
 "랜드마크 · 땅값 + · 인구 한도 + · 내 수족관 넓히기": "Công trình · giá đất + · giới hạn dân + · mở rộng bể cá",
 "아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 레벨마다 아가미 파이터 내 수족관의 소품 칸이 2칸, 집 진주 샘이 1% 늘어요.": "Bể cá Gill. Tăng mạnh giá đất vùng rộng và giới hạn dân số. Mỗi cấp thêm 2 ô trang trí và +1% suối ngọc cho bể cá trong Gill Fighter.",
-"<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. 산호궁 Lv.2부터는 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "Ở <b>🐠 Xưởng bể cá</b> (dưới 📦 Kho) bạn dùng nguyên liệu dư để làm đồ trang trí riêng cho bể cá. Từ Cung San Hô Lv 2, rùa <b>🐢 Bưu kiện của làng</b> thỉnh thoảng ghé bể cá mang ngọc trai cư dân gửi (3 lần mỗi ngày).",
-"🏆 마을 기록": "🏆 Thành tích thị trấn",
+"🏆 마을 기록": "🏆 Thành tích làng",
 "마을 기록": "Thành tích",
 "도장 모으기": "Sưu tầm con dấu",
 "✓ 다 모음": "✓ Đủ hết",
-"마을 이름 바꾸기": "Đổi tên thị trấn",
+"마을 이름 바꾸기": "Đổi tên làng",
 "단계를 넘으면 💎 · ⭐ 명성을 받아요": "Mỗi mốc vượt qua nhận 💎 và ⭐ Danh tiếng",
-"마을 이름 (10글자까지)": "Tên thị trấn (tối đa 10 ký tự)"
+"마을 이름 (10글자까지)": "Tên làng (tối đa 10 ký tự)",
+"<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. <b>🐢 거북 배달소</b>를 지으면 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "Ở <b>🐠 Xưởng bể cá</b> (dưới 📦 Kho) bạn dùng nguyên liệu dư để làm đồ trang trí riêng cho bể cá. Khi xây <b>🐢 Trạm giao hàng Rùa</b>, rùa <b>🐢 Bưu kiện của làng</b> thỉnh thoảng ghé bể cá mang ngọc trai cư dân gửi (3 lần mỗi ngày).",
+"<b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.": "<b>🏆 Thành tích làng</b> (☰ Menu) là các con dấu sưu tầm lâu dài. Mỗi mốc vượt qua nhận 💎 và ⭐ Danh tiếng, và nút ✏ ở trên cùng để đặt tên làng."
 }
 }

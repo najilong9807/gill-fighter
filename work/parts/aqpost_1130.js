@@ -1,5 +1,5 @@
 /* ===== 1.1.30 늑구 '수족관 비중도 작아지지 않게' ② 마을 택배 거북
-   - 마을(아가미시티) 산호궁 Lv.2 이상이면, 수족관에 있을 때 가끔 '마을 택배' 거북이 선물 상자를 메고 지나감
+   - 마을(아가미시티)에 거북 배달소를 지었으면(산호궁 Lv.3에 열림, 38차에 Lv.2 → 배달소로 바꿈), 수족관에 있을 때 가끔 '마을 택배' 거북이 선물 상자를 메고 지나감
    - 누르면 마을 주민이 보낸 선물: 진주 40 + 산호궁 레벨×10 (최대 250) · 하루 3번 · 받고 나서 3시간 뒤에 다시 옴
    - 못 누르고 지나가면 3분 뒤 다시 지나감. 친구 수족관 구경 · 꾸미기 · 구경 모드 · 손님이 있을 땐 안 나옴. 사용 기록 tkPost ===== */
 (function(){
@@ -13,10 +13,11 @@ var IM={t:new Image(),g:new Image()};IM.t.src='svart/pet_turtle.webp';IM.g.src='
 var PO=null,WAIT=0,DAYN=3,COOL=3*3600e3,MISS=180e3;
 function dayK(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function st(){var o=save.tkPost;if(!o||typeof o!=='object')o=save.tkPost={d:'',n:0,at:0,miss:0};if(o.d!==dayK()){o.d=dayK();o.n=0}return o}
-var HL={v:0,at:0};function hallLv(){var now=Date.now();if(now-HL.at<15000)return HL.v;HL.at=now;try{var g=JSON.parse(localStorage.getItem('gfcity.v1')||'null'),L=0;if(g&&g.b)g.b.forEach(function(b){if(b.k==='hall')L=Math.max(L,b.lv|0)});return HL.v=L}catch(e){return HL.v=0}}
+var HL={v:0,tk:0,at:0};function hallLv(){var now=Date.now();if(now-HL.at<15000)return HL.v;HL.at=now;try{var g=JSON.parse(localStorage.getItem('gfcity.v1')||'null'),L=0,K=0;if(g&&g.b)g.b.forEach(function(b){if(b.k==='hall')L=Math.max(L,b.lv|0);if(b.k==='turtle')K=Math.max(K,b.lv|0)});HL.tk=K;return HL.v=L}catch(e){HL.tk=0;return HL.v=0}}
+function depotOk(){hallLv();return HL.tk>=1}
 function gain(){return Math.min(250,40+10*hallLv())}
 function canSpawn(){if(page!=='tank'||deco.on||VIEWM||(typeof VISIT!=='undefined'&&VISIT)||document.hidden)return false;if(typeof ABY==='object'&&ABY&&ABY.vis)return false;
-  var o=st(),now=Date.now();if(o.n>=DAYN||now-(o.at||0)<COOL||now-(o.miss||0)<MISS)return false;return hallLv()>=2}
+  var o=st(),now=Date.now();if(o.n>=DAYN||now-(o.at||0)<COOL||now-(o.miss||0)<MISS)return false;return depotOk()}
 function spawn(){var dir=Math.random()<.5?1:-1,vw=viewW();PO={dir:dir,x:dir>0?tankCam-70:tankCam+vw+70,y:ch*(.5+Math.random()*.12),ph:Math.random()*6,t:0,out:0};
   try{banner(TX[2],TX[3]);svSnd('bub',.7)}catch(e){}try{crumb('tkPost')}catch(e){}}
 function tick(dt){if(!PO){if(!canSpawn()){WAIT=0;return}WAIT+=dt;if(WAIT>25+Math.random()*2){WAIT=0;spawn()}return}
@@ -36,9 +37,12 @@ function take(){var o=st(),g=gain();PO.out=1;PO.t=0;o.n++;o.at=Date.now();save.p
   try{if(typeof msEv==='function')msEv('tkPost')}catch(e){}try{refreshTank()}catch(e){}try{refreshHome(true)}catch(e){}}
 var LAST=0;var _dtpP=drawTankPops;drawTankPops=function(){if(page==='tank'){try{var n=performance.now(),dt=LAST?Math.min(.1,(n-LAST)/1000):0;LAST=n;tick(dt);draw()}catch(e){}}else LAST=0;return _dtpP.apply(this,arguments)};
 var _ttP=tankTap;tankTap=function(wx,wy){try{if(!VIEWM&&!deco.on&&hit(wx,wy)){take();return}}catch(e){}return _ttP.apply(this,arguments)};
-window.__tkPost={dbg:function(){return JSON.stringify({dU:decoU(),z:tankZ,ch:ch,cw:cw,vw:viewW(),fl:typeof floorY==='function'?floorY():null})},spawn:function(){spawn()},st:function(){return {po:PO,s:st(),hl:hallLv()}},sc:function(){return PO?{x:(PO.x-tankCam)*tankZ+xOff(),y:PO.y*tankZ-decoVo+zOff()}:null}};
+window.__tkPost={dbg:function(){return JSON.stringify({dU:decoU(),z:tankZ,ch:ch,cw:cw,vw:viewW(),fl:typeof floorY==='function'?floorY():null})},spawn:function(){spawn()},st:function(){return {po:PO,s:st(),hl:hallLv(),dp:depotOk()}},sc:function(){return PO?{x:(PO.x-tankCam)*tankZ+xOff(),y:PO.y*tankZ-decoVo+zOff()}:null}};
 /* 게임 안 1.1.30 소식에 한 줄 */
-try{var NK3='수족관: 마을 산호궁이 Lv.2가 되면 「마을 택배」 거북이 가끔 지나가요 · 누르면 주민들이 보낸 진주 선물(하루 3번)',NV3={en:'Aquarium: once your Coral Hall reaches Lv 2, a Town parcel turtle swims by now and then · tap it for a pearl gift from your residents (3 a day)',ja:'水族館：町のサンゴ宮がLv2になると「町の宅配便」のカメがときどき通ります・タップで住民からの真珠プレゼント（1日3回）',es:'Acuario: cuando tu Palacio de Coral llegue al Nv 2, a veces pasará la tortuga del Paquete del pueblo · tócala para recibir perlas de tus habitantes (3 al día)',vi:'Bể cá: khi Cung San Hô của làng đạt Lv 2, rùa Bưu kiện của làng thỉnh thoảng bơi qua · chạm vào để nhận ngọc trai cư dân gửi (3 lần mỗi ngày)'};
+try{var NK3='수족관: 마을에 거북 배달소를 지으면 「마을 택배」 거북이 가끔 지나가요 · 누르면 주민들이 보낸 진주 선물(하루 3번)',NV3={en:'Aquarium: once you build the Turtle Depot in Town, a Town parcel turtle swims by now and then · tap it for a pearl gift from your residents (3 a day)',ja:'水族館：町にカメ配達所を建てると「町の宅配便」のカメがときどき通ります・タップで住民からの真珠プレゼント（1日3回）',es:'Acuario: cuando construyas el Reparto Tortuga en el pueblo, a veces pasará la tortuga del Paquete del pueblo · tócala para recibir perlas de tus habitantes (3 al día)',vi:'Bể cá: khi xây Trạm giao hàng Rùa trong làng, rùa Bưu kiện của làng thỉnh thoảng bơi qua · chạm vào để nhận ngọc trai cư dân gửi (3 lần mỗi ngày)'};
   try{TRT[NK3]=NV3.en}catch(e){}try{TRJ[NK3]=NV3.ja}catch(e){}try{if(SUBL&&NV3[SUBL])TRX[NK3]=NV3[SUBL]}catch(e){}
   NEWS['1.1.30']=(NEWS['1.1.30']||[]).concat([T(NK3)])}catch(e){}
+try{var NK4='마을: ☰ 메뉴 「🏆 마을 기록」에서 도장을 모아 💎 보석을 받아요 · 마을 이름도 지을 수 있어요',NV4={en:'Town: collect stamps in ☰ Menu → “🏆 Town Records” to earn 💎 gems · you can name your town too',ja:'町：☰ メニュー「🏆 町の記録」でスタンプを集めて💎 ジェムをもらおう・町の名前も付けられます',es:'Pueblo: junta sellos en ☰ Menú → «🏆 Récords del pueblo» y gana 💎 gemas · también puedes ponerle nombre a tu pueblo',vi:'Làng: sưu tầm con dấu ở ☰ Menu → “🏆 Thành tích làng” để nhận 💎 đá quý · bạn cũng có thể đặt tên cho làng'};
+  try{TRT[NK4]=NV4.en}catch(e){}try{TRJ[NK4]=NV4.ja}catch(e){}try{if(SUBL&&NV4[SUBL])TRX[NK4]=NV4[SUBL]}catch(e){}
+  NEWS['1.1.30']=(NEWS['1.1.30']||[]).concat([T(NK4)])}catch(e){}
 })();

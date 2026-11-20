@@ -10,6 +10,26 @@
 },
 "t": [
 [
+"주변 (\\d+)칸 길 막힘 −35% · 여러 개 지어요",
+"Tắc đường −35% trong $1 ô · xây được nhiều cái"
+],
+[
+"주변 (\\d+)칸 길의 오가는 양 −35% · 막힌 길이 풀려요",
+"Lưu lượng −35% trên đường trong $1 ô · gỡ tắc"
+],
+[
+"🚦 길이 막혀요\\(막힘 ([\\d.]+)\\) · 길 넓히기 · 🚌 버스 정류장",
+"🚦 Đường tắc ($1) · mở rộng đường · 🚌 trạm xe buýt"
+],
+[
+"🏛 산호궁 Lv\\.(\\d+)에 (.+?)이\\(가\\) 열려요",
+"$2 mở ở 🏛 Cung San Hô Lv.$1"
+],
+[
+"🪨 산호석이 모자라요",
+"Thiếu 🪨 đá san hô"
+],
+[
 "주변 (\\d+)칸 산소 · 여러 개 지어요",
 "Oxy trong $1 ô · xây được nhiều cái"
 ],
@@ -984,6 +1004,19 @@
 "😟 안 좋아요": "😟 Không vui",
 "🏠 집 보기": "🏠 Xem nhà",
 "💼 일터 보기": "💼 Xem nơi làm",
-"<b>🐟 주민</b>을 누르면 이름 · 집 · 일터 · 기분과 한마디를 들을 수 있어요. 마을에 무엇이 모자란지 주민 말로 알 수 있어요.": "Chạm vào <b>🐟 cư dân</b> để xem tên, nhà, nơi làm, tâm trạng và nghe họ nói. Lời họ cho biết làng đang thiếu gì."
+"<b>🐟 주민</b>을 누르면 이름 · 집 · 일터 · 기분과 한마디를 들을 수 있어요. 마을에 무엇이 모자란지 주민 말로 알 수 있어요.": "Chạm vào <b>🐟 cư dân</b> để xem tên, nhà, nơi làm, tâm trạng và nghe họ nói. Lời họ cho biết làng đang thiếu gì.",
+"⬆ 길 넓히기": "⬆ Mở rộng đường",
+"길 넓히기": "Mở rộng đường",
+"교통": "Giao thông",
+"자갈길": "Đường sỏi",
+"산호 대로": "Đại lộ san hô",
+"해류 버스 정류장": "Trạm xe buýt hải lưu",
+"한산": "Thông thoáng",
+"붐빔": "Đông",
+"막힘": "Tắc",
+"끌어서 길을 넓혀요 · 자갈길 40🫧 🪨20 · 산호 대로 120🫧 🪨60 · 이동은 두 손가락": "Kéo để mở rộng đường · Đường sỏi 40🫧 🪨20 · Đại lộ san hô 120🫧 🪨60 · di chuyển bằng hai ngón",
+"막힌 길을 자갈길 · 산호 대로로": "Đổi đường tắc thành đường sỏi · đại lộ",
+"<i style=\"background:#46c86e\"></i> 한산 <i style=\"background:#ffc83c\"></i> 붐빔 <i style=\"background:#eb463c\"></i> 막힘 · ⬆ 길 넓히기 · 🚌 버스 정류장으로 풀어요": "<i style=\"background:#46c86e\"></i> Thông thoáng <i style=\"background:#ffc83c\"></i> Đông <i style=\"background:#eb463c\"></i> Tắc · gỡ bằng ⬆ Mở rộng đường · 🚌 Trạm xe buýt",
+"<b>🚦 교통</b>: 집 · 가게 · 공방 · 일터가 몰린 길은 막혀요. 막힌 길 옆은 생산 · 입주 · 행복이 줄고, 구역 4단계부터는 길이 안 막혀야 자라요. 🛣 도로 탭 <b>⬆ 길 넓히기</b>로 자갈길(Lv.5) · 산호 대로(Lv.12)를 깔거나, ⚙ 기반의 <b>🚌 해류 버스 정류장</b>을 놓아요. 🗺 지도 → 교통으로 확인해요.": "<b>🚦 Giao thông</b>: đường có nhiều nhà, cửa hàng, xưởng và nơi làm sẽ bị tắc. Cạnh đường tắc thì sản xuất, người chuyển đến và hạnh phúc giảm, và khu từ cấp 4 trở lên cần đường không tắc. Dùng <b>⬆ Mở rộng đường</b> ở tab 🛣 Đường để làm đường sỏi (Lv.5) và đại lộ san hô (Lv.12), hoặc đặt <b>🚌 Trạm xe buýt hải lưu</b> ở ⚙ Hạ tầng. Xem ở 🗺 Bản đồ → Giao thông."
 }
 }

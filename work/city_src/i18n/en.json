@@ -10,6 +10,26 @@
 },
 "t": [
 [
+"주변 (\\d+)칸 길 막힘 −35% · 여러 개 지어요",
+"Road jams −35% within $1 tiles · build several"
+],
+[
+"주변 (\\d+)칸 길의 오가는 양 −35% · 막힌 길이 풀려요",
+"Traffic −35% on roads within $1 tiles · eases jams"
+],
+[
+"🚦 길이 막혀요\\(막힘 ([\\d.]+)\\) · 길 넓히기 · 🚌 버스 정류장",
+"🚦 Road jammed ($1) · widen roads · 🚌 bus stop"
+],
+[
+"🏛 산호궁 Lv\\.(\\d+)에 (.+?)이\\(가\\) 열려요",
+"$2 unlocks at 🏛 Coral Hall Lv.$1"
+],
+[
+"🪨 산호석이 모자라요",
+"Not enough 🪨 Coral Stone"
+],
+[
 "주변 (\\d+)칸 산소 · 여러 개 지어요",
 "Oxygen within $1 tiles · build several"
 ],
@@ -984,6 +1004,19 @@
 "😟 안 좋아요": "😟 Not good",
 "🏠 집 보기": "🏠 See home",
 "💼 일터 보기": "💼 See workplace",
-"<b>🐟 주민</b>을 누르면 이름 · 집 · 일터 · 기분과 한마디를 들을 수 있어요. 마을에 무엇이 모자란지 주민 말로 알 수 있어요.": "Tap a <b>🐟 resident</b> to see their name, home, workplace and mood, and hear what they have to say. Their words tell you what the town is missing."
+"<b>🐟 주민</b>을 누르면 이름 · 집 · 일터 · 기분과 한마디를 들을 수 있어요. 마을에 무엇이 모자란지 주민 말로 알 수 있어요.": "Tap a <b>🐟 resident</b> to see their name, home, workplace and mood, and hear what they have to say. Their words tell you what the town is missing.",
+"⬆ 길 넓히기": "⬆ Widen roads",
+"길 넓히기": "Widen roads",
+"교통": "Traffic",
+"자갈길": "Gravel road",
+"산호 대로": "Coral avenue",
+"해류 버스 정류장": "Current Bus Stop",
+"한산": "Clear",
+"붐빔": "Busy",
+"막힘": "Jammed",
+"끌어서 길을 넓혀요 · 자갈길 40🫧 🪨20 · 산호 대로 120🫧 🪨60 · 이동은 두 손가락": "Drag to widen roads · Gravel 40🫧 🪨20 · Coral avenue 120🫧 🪨60 · move with two fingers",
+"막힌 길을 자갈길 · 산호 대로로": "Turn jammed roads into gravel or coral avenues",
+"<i style=\"background:#46c86e\"></i> 한산 <i style=\"background:#ffc83c\"></i> 붐빔 <i style=\"background:#eb463c\"></i> 막힘 · ⬆ 길 넓히기 · 🚌 버스 정류장으로 풀어요": "<i style=\"background:#46c86e\"></i> Clear <i style=\"background:#ffc83c\"></i> Busy <i style=\"background:#eb463c\"></i> Jammed · fix with ⬆ Widen roads · 🚌 Bus stops",
+"<b>🚦 교통</b>: 집 · 가게 · 공방 · 일터가 몰린 길은 막혀요. 막힌 길 옆은 생산 · 입주 · 행복이 줄고, 구역 4단계부터는 길이 안 막혀야 자라요. 🛣 도로 탭 <b>⬆ 길 넓히기</b>로 자갈길(Lv.5) · 산호 대로(Lv.12)를 깔거나, ⚙ 기반의 <b>🚌 해류 버스 정류장</b>을 놓아요. 🗺 지도 → 교통으로 확인해요.": "<b>🚦 Traffic</b>: roads crowded with homes, shops, workshops and workplaces get jammed. Next to a jammed road, production, move-ins and happiness drop, and zones need unjammed roads to reach Lv.4+. Use <b>⬆ Widen roads</b> in the 🛣 Roads tab for gravel roads (Lv.5) and coral avenues (Lv.12), or place <b>🚌 Current Bus Stops</b> from ⚙ Utilities. Check it on 🗺 Map → Traffic."
 }
 }

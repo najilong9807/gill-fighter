@@ -388,6 +388,21 @@ def step_desc(api, vid):
         for l in api.all('appInfos/%s/appInfoLocalizations?limit=50' % info['id']):
             a = l['attributes']; log('INSPECT info', st, a['locale'], 'name', a.get('name'), '| sub', a.get('subtitle'))
 
+def step_terr(api):
+    """[읽기만] 판매 나라(지역) — 몇 곳에서 팔리는지, 중국 본토 · 대만 · 홍콩 · 마카오 등"""
+    try:
+        av = api.get('apps/%s/appAvailabilityV2' % APP)
+        aid = (av.get('data') or {}).get('id')
+        ts = api.all('appAvailabilities/%s/territoryAvailabilities?limit=200&include=territory' % aid)
+        on = [t for t in ts if t['attributes'].get('available')]
+        log('INSPECT terr total', len(ts), 'available', len(on))
+        for t in ts:
+            tid = ((t.get('relationships') or {}).get('territory') or {}).get('data', {}).get('id')
+            if tid in ('CHN', 'TWN', 'HKG', 'MAC', 'KOR', 'JPN', 'USA', 'VNM'):
+                log('INSPECT terr', tid, 'available', t['attributes'].get('available'), 'state', t['attributes'].get('contentStatuses'))
+    except Exception as e:
+        log('INSPECT terr ERR', str(e)[:300])
+
 OLD_NAME = 'Gulp Deep'; NEW_NAME = 'Gill Fighter'
 def step_name(api):
     """앱 이름(appInfo) 바꾸기 — 판매 중 쪽은 못 바꾸고, 새 버전과 함께 준비 중인 appInfo만.
@@ -413,6 +428,7 @@ def main():
     api = Api()
     log('MODE', 'DRY' if DRY else 'WRITE', 'steps', sorted(STEPS))
     if 'cancel' in STEPS: step_cancel(api)
+    if 'terr' in STEPS: step_terr(api)
     v = find_version(api, create='version' in STEPS)
     if v:
         st = v['attributes'].get('appStoreState') or ''

@@ -377,6 +377,17 @@ def step_inspect(api, vid):
             ps = api.all('appPreviewSets/%s/appPreviews?limit=10' % st['id'])
             log('INSPECT preview', loc, st['attributes']['previewType'], len(ps), [((x['attributes'].get('videoDeliveryState') or {}).get('state')) for x in ps])
 
+def step_desc(api, vid):
+    """[읽기만] 로캘마다 앱 설명 · 키워드 · 홍보 · 새 소식 · 부제목 · 이름이 채워졌는지와 설명 글자 수 · 앞부분"""
+    locs = localizations(api, vid)
+    for loc, l in sorted(locs.items()):
+        a = l['attributes']; d = a.get('description') or ''
+        log('INSPECT desc', loc, len(d), 'kw', len(a.get('keywords') or ''), 'promo', len(a.get('promotionalText') or ''), 'new', len(a.get('whatsNew') or ''), '|', d[:50].replace('\n', ' '))
+    for info in api.all('apps/%s/appInfos?limit=10' % APP):
+        st = info['attributes'].get('appStoreState') or info['attributes'].get('state') or ''
+        for l in api.all('appInfos/%s/appInfoLocalizations?limit=50' % info['id']):
+            a = l['attributes']; log('INSPECT info', st, a['locale'], 'name', a.get('name'), '| sub', a.get('subtitle'))
+
 OLD_NAME = 'Gulp Deep'; NEW_NAME = 'Gill Fighter'
 def step_name(api):
     """앱 이름(appInfo) 바꾸기 — 판매 중 쪽은 못 바꾸고, 새 버전과 함께 준비 중인 appInfo만.
@@ -408,6 +419,7 @@ def main():
         if st in ('READY_FOR_SALE', 'PROCESSING_FOR_APP_STORE', 'PENDING_DEVELOPER_RELEASE', 'IN_REVIEW', 'WAITING_FOR_REVIEW'):
             log('version not editable (%s) -> skip text/shots' % st)
             if 'inspect' in STEPS: step_inspect(api, v['id'])
+            if 'desc' in STEPS: step_desc(api, v['id'])
         else:
             if 'drop61' in STEPS: step_drop61(api, v['id'])
             if 'inspect' in STEPS: step_inspect(api, v['id'])

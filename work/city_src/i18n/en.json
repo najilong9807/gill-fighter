@@ -10,6 +10,50 @@
 },
 "t": [
 [
+"산호궁 Lv\\.(\\d+) 만들기",
+"Reach Coral Hall Lv.$1"
+],
+[
+"주민 (\\d+)마리 모으기",
+"Gather $1 residents"
+],
+[
+"명성 Lv\\.(\\d+) 되기",
+"Reach Fame Lv.$1"
+],
+[
+"주문 (\\d+)번 배달하기",
+"Deliver $1 orders"
+],
+[
+"구역 건물 단계 합 (\\d+) 만들기",
+"Zone building levels total $1"
+],
+[
+"열차 · 고래 배 (\\d+)번 다녀오기",
+"Complete $1 train or whale ship trips"
+],
+[
+"주간 의뢰 3개를 (\\d+)주 다 끝내기",
+"Finish all 3 weekly requests in $1 weeks"
+],
+[
+"마을에 놀러 온 내 물고기 (\\d+)번 쓰다듬기",
+"Pet your visiting fish $1 times"
+],
+[
+"받을 도장 (\\d+)개",
+"$1 stamps to claim"
+],
+[
+"도장 <b>(\\d+) / (\\d+)</b>",
+"Stamps <b>$1 / $2</b>"
+],
+[
+"🏆 도장 받기! (.+?) · 💎(\\d+)",
+"🏆 Stamp earned! $1 · 💎$2"
+],
+[
 "🐠 (.+?) · 내 수족관으로 보냈어요",
 "🐠 $1 · sent to your aquarium"
 ],
@@ -745,6 +789,13 @@
 "마을 재료로 <b>내 수족관 전용 소품</b>을 만들어 보내요 · 수족관 › 꾸미기 › 소품에 들어가요": "Use town materials to make <b>decorations only for your aquarium</b> · they go to Aquarium › Decorate › Decor",
 "랜드마크 · 땅값 + · 인구 한도 + · 내 수족관 넓히기": "Landmark · land value + · population cap + · bigger aquarium",
 "아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 레벨마다 아가미 파이터 내 수족관의 소품 칸이 2칸, 집 진주 샘이 1% 늘어요.": "The Gill Aquarium. Greatly raises land value over a wide area and raises the population cap. Each level adds 2 decor slots and +1% pearl spring to your Gill Fighter aquarium.",
-"<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. 산호궁 Lv.2부터는 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "<b>🐠 Aquarium workshop</b> (below 📦 Storage) turns spare materials into decor made only for your aquarium. From Coral Hall Lv 2, the <b>🐢 Town parcel</b> turtle sometimes visits your aquarium with pearls from your residents (3 times a day)."
+"<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. 산호궁 Lv.2부터는 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "<b>🐠 Aquarium workshop</b> (below 📦 Storage) turns spare materials into decor made only for your aquarium. From Coral Hall Lv 2, the <b>🐢 Town parcel</b> turtle sometimes visits your aquarium with pearls from your residents (3 times a day).",
+"🏆 마을 기록": "🏆 Town Records",
+"마을 기록": "Town Records",
+"도장 모으기": "Collect stamps",
+"✓ 다 모음": "✓ Complete",
+"마을 이름 바꾸기": "Rename town",
+"단계를 넘으면 💎 · ⭐ 명성을 받아요": "Each stage you pass gives 💎 and ⭐ Fame",
+"마을 이름 (10글자까지)": "Town name (up to 10 characters)"
 }
 }

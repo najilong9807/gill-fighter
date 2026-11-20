@@ -10,6 +10,50 @@
 },
 "t": [
 [
+"산호궁 Lv\\.(\\d+) 만들기",
+"Nâng Cung San Hô lên Lv.$1"
+],
+[
+"주민 (\\d+)마리 모으기",
+"Có $1 cư dân"
+],
+[
+"명성 Lv\\.(\\d+) 되기",
+"Đạt Danh tiếng Lv.$1"
+],
+[
+"주문 (\\d+)번 배달하기",
+"Giao $1 đơn hàng"
+],
+[
+"구역 건물 단계 합 (\\d+) 만들기",
+"Tổng cấp nhà trong khu đạt $1"
+],
+[
+"열차 · 고래 배 (\\d+)번 다녀오기",
+"Hoàn thành $1 chuyến tàu hỏa · tàu cá voi"
+],
+[
+"주간 의뢰 3개를 (\\d+)주 다 끝내기",
+"Hoàn thành cả 3 yêu cầu tuần trong $1 tuần"
+],
+[
+"마을에 놀러 온 내 물고기 (\\d+)번 쓰다듬기",
+"Vuốt ve cá của bạn đến chơi $1 lần"
+],
+[
+"받을 도장 (\\d+)개",
+"$1 con dấu chờ nhận"
+],
+[
+"도장 <b>(\\d+) / (\\d+)</b>",
+"Con dấu <b>$1 / $2</b>"
+],
+[
+"🏆 도장 받기! (.+?) · 💎(\\d+)",
+"🏆 Nhận con dấu! $1 · 💎$2"
+],
+[
 "🐠 (.+?) · 내 수족관으로 보냈어요",
 "🐠 $1 · đã gửi về bể cá"
 ],
@@ -745,6 +789,13 @@
 "마을 재료로 <b>내 수족관 전용 소품</b>을 만들어 보내요 · 수족관 › 꾸미기 › 소품에 들어가요": "Dùng vật liệu của làng làm <b>đồ trang trí riêng cho bể cá</b> · vào Bể cá › Trang trí › Đồ",
 "랜드마크 · 땅값 + · 인구 한도 + · 내 수족관 넓히기": "Công trình · giá đất + · giới hạn dân + · mở rộng bể cá",
 "아가미 수족관이에요. 넓은 범위의 땅값을 크게 올리고 인구 한도를 늘려요. 레벨마다 아가미 파이터 내 수족관의 소품 칸이 2칸, 집 진주 샘이 1% 늘어요.": "Bể cá Gill. Tăng mạnh giá đất vùng rộng và giới hạn dân số. Mỗi cấp thêm 2 ô trang trí và +1% suối ngọc cho bể cá trong Gill Fighter.",
-"<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. 산호궁 Lv.2부터는 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "Ở <b>🐠 Xưởng bể cá</b> (dưới 📦 Kho) bạn dùng nguyên liệu dư để làm đồ trang trí riêng cho bể cá. Từ Cung San Hô Lv 2, rùa <b>🐢 Bưu kiện của làng</b> thỉnh thoảng ghé bể cá mang ngọc trai cư dân gửi (3 lần mỗi ngày)."
+"<b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. 산호궁 Lv.2부터는 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러 주민들이 보낸 진주를 전해 줘요(하루 3번).": "Ở <b>🐠 Xưởng bể cá</b> (dưới 📦 Kho) bạn dùng nguyên liệu dư để làm đồ trang trí riêng cho bể cá. Từ Cung San Hô Lv 2, rùa <b>🐢 Bưu kiện của làng</b> thỉnh thoảng ghé bể cá mang ngọc trai cư dân gửi (3 lần mỗi ngày).",
+"🏆 마을 기록": "🏆 Thành tích thị trấn",
+"마을 기록": "Thành tích",
+"도장 모으기": "Sưu tầm con dấu",
+"✓ 다 모음": "✓ Đủ hết",
+"마을 이름 바꾸기": "Đổi tên thị trấn",
+"단계를 넘으면 💎 · ⭐ 명성을 받아요": "Mỗi mốc vượt qua nhận 💎 và ⭐ Danh tiếng",
+"마을 이름 (10글자까지)": "Tên thị trấn (tối đa 10 ký tự)"
 }
 }

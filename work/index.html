@@ -17652,7 +17652,7 @@ try{var NK3='수족관: 마을 산호궁이 Lv.2가 되면 「마을 택배」 �
   try{TRT[HK]=HT.en}catch(e){}try{TRJ[HK]=HT.ja}catch(e){}try{if(SUBL&&HT[SUBL])TRX[HK]=HT[SUBL]}catch(e){}
   try{var _rbh=rbxHint;rbxHint=function(){if(page==='city'&&rbxAutoOn())return T(HK);return _rbh.apply(this,arguments)}}catch(e){}
   /* 사용 기록(1.1.30): 하루치 횟수만 msEv(kind 'ms' · 3시간에 한 번 · 누구인지 없음)로. 마을 안 행동은 마을이 GF_CITY_EV 로 알려 줌 */
-  var CEV={collect:'cityCol',ord:'cityOrd',box:'cityBox',build:'cityBuild',dec:'cityDec',pet:'cityPet',wq:'cityWq'};
+  var CEV={collect:'cityCol',ord:'cityOrd',box:'cityBox',build:'cityBuild',dec:'cityDec',pet:'cityPet',wq:'cityWq',rec:'cityRec',name:'cityName'};
   function cms(k,n){try{if(typeof msEv==='function')msEv(k,n)}catch(e){}}
   window.GF_CITY_EV=function(k,n){try{if(k==='collect')dmAdd('town',n||1)}catch(e){}if(CEV[k])cms(CEV[k],n||1)};
   /* 빨간 점: 아직 한 번도 안 들어가 봤거나, 마을에 받을 것이 생겼을 때 */

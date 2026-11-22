@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Áramlatvillamos-megálló",
+  "선로 위에는 못 지어요": "Sínekre nem lehet építeni",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Sínek mellé kell építeni · 🛣 Utak fül → „🚋 Sínfektetés”",
+  "🚋 선로 놓기": "🚋 Sínfektetés",
+  "건물이 있는 칸이에요": "Ott már áll egy épület",
+  "🚋 해류 열차역을 먼저 지어요": "Előbb építsd meg az 🚋 Áramlatvonat-állomást",
+  "🛣 길 자동 연결 켜짐": "🛣 Automatikus útcsatlakozás be",
+  "🛣 길 자동 연결": "🛣 Automatikus útcsatlakozás",
+  "꺼짐 · 길은 직접 깔아요": "Ki · az utakat te rakod le",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Be · utat épít minden övezeti mezőig",
+  "진주가 모자라 길을 다 잇지 못했어요": "Nincs elég Gyöngy az összes út összekötéséhez",
+  "✅ 이어졌어요": "✅ Összekötve",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Még nincs összekötve · fektess 🚋 sínt egy másik megállóig",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Sínek",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Villamosok és járművek</b>: 🚌 buszok, 🐢 csomagszállító teknősök és 🦀 rákkocsik járják az utaidat, és a dugós utakon 💢 kíséretében lelassulnak. Ha felépíted az Áramlatvonat-állomást (Korallcsarnok Lv.9), használd a <b>🚋 Sínfektetés</b> gombot a 🛣 Utak fülön. Tegyél egy <b>🚉 Áramlatvillamos-megállót</b> (⚙ Közművek) a sínek mellé, és kösd össze egy másik megállóval (vagy az állomással): villamosok járnak, és az 5 mezőn belüli utakon kisebb a dugó.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Automatikus útcsatlakozás</b>: amikor az övezetek festése után felemeled az ujjad, utak kerülnek le, hogy minden övezeti mező érintsen egyet (mezőnként 10🫧). A 🏘 Övezetek fülön kikapcsolható."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Sínnel összekötve egy másik megállóval (vagy az állomással): forgalom −45% a $1 mezőn belüli utakon · villamosok járnak"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Sínnel összekötve: dugó −45% $1 mezőn belül · sínek mellé építsd"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Sínnel összekötve: dugó −45% $1 mezőn belül"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Húzd a sínfektetéshez · mezőnként $1🫧 🪨$2 · keresztezhet utat · a megállók a ⚙ Közművek alatt"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "Mezőnként $1🫧 🪨$2 · kösd össze a megállókat"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 útmező automatikusan összekötve · −$2🫧"
+  ]
+ ]
+}

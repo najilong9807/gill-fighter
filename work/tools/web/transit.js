@@ -1,0 +1,15 @@
+const {open}=require('./lib.js');const fs=require('fs');
+(async()=>{const seed=JSON.parse(fs.readFileSync(__dirname+'/seed.json','utf8'));seed.newsSeen='1.1.31';
+const city=JSON.parse(fs.readFileSync(__dirname+'/bigtown.json','utf8'));city.t=Date.now();city.tick=Date.now();
+const {b,p,errs}=await open({w:393,h:852,dpr:2,init:`Object.defineProperty(window,'GF_TOWN_OFF',{get(){return 0},set(){}});if(!sessionStorage.s){localStorage.setItem('fishproto.save2',${JSON.stringify(JSON.stringify(seed))});localStorage.setItem('gfcity.v1',${JSON.stringify(JSON.stringify(city))});sessionStorage.s=1}`});
+await p.goto('http://app.local/index.html');await p.waitForTimeout(2500);
+const hide=()=>p.evaluate(()=>{document.querySelectorAll('.overlay').forEach(o=>{o.hidden=true});document.body.classList.remove('ovOpen')});
+await hide();await p.waitForTimeout(1500);await hide();await p.click('#tab-city');await p.waitForTimeout(4000);await hide();
+const f=p.frames().find(x=>x.url().includes('city.html'));const T=(s)=>f.evaluate(s);
+await p.waitForTimeout(10000);
+console.log('veh',await T(()=>window.__transit.veh()));
+await T(()=>window.__transit.test.hall(.8));await p.waitForTimeout(1500);await p.screenshot({path:__dirname+'/tr_veh.png'});
+console.log('rail',JSON.stringify(await T(()=>window.__transit.test.rail())));await p.waitForTimeout(9000);await p.screenshot({path:__dirname+'/tr_rail.png'});
+console.log('veh2',await T(()=>window.__transit.veh()));
+console.log('auto',JSON.stringify(await T(()=>window.__transit.test.auto())));await p.waitForTimeout(1500);await p.screenshot({path:__dirname+'/tr_auto.png'});
+console.log('errs',errs);await b.close()})();

@@ -1,0 +1,94 @@
+{
+ "d": [
+  [
+   "해류 열차 정거장",
+   "Current Tram Stop"
+  ],
+  [
+   "선로 위에는 못 지어요",
+   "Can't build on rails"
+  ],
+  [
+   "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」",
+   "Must be next to rails · 🛣 Roads tab → “🚋 Lay rails”"
+  ],
+  [
+   "🚋 선로 놓기",
+   "🚋 Lay rails"
+  ],
+  [
+   "건물이 있는 칸이에요",
+   "There's a building there"
+  ],
+  [
+   "🚋 해류 열차역을 먼저 지어요",
+   "Build the 🚋 Current Train Station first"
+  ],
+  [
+   "🛣 길 자동 연결 켜짐",
+   "🛣 Auto-connect roads on"
+  ],
+  [
+   "🛣 길 자동 연결",
+   "🛣 Auto-connect roads"
+  ],
+  [
+   "꺼짐 · 길은 직접 깔아요",
+   "Off · lay roads yourself"
+  ],
+  [
+   "켜짐 · 길에 안 닿은 칸까지 길을 깔아요",
+   "On · adds roads to reach every zone tile"
+  ],
+  [
+   "진주가 모자라 길을 다 잇지 못했어요",
+   "Not enough pearls to connect every road"
+  ],
+  [
+   "✅ 이어졌어요",
+   "✅ Connected"
+  ],
+  [
+   "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요",
+   "⚠ Not connected yet · lay 🚋 rails to another stop"
+  ],
+  [
+   "<i style=\"background:#9664e6\"></i> 선로",
+   "<i style=\"background:#9664e6\"></i> Rails"
+  ],
+  [
+   "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.",
+   "<b>🚋 Trams & vehicles</b>: 🚌 buses, 🐢 parcel turtles and 🦀 crab carts drive on your roads and slow down with 💢 on jammed roads. Once you build the Current Train Station (Coral Hall Lv.9), use <b>🚋 Lay rails</b> in the 🛣 Roads tab. Put a <b>🚉 Current Tram Stop</b> (⚙ Utilities) next to the rails and connect it to another stop (or the station): trams run and roads within 5 tiles jam less."
+  ],
+  [
+   "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.",
+   "<b>🛣 Auto-connect roads</b>: when you lift your finger after painting zones, roads are added so every zone tile touches one (10🫧 per tile). Turn it off in the 🏘 Zones tab."
+  ]
+ ],
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Connected by rails to another stop (or the station): traffic −45% on roads within $1 tiles · trams run"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Connected by rails: road jams −45% within $1 tiles · build next to rails"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Connected by rails: road jams −45% within $1 tiles"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Drag to lay rails · $1🫧 🪨$2 per tile · may cross roads · stops are in ⚙ Utilities"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 per tile · link the stops"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 Auto-connected $1 road tiles · −$2🫧"
+  ]
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Strømsporvognsstoppested",
+  "선로 위에는 못 지어요": "Kan ikke bygge på skinner",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Skal ligge ved skinner · fanen 🛣 Veje → “🚋 Læg skinner”",
+  "🚋 선로 놓기": "🚋 Læg skinner",
+  "건물이 있는 칸이에요": "Der står allerede en bygning",
+  "🚋 해류 열차역을 먼저 지어요": "Byg først 🚋 Strømtogets station",
+  "🛣 길 자동 연결 켜짐": "🛣 Auto-forbind veje til",
+  "🛣 길 자동 연결": "🛣 Auto-forbind veje",
+  "꺼짐 · 길은 직접 깔아요": "Fra · læg selv veje",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Til · lægger vej hen til hvert zonefelt",
+  "진주가 모자라 길을 다 잇지 못했어요": "Ikke nok Perler til at forbinde alle veje",
+  "✅ 이어졌어요": "✅ Forbundet",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Ikke forbundet endnu · læg 🚋 skinner til et andet stoppested",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Skinner",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Sporvogne & køretøjer</b>: 🚌 busser, 🐢 pakkeskildpadder og 🦀 krabbevogne kører på dine veje og sænker farten med 💢 på veje med kø. Når du har bygget Strømtogets station (Koralhallen Lv.9), så brug <b>🚋 Læg skinner</b> i fanen 🛣 Veje. Sæt et <b>🚉 Strømsporvognsstoppested</b> (⚙ Forsyning) ved skinnerne og forbind det med et andet stoppested (eller stationen): sporvogne kører, og veje inden for 5 felter får mindre kø.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Auto-forbind veje</b>: når du løfter fingeren efter at have malet zoner, lægges der veje, så hvert zonefelt rører en (10🫧 pr. felt). Slå det fra i fanen 🏘 Zoner."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Forbundet med skinner til et andet stoppested (eller stationen): trafik −45% på veje inden for $1 felter · sporvogne kører"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Forbundet med skinner: vejkø −45% inden for $1 felter · byg ved skinner"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Forbundet med skinner: vejkø −45% inden for $1 felter"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Træk for at lægge skinner · $1🫧 🪨$2 pr. felt · må krydse veje · stoppesteder ligger under ⚙ Forsyning"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 pr. felt · forbind stoppestederne"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 Forbandt automatisk $1 vejfelter · −$2🫧"
+  ]
+ ]
+}

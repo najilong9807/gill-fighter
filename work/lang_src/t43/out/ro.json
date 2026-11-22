@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Stația de tramvai a curenților",
+  "선로 위에는 못 지어요": "Nu poți construi pe șine",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Trebuie lângă șine · fila 🛣 Drumuri → „🚋 Pune șine”",
+  "🚋 선로 놓기": "🚋 Pune șine",
+  "건물이 있는 칸이에요": "Acolo e deja o clădire",
+  "🚋 해류 열차역을 먼저 지어요": "Construiește întâi 🚋 Gara Trenului curenților",
+  "🛣 길 자동 연결 켜짐": "🛣 Conectare automată drumuri: pornită",
+  "🛣 길 자동 연결": "🛣 Conectare automată drumuri",
+  "꺼짐 · 길은 직접 깔아요": "Oprită · pui drumurile singur",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Pornită · adaugă drumuri până la fiecare pătrățel de zonă",
+  "진주가 모자라 길을 다 잇지 못했어요": "Nu ai destule Perle ca să conectezi toate drumurile",
+  "✅ 이어졌어요": "✅ Conectat",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Încă neconectat · pune 🚋 șine până la altă stație",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Șine",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Tramvaie și vehicule</b>: 🚌 autobuze, 🐢 țestoase curier și 🦀 cărucioare-crab circulă pe drumurile tale și încetinesc cu 💢 pe drumurile blocate. După ce construiești Gara Trenului curenților (Sala Coralului Lv.9), folosește <b>🚋 Pune șine</b> din fila 🛣 Drumuri. Pune <b>🚉 Stația de tramvai a curenților</b> (⚙ Utilități) lângă șine și conecteaz-o la altă stație (sau la gară): tramvaiele circulă, iar drumurile pe o rază de 5 pătrățele se blochează mai puțin.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Conectare automată drumuri</b>: când ridici degetul după ce pictezi zone, se adaugă drumuri ca fiecare pătrățel de zonă să atingă unul (10🫧 pe pătrățel). O poți opri din fila 🏘 Zone."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Conectată prin șine la altă stație (sau la gară): trafic −45% pe drumuri pe o rază de $1 pătrățele · circulă tramvaie"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Conectată prin șine: ambuteiaje −45% pe o rază de $1 pătrățele · construiește lângă șine"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Conectată prin șine: ambuteiaje −45% pe o rază de $1 pătrățele"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Trage ca să pui șine · $1🫧 🪨$2 pe pătrățel · pot traversa drumuri · stațiile sunt în ⚙ Utilități"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 pe pătrățel · leagă stațiile"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 pătrățele de drum conectate automat · −$2🫧"
+  ]
+ ]
+}

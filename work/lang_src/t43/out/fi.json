@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Virtaratikkapysäkki",
+  "선로 위에는 못 지어요": "Kiskoille ei voi rakentaa",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Täytyy olla kiskojen vieressä · välilehti 🛣 Tiet → ”🚋 Laske kiskot”",
+  "🚋 선로 놓기": "🚋 Laske kiskot",
+  "건물이 있는 칸이에요": "Ruudussa on jo rakennus",
+  "🚋 해류 열차역을 먼저 지어요": "Rakenna ensin 🚋 Virtajunan asema",
+  "🛣 길 자동 연결 켜짐": "🛣 Teiden automaattiyhdistys päällä",
+  "🛣 길 자동 연결": "🛣 Teiden automaattiyhdistys",
+  "꺼짐 · 길은 직접 깔아요": "Pois · rakennat tiet itse",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Päällä · lisää tiet jokaiseen alueruutuun asti",
+  "진주가 모자라 길을 다 잇지 못했어요": "Helmet eivät riitä kaikkien teiden yhdistämiseen",
+  "✅ 이어졌어요": "✅ Yhdistetty",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Ei vielä yhdistetty · laske 🚋 kiskot toiselle pysäkille",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Kiskot",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Ratikat ja ajoneuvot</b>: 🚌 bussit, 🐢 pakettikilpikonnat ja 🦀 rapukärryt kulkevat teilläsi ja hidastuvat 💢 ruuhkaisilla teillä. Kun olet rakentanut Virtajunan aseman (Korallisali Lv.9), käytä <b>🚋 Laske kiskot</b> -toimintoa välilehdellä 🛣 Tiet. Aseta <b>🚉 Virtaratikkapysäkki</b> (⚙ Huolto) kiskojen viereen ja yhdistä se toiseen pysäkkiin (tai asemaan): ratikat kulkevat ja teillä 5 ruudun säteellä on vähemmän ruuhkaa.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Teiden automaattiyhdistys</b>: kun nostat sormen alueiden maalaamisen jälkeen, teitä lisätään niin, että jokainen alueruutu koskee tietä (10🫧 / ruutu). Kytke pois välilehdellä 🏘 Alueet."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Yhdistetty kiskoilla toiseen pysäkkiin (tai asemaan): liikenne −45 % teillä $1 ruudun säteellä · ratikat kulkevat"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Yhdistetty kiskoilla: tieruuhkat −45 % $1 ruudun säteellä · rakenna kiskojen viereen"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Yhdistetty kiskoilla: tieruuhkat −45 % $1 ruudun säteellä"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Vedä laskeaksesi kiskot · $1🫧 🪨$2 / ruutu · saa ylittää teitä · pysäkit ovat kohdassa ⚙ Huolto"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 / ruutu · yhdistä pysäkit"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 Yhdistettiin automaattisesti $1 tieruutua · −$2🫧"
+  ]
+ ]
+}

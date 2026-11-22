@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Halte Trem Arus",
+  "선로 위에는 못 지어요": "Tak bisa membangun di atas rel",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Harus di samping rel · tab 🛣 Jalan → “🚋 Pasang rel”",
+  "🚋 선로 놓기": "🚋 Pasang rel",
+  "건물이 있는 칸이에요": "Sudah ada bangunan di sana",
+  "🚋 해류 열차역을 먼저 지어요": "Bangun 🚋 Stasiun Kereta Arus dulu",
+  "🛣 길 자동 연결 켜짐": "🛣 Sambung jalan otomatis aktif",
+  "🛣 길 자동 연결": "🛣 Sambung jalan otomatis",
+  "꺼짐 · 길은 직접 깔아요": "Mati · pasang jalan sendiri",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Aktif · menambah jalan ke setiap petak zona",
+  "진주가 모자라 길을 다 잇지 못했어요": "Mutiara tak cukup untuk menyambung semua jalan",
+  "✅ 이어졌어요": "✅ Tersambung",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Belum tersambung · pasang 🚋 rel ke halte lain",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Rel",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Trem & kendaraan</b>: 🚌 bus, 🐢 kura-kura kurir, dan 🦀 gerobak kepiting melaju di jalanmu dan melambat dengan 💢 di jalan macet. Setelah membangun Stasiun Kereta Arus (Balai Karang Lv.9), pakai <b>🚋 Pasang rel</b> di tab 🛣 Jalan. Taruh <b>🚉 Halte Trem Arus</b> (⚙ Utilitas) di samping rel dan sambungkan ke halte lain (atau stasiun): trem berjalan dan jalan dalam 5 petak jadi tak terlalu macet.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Sambung jalan otomatis</b>: saat kamu mengangkat jari setelah mewarnai zona, jalan ditambahkan agar setiap petak zona menyentuh jalan (10🫧 per petak). Matikan di tab 🏘 Zona."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Tersambung rel ke halte lain (atau stasiun): lalu lintas −45% di jalan dalam $1 petak · trem berjalan"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Tersambung rel: macet −45% dalam $1 petak · bangun di samping rel"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Tersambung rel: macet −45% dalam $1 petak"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Seret untuk memasang rel · $1🫧 🪨$2 per petak · boleh menyeberangi jalan · halte ada di ⚙ Utilitas"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 per petak · sambungkan halte"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 petak jalan tersambung otomatis · −$2🫧"
+  ]
+ ]
+}

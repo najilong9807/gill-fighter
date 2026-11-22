@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Strömspårvagnshållplats",
+  "선로 위에는 못 지어요": "Kan inte bygga på räls",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Måste ligga vid räls · fliken 🛣 Vägar → ”🚋 Lägg räls”",
+  "🚋 선로 놓기": "🚋 Lägg räls",
+  "건물이 있는 칸이에요": "Där står redan en byggnad",
+  "🚋 해류 열차역을 먼저 지어요": "Bygg först 🚋 Strömtågets station",
+  "🛣 길 자동 연결 켜짐": "🛣 Autokoppla vägar på",
+  "🛣 길 자동 연결": "🛣 Autokoppla vägar",
+  "꺼짐 · 길은 직접 깔아요": "Av · lägg vägar själv",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "På · lägger väg fram till varje zonruta",
+  "진주가 모자라 길을 다 잇지 못했어요": "Inte nog med Pärlor för att koppla alla vägar",
+  "✅ 이어졌어요": "✅ Ansluten",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Inte ansluten än · lägg 🚋 räls till en annan hållplats",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Räls",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Spårvagnar & fordon</b>: 🚌 bussar, 🐢 paketsköldpaddor och 🦀 krabbkärror kör på dina vägar och saktar in med 💢 på köade vägar. När du byggt Strömtågets station (Korallhallen Lv.9) använder du <b>🚋 Lägg räls</b> i fliken 🛣 Vägar. Ställ en <b>🚉 Strömspårvagnshållplats</b> (⚙ Försörjning) vid rälsen och koppla den till en annan hållplats (eller stationen): spårvagnar går och vägar inom 5 rutor får mindre köer.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Autokoppla vägar</b>: när du lyfter fingret efter att ha målat zoner läggs vägar till så att varje zonruta når en (10🫧 per ruta). Stäng av i fliken 🏘 Zoner."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Kopplad med räls till en annan hållplats (eller stationen): trafik −45% på vägar inom $1 rutor · spårvagnar går"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Kopplad med räls: vägköer −45% inom $1 rutor · bygg vid räls"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Kopplad med räls: vägköer −45% inom $1 rutor"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Dra för att lägga räls · $1🫧 🪨$2 per ruta · får korsa vägar · hållplatser finns under ⚙ Försörjning"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 per ruta · koppla ihop hållplatserna"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 Kopplade automatiskt $1 vägrutor · −$2🫧"
+  ]
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Przystanek Tramwaju prądów",
+  "선로 위에는 못 지어요": "Nie można budować na torach",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Musi stać przy torach · karta 🛣 Drogi → „🚋 Kładź tory”",
+  "🚋 선로 놓기": "🚋 Kładź tory",
+  "건물이 있는 칸이에요": "Tu już stoi budynek",
+  "🚋 해류 열차역을 먼저 지어요": "Najpierw zbuduj 🚋 Stację Pociągu prądów",
+  "🛣 길 자동 연결 켜짐": "🛣 Autołączenie dróg: wł.",
+  "🛣 길 자동 연결": "🛣 Autołączenie dróg",
+  "꺼짐 · 길은 직접 깔아요": "Wył. · drogi kładziesz sam",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Wł. · dokłada drogi do każdego pola strefy",
+  "진주가 모자라 길을 다 잇지 못했어요": "Za mało Pereł, by połączyć wszystkie drogi",
+  "✅ 이어졌어요": "✅ Połączono",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Jeszcze niepołączony · połóż 🚋 tory do innego przystanku",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Tory",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Tramwaje i pojazdy</b>: 🚌 autobusy, 🐢 żółwie kurierzy i 🦀 krabie wózki jeżdżą po twoich drogach i zwalniają z 💢 w korkach. Gdy zbudujesz Stację Pociągu prądów (Koralowy ratusz Lv.9), użyj <b>🚋 Kładź tory</b> w karcie 🛣 Drogi. Postaw <b>🚉 Przystanek Tramwaju prądów</b> (⚙ Usługi) przy torach i połącz go z innym przystankiem (lub stacją): ruszą tramwaje, a drogi w promieniu 5 pól będą mniej zakorkowane.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Autołączenie dróg</b>: gdy po malowaniu stref podniesiesz palec, dołożą się drogi, by każde pole strefy jakiejś dotykało (10🫧 za pole). Wyłączysz to w karcie 🏘 Strefy."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Połączony torami z innym przystankiem (lub stacją): ruch −45% na drogach w promieniu $1 pól · jeżdżą tramwaje"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Połączony torami: korki −45% w promieniu $1 pól · buduj przy torach"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Połączony torami: korki −45% w promieniu $1 pól"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Przeciągnij, by kłaść tory · $1🫧 🪨$2 za pole · mogą przecinać drogi · przystanki są w ⚙ Usługi"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 za pole · połącz przystanki"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 Automatycznie połączono pola dróg: $1 · −$2🫧"
+  ]
+ ]
+}

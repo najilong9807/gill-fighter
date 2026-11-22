@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Fermata del Tram della corrente",
+  "선로 위에는 못 지어요": "Non puoi costruire sui binari",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Va accanto ai binari · scheda 🛣 Strade → “🚋 Posa binari”",
+  "🚋 선로 놓기": "🚋 Posa binari",
+  "건물이 있는 칸이에요": "Qui c'è già un edificio",
+  "🚋 해류 열차역을 먼저 지어요": "Costruisci prima la 🚋 Stazione del Treno della corrente",
+  "🛣 길 자동 연결 켜짐": "🛣 Collegamento strade auto attivo",
+  "🛣 길 자동 연결": "🛣 Collegamento strade auto",
+  "꺼짐 · 길은 직접 깔아요": "Disattivo · posa le strade tu",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Attivo · aggiunge strade fino a ogni casella di zona",
+  "진주가 모자라 길을 다 잇지 못했어요": "Perle insufficienti per collegare tutte le strade",
+  "✅ 이어졌어요": "✅ Collegata",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Non ancora collegata · posa 🚋 binari fino a un'altra fermata",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Binari",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Tram e veicoli</b>: 🚌 bus, 🐢 tartarughe corriere e 🦀 carretti granchio girano sulle tue strade e rallentano con 💢 su quelle bloccate. Costruita la Stazione del Treno della corrente (Sala del Corallo Lv.9), usa <b>🚋 Posa binari</b> nella scheda 🛣 Strade. Metti una <b>🚉 Fermata del Tram della corrente</b> (⚙ Servizi pubblici) accanto ai binari e collegala a un'altra fermata (o alla stazione): i tram circolano e le strade entro 5 caselle si bloccano meno.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Collegamento strade auto</b>: quando sollevi il dito dopo aver dipinto le zone, vengono aggiunte strade perché ogni casella di zona ne tocchi una (10🫧 a casella). Disattivalo nella scheda 🏘 Zone."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Collegata con binari a un'altra fermata (o alla stazione): traffico −45% sulle strade entro $1 caselle · i tram circolano"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Collegata con binari: ingorghi −45% entro $1 caselle · costruisci accanto ai binari"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Collegata con binari: ingorghi −45% entro $1 caselle"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Trascina per posare binari · $1🫧 🪨$2 a casella · possono attraversare strade · fermate in ⚙ Servizi pubblici"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 a casella · collega le fermate"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 caselle di strada collegate in automatico · −$2🫧"
+  ]
+ ]
+}

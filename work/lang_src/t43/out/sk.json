@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Zastávka prúdovej električky",
+  "선로 위에는 못 지어요": "Na koľajniciach sa stavať nedá",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Musí stáť pri koľajniciach · karta 🛣 Cesty → „🚋 Klásť koľaje“",
+  "🚋 선로 놓기": "🚋 Klásť koľaje",
+  "건물이 있는 칸이에요": "Tu už stojí budova",
+  "🚋 해류 열차역을 먼저 지어요": "Najprv postav 🚋 Stanicu Prúdového vlaku",
+  "🛣 길 자동 연결 켜짐": "🛣 Automatické prepojenie ciest zapnuté",
+  "🛣 길 자동 연결": "🛣 Automatické prepojenie ciest",
+  "꺼짐 · 길은 직접 깔아요": "Vypnuté · cesty staviaš sám",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Zapnuté · dostavia cesty ku každému políčku zóny",
+  "진주가 모자라 길을 다 잇지 못했어요": "Nedostatok Periel na prepojenie všetkých ciest",
+  "✅ 이어졌어요": "✅ Prepojené",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Zatiaľ neprepojené · polož 🚋 koľaje k inej zastávke",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Koľaje",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Električky a vozidlá</b>: 🚌 autobusy, 🐢 doručovacie korytnačky a 🦀 krabie vozíky jazdia po tvojich cestách a v zápche s 💢 spomaľujú. Keď postavíš Stanicu Prúdového vlaku (Koralová radnica Lv.9), použi <b>🚋 Klásť koľaje</b> na karte 🛣 Cesty. Polož <b>🚉 Zastávku prúdovej električky</b> (⚙ Infraštruktúra) ku koľajam a prepoj ju s inou zastávkou (alebo stanicou): začnú jazdiť električky a cesty do 5 políčok budú menej zapchaté.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Automatické prepojenie ciest</b>: keď po maľovaní zón zdvihneš prst, pridajú sa cesty, aby sa každé políčko zóny nejakej dotýkalo (10🫧 za políčko). Vypneš ho na karte 🏘 Zóny."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Prepojené koľajami s inou zastávkou (alebo stanicou): doprava −45 % na cestách do $1 políčok · jazdia električky"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Prepojené koľajami: zápchy −45 % do $1 políčok · stavaj pri koľajniciach"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Prepojené koľajami: zápchy −45 % do $1 políčok"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Ťahaj a polož koľaje · $1🫧 🪨$2 za políčko · môžu križovať cesty · zastávky sú v ⚙ Infraštruktúra"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 za políčko · prepoj zastávky"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 Automaticky prepojené políčka ciest: $1 · −$2🫧"
+  ]
+ ]
+}

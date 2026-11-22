@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Akıntı Tramvay Durağı",
+  "선로 위에는 못 지어요": "Rayların üstüne inşa edilemez",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Rayların yanına yapılmalı · 🛣 Yollar sekmesi → “🚋 Ray döşe”",
+  "🚋 선로 놓기": "🚋 Ray döşe",
+  "건물이 있는 칸이에요": "Orada zaten bir bina var",
+  "🚋 해류 열차역을 먼저 지어요": "Önce 🚋 Akıntı Treni İstasyonu'nu inşa et",
+  "🛣 길 자동 연결 켜짐": "🛣 Otomatik yol bağlama açık",
+  "🛣 길 자동 연결": "🛣 Otomatik yol bağlama",
+  "꺼짐 · 길은 직접 깔아요": "Kapalı · yolları kendin döşe",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Açık · her alan karesine yol döşer",
+  "진주가 모자라 길을 다 잇지 못했어요": "Tüm yolları bağlamaya yetecek İnci yok",
+  "✅ 이어졌어요": "✅ Bağlandı",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Henüz bağlı değil · başka bir durağa 🚋 ray döşe",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Raylar",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Tramvaylar ve araçlar</b>: 🚌 otobüsler, 🐢 kargo kaplumbağaları ve 🦀 yengeç arabaları yollarında gezer, tıkalı yollarda 💢 ile yavaşlar. Akıntı Treni İstasyonu'nu (Mercan Salonu Lv.9) kurunca 🛣 Yollar sekmesindeki <b>🚋 Ray döşe</b> ile ray döşeyebilirsin. Rayların yanına bir <b>🚉 Akıntı Tramvay Durağı</b> (⚙ Altyapı) koy ve başka bir durağa (veya istasyona) bağla: tramvaylar çalışır, 5 kare içindeki yollar daha az tıkanır.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Otomatik yol bağlama</b>: alanları boyayıp parmağını kaldırınca her alan karesi bir yola değsin diye yol eklenir (kare başı 10🫧). 🏘 Alanlar sekmesinden kapatabilirsin."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Raylarla başka bir durağa (veya istasyona) bağlı: $1 kare içindeki yollarda trafik −%45 · tramvaylar çalışır"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Raylarla bağlı: $1 kare içinde yol tıkanıklığı −%45 · rayların yanına kur"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Raylarla bağlı: $1 kare içinde yol tıkanıklığı −%45"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Ray döşemek için sürükle · kare başı $1🫧 🪨$2 · yolları kesebilir · duraklar ⚙ Altyapı'da"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "Kare başı $1🫧 🪨$2 · durakları birbirine bağla"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 yol karesi otomatik bağlandı · −$2🫧"
+  ]
+ ]
+}

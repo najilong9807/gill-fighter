@@ -1,9 +1,9 @@
 /* 아가미시티 진행 시뮬레이터: 유저 유형별로 산호궁이 며칠 만에 몇 단계에 가는지 */
 const D=require('./village-data.js');
 const P={
-  light :{name:'가벼운 유저',ses:[21],dur:10,pearlDay:400,gemDay:0},
-  normal:{name:'보통 유저',ses:[8,13,21],dur:15,pearlDay:1000,gemDay:0},
-  heavy :{name:'열심 유저',ses:[7,10,13,16,19,22],dur:20,pearlDay:2500,gemDay:40},
+  light :{name:'가벼운 유저',ses:[21],dur:10,pearlDay:400,gemDay:0,qRate:.35,parcel:.7,incDay:.15,blk:.4},
+  normal:{name:'보통 유저',ses:[8,13,21],dur:15,pearlDay:1000,gemDay:0,qRate:.7,parcel:1.6,incDay:.5,blk:.6},
+  heavy :{name:'열심 유저',ses:[7,10,13,16,19,22],dur:20,pearlDay:2500,gemDay:40,qRate:1,parcel:3,incDay:1.2,blk:.75},
 };
 function run(type,days,opt){opt=opt||{};const pf=P[type];
   const TAXR=+(process.env.TAXR||.05),ORDP=+(process.env.ORDP||.5);const S={tax:0,taxGot:0,ordGot:0,lv:{},res:{pearl:1500,stone:800,brick:0,nail:0},gems:0,jobs:[],log:{},block:{},snap:{},spent:{pearl:0,gem:0}};
@@ -16,7 +16,10 @@ function run(type,days,opt){opt=opt||{};const pf=P[type];
   const can=(c)=>Object.keys(c).every(k=>(S.res[k]||0)>=c[k]);
   const pay=(c)=>{for(const k in c){S.res[k]-=c[k];if(k==='pearl')S.spent.pearl+=c[k]}};
   const open=id=>id==='hall'||lv('hall')>=D.B[id].at;
-  function start(id){const L=lv(id)+1;S.jobs.push({id,L,left:D.time(id,L)});pay(D.cost(id,L))}
+  /* 39~43차 기반 시설(길 · 구역 칠하기 · 길 넓히기 · 버스 · 물 거르개 · 숨샘/숨탑 · 장식 · 선로 · 정거장) — 인구를 산호궁 조건만큼 채우려면 드는 돈을 산호궁 단계마다 나눠 냄 */
+  const INFRA=L=>Math.round((+(process.env.INF||1))*16*Math.pow(L,2.5)),INFS=+(process.env.INFS||.3);
+  const costX=(id,L)=>{const c=Object.assign({},D.cost(id,L));if(id==='hall'&&!opt.noInfra){const x=INFRA(L)-INFRA(L-1);c.pearl+=x;c.stone=(c.stone||0)+Math.round(x*INFS);S.infra=(S.infra||0)}return c};
+  function start(id){const L=lv(id)+1;S.jobs.push({id,L,left:D.time(id,L)});const c=costX(id,L);if(id==='hall'&&!opt.noInfra)S.infra=(S.infra||0)+INFRA(L)-INFRA(L-1);pay(c)}
   /* 다음 산호궁에 필요한 것 중 지금 시작할 수 있는 것 */
   function critical(){if(lv('hall')>=D.HMAX)return [];const out=[];const seen={};
     (function walk(id,L){const key=id+L;if(seen[key])return;seen[key]=1;if(lv(id)>=L)return;
@@ -27,18 +30,23 @@ function run(type,days,opt){opt=opt||{};const pf=P[type];
     /* 주문판 · 열차 · 항구 보상(들어와야 받음) */
     if(first){S.res.pearl+=pf.pearlDay*(1+day/90)/pf.ses.length;if(lv('turtle')){const L=lv('hall'),n=Math.min(3,1+L/10);const og=Math.min(3,3+Math.floor(lv('turtle')/2))*ORDP*n*10*(1+.35*L)*(pf.ordK||.6);S.res.pearl+=og;S.ordGot+=og}
     /* 세금: 산호궁 말풍선(8시간치까지) */S.res.pearl+=S.tax;S.taxGot+=S.tax;S.tax=0;
-    S.res.brick+=3*lv('train');S.res.nail+=1*lv('port');S.gems+=pf.gemDay/pf.ses.length;}
+    S.res.brick+=3*lv('train');S.res.nail+=1*lv('port');S.gems+=pf.gemDay/pf.ses.length;
+    if(!opt.noInfra){const L=lv('hall');const dayStart=S.lastDay!==day;if(dayStart){S.lastDay=day;
+      /* 택배 거북(수족관, 거북 배달소 지으면) · 마을 사건 해결비 · 주간 의뢰(월요일) */
+      if(lv('turtle')){const g=pf.parcel*Math.min(250,40+10*L);S.res.pearl+=g;S.parcelGot=(S.parcelGot||0)+g}
+      if(L>=6){const c=pf.incDay*(1-pf.blk*Math.min(1,(lv('fire')>0)+(lv('police')>0)+(lv('clinic')>0))/3*3/3)*(80+25*L);S.res.pearl-=c;S.incPaid=(S.incPaid||0)+c}
+      if(L>=5&&day%7===0){const q=Math.max(+(process.env.QMIN||100),D.hallPearl(Math.max(2,L))*.6)*3*pf.qRate*(pf.qRate>=1?1.5:1);S.res.pearl+=q;S.questGot=(S.questGot||0)+q}}}}
     let guard=0;
     while(S.jobs.length<D.crabs(lv('crab'))&&guard++<20){
-      const all=critical();if(first&&guard===1&&all.length){const blk=all.find(id=>!can(D.cost(id,lv(id)+1)));if(blk&&S.jobs.length===0){const c=D.cost(blk,lv(blk)+1);const k=Object.keys(c).find(k=>(S.res[k]||0)<c[k]);S.block[k]=(S.block[k]||0)+1}else if(S.jobs.length)S.block.time=(S.block.time||0)+1}
+      const all=critical();if(first&&guard===1&&all.length){const blk=all.find(id=>!can(costX(id,lv(id)+1)));if(blk&&S.jobs.length===0){const c=costX(blk,lv(blk)+1);const k=Object.keys(c).find(k=>(S.res[k]||0)<c[k]);S.block[k]=(S.block[k]||0)+1}else if(S.jobs.length)S.block.time=(S.block.time||0)+1}
       let all2=all;if(lv('hall')<D.HMAX&&D.needs('hall',lv('hall')+1).every(([k,l])=>lv(k)>=l)&&!popOk(lv('hall')+1)){S.block.pop=(S.block.pop||0)+(first&&guard===1?1:0);all2=Object.keys(PUB).filter(k=>open(k)&&!busy(k)&&lv(k)<lv('hall')&&met(k,lv(k)+1)).sort((a,b)=>lv(a)-lv(b))}
-      const cr=all2.filter(id=>can(D.cost(id,lv(id)+1)));
+      const cr=all2.filter(id=>can(costX(id,lv(id)+1)));
       if(cr.length){start(cr[0]);continue}
       /* 남는 진주로 옆 건물(생산 먼저) — 다음 핵심 비용의 2배 넘게 있을 때만 */
-      const nextNeed=critical()[0],reserve=nextNeed?D.cost(nextNeed,lv(nextNeed)+1).pearl*2:0;
+      const nextNeed=critical()[0],reserve=nextNeed?costX(nextNeed,lv(nextNeed)+1).pearl*2:0;
       const side=Object.keys(D.B).filter(k=>k!=='hall'&&open(k)&&!busy(k)&&lv(k)<lv('hall')&&met(k,lv(k)+1))
         .sort((a,b)=>(D.B[b].prod?1:0)-(D.B[a].prod?1:0)||lv(a)-lv(b))
-        .find(k=>{const c=D.cost(k,lv(k)+1);return can(c)&&S.res.pearl-c.pearl>=reserve});
+        .find(k=>{const c=costX(k,lv(k)+1);return can(c)&&S.res.pearl-c.pearl>=reserve});
       if(side){start(side);continue}break}
     /* 보석: 산호궁 공사 남은 시간에 씀 */
     if(pf.gemDay){const j=S.jobs.find(j=>j.id==='hall')||S.jobs[0];if(j){const g=D.rushGems(j.left);const use=Math.min(Math.floor(S.gems),g);if(use>0){j.left-=use*60;S.gems-=use;S.spent.gem+=use}}}
@@ -59,7 +67,7 @@ function report(){const out={};for(const t of Object.keys(P)){const S=run(t,200)
   const marks=[5,10,15,20,25];
   console.log('산호궁 도달 날짜(일차)');console.log('단계\t'+Object.keys(P).map(t=>P[t].name).join('\t'));
   marks.forEach(L=>console.log('Lv.'+L+'\t'+Object.keys(P).map(t=>out[t].log[L]!=null?out[t].log[L]:'-').join('\t')));
-  Object.keys(P).forEach(t=>{const S=out[t];console.log(P[t].name,'막힌 이유(세션수)',JSON.stringify(S.block),'스냅',JSON.stringify(S.snap));console.log(P[t].name,'200일 뒤 산호궁',S.lv.hall,'· 진주 쓴 총량',Math.round(S.spent.pearl),'· 보석',S.spent.gem,'· 세금',Math.round(S.taxGot),'· 주문',Math.round(S.ordGot),'· 건물 평균 Lv',(Object.values(S.lv).reduce((a,b)=>a+b,0)/Object.keys(S.lv).length).toFixed(1))});
+  Object.keys(P).forEach(t=>{const S=out[t];console.log(P[t].name,'막힌 이유(세션수)',JSON.stringify(S.block),'스냅',JSON.stringify(S.snap));console.log(P[t].name,'200일 뒤 산호궁',S.lv.hall,'· 진주 쓴 총량',Math.round(S.spent.pearl),'· 보석',S.spent.gem,'· 세금',Math.round(S.taxGot),'· 주문',Math.round(S.ordGot),'· 기반 시설',Math.round(S.infra||0),'· 의뢰',Math.round(S.questGot||0),'· 택배 거북',Math.round(S.parcelGot||0),'· 사건',Math.round(S.incPaid||0),'· 건물 평균 Lv',(Object.values(S.lv).reduce((a,b)=>a+b,0)/Object.keys(S.lv).length).toFixed(1))});
   return out}
 if(require.main===module){const o=report();if(process.argv[2]==='full'){const t=process.argv[3]||'normal';console.log(JSON.stringify(o[t].log))}}
 module.exports={run,P};

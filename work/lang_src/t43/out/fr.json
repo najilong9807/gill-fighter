@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Arrêt de tram du courant",
+  "선로 위에는 못 지어요": "Impossible de construire sur des rails",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Doit être près des rails · onglet 🛣 Routes → « 🚋 Poser des rails »",
+  "🚋 선로 놓기": "🚋 Poser des rails",
+  "건물이 있는 칸이에요": "Il y a déjà un bâtiment ici",
+  "🚋 해류 열차역을 먼저 지어요": "Construis d'abord la 🚋 Gare du Train du courant",
+  "🛣 길 자동 연결 켜짐": "🛣 Liaison auto des routes activée",
+  "🛣 길 자동 연결": "🛣 Liaison auto des routes",
+  "꺼짐 · 길은 직접 깔아요": "Désactivée · pose les routes toi-même",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Activée · ajoute des routes jusqu'à chaque case de zone",
+  "진주가 모자라 길을 다 잇지 못했어요": "Pas assez de Perles pour relier toutes les routes",
+  "✅ 이어졌어요": "✅ Relié",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Pas encore relié · pose des 🚋 rails jusqu'à un autre arrêt",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Rails",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Trams et véhicules</b> : 🚌 bus, 🐢 tortues livreuses et 🦀 chariots-crabes roulent sur tes routes et ralentissent avec 💢 sur les routes bouchées. Une fois la Gare du Train du courant construite (Mairie de corail Lv.9), utilise <b>🚋 Poser des rails</b> dans l'onglet 🛣 Routes. Place un <b>🚉 Arrêt de tram du courant</b> (⚙ Services publics) près des rails et relie-le à un autre arrêt (ou à la gare) : les trams circulent et les routes à 5 cases se bouchent moins.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Liaison auto des routes</b> : quand tu lèves le doigt après avoir peint des zones, des routes sont ajoutées pour que chaque case de zone en touche une (10🫧 par case). Désactive-la dans l'onglet 🏘 Zones."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Relié par rails à un autre arrêt (ou à la gare) : trafic −45% sur les routes à $1 cases · les trams circulent"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Relié par rails : embouteillages −45% à $1 cases · construis près des rails"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Relié par rails : embouteillages −45% à $1 cases"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Glisse pour poser des rails · $1🫧 🪨$2 par case · peuvent croiser les routes · arrêts dans ⚙ Services publics"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 par case · relie les arrêts"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 cases de route reliées automatiquement · −$2🫧"
+  ]
+ ]
+}

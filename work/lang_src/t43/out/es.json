@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Parada del tranvía de corriente",
+  "선로 위에는 못 지어요": "No se puede construir sobre las vías",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Debe estar junto a las vías · pestaña 🛣 Carretera → “🚋 Tender vías”",
+  "🚋 선로 놓기": "🚋 Tender vías",
+  "건물이 있는 칸이에요": "Ahí ya hay un edificio",
+  "🚋 해류 열차역을 먼저 지어요": "Primero construye la 🚋 Estación del Tren Corriente",
+  "🛣 길 자동 연결 켜짐": "🛣 Autoconexión de calles activada",
+  "🛣 길 자동 연결": "🛣 Autoconexión de calles",
+  "꺼짐 · 길은 직접 깔아요": "Desactivada · traza las calles tú",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Activada · añade calles hasta cada casilla de zona",
+  "진주가 모자라 길을 다 잇지 못했어요": "No hay Perlas suficientes para conectar todas las calles",
+  "✅ 이어졌어요": "✅ Conectada",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Aún sin conectar · tiende 🚋 vías hasta otra parada",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Vías",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Tranvías y vehículos</b>: 🚌 buses, 🐢 tortugas mensajeras y 🦀 carritos cangrejo circulan por tus calles y van más lentos con 💢 en calles atascadas. Al construir la Estación del Tren Corriente (Palacio de Coral Lv.9), usa <b>🚋 Tender vías</b> en la pestaña 🛣 Carretera. Pon una <b>🚉 Parada del tranvía de corriente</b> (⚙ Servicios básicos) junto a las vías y conéctala con otra parada (o la estación): circulan tranvías y las calles a 5 casillas se atascan menos.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Autoconexión de calles</b>: al levantar el dedo tras pintar zonas, se añaden calles para que cada casilla de zona toque una (10🫧 por casilla). Desactívala en la pestaña 🏘 Zonas."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Conectada por vías a otra parada (o la estación): tráfico −45% en calles a $1 casillas · circulan tranvías"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Conectada por vías: atascos −45% en $1 casillas · construye junto a las vías"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Conectada por vías: atascos −45% en $1 casillas"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Arrastra para tender vías · $1🫧 🪨$2 por casilla · pueden cruzar calles · paradas en ⚙ Servicios básicos"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 por casilla · une las paradas"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 casillas de calle autoconectadas · −$2🫧"
+  ]
+ ]
+}

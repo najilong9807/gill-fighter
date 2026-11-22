@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Strömungstram-Haltestelle",
+  "선로 위에는 못 지어요": "Nicht auf Schienen baubar",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Muss an Schienen stehen · Tab 🛣 Straßen → „🚋 Schienen legen“",
+  "🚋 선로 놓기": "🚋 Schienen legen",
+  "건물이 있는 칸이에요": "Da steht schon ein Gebäude",
+  "🚋 해류 열차역을 먼저 지어요": "Baue zuerst den 🚋 Strömungszug-Bahnhof",
+  "🛣 길 자동 연결 켜짐": "🛣 Straßen-Autoverbindung an",
+  "🛣 길 자동 연결": "🛣 Straßen-Autoverbindung",
+  "꺼짐 · 길은 직접 깔아요": "Aus · Straßen selbst bauen",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "An · baut Straßen bis zu jedem Zonenfeld",
+  "진주가 모자라 길을 다 잇지 못했어요": "Nicht genug Perlen, um alle Straßen zu verbinden",
+  "✅ 이어졌어요": "✅ Verbunden",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Noch nicht verbunden · lege 🚋 Schienen zu einer anderen Haltestelle",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Schienen",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Trams & Fahrzeuge</b>: 🚌 Busse, 🐢 Paketschildkröten und 🦀 Krabbenkarren fahren auf deinen Straßen und werden auf verstopften Straßen mit 💢 langsamer. Sobald du den Strömungszug-Bahnhof baust (Korallenhalle Lv.9), nutze <b>🚋 Schienen legen</b> im Tab 🛣 Straßen. Setze eine <b>🚉 Strömungstram-Haltestelle</b> (⚙ Versorgung) an die Schienen und verbinde sie mit einer anderen Haltestelle (oder dem Bahnhof): Trams fahren und Straßen im Umkreis von 5 Feldern stauen weniger.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Straßen-Autoverbindung</b>: Wenn du nach dem Zonen-Malen den Finger hebst, werden Straßen ergänzt, damit jedes Zonenfeld eine berührt (10🫧 pro Feld). Im Tab 🏘 Zonen abschaltbar."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Per Schienen mit einer anderen Haltestelle (oder dem Bahnhof) verbunden: Verkehr −45% auf Straßen im Umkreis von $1 Feldern · Trams fahren"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Per Schienen verbunden: Staus −45% im Umkreis von $1 Feldern · an Schienen bauen"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Per Schienen verbunden: Staus −45% im Umkreis von $1 Feldern"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Ziehen, um Schienen zu legen · $1🫧 🪨$2 pro Feld · darf Straßen kreuzen · Haltestellen unter ⚙ Versorgung"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 pro Feld · verbinde die Haltestellen"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 Straßenfelder automatisch verbunden · −$2🫧"
+  ]
+ ]
+}

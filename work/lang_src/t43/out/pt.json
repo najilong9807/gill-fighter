@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Ponto de Bonde da Corrente",
+  "선로 위에는 못 지어요": "Não dá para construir nos trilhos",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Precisa ficar ao lado dos trilhos · aba 🛣 Ruas → “🚋 Pôr trilhos”",
+  "🚋 선로 놓기": "🚋 Pôr trilhos",
+  "건물이 있는 칸이에요": "Já tem um prédio aí",
+  "🚋 해류 열차역을 먼저 지어요": "Construa primeiro a 🚋 Estação do Trem da Corrente",
+  "🛣 길 자동 연결 켜짐": "🛣 Conexão automática de ruas ativada",
+  "🛣 길 자동 연결": "🛣 Conexão automática de ruas",
+  "꺼짐 · 길은 직접 깔아요": "Desativada · faça as ruas você mesmo",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Ativada · cria ruas até cada quadrado de zona",
+  "진주가 모자라 길을 다 잇지 못했어요": "Pérolas insuficientes para conectar todas as ruas",
+  "✅ 이어졌어요": "✅ Conectado",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Ainda não conectado · ponha 🚋 trilhos até outro ponto",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Trilhos",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Bondes e veículos</b>: 🚌 ônibus, 🐢 tartarugas entregadoras e 🦀 carrinhos de caranguejo andam pelas suas ruas e ficam lentos com 💢 nas ruas congestionadas. Depois de construir a Estação do Trem da Corrente (Salão de Coral Lv.9), use <b>🚋 Pôr trilhos</b> na aba 🛣 Ruas. Coloque um <b>🚉 Ponto de Bonde da Corrente</b> (⚙ Serviços) ao lado dos trilhos e ligue-o a outro ponto (ou à estação): os bondes circulam e as ruas num raio de 5 quadrados congestionam menos.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Conexão automática de ruas</b>: ao tirar o dedo depois de pintar zonas, são criadas ruas para que cada quadrado de zona toque uma (10🫧 por quadrado). Desative na aba 🏘 Zonas."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Ligado por trilhos a outro ponto (ou à estação): trânsito −45% nas ruas num raio de $1 quadrados · bondes circulam"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Ligado por trilhos: congestionamento −45% num raio de $1 quadrados · construa ao lado dos trilhos"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Ligado por trilhos: congestionamento −45% num raio de $1 quadrados"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Arraste para pôr trilhos · $1🫧 🪨$2 por quadrado · podem cruzar ruas · pontos ficam em ⚙ Serviços"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 por quadrado · ligue os pontos"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 quadrados de rua conectados automaticamente · −$2🫧"
+  ]
+ ]
+}

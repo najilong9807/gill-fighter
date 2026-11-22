@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Parada del Tramvia del corrent",
+  "선로 위에는 못 지어요": "No es pot construir sobre les vies",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Ha d'estar al costat de les vies · pestanya 🛣 Carrers → «🚋 Posa vies»",
+  "🚋 선로 놓기": "🚋 Posa vies",
+  "건물이 있는 칸이에요": "Aquí ja hi ha un edifici",
+  "🚋 해류 열차역을 먼저 지어요": "Primer construeix l'Estació del Tren del corrent 🚋",
+  "🛣 길 자동 연결 켜짐": "🛣 Connexió automàtica de carrers activada",
+  "🛣 길 자동 연결": "🛣 Connexió automàtica de carrers",
+  "꺼짐 · 길은 직접 깔아요": "Desactivada · fes els carrers tu",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Activada · afegeix carrers fins a cada casella de zona",
+  "진주가 모자라 길을 다 잇지 못했어요": "No hi ha prou Perles per connectar tots els carrers",
+  "✅ 이어졌어요": "✅ Connectada",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Encara no connectada · posa 🚋 vies fins a una altra parada",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Vies",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Tramvies i vehicles</b>: 🚌 busos, 🐢 tortugues missatgeres i 🦀 carretons cranc circulen pels teus carrers i van més lents amb 💢 als carrers embussats. Quan construeixis l'Estació del Tren del corrent (Sala del Corall Lv.9), fes servir <b>🚋 Posa vies</b> a la pestanya 🛣 Carrers. Col·loca una <b>🚉 Parada del Tramvia del corrent</b> (⚙ Serveis bàsics) al costat de les vies i connecta-la amb una altra parada (o l'estació): circulen tramvies i els carrers a 5 caselles s'embussen menys.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Connexió automàtica de carrers</b>: quan aixeques el dit després de pintar zones, s'afegeixen carrers perquè cada casella de zona en toqui un (10🫧 per casella). Desactiva-la a la pestanya 🏘 Zones."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Connectada per vies a una altra parada (o l'estació): trànsit −45% als carrers en $1 caselles · circulen tramvies"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Connectada per vies: embussos −45% en $1 caselles · construeix al costat de les vies"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Connectada per vies: embussos −45% en $1 caselles"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Arrossega per posar vies · $1🫧 🪨$2 per casella · poden creuar carrers · parades a ⚙ Serveis bàsics"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 per casella · uneix les parades"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 $1 caselles de carrer connectades automàticament · −$2🫧"
+  ]
+ ]
+}

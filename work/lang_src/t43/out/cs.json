@@ -1,0 +1,46 @@
+{
+ "d": {
+  "해류 열차 정거장": "Proudová tramvajová zastávka",
+  "선로 위에는 못 지어요": "Na kolejích stavět nejde",
+  "선로 옆에 지어야 해요 · 🛣 도로 탭 「🚋 선로 놓기」": "Musí stát u kolejí · karta 🛣 Silnice → „🚋 Pokládat koleje“",
+  "🚋 선로 놓기": "🚋 Pokládat koleje",
+  "건물이 있는 칸이에요": "Tady už stojí budova",
+  "🚋 해류 열차역을 먼저 지어요": "Nejdřív postav 🚋 Stanici Proudového vlaku",
+  "🛣 길 자동 연결 켜짐": "🛣 Automatické propojení silnic zapnuto",
+  "🛣 길 자동 연결": "🛣 Automatické propojení silnic",
+  "꺼짐 · 길은 직접 깔아요": "Vypnuto · silnice stavíš sám",
+  "켜짐 · 길에 안 닿은 칸까지 길을 깔아요": "Zapnuto · dostaví silnice ke každému poli zóny",
+  "진주가 모자라 길을 다 잇지 못했어요": "Nedostatek Perel na propojení všech silnic",
+  "✅ 이어졌어요": "✅ Propojeno",
+  "⚠ 아직 안 이어졌어요 · 🚋 선로로 다른 정거장까지 이어요": "⚠ Zatím nepropojeno · polož 🚋 koleje k jiné zastávce",
+  "<i style=\"background:#9664e6\"></i> 선로": "<i style=\"background:#9664e6\"></i> Koleje",
+  "<b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.": "<b>🚋 Tramvaje a vozidla</b>: 🚌 autobusy, 🐢 doručovací želvy a 🦀 krabí vozíky jezdí po tvých silnicích a v zácpě s 💢 zpomalují. Až postavíš Stanici Proudového vlaku (Korálová radnice Lv.9), použij <b>🚋 Pokládat koleje</b> na kartě 🛣 Silnice. Polož <b>🚉 Proudovou tramvajovou zastávku</b> (⚙ Služby) ke kolejím a propoj ji s jinou zastávkou (nebo stanicí): začnou jezdit tramvaje a silnice do 5 polí budou méně ucpané.",
+  "<b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.": "<b>🛣 Automatické propojení silnic</b>: když po malování zón zvedneš prst, přidají se silnice, aby se každé pole zóny nějaké dotýkalo (10🫧 za pole). Vypneš ho na kartě 🏘 Zóny."
+ },
+ "t": [
+  [
+   "선로로 다른 정거장\\(또는 열차역\\)과 이어지면 주변 (\\d+)칸 길의 오가는 양 −45% · 트램이 오가요",
+   "Propojeno kolejemi s jinou zastávkou (nebo stanicí): doprava −45 % na silnicích do $1 polí · jezdí tramvaje"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45% · 선로 옆에 지어요",
+   "Propojeno kolejemi: zácpy −45 % do $1 polí · stav u kolejí"
+  ],
+  [
+   "선로로 이어지면 주변 (\\d+)칸 길 막힘 −45%",
+   "Propojeno kolejemi: zácpy −45 % do $1 polí"
+  ],
+  [
+   "끌어서 선로를 놓아요 · 한 칸 (\\d+)🫧 🪨(\\d+) · 길을 가로질러도 돼요 · 정거장은 ⚙ 기반 탭",
+   "Táhni pro položení kolejí · $1🫧 🪨$2 za pole · smí křížit silnice · zastávky jsou v ⚙ Služby"
+  ],
+  [
+   "한 칸 (\\d+)🫧 🪨(\\d+) · 정거장끼리 이어요",
+   "$1🫧 🪨$2 za pole · propoj zastávky"
+  ],
+  [
+   "🛣 길 (\\d+)칸을 자동으로 이었어요 · −(\\d+)🫧",
+   "🛣 Automaticky propojeno polí silnic: $1 · −$2🫧"
+  ]
+ ]
+}

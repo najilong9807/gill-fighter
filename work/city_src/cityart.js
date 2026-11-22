@@ -45,14 +45,14 @@ var CITY_ART={
  train:{t:[1,10,20]},
  turtle:{t:[1,10,20]},
  zC0:{t:[1,2,3,4,5]},
- zC1:{t:[1,2,3,4,5],a:'zC0'},
- zC2:{t:[1,2,3,4,5],a:'zC0'},
+ zC1:{t:[1,2,3,4,5]},
+ zC2:{t:[1,2,3,4,5]},
  zI0:{t:[1,2,3,4,5]},
- zI1:{t:[1,2,3,4,5],a:'zI0'},
- zI2:{t:[1,2,3,4,5],a:'zI0'},
+ zI1:{t:[1,2,3,4,5]},
+ zI2:{t:[1,2,3,4,5]},
  zR0:{t:[1,2,3,4,5]},
- zR1:{t:[1,2,3,4,5],a:'zR0'},
- zR2:{t:[1,2,3,4,5],a:'zR0'}
+ zR1:{t:[1,2,3,4,5]},
+ zR2:{t:[1,2,3,4,5]}
 };
 try{var _cat=localStorage.getItem('gfcity.artTest');if(_cat){var _co=JSON.parse(_cat);for(var _k in _co)CITY_ART[_k]=_co[_k]}}catch(e){}
 function caTier(id,L){var c=CITY_ART[id];if(!c)return 0;var t=0;(c.t||[1]).forEach(function(x){if(L>=x)t=x});return t}

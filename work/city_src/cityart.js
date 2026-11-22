@@ -20,6 +20,7 @@ var CITY_ART={
  d_lamp:{t:[1]},
  d_o2:{t:[1]},
  d_o2b:{t:[1]},
+ d_rstop:{t:[1]},
  d_seal:{t:[1]},
  d_shipw:{t:[1]},
  d_snow:{t:[1]},

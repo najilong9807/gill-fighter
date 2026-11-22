@@ -38,5 +38,6 @@ for f in sorted(glob.glob(SRC+'/*.png')):
     m=re.match(r'^z([RCI])0_(\d)$',n)
     if m:
         for v,(lo,hi,smin,sh,vm,sm) in enumerate(VAR[m.group(1)],1):
+            if os.path.exists(SRC+'/z%s%d_%s.png'%(m.group(1),v,m.group(2))):continue  # 모양 다른 판이 있으면 색 바꾼 판은 안 만듦
             hueshift(im,lo,hi,smin,sh,vm,sm).save(OUT+'/z%s%d_%s.png'%(m.group(1),v,m.group(2)))
 print(len(os.listdir(OUT)))

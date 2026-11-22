@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Dane",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Vyššia daň dá viac perál, ale zníži dopyt v zóne (menej nových obyvateľov, obchodov a dielní) a šťastie · predvolene 9%",
+  "수요 그대로": "Dopyt bez zmeny",
+  "물건값 ↑": "Ceny ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Dane</b> (☰ Menu): od Koralovej radnice úr.4 nastavíš dane pre obytnú, obchodnú a priemyselnú zónu od 0 do 20%. Vyššia daň dá viac perál, ale zníži dopyt v zóne, a vysoké obytné alebo obchodné dane znížia aj šťastie. Nižšia daň priláka nových obyvateľov a viac obchodov a dielní."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Dane sa odomknú na 🏛 Koralovej radnici úr.$1 · dovtedy všetky $2%"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Dane teraz 🫧<b>$1</b> za hodinu · šťastie z daní $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Všetko na $1%"
+  ]
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Taxe",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Mai mari aduc mai multe perle, dar scad cererea zonei (mai puține mutări, magazine și ateliere) și fericirea · implicit 9%",
+  "수요 그대로": "Cerere neschimbată",
+  "물건값 ↑": "Prețuri ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Taxe</b> (☰ Meniu): de la Sala Coralului Nv.4, setezi taxele Rezidențial, Comercial și Industrial între 0 și 20%. Taxele mari aduc mai multe perle, dar scad cererea zonei, iar taxele rezidențiale sau comerciale mari scad și fericirea. Taxele mici aduc locuitori noi și mai multe magazine și ateliere."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Taxele se deblochează la 🏛 Sala Coralului Nv.$1 · până atunci toate $2%"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Taxe acum 🫧<b>$1</b> pe oră · fericire din taxe $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Toate la $1%"
+  ]
+ ]
+}

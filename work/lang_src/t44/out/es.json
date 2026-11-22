@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Impuestos",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Subirlos da más perlas, pero baja la demanda de esa zona (menos mudanzas, tiendas y talleres) y la felicidad · base 9%",
+  "수요 그대로": "Demanda sin cambios",
+  "물건값 ↑": "Precios ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Impuestos</b> (☰ Menú): desde el Palacio de Coral Lv.4, fija los impuestos Residencial, Comercial e Industrial entre 0 y 20%. Subirlos da más perlas, pero baja la demanda de esa zona, y si los impuestos residencial o comercial son altos, también baja la felicidad. Bajarlos atrae mudanzas y más tiendas y talleres."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Los impuestos se desbloquean en 🏛 Palacio de Coral Lv.$1 · hasta entonces, todos al $2%"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Impuestos ahora: 🫧<b>$1</b> por hora · felicidad por impuestos $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Todos al $1%"
+  ]
+ ]
+}

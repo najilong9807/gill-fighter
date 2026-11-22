@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Impostos",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Apujar-los dona més perles, però baixa la demanda de la zona (menys mudances, botigues i tallers) i la felicitat · per defecte 9%",
+  "수요 그대로": "Demanda igual",
+  "물건값 ↑": "Preus ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Impostos</b> (☰ Menú): des de la Sala del Corall Nv.4, fixa els impostos Residencial, Comercial i Industrial entre 0 i 20%. Apujar-los dona més perles, però baixa la demanda de la zona, i uns impostos residencials o comercials alts també baixen la felicitat. Abaixar-los atrau nous veïns i més botigues i tallers."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Els impostos s'obren a la 🏛 Sala del Corall Nv.$1 · fins aleshores, tots al $2%"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Impostos ara 🫧<b>$1</b> per hora · felicitat pels impostos $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Tots al $1%"
+  ]
+ ]
+}

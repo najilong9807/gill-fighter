@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Cukai",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Naikkan untuk lebih banyak mutiara, tapi permintaan zon itu turun (kurang penduduk berpindah, kedai dan bengkel) dan kebahagiaan turun · lalai 9%",
+  "수요 그대로": "Permintaan tidak berubah",
+  "물건값 ↑": "Harga ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Cukai</b> (☰ Menu): mulai Dewan Karang Tahap 4, tetapkan cukai Kediaman, Komersial dan Industri dari 0 hingga 20%. Cukai tinggi beri lebih banyak mutiara tapi permintaan zon itu turun, dan cukai kediaman atau komersial yang tinggi juga menurunkan kebahagiaan. Cukai rendah menarik penduduk baru serta lebih banyak kedai dan bengkel."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Cukai dibuka di 🏛 Dewan Karang Tahap $1 · sebelum itu semuanya $2%"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Cukai sekarang 🫧<b>$1</b> sejam · kebahagiaan daripada cukai $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Semua jadi $1%"
+  ]
+ ]
+}

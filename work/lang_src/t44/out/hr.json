@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Porezi",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Viši porez donosi više bisera, ali smanjuje potražnju u zoni (manje doseljavanja, trgovina i radionica) i sreću · zadano 9%",
+  "수요 그대로": "Potražnja nepromijenjena",
+  "물건값 ↑": "Cijene ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Porezi</b> (☰ Izbornik): od Koraljne dvorane Raz.4 postavi poreze za stambenu, poslovnu i industrijsku zonu od 0 do 20%. Viši porez donosi više bisera, ali smanjuje potražnju u zoni, a visoki stambeni ili poslovni porezi smanjuju i sreću. Niži porez privlači doseljenike te više trgovina i radionica."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Porezi se otključavaju na 🏛 Koraljnoj dvorani Raz.$1 · do tada svi $2%"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Porez sada 🫧<b>$1</b> po satu · sreća od poreza $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Sve na $1%"
+  ]
+ ]
+}

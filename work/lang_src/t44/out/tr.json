@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Vergiler",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Artırınca daha çok inci gelir ama o bölgenin talebi (daha az taşınan, dükkân ve atölye) ve mutluluk düşer · varsayılan %9",
+  "수요 그대로": "Talep değişmez",
+  "물건값 ↑": "Fiyatlar ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Vergiler</b> (☰ Menü): Mercan Salonu Sv.4'ten itibaren Konut, Ticaret ve Sanayi vergilerini %0–20 arası ayarla. Artırınca daha çok inci gelir ama o bölgenin talebi düşer; konut veya ticaret vergisi yüksekse mutluluk da düşer. Düşürünce yeni sakinler taşınır, daha çok dükkân ve atölye açılır."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Vergiler 🏛 Mercan Salonu Sv.$1'de açılır · o zamana kadar hepsi %$2"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Vergi şu an saatte 🫧<b>$1</b> · vergiden mutluluk $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Hepsini %$1 yap"
+  ]
+ ]
+}

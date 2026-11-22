@@ -1,0 +1,23 @@
+{
+ "d": {
+  "세율": "Belasting",
+  "올리면 진주가 더 들어오지만 그 구역 수요가 줄고(이사 · 가게 · 공방이 덜 생김) 행복이 내려가요 · 기본 9%": "Hoger levert meer parels op, maar verlaagt de vraag in die zone (minder nieuwe bewoners, winkels en werkplaatsen) en het geluk · standaard 9%",
+  "수요 그대로": "Vraag onveranderd",
+  "물건값 ↑": "Prijzen ↑",
+  "<b>💰 세율</b>(☰ 메뉴): 산호궁 Lv.4부터 주거 · 상업 · 산업 세율을 0~20%로 정해요. 올리면 진주가 더 들어오지만 그 구역 수요가 줄고, 주거 · 상업 세금이 높으면 행복도 내려가요. 내리면 이사 오고 가게 · 공방이 잘 생겨요.": "<b>💰 Belasting</b> (☰ Menu): vanaf Koraalhal Nv.4 stel je de belasting voor Woonzone, Winkelzone en Industriezone in op 0–20%. Hoger levert meer parels op, maar verlaagt de vraag in die zone, en hoge woon- of winkelbelasting verlaagt ook het geluk. Lager trekt nieuwe bewoners en meer winkels en werkplaatsen."
+ },
+ "t": [
+  [
+   "세율은 🏛 산호궁 Lv\\.(\\d+)에 열려요 · 그 전엔 모두 (\\d+)%",
+   "Belasting vrij bij 🏛 Koraalhal Nv.$1 · tot dan alles $2%"
+  ],
+  [
+   "세금 지금 시간당 🫧<b>([\\d,]+)</b> · 세율 때문에 행복 ([+−-]?\\d+)",
+   "Belasting nu 🫧<b>$1</b> per uur · geluk door belasting $2"
+  ],
+  [
+   "모두 (\\d+)%로",
+   "Alles op $1%"
+  ]
+ ]
+}

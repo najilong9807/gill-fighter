@@ -31,10 +31,10 @@ function cityTick(now){if(now-cityT<1000)return;var dt=Math.min(5,(now-(cityT||n
   G.res.dango=Math.max(0,(G.res.dango||0)-eat);G.res.cloth=Math.max(0,(G.res.cloth||0)-wear);
   var food=hallLv()<3||pop===0||(G.res.dango||0)>0,cloth=!clothOn||pop===0||(G.res.cloth||0)>0,avgLV=0,nR=0;
   var mkS=0,mkN=0,jmS=0;G.b.forEach(function(b){if(isZ(b.k)&&b.k.charAt(1)==='R'&&b.lv){avgLV+=landVal(b.x,b.y);nR++;var oc=Math.max(1,b.occ|0);mkS+=murkAt(b.x,b.y)*oc;mkN+=oc;jmS+=bJam(b)*oc}});avgLV=nR?avgLV/nR:50;var murkH=mkN?Math.min(15,Math.round(mkS/mkN*.25)):0,jamH=mkN?Math.max(0,Math.min(10,Math.round((jmS/mkN-.8)*15))):0;
-  var happy=Math.round(Math.max(0,Math.min(100,35+(pop?25*served/pop:20)+(food?15:-20)+(cloth?10:-15)+avgLV*.2+cheerV()-murkH-jamH+polV('happy')+txHappy())));
-  var dR=Math.max(-1,Math.min(1,((jobs+12)-workers)/25-txDem('R')));if(pop>=lim)dR=Math.min(dR,-.3);if(!food)dR-=.4;
-  var dC=hallLv()>=ZN.C.at?Math.max(-1,Math.min(1,(pop*.22-jC)/10+(pop>capC?.3:0)-txDem('C'))):0,dI=hallLv()>=ZN.I.at?Math.max(-1,Math.min(1,(pop*.3-jI)/12-txDem('I'))):0;
-  G.taxH=Math.round(served*TAXR*happy*polV('tax')*txMul(pop,jC,jI))/100;CS={txH:txHappy(),jamH:jamH,murkH:murkH,tax:G.taxH,pop:pop,lim:lim,workers:workers,jobs:jobs,w:w,dem:{R:dR,C:dC,I:dI},capC:capC,served:served,happy:happy,food:food,cloth:cloth,clothOn:clothOn,eat:served*.06*polV('eat'),wear:clothOn?served*.03:0};
+  var happy=Math.round(Math.max(0,Math.min(100,35+(pop?25*served/pop:20)+(food?15:-20)+(cloth?10:-15)+avgLV*.2+cheerV()-murkH-jamH+polV('happy'))));
+  var dR=Math.max(-1,Math.min(1,((jobs+12)-workers)/25));if(pop>=lim)dR=Math.min(dR,-.3);if(!food)dR-=.4;
+  var dC=hallLv()>=ZN.C.at?Math.max(-1,Math.min(1,(pop*.22-jC)/10+(pop>capC?.3:0))):0,dI=hallLv()>=ZN.I.at?Math.max(-1,Math.min(1,(pop*.3-jI)/12)):0;
+  G.taxH=Math.round(served*TAXR*happy*polV('tax'))/100;CS={jamH:jamH,murkH:murkH,tax:G.taxH,pop:pop,lim:lim,workers:workers,jobs:jobs,w:w,dem:{R:dR,C:dC,I:dI},capC:capC,served:served,happy:happy,food:food,cloth:cloth,clothOn:clothOn,eat:served*.06*polV('eat'),wear:clothOn?served*.03:0};
   /* 새 건물이 올라감 */
   if(now-cityG>2500){cityG=now;var busy=G.b.filter(function(b){return isZ(b.k)&&b.job}).length;
     ['R','C','I'].forEach(function(z){if(CS.dem[z]<=.1||busy>=2+pop/40||Math.random()>.6)return;var L=[];for(var key in G.zone){if(G.zone[key]!==z||OCC[key])continue;var q=key.split(','),x=+q[0],y=+q[1];if(O2[key]&&roadAdj(x,y))L.push([x,y])}

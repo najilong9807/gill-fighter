@@ -19,7 +19,7 @@ function wqState(){if(hallLv()<5)return null;var W=wqWeek();if(!G.wq||G.wq.wk!==
 function wqDef(k){for(var i=0;i<WQ_POOL.length;i++)if(WQ_POOL[i].k===k)return WQ_POOL[i]}
 function wqVal(q){var S=G.wq;if(q.k==='pop')return CS.pop||0;if(q.k==='zup')return Math.max(0,zLvSum()-(S.z0|0));return q.v|0}
 function wqAdd(k,n){var S=wqState();if(!S)return;S.q.forEach(function(q){if(q.k===k&&!q.got)q.v=(q.v|0)+(n||1)});wqDot()}
-function wqRw(){var L=(G.wq&&G.wq.L)||hallLv();return Math.max(100,Math.round(D.hallPearl(Math.max(2,L))*.6/10)*10)}
+function wqRw(){var L=(G.wq&&G.wq.L)||hallLv();return Math.min(1500,Math.max(100,Math.round(D.hallPearl(Math.max(2,L))*.6/10)*10))} /* 1.1.32 늑구: 의뢰 하나 진주 최대 1,500 */
 function wqReady(){var S=wqState();if(!S)return 0;var n=S.q.filter(function(q){return !q.got&&wqVal(q)>=q.goal}).length;if(!S.all&&S.q.every(function(q){return q.got}))n++;return n}
 function wqDot(){var b=$('bWq');if(!b)return;var on=hallLv()>=5;b.hidden=!on;if(!on)return;var e=b.querySelector('em');if(e)e.hidden=!wqReady()}
 function wqPanel(){var S=wqState(),el=$('panel'),W=wqWeek();if(!S)return;var rw=wqRw(),h='<button class="x" id="pX">✕</button><h2>📜 이번 주 마을 의뢰</h2><p class="role">새 의뢰까지 <b>'+dur((W.end-NOW())/1000)+'</b> · 하나에 🫧'+fmt(rw)+' · 셋 다 하면 💎5 + 🫧'+fmt(Math.round(rw*1.5))+'</p><div class="wq">';

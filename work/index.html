@@ -3917,7 +3917,7 @@ function populate(){if(mode==='race')return;for(var q=fish.length-1;q>=0;q--)if(
 function runGain(win){var L=P.look,grown=Math.max(0,P.grownW||0);win=win||P.full;var g=Math.floor((grown*(win?1.5:1)+(P.huntPearls||0)*(fair()?1:1+.05*rsLv('hunt')))*(fair()?1:(L.pearlMult||1))*(fair()?1:1+gradeOf(L).bonus)*(x2On()?2:P.boost&&P.boost.double?1.5:1)*(P.k?P.k.pearl:1)*(1+.03*rsLv('pearl'))*(P.mpBonus||1))+(P.bonus||0)+(mode==='single'&&!P.camp?Math.floor(scoreNow()/40):0);
   /* 1.1.1 안전장치: 한 판에 받을 수 있는 진주 상한(정상 플레이로는 닿지 않는 값) — 계산이 어긋나도 경제가 무너지지 않게 */
   g=Math.floor(g*PEARL_K); /* 1.2.0 경제 조정: 판에서 받는 진주 20% 줄임(싱글·대전·심해 탐험 공통) */
-  return Math.min(Math.max(0,g)|0,fair()?600:100000)} /* 1.1.18 종한: 한 판 최대 3만 → 10만 (판 결과 복구 상한 10만과 같게) */
+  return fair()?Math.min(Math.max(0,g)|0,600):Math.max(0,Math.floor(g))} /* 1.1.32 늑구: 싱글 · 탐험 한 판 진주 상한 없앰 */ /* 1.1.18 종한: 한 판 최대 3만 → 10만 (판 결과 복구 상한 10만과 같게) */
 
 /* ===== v0.37 싱글 에너지: 한 판에 1개, 20분마다 1개 충전(최대 5개). 멀티는 제한 없음. 시간은 기기 시계 기준 =====
    출시 때는 서버 시간으로 바꿔야 한다(기기 시계를 돌리면 충전됨). */
@@ -10873,7 +10873,7 @@ function runSnap(){if((state!=='play'&&state!=='pause')||mode==='race'||P.dead)r
   localStorage.setItem(RUNK,JSON.stringify(o))}catch(e){}}
 function runSnapClear(){try{localStorage.removeItem(RUNK)}catch(e){}}
 function runRecover(){var r=null;try{r=JSON.parse(localStorage.getItem(RUNK)||'null')}catch(e){}runSnapClear();
-  if(!r)return 0;var old=!(Date.now()-r.at<12*3600e3);var g=!old&&r.g>0?Math.min(Math.floor(r.g),100000):0; /* 1.1.29: 12시간 넘게 지나 켜도 진주만 빼고 기록(최고 기록 · 기록판 · 생존 기록)은 남긴다 */if(g)save.pearls+=g;if(r.m==='surv'){try{svRecCommit(r,g)}catch(e){}persist();try{var RS=r.rs;if(RS&&!(RS.dm&&RS.dm!==svDayKey())&&(RS.hp|0)>0&&r.t>=20&&Date.now()-r.at<30*60e3&&owns(r.id)&&svChOpen(RS.n))RES_PEND={r:r,g:g,surv:1}}catch(e){}return g}if(r.d&&!(save.deep>=r.d)&&!r.camp)save.deep=r.d;var rcb=null;try{rcb=runRecCommit(r,g)}catch(e){}persist();
+  if(!r)return 0;var old=!(Date.now()-r.at<12*3600e3);var g=!old&&r.g>0?Math.floor(r.g):0; /* 1.1.29: 12시간 넘게 지나 켜도 진주만 빼고 기록(최고 기록 · 기록판 · 생존 기록)은 남긴다 */if(g)save.pearls+=g;if(r.m==='surv'){try{svRecCommit(r,g)}catch(e){}persist();try{var RS=r.rs;if(RS&&!(RS.dm&&RS.dm!==svDayKey())&&(RS.hp|0)>0&&r.t>=20&&Date.now()-r.at<30*60e3&&owns(r.id)&&svChOpen(RS.n))RES_PEND={r:r,g:g,surv:1}}catch(e){}return g}if(r.d&&!(save.deep>=r.d)&&!r.camp)save.deep=r.d;var rcb=null;try{rcb=runRecCommit(r,g)}catch(e){}persist();
   /* 1.1.2: 싱글 판이 15초 넘게 진행 중이었고 30분 안이면 '이어서 하기'를 고를 수 있게 남겨 둔다 */
   if(r.m==='single'&&r.p&&!r.camp&&(r.p.time||0)>=15&&Date.now()-r.at<30*60e3&&owns(r.id))RES_PEND={r:r,g:g,cb:rcb};
   return g}

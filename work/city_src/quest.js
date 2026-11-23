@@ -13,9 +13,9 @@ var WQ_POOL=[
  {k:'box',ic:'📦',t:function(g){return '판에서 모은 재료 상자 '+g+'개 열기'},g:function(){return 6},emb:1}];
 function wqWeek(){var d=new Date(NOW()),m=new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7));return {k:m.getFullYear()+'-'+(m.getMonth()+1)+'-'+m.getDate(),end:+m+7*864e5}}
 function zLvSum(){var s=0;G.b.forEach(function(b){if(isZ(b.k))s+=b.lv|0});return s}
-function wqState(){if(hallLv()<5)return null;var W=wqWeek();if(!G.wq||G.wq.wk!==W.k){var L=hallLv(),pool=WQ_POOL.filter(function(q){return !q.emb||EMB}),h=0,i;for(i=0;i<W.k.length;i++)h=(h*31+W.k.charCodeAt(i)+(G.seed|0))>>>0;
+function wqState(){if(hallLv()<5)return null;var W=wqWeek();var wqOld=G.wq&&(G.wq.end||(function(k){var p=String(k).split('-');return +new Date(+p[0],+p[1]-1,+p[2])+7*864e5})(G.wq.wk));if(!G.wq||G.wq.wk!==W.k&&!(W.end<=wqOld)){ /* 1.1.32: 시계 · 시간대를 거꾸로 넘어도 의뢰를 새로 만들지 않음 */var L=hallLv(),pool=WQ_POOL.filter(function(q){return !q.emb||EMB}),h=0,i;for(i=0;i<W.k.length;i++)h=(h*31+W.k.charCodeAt(i)+(G.seed|0))>>>0;
     var pick=[];while(pick.length<3&&pool.length){h=(h*1103515245+12345)>>>0;pick.push(pool.splice((h>>>8)%pool.length,1)[0])}
-    G.wq={wk:W.k,L:L,z0:zLvSum(),q:pick.map(function(q){return {k:q.k,goal:q.g(L),v:0,got:0}}),all:0};save()}return G.wq}
+    G.wq={wk:W.k,end:W.end,L:L,z0:zLvSum(),q:pick.map(function(q){return {k:q.k,goal:q.g(L),v:0,got:0}}),all:0};save()}return G.wq}
 function wqDef(k){for(var i=0;i<WQ_POOL.length;i++)if(WQ_POOL[i].k===k)return WQ_POOL[i]}
 function wqVal(q){var S=G.wq;if(q.k==='pop')return CS.pop||0;if(q.k==='zup')return Math.max(0,zLvSum()-(S.z0|0));return q.v|0}
 function wqAdd(k,n){var S=wqState();if(!S)return;S.q.forEach(function(q){if(q.k===k&&!q.got)q.v=(q.v|0)+(n||1)});wqDot()}

@@ -35,7 +35,7 @@ function run(type,days,opt){opt=opt||{};const pf=P[type];
       /* 택배 거북(수족관, 거북 배달소 지으면) · 마을 사건 해결비 · 주간 의뢰(월요일) */
       if(lv('turtle')){const g=pf.parcel*Math.min(250,40+10*L);S.res.pearl+=g;S.parcelGot=(S.parcelGot||0)+g}
       if(L>=6){const c=pf.incDay*(1-pf.blk*Math.min(1,(lv('fire')>0)+(lv('police')>0)+(lv('clinic')>0))/3*3/3)*(80+25*L);S.res.pearl-=c;S.incPaid=(S.incPaid||0)+c}
-      if(L>=5&&day%7===0){const q=Math.max(+(process.env.QMIN||100),D.hallPearl(Math.max(2,L))*.6)*3*pf.qRate*(pf.qRate>=1?1.5:1);S.res.pearl+=q;S.questGot=(S.questGot||0)+q}}}}
+      if(L>=5&&day%7===0){const q=Math.min(1500,Math.max(+(process.env.QMIN||100),D.hallPearl(Math.max(2,L))*.6))*3*pf.qRate*(pf.qRate>=1?1.5:1);S.res.pearl+=q;S.questGot=(S.questGot||0)+q}}}}
     let guard=0;
     while(S.jobs.length<D.crabs(lv('crab'))&&guard++<20){
       const all=critical();if(first&&guard===1&&all.length){const blk=all.find(id=>!can(costX(id,lv(id)+1)));if(blk&&S.jobs.length===0){const c=costX(blk,lv(blk)+1);const k=Object.keys(c).find(k=>(S.res[k]||0)<c[k]);S.block[k]=(S.block[k]||0)+1}else if(S.jobs.length)S.block.time=(S.block.time||0)+1}

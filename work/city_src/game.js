@@ -24,7 +24,18 @@ function fresh(){var g={v:1,seed:Math.floor(Math.random()*1e6),t:NOW(),res:{ston
   var c=Math.floor(N/2)-1;g.N=N;g.groad={};for(var x=0;x<=c+8;x++){g.road[x+','+(c+3)]=1;if(x<16)g.groad[x+','+(c+3)]=1}g.gate={x:0,y:c+3};g.gateV=3;
   for(var i=0;i<N;i++)for(var j=0;j<N;j++){var d=Math.max(Math.abs(i-c-1),Math.abs(j-c-1));if(d<5)continue;var r=hh(g.seed+i*31+j*57);if(r<.09)g.ter[i+','+j]=1;else if(r<.15)g.ter[i+','+j]=2}
   g.b.push({id:g.nid++,k:'hall',x:c,y:c,lv:1,buf:{}});return g}
-function load(){try{var s=JSON.parse(localStorage.getItem(KEY));if(s&&s.v===1){if((s.N||36)<N){for(var i=0;i<N;i++)for(var j=0;j<N;j++){if(i<(s.N||36)&&j<(s.N||36))continue;var r=hh(s.seed+i*31+j*57);if(r<.09)s.ter[i+','+j]=1;else if(r<.15)s.ter[i+','+j]=2}s.N=N}return s}}catch(e){}return fresh()}
+/* 1.1.32 최악 조건 점검: 저장이 망가져도(칸 빠짐 · 글자 숫자 · 음수 · null · 산호궁 없음) 마을이 켜지게 고쳐서 불러오고,
+   못 읽는 저장(잘린 글 · 다른 판)은 새 마을로 덮기 전에 'gfcity.v1.bad' 에 원문을 남김 */
+try{(function(){var t=D.time;D.time=function(k,L){try{return t.apply(this,arguments)}catch(e){return 60}}})()}catch(e){} /* 모르는 건물 시간 물어도 멈추지 않게 */
+function fixSave(s){var num=function(v,d){v=+v;return isFinite(v)?v:d},obj=function(v){return v&&typeof v==='object'&&!Array.isArray(v)?v:{}};
+  s.res=obj(s.res);try{var r0=fresh().res;for(var r1 in r0)if(!(r1 in s.res))s.res[r1]=0}catch(e){}for(var r in s.res)s.res[r]=Math.min(1e9,Math.max(0,num(s.res[r],0)));s.road=obj(s.road);s.ter=obj(s.ter);if(!Array.isArray(s.ord))s.ord=[];
+  s.N=Math.max(36,Math.min(200,num(s.N,36)|0));s.seed=num(s.seed,1)|0;var seen={},mx=0;
+  s.b=(Array.isArray(s.b)?s.b:[]).filter(function(b){if(!b||typeof b!=='object'||typeof b.k!=='string')return false;var z=b.k.charAt(0)==='z';if(!B[b.k]&&b.k.indexOf('d_')!==0&&!(z&&/^z[RCI]/.test(b.k)))return false;b.x=num(b.x,-1)|0;b.y=num(b.y,-1)|0;if(b.x<0||b.y<0||b.x>=s.N||b.y>=s.N)return false;
+    if(!isFinite(+b.id)||seen[b.id])b.id=null;else{b.id=+b.id;seen[b.id]=1;mx=Math.max(mx,b.id)}b.lv=Math.max(b.k==='hall'?1:0,Math.min(z?5:30,num(b.lv,0)|0));b.buf=obj(b.buf);for(var q in b.buf)b.buf[q]=Math.max(0,num(b.buf[q],0));
+    if(b.job&&(typeof b.job!=='object'||!isFinite(+b.job.end)||!isFinite(+b.job.L)))b.job=null;return true});
+  s.nid=Math.max(num(s.nid,1)|0,mx+1);s.b.forEach(function(b){if(b.id==null)b.id=s.nid++});
+  if(!s.b.some(function(b){return b.k==='hall'})){var c=Math.floor(s.N/2)-1;s.b.push({id:s.nid++,k:'hall',x:c,y:c,lv:1,buf:{}})}return s}
+function load(){var raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}try{var s=JSON.parse(raw);if(s&&s.v===1){try{fixSave(s)}catch(e){}if((s.N||36)<N){for(var i=0;i<N;i++)for(var j=0;j<N;j++){if(i<(s.N||36)&&j<(s.N||36))continue;var r=hh(s.seed+i*31+j*57);if(r<.09)s.ter[i+','+j]=1;else if(r<.15)s.ter[i+','+j]=2}s.N=N}return s}}catch(e){}try{if(raw)localStorage.setItem(KEY+'.bad',raw)}catch(e){}return fresh()}
 function save(){G.t=NOW();try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}try{hint()}catch(e){}}
 /* 본게임 탭 빨간 점용: 다음에 받을 것이 생기는 시각(공사 끝 · 생산 8시간치 가득) */
 function hint(){var now=NOW(),nx=Infinity;G.b.forEach(function(b){if(b.job){nx=Math.min(nx,b.job.end);return}var r=rates(b);for(var k in r)if(r[k]>0){var left=(r[k]*BUFH-((b.buf&&b.buf[k])||0))/r[k];nx=Math.min(nx,now+Math.max(0,left)*3600000)}});
@@ -68,7 +79,7 @@ function siteWhy(k,x,y){var s=sz(k),road=false;for(var i=0;i<s;i++)for(var j=0;j
 
 /* --- 진행: 공사 · 생산 --- */
 var FX=[],TXT=[],POPS={};
-function step(now,quiet){var dtH=(now-(G.tick||now))/3600000;G.tick=now;
+function step(now,quiet){var dtH=(now-(G.tick||now))/3600000;if(dtH<0){if(dtH<-48)G.tick=now;dtH=0}else G.tick=now; /* 1.1.32: 시계를 뒤로 돌리면 tick 을 되돌리지 않음(돌려놓을 때 8시간치가 거저 생기던 것) */
   G.b.forEach(function(b){
     if(b.job&&now>=b.job.end){b.lv=b.job.L;b.job=null;if(b.lv===1&&!isZ(b.k)){var r0=rates(b);b.buf=b.buf||{};for(var q0 in r0)b.buf[q0]=(b.buf[q0]||0)+Math.max(2,r0[q0]*1.2)}POPS[b.id]=quiet?0:now;if(!quiet){var c=centerOf(b);if(isZ(b.k)){dust(c.x,c.y,8,.8);sparkle(c.x,c.y-30*cam.z,6)}else{dust(c.x,c.y,22,1.8);sparkle(c.x,c.y-60*cam.z,18);float(c.x,c.y-90*cam.z,(b.k==='hall'?'🏛 ':'')+'Lv.'+b.lv+'!',true);snd('done');toast(B[b.k].n+' Lv.'+b.lv+' 완성!')}}else QUIET++}
     if(b.lv&&!b.job&&b.xpd!==b.lv){b.xpd=b.lv;addXP(isZ(b.k)||isD(b.k)?2:Math.min(200,Math.ceil(D.time(b.k,b.lv)/60)+5))}
@@ -341,10 +352,15 @@ $('hF').onclick=function(){lifePanel()};
 var PRESS=false;document.addEventListener('pointerdown',function(){PRESS=true},true);document.addEventListener('pointerup',function(){setTimeout(function(){PRESS=false},300)},true);
 var lastUI=0,lastPanel=0,lastSave=NOW();
 var AWAY=(NOW()-(G.t||NOW()))/1000;step(NOW(),true);setTimeout(function(){if(AWAY>=300)settle(AWAY,QUIET);else if(QUIET)toast('자는 동안 공사 '+QUIET+'개가 끝났어요')},700);if(!G.cam)focus(bOf('hall'));
-var lastT=0;function frame(t){var now=NOW(),fdt=lastT?Math.min(.05,(t-lastT)/1000):0;camGo(fdt);camInertia();walkMove(fdt);lastT=t;step(now,false);cityTick(now);ordTick(now);trainTick(now);portTick(now);ctx.setTransform(DPR,0,0,DPR,0,0);drawBg(t);drawTiles(t);if(G.gate)drawShore(t);drawWorld(t,now);drawLand();drawFX();drawSnow(t);drawHint(t);floatUI();
+var lastT=0,FERR=0,SANE=0;
+/* 저장에 모르는 건물(없앤 건물 · 다른 판 · 망가진 이름)은 빼서 'gfcity.v1.unknown' 에 따로 남김 — 모든 표(B · DEC · ZN)가 읽힌 뒤 첫 프레임에 */
+function dropUnknown(){var out=[];G.b=G.b.filter(function(b){var ok=B[b.k]||(typeof DEC!=='undefined'&&DEC[b.k])||(isZ(b.k)&&typeof ZN!=='undefined'&&ZN[b.k.charAt(1)]);if(!ok)out.push(b);return !!ok});
+  if(out.length){try{localStorage.setItem(KEY+'.unknown',JSON.stringify(out))}catch(e){}try{occ()}catch(e){}save()}}
+function frame(t){if(!SANE){SANE=1;try{dropUnknown()}catch(e){}}try{frameB(t)}catch(e){FERR++;if(FERR===1||FERR%300===0)try{console.error('city frame',e)}catch(x){}}requestAnimationFrame(frame)}
+function frameB(t){var now=NOW(),fdt=lastT?Math.min(.05,(t-lastT)/1000):0;camGo(fdt);camInertia();walkMove(fdt);lastT=t;step(now,false);cityTick(now);ordTick(now);trainTick(now);portTick(now);ctx.setTransform(DPR,0,0,DPR,0,0);drawBg(t);drawTiles(t);if(G.gate)drawShore(t);drawWorld(t,now);drawLand();drawFX();drawSnow(t);drawHint(t);floatUI();
   if(Math.random()<.03)FX.push({k:'b',x:Math.random()*VW,y:VH,vx:0,vy:-.6-Math.random(),r:2+Math.random()*3,l:1,dl:.004});
   if(t-lastUI>250){hud();lastUI=t}if(panelFor&&!PRESS&&t-lastPanel>1000&&$('panel').contains(document.activeElement)===false){lastPanel=t;if(panelFor==='ord')orderPanel();else if(panelFor==='evt')evtPanel();else if(panelFor.tr)trainPanel(panelFor.tr);else if(panelFor.pt)portPanel(panelFor.pt);else openPanel(panelFor)}
-  if(now-lastSave>5000){G.cam=cam;save();lastSave=now}requestAnimationFrame(frame)}
+  if(now-lastSave>5000){G.cam=cam;save();lastSave=now}}
 addEventListener('pagehide',function(){G.cam=cam;save()});document.addEventListener('visibilitychange',function(){if(document.hidden){G.cam=cam;save()}});
 requestAnimationFrame(frame);
 window.__signs=function(){return SIGNS};window.__dbg=function(){var h=G.b.find(function(b){return isZ(b.k)&&b.lv});var q=bOf('quarry');return {n:WALK.length,rn:[roadNear(h),roadNear(q)],p:(path(roadNear(h),roadNear(q))||[]).length,homes:G.b.filter(function(b){return isZ(b.k)&&(b.occ|0)>0}).length}};window.__walk=function(keep){if(!keep||!window.__wf||WALK.indexOf(window.__wf)<0)window.__wf=WALK.filter(function(f){return !f.st&&f.p.length>5})[0];var f=window.__wf;if(!f)return null;var q=walkerPos(f);return [+q.i.toFixed(4),+q.j.toFixed(4),f.wait>0?1:0]};window.__city={walkMove:function(d){walkMove(d)},arrive:function(){var hs=G.b.filter(function(b){return isZ(b.k)&&b.lv});if(hs.length)arrive(hs[0])},why:function(){return G.b.filter(function(b){return isZ(b.k)&&b.lv===2}).slice(0,8).map(function(b){return b.k+' '+landVal(b.x,b.y)+' '+zUpWhy(b).join('|')})},deco:function(k,x,y){return placeDeco(k,x,y)},settle:function(a,d){settle(a,d)},warp:function(sec){for(var t=0;t<sec;t+=2){TOFF+=2000;var n=NOW();step(n,true);cityTick(n);walkMove(2)}},CS:function(){return CS},G:function(){return G},give:function(p,g){WAL.add('pearl',p||0);WAL.add('gem',g||0)},res:function(o){for(var k in o)G.res[k]=(G.res[k]||0)+o[k]},

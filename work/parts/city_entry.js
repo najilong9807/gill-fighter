@@ -10,7 +10,7 @@
   /* 저장 백업에 마을 저장도 같이: 맡길 때 save.city로 싣고, 불러올 때 'gfcity.v1'로 되돌림.
      city 칸이 없는 옛 백업이면 이 폰의 마을은 그대로 두고, 있으면(null 포함) 그 백업의 마을로 바꿈. 바꾸기 전 것은 'gfcity.v1.bak'에 한 벌 남김 */
   var CK='gfcity.v1',_cd=cloudData,_ca=cloudApply;
-  cloudData=function(){var o=_cd();o.city=null;try{var c=localStorage.getItem(CK);if(c&&c.length<250000)o.city=JSON.parse(c)}catch(e){}return o};
+  cloudData=function(){var o=_cd();o.city=null;try{var c=localStorage.getItem(CK);if(c&&c.length<250000)o.city=JSON.parse(c);else if(c)delete o.city}catch(e){delete o.city}return o}; /* 1.1.32: 너무 크면 city 칸을 빼서 복원 때 그 폰 마을을 지우지 않음 */
   cloudApply=function(code,d){try{if(d&&('city' in d)){var old=localStorage.getItem(CK);if(old)localStorage.setItem(CK+'.bak',old);if(d.city&&typeof d.city==='object')localStorage.setItem(CK,JSON.stringify(d.city));else localStorage.removeItem(CK);localStorage.removeItem('gfcity.hint');delete d.city}}catch(e){}_ca(code,d)};
 
   var LAB={ko:'마을',en:'Town',ja:'町',es:'Pueblo',vi:'Làng'},NM={ko:'아가미시티',en:'Gill City',ja:'エラシティ',es:'Gill City',vi:'Gill City'};

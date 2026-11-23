@@ -1,0 +1,78 @@
+{
+ "d": {
+  "오늘의 마을 일": "Tâches du village du jour",
+  "오늘의 일 3개 모두 끝내기": "Termine les 3 tâches du jour",
+  "광장": "Grand-Place",
+  "축제 · 기념물": "Fête · Monuments",
+  "축제 중": "Fête en cours",
+  "축제 중이에요": "La fête bat son plein",
+  "축제의 날": "Jour de fête",
+  "축제의 날 열기": "Lancer le Jour de fête",
+  "축제의 날! 1시간 동안 세금 2배 · 생산 1.5배": "Jour de fête ! Impôts ×2 · production ×1,5 pendant 1 h",
+  "하루 한 번 · 1시간 동안 세금 2배 · 생산 1.5배 · 축제 방울 +15": "Une fois par jour · impôts ×2 et production ×1,5 pendant 1 h · jetons de fête +15",
+  "오늘은 이미 열었어요 · 내일 또 열 수 있어요": "Déjà fêté aujourd'hui · à refaire demain",
+  "산호 등대": "Phare de corail",
+  "고래 뼈 아치": "Arche en os de baleine",
+  "용궁 시계탑": "Horloge du Palais",
+  "다 지었어요 ✨": "Terminé ✨",
+  "다음 단계:": "Étape suivante :"
+ },
+ "t": [
+  [
+   "⚡ 공사 단축 \\+(\\d+분) · 짓는 중인 건물 창에서 써요",
+   "⚡ Accélération de chantier +$1 · à utiliser sur un bâtiment en construction"
+  ],
+  [
+   "⚡ 단축 (\\d+분) 쓰기 <small>\\(모아 둔 (\\d+분)\\)</small>",
+   "⚡ Utiliser $1 d'accélération <small>($2 en réserve)</small>"
+  ],
+  [
+   "⚡ (\\d+분) 당겼어요",
+   "⚡ Avancé de $1"
+  ],
+  [
+   "([^<>]+?) 뒤 바뀌어요 · 하나에 🫧([\\d,]+) · 셋 다 하면 💎(\\d+) \\+ ⚡(\\d+분)",
+   "Nouvelles tâches dans $1 · 🫧$2 chacune · les trois : 💎$3 + ⚡$4"
+  ],
+  [
+   "🎁 오늘의 마을 일 끝! 💎(\\d+) · ⚡(\\d+분)",
+   "🎁 Tâches du village du jour terminées ! 💎$1 · ⚡$2"
+  ],
+  [
+   "⚡ 공사 단축 <b>(\\d+분)</b> 모아 둠 · 짓는 중인 건물 창에서 써요",
+   "⚡ <b>$1</b> d'accélération en réserve · à utiliser sur un bâtiment en construction"
+  ],
+  [
+   "⚡ 아가미 파이터 한 판마다 공사 단축 (\\d+분) \\(재료 상자를 받을 때\\)",
+   "⚡ Chaque partie de Gill Fighter donne $1 d'accélération de chantier (en recevant la caisse de ravitaillement)"
+  ],
+  [
+   "🎉 축제 중 · 남은 시간 <b>([^<>]+)</b>",
+   "🎉 Fête en cours · temps restant <b>$1</b>"
+  ],
+  [
+   "(산호 등대|고래 뼈 아치|용궁 시계탑) (\\d+)단계 · 💎\\+(\\d+)",
+   "$1 étape $2 · 💎+$3"
+  ],
+  [
+   "(\\d+) / (\\d+)단계",
+   "Étape $1/$2"
+  ],
+  [
+   "생산 \\+(\\d+)% \\(단계마다 \\+(\\d+)%\\)",
+   "Production +$1% (+$2% par étape)"
+  ],
+  [
+   "세금 \\+(\\d+)% \\(단계마다 \\+(\\d+)%\\)",
+   "Impôts +$1% (+$2% par étape)"
+  ],
+  [
+   "공사 시간 −(\\d+)% \\(단계마다 −(\\d+)%\\)",
+   "Temps de construction −$1% (−$2% par étape)"
+  ],
+  [
+   "🧱 (\\d+)단계 짓기",
+   "🧱 Construire l'étape $1"
+  ]
+ ]
+}

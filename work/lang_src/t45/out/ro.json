@@ -1,0 +1,78 @@
+{
+ "d": {
+  "오늘의 마을 일": "Treburile satului de azi",
+  "오늘의 일 3개 모두 끝내기": "Termină toate cele 3 treburi de azi",
+  "광장": "Piața",
+  "축제 · 기념물": "Festival · Monumente",
+  "축제 중": "Festival în curs",
+  "축제 중이에요": "Festivalul e deja în curs",
+  "축제의 날": "Ziua festivalului",
+  "축제의 날 열기": "Pornește Ziua festivalului",
+  "축제의 날! 1시간 동안 세금 2배 · 생산 1.5배": "Ziua festivalului! Timp de 1 oră taxe ×2 · producție ×1,5",
+  "하루 한 번 · 1시간 동안 세금 2배 · 생산 1.5배 · 축제 방울 +15": "O dată pe zi · timp de 1 oră taxe ×2 și producție ×1,5 · jetoane de festival +15",
+  "오늘은 이미 열었어요 · 내일 또 열 수 있어요": "Deja ținut azi · poți din nou mâine",
+  "산호 등대": "Farul de corali",
+  "고래 뼈 아치": "Arcul din oase de balenă",
+  "용궁 시계탑": "Turnul cu ceas al palatului",
+  "다 지었어요 ✨": "Gata construit ✨",
+  "다음 단계:": "Etapa următoare:"
+ },
+ "t": [
+  [
+   "⚡ 공사 단축 \\+(\\d+분) · 짓는 중인 건물 창에서 써요",
+   "⚡ Accelerare construcție +$1 · folosește-o în fereastra unei clădiri în construcție"
+  ],
+  [
+   "⚡ 단축 (\\d+분) 쓰기 <small>\\(모아 둔 (\\d+분)\\)</small>",
+   "⚡ Accelerează cu $1 <small>(strâns: $2)</small>"
+  ],
+  [
+   "⚡ (\\d+분) 당겼어요",
+   "⚡ Accelerat cu $1"
+  ],
+  [
+   "([^<>]+?) 뒤 바뀌어요 · 하나에 🫧([\\d,]+) · 셋 다 하면 💎(\\d+) \\+ ⚡(\\d+분)",
+   "Treburi noi în $1 · 🫧$2 fiecare · toate trei: 💎$3 + ⚡$4"
+  ],
+  [
+   "🎁 오늘의 마을 일 끝! 💎(\\d+) · ⚡(\\d+분)",
+   "🎁 Treburile satului de azi gata! 💎$1 · ⚡$2"
+  ],
+  [
+   "⚡ 공사 단축 <b>(\\d+분)</b> 모아 둠 · 짓는 중인 건물 창에서 써요",
+   "⚡ Accelerare strânsă: <b>$1</b> · folosește-o în fereastra unei clădiri în construcție"
+  ],
+  [
+   "⚡ 아가미 파이터 한 판마다 공사 단축 (\\d+분) \\(재료 상자를 받을 때\\)",
+   "⚡ Fiecare tură de Gill Fighter = $1 accelerare construcție (când primești lada de provizii)"
+  ],
+  [
+   "🎉 축제 중 · 남은 시간 <b>([^<>]+)</b>",
+   "🎉 Festival în curs · timp rămas <b>$1</b>"
+  ],
+  [
+   "(산호 등대|고래 뼈 아치|용궁 시계탑) (\\d+)단계 · 💎\\+(\\d+)",
+   "$1, etapa $2 · 💎+$3"
+  ],
+  [
+   "(\\d+) / (\\d+)단계",
+   "Etapa $1/$2"
+  ],
+  [
+   "생산 \\+(\\d+)% \\(단계마다 \\+(\\d+)%\\)",
+   "Producție +$1% (+$2% pe etapă)"
+  ],
+  [
+   "세금 \\+(\\d+)% \\(단계마다 \\+(\\d+)%\\)",
+   "Taxe +$1% (+$2% pe etapă)"
+  ],
+  [
+   "공사 시간 −(\\d+)% \\(단계마다 −(\\d+)%\\)",
+   "Timp de construcție −$1% (−$2% pe etapă)"
+  ],
+  [
+   "🧱 (\\d+)단계 짓기",
+   "🧱 Construiește etapa $1"
+  ]
+ ]
+}

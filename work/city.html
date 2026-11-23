@@ -30,7 +30,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none}
 #place .pt{flex:1;background:var(--card);border:2.5px solid var(--ink);border-radius:14px;padding:6px 10px;font-size:13px;box-shadow:0 3px 0 var(--ink)}
 #place button{width:62px;border:2.5px solid var(--ink);border-radius:14px;background:var(--card);font:inherit;font-weight:900;font-size:15px;box-shadow:0 3px 0 var(--ink)}
 #place button.main{width:84px;background:#ffd54a}#place button:disabled{opacity:.45}
-#panel{position:fixed;left:10px;right:10px;bottom:calc(var(--sab,env(safe-area-inset-bottom)) + 72px);max-height:58vh;overflow:auto;background:var(--card);border:2.5px solid var(--ink);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--ink)}
+#panel{position:fixed;z-index:6;left:10px;right:10px;bottom:calc(var(--sab,env(safe-area-inset-bottom)) + 72px);max-height:58vh;overflow:auto;background:var(--card);border:2.5px solid var(--ink);border-radius:18px;padding:12px 14px;box-shadow:0 4px 0 var(--ink)}
 #panel h2{margin:0 0 4px;font-size:19px}#panel h2 small{font-size:14px;color:#5a6a88}
 #panel .x{position:absolute;right:10px;top:10px;width:34px;height:34px;border:2px solid var(--ink);border-radius:10px;background:#fff;font:inherit;font-weight:900}
 #panel .role,#panel .prod{margin:2px 0;font-size:13px;color:#43506b}
@@ -594,7 +594,7 @@ function step(now,quiet){var dtH=(now-(G.tick||now))/3600000;G.tick=now;
   G.b.forEach(function(b){
     if(b.job&&now>=b.job.end){b.lv=b.job.L;b.job=null;if(b.lv===1&&!isZ(b.k)){var r0=rates(b);b.buf=b.buf||{};for(var q0 in r0)b.buf[q0]=(b.buf[q0]||0)+Math.max(2,r0[q0]*1.2)}POPS[b.id]=quiet?0:now;if(!quiet){var c=centerOf(b);if(isZ(b.k)){dust(c.x,c.y,8,.8);sparkle(c.x,c.y-30*cam.z,6)}else{dust(c.x,c.y,22,1.8);sparkle(c.x,c.y-60*cam.z,18);float(c.x,c.y-90*cam.z,(b.k==='hall'?'🏛 ':'')+'Lv.'+b.lv+'!',true);snd('done');toast(B[b.k].n+' Lv.'+b.lv+' 완성!')}}else QUIET++}
     if(b.lv&&!b.job&&b.xpd!==b.lv){b.xpd=b.lv;addXP(isZ(b.k)||isD(b.k)?2:Math.min(200,Math.ceil(D.time(b.k,b.lv)/60)+5))}
-    if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=r[k]*dtH;if(u){for(var q in u){var need=u[q]*add;if(G.res[q]<need)add=G.res[q]/u[q];}for(q in u)G.res[q]-=u[q]*add}
+    if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=Math.min(r[k]*dtH,Math.max(0,r[k]*BUFH-(b.buf[k]||0)));if(u){for(var q in u){var need=u[q]*add;if(G.res[q]<need)add=G.res[q]/u[q];}for(q in u)G.res[q]-=u[q]*add}
       b.buf[k]=Math.min(r[k]*BUFH,(b.buf[k]||0)+add)}}})}
 var QUIET=0;
 function collect(b){var got=[],c=centerOf(b);for(var k in b.buf){var v=Math.floor(b.buf[k]);if(v<1)continue;
@@ -644,7 +644,7 @@ function drawTer(p,v,seed,t){var z=cam.z;ctx.save();ctx.translate(p.x,p.y);ctx.s
   else{for(var s=0;s<4;s++){var sx=(s-1.5)*9,sw=Math.sin(t*.0018+s+seed*9)*5;ctx.lineCap='round';ctx.strokeStyle=OUT;ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(sx,6);ctx.quadraticCurveTo(sx+sw,-16,sx+sw*1.5,-32-(s%2)*8);ctx.stroke();ctx.strokeStyle=s%2?'#56c27f':'#3fae6a';ctx.lineWidth=4.6;ctx.stroke()}}
   ctx.restore()}
 function drawArt(a,c,alpha,clipY,sy){if(!a.ok)return;var z=cam.z;ctx.save();if(alpha!=null)ctx.globalAlpha=alpha;if(clipY!=null){ctx.beginPath();ctx.rect(0,clipY,VW,VH);ctx.clip()}
-  if(sy&&sy!==1){ctx.translate(c.x,c.y);ctx.scale(1/Math.sqrt(sy),sy);ctx.translate(-c.x,-c.y)}ctx.drawImage(a.img,c.x-GX*z,c.y-GY*z,W*z,H*z);ctx.restore()}
+  if(sy&&sy!==1){ctx.translate(c.x,c.y);ctx.scale(1/Math.sqrt(sy),sy);ctx.translate(-c.x,-c.y)}if(a.cw)ctx.drawImage(a.img,c.x+(a.cx-GX)*z,c.y+(a.cy-GY)*z,a.cw*z,a.ch*z);else ctx.drawImage(a.img,c.x-GX*z,c.y-GY*z,W*z,H*z);ctx.restore()}
 function scaffold(c,s,topY,front,alpha,drop){var z=cam.z;ctx.save();ctx.globalAlpha=alpha==null?1:alpha;ctx.translate(c.x,c.y);ctx.scale(z,z);
   var a=48*s+8,b=24*s+4,hT=(c.y-topY)/z,P=front?[[-a,0],[-a/2,b/2],[0,b],[a/2,b/2],[a,0]]:[[-a,0],[-a/2,-b/2],[0,-b],[a/2,-b/2],[a,0]];
   function wood(x1,y1,x2,y2,w){ctx.strokeStyle=OUT;ctx.lineWidth=w+3;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.strokeStyle='#d9995a';ctx.lineWidth=w;ctx.stroke()}
@@ -1270,7 +1270,7 @@ function boxWorth(){var L=Math.max(1,hallLv()),o={},q=D.prodPerHour('quarry',L),
 function giftN(){try{var g=JSON.parse(localStorage.getItem('gfcity.gift')||'null');return g&&g.n>0?g.n|0:0}catch(e){return 0}}
 function giftEl(){var el=$('giftN');if(!el){el=document.createElement('div');el.id='giftN';el.hidden=true;document.body.appendChild(el);var st=document.createElement('style');st.textContent='#giftN{position:fixed;left:50%;transform:translateX(-50%);top:calc(var(--sat,env(safe-area-inset-top)) + 206px);background:#e3f6ec;border:2.5px solid var(--ink);border-radius:16px;padding:8px 14px;font-size:14px;box-shadow:0 3px 0 var(--ink);z-index:8;white-space:nowrap;cursor:pointer;animation:gfIn .3s ease-out}#giftN b{font-family:var(--disp);font-weight:400;color:#1f7a42}@keyframes gfIn{from{transform:translate(-50%,-10px);opacity:0}}';document.head.appendChild(st);el.onclick=function(){giftTake()}}return el}
 function giftShow(){var n=giftN(),el=giftEl();if(!n||!G.gate&&!hallLv()){el.hidden=true;return}var t='📦 판에서 모은 재료 상자 '+n+'개 <b>받기 ›</b>';if(el.dataset.t!==t){el.dataset.t=t;el.innerHTML=t}el.hidden=false}
-function giftTake(){var n=giftN();$('giftN').hidden=true;if(!n)return;try{localStorage.setItem('gfcity.gift',JSON.stringify({n:0,at:Date.now()}))}catch(e){}
+function giftTake(){var n=giftN();$('giftN').hidden=true;if(!n)return;try{undoClear()}catch(e){}try{localStorage.setItem('gfcity.gift',JSON.stringify({n:0,at:Date.now()}))}catch(e){}
   var w=boxWorth(),got=[],full=[];for(var k in w){var add=w[k]*n,room=Math.max(0,Math.floor(cap(k)-(G.res[k]||0))),t=Math.min(add,room);G.res[k]=(G.res[k]||0)+t;if(t>0)got.push(ICON[k]+'+'+fmt(t));if(t<add)full.push(RNAME[k])}
   snd('coin');addXP(3*n);try{evtAdd(3*n)}catch(e){}var h=bOf('hall');if(h){var c=centerOf(h);sparkle(c.x,c.y-60*cam.z,14+n*2);float(c.x,c.y-90*cam.z,got.join(' '),true)}
   toast('📦 재료 상자 '+n+'개를 열었어요 '+got.join(' ')+(full.length?' · 창고가 가득 찬 재료는 일부만':''));save();hud()}
@@ -1755,7 +1755,7 @@ function aqwHtml(){if(!EMB||!window.parent.GF_AQGIFT)return '';var L=hallLv(),h=
     h+='<div class="aqr'+(open?'':' off')+'"><img src="svart/dc_'+w.id+'.webp" alt=""><div class="tx"><b>'+w.n+'</b><small>'+(open?Object.keys(w.c).map(function(k){var have=(G.res[k]||0)>=w.c[k];return '<span class="'+(have?'':'no')+'">'+ICON[k]+fmt(w.c[k])+'</span>'}).join(' '):'🔒 🏛 산호궁 Lv.'+w.at)+'</small></div><button data-aq="'+i+'"'+(ok?'':' disabled')+'>만들기</button></div>'});
   return h+'</div>'}
 function aqwMake(i){var w=AQW[i];if(!w||hallLv()<w.at)return;for(var k in w.c)if((G.res[k]||0)<w.c[k]){toast('재료가 모자라요');return}
-  var ok=false;try{ok=window.parent.GF_AQGIFT(w.id)}catch(e){}if(!ok){toast('지금은 보낼 수 없어요');return}for(k in w.c)G.res[k]-=w.c[k];
+  var ok=false;try{ok=window.parent.GF_AQGIFT(w.id)}catch(e){}if(!ok){toast('지금은 보낼 수 없어요');return}for(k in w.c)G.res[k]-=w.c[k];try{undoClear()}catch(e){}
   snd('done');addXP(10);sparkle(VW/2,VH*.4,20);toast('🐠 '+w.n+' · 내 수족관으로 보냈어요');save();hud();storePanel()}
 var _storePanelA=storePanel;storePanel=function(){var r=_storePanelA.apply(this,arguments);try{var x=aqwHtml();if(x){var el=$('panel');el.insertAdjacentHTML('beforeend',(window.CITY_TR||String)(x));el.querySelectorAll('[data-aq]').forEach(function(b){b.onclick=function(){aqwMake(+b.dataset.aq)}})}}catch(e){}return r};
 /* ② 응원 */
@@ -1835,11 +1835,12 @@ function caLoad(src,cb){var o=CA_IMG[src];if(!o){o=CA_IMG[src]={im:new Image(),o
 /* 땅 기준 그림판(W×H, 2배)에 붙여 둔 것 — 같은 그림 · 같은 단계는 한 장을 같이 씀 */
 function caCanvas(k,src,bp){var key=src+(bp?'b':'');if(CA_CV[key])return CA_CV[key];var im=CA_IMG[src].im,c=CITY_ART[k]||{},n=sz(k)||1,
   dw=96*n*(c.s||1.04),dh=dw*im.naturalHeight/Math.max(1,im.naturalWidth),bot=GY+24*n*(c.b==null?1:c.b),cv2=document.createElement('canvas');
-  cv2.width=W*2;cv2.height=H*2;var x=cv2.getContext('2d');x.scale(2,2);x.drawImage(im,GX-dw/2+(c.dx||0),bot-dh,dw,dh);
-  if(bp){x.globalCompositeOperation='source-in';x.fillStyle='rgba(225,240,255,.78)';x.fillRect(0,0,W,H)}
-  return CA_CV[key]={cv:cv2,top:Math.max(4,bot-dh)}}
+  /* 1.1.32 마을 점검: 그림이 있는 칸만 잘라 둠(x0,y0 = 그림판 안 왼쪽 위) */
+  var x0=GX-dw/2+(c.dx||0),y0=bot-dh;cv2.width=Math.max(1,Math.ceil(dw*2));cv2.height=Math.max(1,Math.ceil(dh*2));var x=cv2.getContext('2d');x.scale(2,2);x.drawImage(im,0,0,dw,dh);
+  if(bp){x.globalCompositeOperation='source-in';x.fillStyle='rgba(225,240,255,.78)';x.fillRect(0,0,dw,dh)}
+  return CA_CV[key]={cv:cv2,top:Math.max(4,bot-dh),x0:x0,y0:y0,w:dw,h:dh}}
 var _artCA=art;art=function(k,L,bp){var key=k+L+(bp?'b':'');if(IMG[key])return IMG[key];var o=_artCA(k,L,bp),t=caTier(k,Math.max(1,L));if(!t)return o;
-  var src=caSrc(k,t);caLoad(src,function(){var r=caCanvas(k,src,bp);o.img=r.cv;o.top=r.top;o.ok=true});return o};
+  var src=caSrc(k,t);caLoad(src,function(){var r=caCanvas(k,src,bp);o.img=r.cv;o.top=r.top;o.cx=r.x0;o.cy=r.y0;o.cw=r.w;o.ch=r.h;o.ok=true});return o};
 var _thumbCA=thumb;thumb=function(k){var t=caTier(k,1);return t&&!(CA_IMG[caSrc(k,t)]&&CA_IMG[caSrc(k,t)].ok<0)?caSrc(k,t):_thumbCA(k)};
 window.__cityArt={tier:caTier,src:caSrc,list:function(){return CITY_ART},ref:function(k,L){var r=artFor(k,Math.max(1,L),false),n=sz(k)||1,hw=60*n+20;return {top:r.top,svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+hw*4+'" height="'+(GY+30*n+10-r.top+10)*2+'" viewBox="'+(GX-hw)+' '+(r.top-10)+' '+hw*2+' '+(GY+30*n+10-r.top+10)+'">'+DEFS+r.svg+'</svg>'}},focus:function(k,z){var b=bOf(k);if(b){if(z)cam.z=z;focus(b)}return !!b}};
 
@@ -1852,6 +1853,12 @@ function endAct(){var e=ACT;ACT=null;if(e&&e.g===JSON.stringify(G)&&!Object.keys
 function undoOk(){var e=UNDO[UNDO.length-1];return e&&NOW()-e.at<60000?e:null}
 function doUndo(){var e=undoOk();if(!e){toast('되돌릴 게 없어요');return}UNDO.pop();ACT=null;for(var k in e.d)if(k==='pearl'||k==='gem')WAL.add(k,-e.d[k]);G=JSON.parse(e.g);occ();cityF=0;POPS={};SEL=null;GH=null;$('place').hidden=true;closePanel();save();snd('pop');toast('↶ '+e.lab+' 되돌렸어요');undoBtn()}
 function undoBtn(){var e=undoOk(),b=$('bUndo');if(!b)return;b.hidden=!e;if(e)b.innerHTML='↶<small>'+e.lab+'</small>'}
+/* 1.1.32 마을 점검: 되돌리기 중복 받기 막기 — 되돌리기 기록이 있는 동안 지갑에 진주 · 보석이 '들어오면'(받기 · 주문 · 도장 · 의뢰) 또는 마을 밖으로 무언가 나가거나(공방 → 수족관) 들어오면(재료 상자) 되돌리기 기록을 지움.
+   전엔 G 만 1분 전으로 돌아가고 그 사이 받은 진주 · 보석은 지갑에 남아, 같은 보상을 계속 다시 받을 수 있었음 */
+/* 저장에 모르는 건물(없앤 건물 · 옛 판 복원)이 있어도 마을이 안 켜지는 일 없게 */
+var _ratesG=rates;rates=function(b){try{return _ratesG(b)}catch(e){return {}}};
+function undoClear(){if(!UNDO.length)return;UNDO=[];ACT=null;try{undoBtn()}catch(e){}}
+(function(){var _b=WAL.add;WAL.add=function(k,n){if(!ACT&&n>0)undoClear();return _b(k,n)}})();
 $('bUndo').onclick=doUndo;$('bUndo2').onclick=function(){FLOATU=null;doUndo()};
 
 /* --- 짓기: 카드를 누르면 화면 가운데에서 가장 가까운 빈자리(도로 옆)에 바로 놓이고, 끌어서 옮겨요 --- */

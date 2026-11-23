@@ -15,7 +15,7 @@ function aqwHtml(){if(!EMB||!window.parent.GF_AQGIFT)return '';var L=hallLv(),h=
     h+='<div class="aqr'+(open?'':' off')+'"><img src="svart/dc_'+w.id+'.webp" alt=""><div class="tx"><b>'+w.n+'</b><small>'+(open?Object.keys(w.c).map(function(k){var have=(G.res[k]||0)>=w.c[k];return '<span class="'+(have?'':'no')+'">'+ICON[k]+fmt(w.c[k])+'</span>'}).join(' '):'🔒 🏛 산호궁 Lv.'+w.at)+'</small></div><button data-aq="'+i+'"'+(ok?'':' disabled')+'>만들기</button></div>'});
   return h+'</div>'}
 function aqwMake(i){var w=AQW[i];if(!w||hallLv()<w.at)return;for(var k in w.c)if((G.res[k]||0)<w.c[k]){toast('재료가 모자라요');return}
-  var ok=false;try{ok=window.parent.GF_AQGIFT(w.id)}catch(e){}if(!ok){toast('지금은 보낼 수 없어요');return}for(k in w.c)G.res[k]-=w.c[k];
+  var ok=false;try{ok=window.parent.GF_AQGIFT(w.id)}catch(e){}if(!ok){toast('지금은 보낼 수 없어요');return}for(k in w.c)G.res[k]-=w.c[k];try{undoClear()}catch(e){}
   snd('done');addXP(10);sparkle(VW/2,VH*.4,20);toast('🐠 '+w.n+' · 내 수족관으로 보냈어요');save();hud();storePanel()}
 var _storePanelA=storePanel;storePanel=function(){var r=_storePanelA.apply(this,arguments);try{var x=aqwHtml();if(x){var el=$('panel');el.insertAdjacentHTML('beforeend',(window.CITY_TR||String)(x));el.querySelectorAll('[data-aq]').forEach(function(b){b.onclick=function(){aqwMake(+b.dataset.aq)}})}}catch(e){}return r};
 /* ② 응원 */

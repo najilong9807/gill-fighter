@@ -72,7 +72,7 @@ function step(now,quiet){var dtH=(now-(G.tick||now))/3600000;G.tick=now;
   G.b.forEach(function(b){
     if(b.job&&now>=b.job.end){b.lv=b.job.L;b.job=null;if(b.lv===1&&!isZ(b.k)){var r0=rates(b);b.buf=b.buf||{};for(var q0 in r0)b.buf[q0]=(b.buf[q0]||0)+Math.max(2,r0[q0]*1.2)}POPS[b.id]=quiet?0:now;if(!quiet){var c=centerOf(b);if(isZ(b.k)){dust(c.x,c.y,8,.8);sparkle(c.x,c.y-30*cam.z,6)}else{dust(c.x,c.y,22,1.8);sparkle(c.x,c.y-60*cam.z,18);float(c.x,c.y-90*cam.z,(b.k==='hall'?'🏛 ':'')+'Lv.'+b.lv+'!',true);snd('done');toast(B[b.k].n+' Lv.'+b.lv+' 완성!')}}else QUIET++}
     if(b.lv&&!b.job&&b.xpd!==b.lv){b.xpd=b.lv;addXP(isZ(b.k)||isD(b.k)?2:Math.min(200,Math.ceil(D.time(b.k,b.lv)/60)+5))}
-    if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=r[k]*dtH;if(u){for(var q in u){var need=u[q]*add;if(G.res[q]<need)add=G.res[q]/u[q];}for(q in u)G.res[q]-=u[q]*add}
+    if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=Math.min(r[k]*dtH,Math.max(0,r[k]*BUFH-(b.buf[k]||0)));if(u){for(var q in u){var need=u[q]*add;if(G.res[q]<need)add=G.res[q]/u[q];}for(q in u)G.res[q]-=u[q]*add}
       b.buf[k]=Math.min(r[k]*BUFH,(b.buf[k]||0)+add)}}})}
 var QUIET=0;
 function collect(b){var got=[],c=centerOf(b);for(var k in b.buf){var v=Math.floor(b.buf[k]);if(v<1)continue;
@@ -122,7 +122,7 @@ function drawTer(p,v,seed,t){var z=cam.z;ctx.save();ctx.translate(p.x,p.y);ctx.s
   else{for(var s=0;s<4;s++){var sx=(s-1.5)*9,sw=Math.sin(t*.0018+s+seed*9)*5;ctx.lineCap='round';ctx.strokeStyle=OUT;ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(sx,6);ctx.quadraticCurveTo(sx+sw,-16,sx+sw*1.5,-32-(s%2)*8);ctx.stroke();ctx.strokeStyle=s%2?'#56c27f':'#3fae6a';ctx.lineWidth=4.6;ctx.stroke()}}
   ctx.restore()}
 function drawArt(a,c,alpha,clipY,sy){if(!a.ok)return;var z=cam.z;ctx.save();if(alpha!=null)ctx.globalAlpha=alpha;if(clipY!=null){ctx.beginPath();ctx.rect(0,clipY,VW,VH);ctx.clip()}
-  if(sy&&sy!==1){ctx.translate(c.x,c.y);ctx.scale(1/Math.sqrt(sy),sy);ctx.translate(-c.x,-c.y)}ctx.drawImage(a.img,c.x-GX*z,c.y-GY*z,W*z,H*z);ctx.restore()}
+  if(sy&&sy!==1){ctx.translate(c.x,c.y);ctx.scale(1/Math.sqrt(sy),sy);ctx.translate(-c.x,-c.y)}if(a.cw)ctx.drawImage(a.img,c.x+(a.cx-GX)*z,c.y+(a.cy-GY)*z,a.cw*z,a.ch*z);else ctx.drawImage(a.img,c.x-GX*z,c.y-GY*z,W*z,H*z);ctx.restore()}
 function scaffold(c,s,topY,front,alpha,drop){var z=cam.z;ctx.save();ctx.globalAlpha=alpha==null?1:alpha;ctx.translate(c.x,c.y);ctx.scale(z,z);
   var a=48*s+8,b=24*s+4,hT=(c.y-topY)/z,P=front?[[-a,0],[-a/2,b/2],[0,b],[a/2,b/2],[a,0]]:[[-a,0],[-a/2,-b/2],[0,-b],[a/2,-b/2],[a,0]];
   function wood(x1,y1,x2,y2,w){ctx.strokeStyle=OUT;ctx.lineWidth=w+3;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.strokeStyle='#d9995a';ctx.lineWidth=w;ctx.stroke()}

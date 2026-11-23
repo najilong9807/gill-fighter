@@ -7,6 +7,12 @@ function endAct(){var e=ACT;ACT=null;if(e&&e.g===JSON.stringify(G)&&!Object.keys
 function undoOk(){var e=UNDO[UNDO.length-1];return e&&NOW()-e.at<60000?e:null}
 function doUndo(){var e=undoOk();if(!e){toast('되돌릴 게 없어요');return}UNDO.pop();ACT=null;for(var k in e.d)if(k==='pearl'||k==='gem')WAL.add(k,-e.d[k]);G=JSON.parse(e.g);occ();cityF=0;POPS={};SEL=null;GH=null;$('place').hidden=true;closePanel();save();snd('pop');toast('↶ '+e.lab+' 되돌렸어요');undoBtn()}
 function undoBtn(){var e=undoOk(),b=$('bUndo');if(!b)return;b.hidden=!e;if(e)b.innerHTML='↶<small>'+e.lab+'</small>'}
+/* 1.1.32 마을 점검: 되돌리기 중복 받기 막기 — 되돌리기 기록이 있는 동안 지갑에 진주 · 보석이 '들어오면'(받기 · 주문 · 도장 · 의뢰) 또는 마을 밖으로 무언가 나가거나(공방 → 수족관) 들어오면(재료 상자) 되돌리기 기록을 지움.
+   전엔 G 만 1분 전으로 돌아가고 그 사이 받은 진주 · 보석은 지갑에 남아, 같은 보상을 계속 다시 받을 수 있었음 */
+/* 저장에 모르는 건물(없앤 건물 · 옛 판 복원)이 있어도 마을이 안 켜지는 일 없게 */
+var _ratesG=rates;rates=function(b){try{return _ratesG(b)}catch(e){return {}}};
+function undoClear(){if(!UNDO.length)return;UNDO=[];ACT=null;try{undoBtn()}catch(e){}}
+(function(){var _b=WAL.add;WAL.add=function(k,n){if(!ACT&&n>0)undoClear();return _b(k,n)}})();
 $('bUndo').onclick=doUndo;$('bUndo2').onclick=function(){FLOATU=null;doUndo()};
 
 /* --- 짓기: 카드를 누르면 화면 가운데에서 가장 가까운 빈자리(도로 옆)에 바로 놓이고, 끌어서 옮겨요 --- */

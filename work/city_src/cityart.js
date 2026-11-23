@@ -64,10 +64,11 @@ function caLoad(src,cb){var o=CA_IMG[src];if(!o){o=CA_IMG[src]={im:new Image(),o
 /* 땅 기준 그림판(W×H, 2배)에 붙여 둔 것 — 같은 그림 · 같은 단계는 한 장을 같이 씀 */
 function caCanvas(k,src,bp){var key=src+(bp?'b':'');if(CA_CV[key])return CA_CV[key];var im=CA_IMG[src].im,c=CITY_ART[k]||{},n=sz(k)||1,
   dw=96*n*(c.s||1.04),dh=dw*im.naturalHeight/Math.max(1,im.naturalWidth),bot=GY+24*n*(c.b==null?1:c.b),cv2=document.createElement('canvas');
-  cv2.width=W*2;cv2.height=H*2;var x=cv2.getContext('2d');x.scale(2,2);x.drawImage(im,GX-dw/2+(c.dx||0),bot-dh,dw,dh);
-  if(bp){x.globalCompositeOperation='source-in';x.fillStyle='rgba(225,240,255,.78)';x.fillRect(0,0,W,H)}
-  return CA_CV[key]={cv:cv2,top:Math.max(4,bot-dh)}}
+  /* 1.1.32 마을 점검: 그림이 있는 칸만 잘라 둠(x0,y0 = 그림판 안 왼쪽 위) */
+  var x0=GX-dw/2+(c.dx||0),y0=bot-dh;cv2.width=Math.max(1,Math.ceil(dw*2));cv2.height=Math.max(1,Math.ceil(dh*2));var x=cv2.getContext('2d');x.scale(2,2);x.drawImage(im,0,0,dw,dh);
+  if(bp){x.globalCompositeOperation='source-in';x.fillStyle='rgba(225,240,255,.78)';x.fillRect(0,0,dw,dh)}
+  return CA_CV[key]={cv:cv2,top:Math.max(4,bot-dh),x0:x0,y0:y0,w:dw,h:dh}}
 var _artCA=art;art=function(k,L,bp){var key=k+L+(bp?'b':'');if(IMG[key])return IMG[key];var o=_artCA(k,L,bp),t=caTier(k,Math.max(1,L));if(!t)return o;
-  var src=caSrc(k,t);caLoad(src,function(){var r=caCanvas(k,src,bp);o.img=r.cv;o.top=r.top;o.ok=true});return o};
+  var src=caSrc(k,t);caLoad(src,function(){var r=caCanvas(k,src,bp);o.img=r.cv;o.top=r.top;o.cx=r.x0;o.cy=r.y0;o.cw=r.w;o.ch=r.h;o.ok=true});return o};
 var _thumbCA=thumb;thumb=function(k){var t=caTier(k,1);return t&&!(CA_IMG[caSrc(k,t)]&&CA_IMG[caSrc(k,t)].ok<0)?caSrc(k,t):_thumbCA(k)};
 window.__cityArt={tier:caTier,src:caSrc,list:function(){return CITY_ART},ref:function(k,L){var r=artFor(k,Math.max(1,L),false),n=sz(k)||1,hw=60*n+20;return {top:r.top,svg:'<svg xmlns="http://www.w3.org/2000/svg" width="'+hw*4+'" height="'+(GY+30*n+10-r.top+10)*2+'" viewBox="'+(GX-hw)+' '+(r.top-10)+' '+hw*2+' '+(GY+30*n+10-r.top+10)+'">'+DEFS+r.svg+'</svg>'}},focus:function(k,z){var b=bOf(k);if(b){if(z)cam.z=z;focus(b)}return !!b}};

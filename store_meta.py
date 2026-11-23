@@ -30,7 +30,9 @@ def shot_files(prefix):
     # 1.1.18부터: store/shots_<버전>/ 에 6장이 다 있으면 그 버전 것을 씀
     vd = os.path.join(ROOT, 'store', 'shots_%s' % VER.replace('.', ''))
     vf = [os.path.join(vd, '%s_%d.jpg' % (prefix, n)) for n in range(1, 7)]
-    if all(os.path.exists(f) for f in vf): return vf
+    if all(os.path.exists(f) for f in vf):
+        f7 = os.path.join(vd, '%s_7.jpg' % prefix)  # 1.1.31부터: 7번째(마을)가 있으면 7장
+        return vf + ([f7] if os.path.exists(f7) else [])
     out = []
     for n in range(1, 7):
         d = 'shots_1113' if n == 6 else 'shots_1112'

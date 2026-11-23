@@ -3,6 +3,7 @@ What's new in 1.1.32:
 (2) Thank-you gift for 200 downloads: players who already used the app before updating receive a one-time in-game gift (10,000 in-game pearls and 500 in-game gems, until December 31). In-game currency only; no real money.
 (3) Arena (online): a few seconds of spawn protection right after joining.
 (4) Town: new daily town tasks, a Plaza with a once-a-day Festival Day and three monuments built with town materials (all in-game resources only), construction speed-ups earned by playing runs in the main game, performance improvements for large towns, an offline production fix and more robust save loading.
+(4b) Crown Rank: the best Solo score shown on the home screen now raises a crown through 8 ranks; each rank gives a one-time in-game pearl and gem reward and a small in-game pearl bonus per run (not in the online Arena).
 (5) Friends: players can send a small amount of in-game pearls to a friend's public aquarium (up to 1,000 per day) and search public aquariums by nickname. No chat or personal data; only the nickname the player chose.
 (6) The per-run in-game pearl limit in Solo and Deep Expedition was removed; layout fixes on small screens and translation fixes.
 The Christmas season content is unchanged and still runs until December 30.

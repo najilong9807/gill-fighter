@@ -24,6 +24,13 @@ function ghostAt(k){var p=findSpot(k);GH={k:k,x:p.x,y:p.y};var s=sz(k),cx=p.x+(s
 var GDRAG=null;
 function ghostHit(x,y){if(!GH)return false;var t=tileAt(x,y),s=sz(GH.k);return t.i>=GH.x-1&&t.i<=GH.x+s&&t.j>=GH.y-1&&t.j<=GH.y+s}
 
+/* 1.1.32 마을 점검: 도미 비서 카드를 누르면 고르고 · 옮기고 · ✓ 누를 것 없이 산호궁 가까운 '지을 수 있는 자리'에 바로 지어요(돈 · 일꾼이 모자라면 예전처럼 짓기 창) */
+function spotNear(k){var s=sz(k),h=bOf('hall'),c=h?{i:h.x+1,j:h.y+1}:tileAt(VW/2,VH*.5);
+  for(var r=1;r<30;r++)for(var dx=-r;dx<=r;dx++)for(var dy=-r;dy<=r;dy++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;var x=c.i+dx-Math.floor((s-1)/2),y=c.j+dy-Math.floor((s-1)/2);if(!siteWhy(k,x,y))return {x:x,y:y}}return null}
+function quickBuild(k){var w=canStart(k,1),p=w.length?null:spotNear(k);if(w.length)toast(w[0]);if(!p){openBuild(CATOF[k]);return}
+  endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;$('ghb').hidden=true;
+  pushUndo(B[k].n+' 짓기');setTimeout(endAct,0);var b={id:G.nid++,k:k,x:p.x,y:p.y,lv:0,buf:{}};G.b.push(b);occ();startJob(b,1);FLOATU={id:b.id,until:NOW()+8000};setTab(null);save();snd('done');focus(b);var c=centerOf(b);dust(c.x,c.y,12,1);toast('🦀 게 일꾼이 '+B[k].n+'을(를) 짓기 시작했어요')}
+
 /* --- 📖 프롤로그 --- */
 var PRO=[
  {img:'d_shipw',t:'깊고 푸른 바닷속',p:'아주 오래전, 이곳엔 물고기들이 모여 사는 산호 마을이 있었어요. 큰 해류가 휩쓸고 간 뒤로 텅 비어 버렸지요.'},
@@ -32,21 +39,21 @@ var PRO=[
  {img:'quarry',t:'모으고, 만들고, 키우고',p:'건물 머리 위에 뜨는 동그란 말풍선(🪨 🌿 🫧)을 눌러 재료를 받아요. 재료로 건물을 올리고, 주문을 배달해 진주를 벌어요.'},
  {img:'pal25',t:'목표는 용궁!',p:'산호궁을 올릴수록 새 건물 · 땅 · 고층 건물이 열려요. 25단계가 되면 반짝이는 용궁이 돼요.'},
  {img:'dom',t:'제가 도와드릴게요',p:'저는 도미 비서예요. 화면 위 노란 말풍선과 깜빡이는 화살표를 따라오시면 돼요. 그럼 시작해 볼까요?'}];
-function proImg(k){if(k==='dom')return '<div class="proav">🐠</div>';if(k==='pal25'){var r=palaceL(25);return '<img src="data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="'+(GX-170)+' '+(r.top-10)+' 340 '+(GY+90-r.top+10)+'">'+DEFS+r.svg+'</svg>')+'">'}return '<img src="'+thumb(k)+'">'}
+function proImg(k){if(k==='dom')return '<div class="proav">🐠</div>';if(k==='pal25'){var r=palaceL(25),sv='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="'+(GX-170)+' '+(r.top-10)+' 340 '+(GY+90-r.top+10)+'">'+DEFS+r.svg+'</svg>');return CITY_ART.hall?'<img src="'+caSrc('hall',25)+'" data-fb="'+sv+'" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb=\'\'}">':'<img src="'+sv+'">'}return '<img src="'+thumb(k)+'">'}
 function prologue(i){i=i||0;var el=$('pro'),s=PRO[i];el.hidden=false;el.innerHTML='<div class="pcard"><div class="pimg">'+proImg(s.img)+'</div><h3>'+s.t+'</h3><p>'+s.p+'</p><div class="dots">'+PRO.map(function(_,j){return '<i class="'+(j===i?'on':'')+'"></i>'}).join('')+'</div><div class="prow"><button id="proSkip">건너뛰기</button><button id="proNext" class="main">'+(i<PRO.length-1?'다음 ›':'시작하기!')+'</button></div></div>';
   $('proSkip').onclick=function(){el.hidden=true;G.pro=1;save()};$('proNext').onclick=function(){snd('tap');if(i<PRO.length-1)prologue(i+1);else{el.hidden=true;G.pro=1;save();snd('done');var h=bOf('hall');if(h)focus(h)}}}
 
 /* --- 🐠 길잡이: 지금 눌러야 할 곳에 깜빡이는 표시 · 지도엔 화살표 --- */
 function hintEl(sel){document.querySelectorAll('.hint').forEach(function(e){if(!sel||!e.matches(sel))e.classList.remove('hint')});if(sel){var e=document.querySelector(sel);if(e)e.classList.add('hint')}}
 function tutTarget(){var i=G.tut|0;if(G.tutMin||i>=TUT.length||!$('pro').hidden)return null;
-  if(i===0){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?'.card[data-k=quarry]':'.pills [data-c=prod]'};return {dom:'#bBuild'}}
+  if(i===0){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?'.card[data-k=quarry]':'.pills [data-c=prod]'};return {dom:'#tut'}}
   if(i===1){var q=bOf('quarry');if(!q)return null;var bb=BUBS.find(function(x){return x.b===q});if(bb)return {x:bb.x,y:bb.y-26,txt:'눌러요!'};var c=centerOf(q);return {x:c.x,y:c.y-90*cam.z,txt:q.job?'다 지어지면 여기 말풍선이 떠요':'곧 말풍선이 떠요'}}
   if(i===2){if(!$('panel').hidden)return {dom:'#pUp'};var h=bOf('hall'),c2=centerOf(h);return {x:c2.x,y:c2.y-140*cam.z,txt:'산호궁을 눌러요'}}
   if(i===3){if(TOOL==='zR')return {txt2:'도로 옆 칸을 손가락으로 쭉 끌어요'};if(!$('tray').hidden)return {dom:CAT==='zone'?'[data-tool=zR]':'.pills [data-c=zone]'};return {dom:'#bBuild'}}
-  if(i===4){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='base'?'.card[data-k=pump]':'.pills [data-c=base]'};return {dom:'#bBuild'}}
+  if(i===4){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='base'?'.card[data-k=pump]':'.pills [data-c=base]'};return {dom:'#tut'}}
   if(i===5)return {dom:'#hF'};
-  if(i===6){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?(bOf('farm')?'.card[data-k=factory]':'.card[data-k=farm]'):'.pills [data-c=prod]'};return {dom:'#bBuild'}}
-  if(i===7){if(!bOf('turtle')){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='trade'?'.card[data-k=turtle]':'.pills [data-c=trade]'};return {dom:'#bBuild'}}if(panelFor==='ord')return {dom:'.ord.can button'};return {dom:'#bOrd'}}
+  if(i===6){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?(bOf('farm')?'.card[data-k=factory]':'.card[data-k=farm]'):'.pills [data-c=prod]'};return {dom:'#tut'}}
+  if(i===7){if(!bOf('turtle')){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='trade'?'.card[data-k=turtle]':'.pills [data-c=trade]'};return {dom:'#tut'}}if(panelFor==='ord')return {dom:'.ord.can button'};return {dom:'#bOrd'}}
   return null}
 var HSTEP=-1,HT0=0;function drawHint(t){var g=tutTarget();hintEl(g&&g.dom?g.dom:null);if(!g||g.dom)return;if((G.tut|0)!==HSTEP){HSTEP=G.tut|0;HT0=t}
   if(g.x!=null&&t-HT0<2500&&!drag&&(g.y<380||g.y>VH-230||g.x<40||g.x>VW-40)){cam.x+=(g.x-VW/2)/cam.z*.1;cam.y+=(g.y-VH*.6)/cam.z*.1}if(g.txt2){ctx.save();ctx.font='400 15px "Jua",sans-serif';ctx.textAlign='center';var w=ctx.measureText(g.txt2).width+24;ctx.fillStyle='rgba(34,48,77,.88)';rr(VW/2-w/2,VH-150,w,32,14);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(g.txt2,VW/2,VH-128);ctx.restore();return}

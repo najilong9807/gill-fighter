@@ -54,15 +54,15 @@ function settle(awaySec,done){if(awaySec<300)return;var sum={};G.b.forEach(funct
 
 /* --- 🐠 도미 비서: 처음 하는 사람 길잡이 --- */
 var TUT=[
- {t:'산호궁 옆에 <b>산호 광산</b>을 지어 봐요',h:'🔨 짓기 → 🏭 생산',ok:function(){return !!bOf('quarry')},go:function(){openBuild('prod')},rw:50},
+ {t:'산호궁 옆에 <b>산호 광산</b>을 지어 봐요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('quarry')},go:function(){quickBuild('quarry')},rw:50},
  {t:'광산 머리 위 <b>🪨 동그라미(말풍선)</b>를 눌러 산호석을 받아요',h:'노란 화살표가 가리키는 곳을 눌러요',ok:function(){return G.tutC},go:function(){var q=bOf('quarry');if(q)focus(q)},rw:30},
  {t:'<b>🏛 산호궁</b>을 Lv.2로 업그레이드해요',h:'산호궁을 눌러 ⬆ 업그레이드',ok:function(){return hallLv()>=2||!!bOf('hall').job},go:function(){var h=bOf('hall');focus(h);SEL=h;openPanel(h)},rw:80},
  {t:'도로 옆에 <b>🏠 주거 구역</b>을 4칸 지정해요',h:'🔨 짓기 → 🏘 구역 → 주거, 끌어서 지정',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){startTool('zR')},rw:50},
- {t:'<b>산소 펌프</b>를 지어 산소를 넓혀요',h:'🔨 짓기 → ⚙ 기반',ok:function(){return !!bOf('pump')},go:function(){openBuild('base')},rw:60},
+ {t:'<b>산소 펌프</b>를 지어 산소를 넓혀요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('pump')},go:function(){quickBuild('pump')},rw:60},
  {t:'물고기 <b>10마리</b>가 입주하게 해요',h:'주택이 도로 · 산소에 닿아야 물고기가 와요',ok:function(){return CS.pop>=10},go:function(){lifePanel()},rw:80},
- {t:'<b>경단 공장</b>을 지어 주민 밥을 만들어요',h:'다시마 농장 → 경단 공장',ok:function(){return !!bOf('factory')},go:function(){openBuild('prod')},rw:100},
- {t:'<b>거북 배달소</b>에서 주문을 하나 배달해요',h:'🔨 짓기 → 🐢 교역 → 거북 배달소',ok:function(){return (G.ordSent|0)>0},go:function(){if(bOf('turtle'))orderPanel();else openBuild('trade')},rw:150}];
-function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length){el.hidden=true;return}var s=TUT[i];
+ {t:'<b>경단 공장</b>을 지어 주민 밥을 만들어요',h:'👆 여기를 누르면 다시마 농장 → 경단 공장을 바로 지어요',ok:function(){return !!bOf('factory')},go:function(){quickBuild(bOf('farm')?'factory':'farm')},rw:100},
+ {t:'<b>거북 배달소</b>에서 주문을 하나 배달해요',h:'👆 여기를 누르면 배달소를 바로 짓고, 다 지으면 주문판을 열어요',ok:function(){return (G.ordSent|0)>0},go:function(){if(bOf('turtle'))orderPanel();else quickBuild('turtle')},rw:150}];
+function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length){el.hidden=true;document.body.classList.remove('tutOn');return}var s=TUT[i];
   if(s.ok()){G.tut=i+1;WAL.add('pearl',s.rw);toast('🐠 잘했어요! 🫧'+s.rw);addXP(5);save();return tutPaint()}
-  $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;var hh2='<span class="av">🐠</span><div><small>도미 비서 · '+(i+1)+'/'+TUT.length+'</small><p>'+s.t+'</p><i>'+s.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh2){el.dataset.h=hh2;el.innerHTML=hh2}}
+  $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;document.body.classList.remove('tutOn');return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;document.body.classList.toggle('tutOn',!G.tutMin&&i<TUT.length);var hh2='<span class="av">🐠</span><div><small>도미 비서 · '+(i+1)+'/'+TUT.length+'</small><p>'+s.t+'</p><i>'+s.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh2){el.dataset.h=hh2;el.innerHTML=hh2}}
 $('tut').onclick=function(ev){if(ev.target.id==='tutX'){G.tutMin=true;save();tutPaint();return}var s=TUT[G.tut|0];if(s)s.go()};$('bTut').onclick=function(){G.tutMin=false;save();tutPaint()};

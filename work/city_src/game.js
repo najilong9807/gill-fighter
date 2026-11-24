@@ -179,14 +179,14 @@ function drawWorld(t,now){var items=[];
 var TOOL=null,GH=null,SEL=null,PT={},drag=null,pinch=null;
 cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);PT[e.pointerId]={x:e.clientX,y:e.clientY};var ids=Object.keys(PT);
   if(ids.length===2){var a=PT[ids[0]],b=PT[ids[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),z:cam.z};drag=null;return}
-  if(GH&&ghostHit(e.clientX,e.clientY)){GDRAG={};drag=null;return}VEL={x:0,y:0};drag={x:e.clientX,y:e.clientY,cx:cam.x,cy:cam.y,moved:false,paint:!!TOOL};if(drag.paint){pushUndo(TOOLN[TOOL]||'구역 지정');paintAt(e.clientX,e.clientY)}});
+  if(GH&&ghostHit(e.clientX,e.clientY)){GDRAG={};drag=null;return}VEL={x:0,y:0};drag={x:e.clientX,y:e.clientY,cx:cam.x,cy:cam.y,moved:false,paint:!!TOOL&&TOOL!=='clear'};if(drag.paint){pushUndo(TOOLN[TOOL]||'구역 지정');paintAt(e.clientX,e.clientY)}});
 cv.addEventListener('pointermove',function(e){if(!PT[e.pointerId])return;PT[e.pointerId]={x:e.clientX,y:e.clientY};var ids=Object.keys(PT);
   if(pinch&&ids.length===2){var a=PT[ids[0]],b=PT[ids[1]],mx=(a.x+b.x)/2,my=(a.y+b.y)/2,wx=(mx-VW/2)/cam.z+cam.x,wy=(my-VH/2)/cam.z+cam.y;cam.z=Math.max(.35,Math.min(1.6,pinch.z*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d));cam.x=wx-(mx-VW/2)/cam.z;cam.y=wy-(my-VH/2)/cam.z;return}
   if(GDRAG&&GH){var tt=tileAt(e.clientX,e.clientY),ss=sz(GH.k),nx=tt.i-Math.floor((ss-1)/2),ny=tt.j-Math.floor((ss-1)/2);if(nx!==GH.x||ny!==GH.y){GH.x=nx;GH.y=ny;placeBar()}return}
   if(!drag)return;var dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>8)drag.moved=true;
   if(drag.paint){paintAt(e.clientX,e.clientY);return}var nx2=drag.cx-dx/cam.z,ny2=drag.cy-dy/cam.z,tnow=performance.now(),dtm=Math.max(8,tnow-(drag.lt||tnow-16));VEL={x:(nx2-cam.x)/dtm*16,y:(ny2-cam.y)/dtm*16};drag.lt=tnow;cam.x=nx2;cam.y=ny2;clampCam()});
 var VEL={x:0,y:0};function camInertia(){if(drag||pinch)return;if(Math.abs(VEL.x)+Math.abs(VEL.y)<.05){VEL.x=VEL.y=0;return}cam.x+=VEL.x;cam.y+=VEL.y;VEL.x*=.9;VEL.y*=.9;clampCam()}
-function endPt(e){delete PT[e.pointerId];if(GDRAG){GDRAG=null;return}if(drag&&(!drag.moved||performance.now()-(drag.lt||0)>80))VEL={x:0,y:0};if(drag&&drag.paint)setTimeout(endAct,0);if(Object.keys(PT).length<2)pinch=null;if(drag&&!drag.moved&&!drag.paint)tap(e.clientX,e.clientY);if(drag&&drag.paint)save();drag=null}
+function endPt(e){delete PT[e.pointerId];if(GDRAG){GDRAG=null;return}if(drag&&(!drag.moved||performance.now()-(drag.lt||0)>80))VEL={x:0,y:0};if(drag&&drag.paint)setTimeout(endAct,0);if(Object.keys(PT).length<2)pinch=null;if(drag&&!drag.moved&&!drag.paint){if(TOOL==='clear'){pushUndo(TOOLN.clear);lastPaint='';paintAt(e.clientX,e.clientY);setTimeout(endAct,0);save()}else tap(e.clientX,e.clientY)}if(drag&&drag.paint)save();drag=null}
 cv.addEventListener('pointerup',endPt);cv.addEventListener('pointercancel',endPt);
 cv.addEventListener('wheel',function(e){e.preventDefault();var wx=(e.clientX-VW/2)/cam.z+cam.x,wy=(e.clientY-VH/2)/cam.z+cam.y;cam.z=Math.max(.35,Math.min(1.6,cam.z*(e.deltaY<0?1.1:.9)));cam.x=wx-(e.clientX-VW/2)/cam.z;cam.y=wy-(e.clientY-VH/2)/cam.z},{passive:false});
 function clampCam(){var c0=sc(0,0);var mx=N*TW/2;cam.x=Math.max(-mx,Math.min(mx,cam.x));cam.y=Math.max(0,Math.min(N*TH,cam.y))}
@@ -246,7 +246,7 @@ function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(functi
     ghostAt(k)}})}
 var TOOLN={road:'🛣 도로 건설',clear:'🧹 철거',zR:'🏠 주거 구역',zC:'🛍 상업 구역',zI:'🔧 산업 구역',z0:'🧽 구역 해제'};
 function startTool(t){TOOL=t;$('tray').hidden=true;TAB=null;$('bBuild').classList.remove('on');closePanel();var el=$('toolbar');el.hidden=false;el.className=t.charAt(0)==='z'?'z':'';$('dock').hidden=true;
-  var h='<div class="tl"><b>'+TOOLN[t]+'</b><small>'+(t==='road'?'끌어서 도로를 놓아요 · '+D_ROAD+'🫧':t==='clear'?'눌러서 철거해요':'끌어서 지정해요 · 5🫧')+' · 이동은 두 손가락</small></div>';
+  var h='<div class="tl"><b>'+TOOLN[t]+'</b><small>'+(t==='road'?'끌어서 도로를 놓아요 · '+D_ROAD+'🫧':t==='clear'?'눌러서 철거해요':'끌어서 지정해요 · 5🫧')+(t==='clear'?' · 끌면 화면 이동':' · 이동은 두 손가락')+'</small></div>';
   if(t.charAt(0)==='z')h+='<div class="zs">'+['zR','zC','zI','z0'].map(function(z){return '<button data-z="'+z+'" class="'+(z===t?'on':'')+'">'+TOOLN[z].split(' ')[0]+'</button>'}).join('')+'</div>';
   h+='<button class="main" id="tDone">✓ 끝</button>';el.innerHTML=h;$('tDone').onclick=function(){endTool();save()};
   el.querySelectorAll('[data-z]').forEach(function(b){b.onclick=function(){var z=b.dataset.z;if(z!=='z0'&&hallLv()<ZN[z.charAt(1)].at){toast(ZN[z.charAt(1)].n+' 구역은 🏛 Lv.'+ZN[z.charAt(1)].at+'에 열려요');return}startTool(z)}})}

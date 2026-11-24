@@ -59,7 +59,7 @@ function monNeed(m,s){return m.at+2*s}
 function monGem(s){return 3+2*s}
 function festOn(){return !!(G.fest&&G.fest.end>NOW())}
 function festCost(){var L=hallLv();return {stone:150*L,kelp:80*L}}
-function payOk(c){for(var k in c)if((G.res[k]||0)<c[k])return false;return true}
+/* 1.1.32 점검: 여기 있던 payOk(재료만 봄)가 game.js 의 payOk(진주 · 보석도 봄)를 덮어써서 진주가 드는 건물이 전부 '재료가 모자라요'로 안 지어졌음 → 지우고 game.js 것을 씀 */
 function payRes(c){for(var k in c)G.res[k]=Math.max(0,(G.res[k]||0)-c[k])}
 function festOpen(){var L=hallLv();if(L<6){toast('🏛 산호궁 Lv.6에 열려요');return}var dk=midDayKey(NOW());if(festOn()){toast('🎉 축제 중이에요');return}if(G.fest&&G.fest.day===dk){toast('오늘은 이미 열었어요 · 내일 또 열 수 있어요');return}
   var c=festCost();if(!payOk(c)){toast('재료가 모자라요');return}payRes(c);G.fest={day:dk,end:NOW()+3600000};try{undoClear()}catch(e){}try{evtAdd(15)}catch(e){}addXP(10);save();hud();snd('done');

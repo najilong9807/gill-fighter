@@ -71,11 +71,12 @@ function nextQ(){var L=hallLv();if(L>=D.HMAX)return null;var h=bOf('hall');if(!h
   var b=bOf(n.k);if(!b)return {k:'b'+n.k,t:'<b>'+NM(n.k)+'</b>을(를) 지어요',h:'👆 여기를 누르면 바로 지어요 · 산호궁 Lv.'+(L+1)+' 조건',go:function(){quickBuild(n.k)}};
   if(b.job)return {k:'w'+n.k+b.job.L,t:'🦀 <b>'+NM(n.k)+'</b> 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(b)}};
   return {k:'u'+n.k+n.lv,t:'<b>'+NM(n.k)+'</b>을(를) Lv.'+n.lv+'로 올려요 (지금 Lv.'+b.lv+')',h:'👆 여기를 누르면 그 건물 창을 열어요',go:function(){focus(b);SEL=b;openPanel(b)}}}
-var QNOW=null;function qPaint(el){var q=null;try{q=nextQ()}catch(e){}QNOW=q;if(!q){el.hidden=true;document.body.classList.remove('tutOn');return}
-  if(G.q2&&G.q2!==q.k&&!/^(job|w)/.test(G.q2)){var rw=20+hallLv()*10;WAL.add('pearl',rw);toast('🐠 잘했어요! 🫧'+rw);addXP(3)}if(G.q2!==q.k){G.q2=q.k;save()}
+var QNOW=null;function qPaint(el,pre){var q=null;try{q=nextQ()}catch(e){}QNOW=q;if(!q){el.hidden=true;document.body.classList.remove('tutOn');return}
+  if(!pre&&G.q2&&G.q2!==q.k&&!/^(job|w)/.test(G.q2)){var rw=20+hallLv()*10;WAL.add('pearl',rw);toast('🐠 잘했어요! 🫧'+rw);addXP(3)}if(G.q2!==q.k){G.q2=q.k;save()}
   $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;document.body.classList.remove('tutOn');return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;document.body.classList.toggle('tutOn',true);
   var hh='<span class="av">🐠</span><div><small>도미 비서 · 다음 할 일</small><p>'+q.t+'</p><i>'+q.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh){el.dataset.h=hh;el.innerHTML=hh}}
-function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length){qPaint(el);return}var s=TUT[i];
+function tutLock(){return (G.tut|0)===7&&!bOf('turtle')&&hallLv()<B.turtle.at}
+function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length||tutLock()&&!TUT[i].ok()){qPaint(el,true);return}var s=TUT[i];
   if(s.ok()){G.tut=i+1;WAL.add('pearl',s.rw);toast('🐠 잘했어요! 🫧'+s.rw);addXP(5);save();return tutPaint()}
   $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;document.body.classList.remove('tutOn');return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;document.body.classList.toggle('tutOn',!G.tutMin&&i<TUT.length);var hh2='<span class="av">🐠</span><div><small>도미 비서 · '+(i+1)+'/'+TUT.length+'</small><p>'+s.t+'</p><i>'+s.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh2){el.dataset.h=hh2;el.innerHTML=hh2}}
-$('tut').onclick=function(ev){if(ev.target.id==='tutX'){G.tutMin=true;save();tutPaint();return}var s=TUT[G.tut|0];if(s)s.go();else if(QNOW)QNOW.go()};$('bTut').onclick=function(){G.tutMin=false;save();tutPaint()};
+$('tut').onclick=function(ev){if(ev.target.id==='tutX'){G.tutMin=true;save();tutPaint();return}var s=TUT[G.tut|0];if(s&&!tutLock())s.go();else if(QNOW)QNOW.go()};$('bTut').onclick=function(){G.tutMin=false;save();tutPaint()};

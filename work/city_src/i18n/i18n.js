@@ -9,8 +9,8 @@ try{var m=/[?&]lang=([a-z]{2,3})/.exec(location.search||'');if(m)L=m[1];
     else{var n=(((navigator.languages&&navigator.languages[0])||navigator.language||'en')+'').toLowerCase();L=n.indexOf('ko')===0?'ko':n.indexOf('ja')===0?'ja':n.indexOf('es')===0?'es':n.indexOf('vi')===0?'vi':'en'}}}catch(e){}
 window.CITY_LANG=L;try{document.documentElement.lang=L}catch(e){}
 /* 한국어: 이름 뒤 '을(를) · 이(가)'를 받침 보고 바로 고쳐 보여 줌(원문은 다른 언어 번역 열쇠라 그대로 둠) */
-if(L==='ko'){var JX=/([\s\S])(을\(를\)|이\(가\)|은\(는\))/g,DB='0136780';
-  var jo=function(s){if(typeof s!=='string'||s.indexOf('(')<0||!JX.test(s))return s;JX.lastIndex=0;return s.replace(JX,function(_,c,p){var h=c.charCodeAt(0),b=null;if(h>=0xAC00&&h<=0xD7A3)b=(h-0xAC00)%28!==0;else if(/\d/.test(c))b=DB.indexOf(c)>=0;if(b===null)return _;var f0=p.charAt(0);return c+(f0==='을'?(b?'을':'를'):f0==='은'?(b?'은':'는'):(b?'이':'가'))})};
+if(L==='ko'){var JX=/([\s\S])((?:<\/b>)?)(을\(를\)|이\(가\)|은\(는\))/g,DB='0136780';
+  var jo=function(s){if(typeof s!=='string'||s.indexOf('(')<0||!JX.test(s))return s;JX.lastIndex=0;return s.replace(JX,function(_,c,tg,p){var h=c.charCodeAt(0),b=null;if(h>=0xAC00&&h<=0xD7A3)b=(h-0xAC00)%28!==0;else if(/\d/.test(c))b=DB.indexOf(c)>=0;if(b===null)return _;var f0=p.charAt(0);return c+tg+(f0==='을'?(b?'을':'를'):f0==='은'?(b?'은':'는'):(b?'이':'가'))})};
   window.CITY_TR=jo;try{var k1=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');Object.defineProperty(Element.prototype,'innerHTML',{get:k1.get,set:function(v){k1.set.call(this,jo(v))},configurable:true})}catch(e){}
   try{var k2=Object.getOwnPropertyDescriptor(Node.prototype,'textContent');Object.defineProperty(Node.prototype,'textContent',{get:k2.get,set:function(v){k2.set.call(this,jo(v))},configurable:true})}catch(e){}
   return}

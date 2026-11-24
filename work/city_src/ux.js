@@ -27,7 +27,7 @@ function ghostHit(x,y){if(!GH)return false;var t=tileAt(x,y),s=sz(GH.k);return t
 /* 1.1.32 마을 점검: 도미 비서 카드를 누르면 고르고 · 옮기고 · ✓ 누를 것 없이 산호궁 가까운 '지을 수 있는 자리'에 바로 지어요(돈 · 일꾼이 모자라면 예전처럼 짓기 창) */
 function spotNear(k){var s=sz(k),h=bOf('hall'),c=h?{i:h.x+1,j:h.y+1}:tileAt(VW/2,VH*.5);
   for(var r=1;r<30;r++)for(var dx=-r;dx<=r;dx++)for(var dy=-r;dy<=r;dy++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;var x=c.i+dx-Math.floor((s-1)/2),y=c.j+dy-Math.floor((s-1)/2);if(!siteWhy(k,x,y))return {x:x,y:y}}return null}
-function quickBuild(k){var w=canStart(k,1),p=w.length?null:spotNear(k);if(w.length)toast(w[0]);if(!p){openBuild(CATOF[k]);return}
+function quickBuild(k){var w=canStart(k,1),p=w.length?null:spotNear(k);if(w.length)toast(w[0]);if(w.length&&(/🦀/.test(w[w.length-1])||needList(k,1).some(function(n){var b=bOf(n.k);return !n.ok&&b&&b.job}))){var jb=G.b.filter(function(b){return b.job&&!isZ(b.k)})[0];if(jb){focus(jb);return}}if(!p){openBuild(CATOF[k]);return}
   endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;$('ghb').hidden=true;
   pushUndo(B[k].n+' 짓기');setTimeout(endAct,0);var b={id:G.nid++,k:k,x:p.x,y:p.y,lv:0,buf:{}};G.b.push(b);occ();startJob(b,1);FLOATU={id:b.id,until:NOW()+8000};setTab(null);save();snd('done');focus(b);var c=centerOf(b);dust(c.x,c.y,12,1);toast('🦀 게 일꾼이 '+B[k].n+'을(를) 짓기 시작했어요')}
 
@@ -85,3 +85,6 @@ if(!G.pro)setTimeout(function(){prologue(0)},400);
 window.GF_CITY_SAVE=function(){try{G.cam=cam}catch(e){}save()};
 var INTAB=/[?&]tab=1/.test(location.search||'');
 if(EMB&&!INTAB){var bb=document.createElement('button');bb.id='bBack';bb.innerHTML='‹<small>나가기</small>';bb.setAttribute('aria-label','아가미 파이터로 돌아가기');$('side').insertBefore(bb,$('side').firstChild);bb.onclick=function(){save();try{window.parent.GF_CITY_CLOSE&&window.parent.GF_CITY_CLOSE()}catch(e){}}}
+
+/* 1.1.33: 건물 창의 조건 줄(○ 다시마 농장 Lv.2 등)을 누르면 그 건물로 · 없으면 바로 짓기 · 인구면 마을 현황 */
+$('panel').addEventListener('click',function(e){var li=e.target&&e.target.closest?e.target.closest('li[data-k]'):null;if(!li||li.classList.contains('ok'))return;var k=li.dataset.k;if(k==='pop'){lifePanel();return}var b=bOf(k);if(b){closePanel();focus(b);SEL=b;openPanel(b)}else if(B[k]){closePanel();quickBuild(k)}});

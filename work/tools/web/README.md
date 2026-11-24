@@ -12,5 +12,5 @@ Playwright(설치돼 있음)로 `work/` 를 `http://app.local/` 처럼 열어 �
 - `node art.js` — 마을 그림 갈아끼우기 확인(CITY_ART) / `node artref.js <폴더>` — 지금 마을 그림을 투명 PNG 로(기준본)
 - `node shot_town.js` — 스토어 7번째 후보(마을) 1320×2868 한 · 영 · 일. 먼저 `mkdir fonts && cd fonts && npm i @fontsource/black-han-sans @fontsource/jua`
 - `node perf.js` / `node prof.js` — 큰 마을 프레임 · 프로파일, `node svstress.js 8 420 hard` — 심해 생존 후반(work/_sv.html 훅 파일 필요)
-- `python3 sync.py` — parts/city_entry.js 를 index.html 에 다시 끼우고 문법 검사
+- ~~`python3 sync.py`~~ — 쓰지 말 것(1.1.33 검수: index.html 최신 코드를 옛 parts/city_entry.js 로 덮어써 지움, 이제 막혀 있음)
 결과 그림 · 기록은 이 폴더에 생기고 git 에는 안 올라감(.gitignore).

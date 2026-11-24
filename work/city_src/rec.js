@@ -13,7 +13,7 @@ var RC=[
  {k:'xl',ic:'⭐',t:function(g){return '명성 Lv.'+g+' 되기'},s:[5,10,20,30,40],v:function(){return G.xl||1}},
  {k:'ord',ic:'🐢',t:function(g){return '주문 '+g+'번 배달하기'},s:[10,50,150,400,1000],v:function(){return G.ordSent|0}},
  {k:'col',ic:'🫧',t:function(g){return '건물 말풍선 '+g+'번 받기'},s:[50,300,1000,3000,8000],v:function(){return rcN('col')}},
- {k:'zone',ic:'🏘',t:function(g){return '구역 건물 단계 합 '+g+' 만들기'},s:[30,100,250,500,1000],v:function(){return zLvSum()}},
+ {k:'zone',ic:'🏘',t:function(g){return '집 · 가게 · 공방 단계 합 '+g+' 만들기'},s:[30,100,250,500,1000],v:function(){return zLvSum()}},
  {k:'deco',ic:'🌸',t:function(g){return '장식 '+g+'개 놓기'},s:[3,10,25,50],v:function(){return decoN()}},
  {k:'trip',ic:'🚋',t:function(g){return '열차 · 고래 배 '+g+'번 다녀오기'},s:[3,15,50,150],v:function(){return rcN('trip')}},
  {k:'blk',ic:'🛡',t:function(g){return '마을 사건 '+g+'번 막아 내기'},s:[3,10,30,80],v:function(){return (G.inc&&G.inc.blk)|0}},

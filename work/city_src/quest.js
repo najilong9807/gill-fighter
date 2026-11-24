@@ -7,7 +7,7 @@ var WQ_POOL=[
  {k:'ord',ic:'🐢',t:function(g){return '거북 배달소에서 주문 '+g+'개 배달하기'},g:function(L){return 6+Math.round(L/2)}},
  {k:'col',ic:'🫧',t:function(g){return '건물 말풍선 '+g+'번 받기'},g:function(L){return 20+L}},
  {k:'up',ic:'⬆',t:function(g){return '건물 '+g+'번 업그레이드하기'},g:function(L){return 3+Math.round(L/6)}},
- {k:'zup',ic:'🏘',t:function(g){return '구역 건물 단계 '+g+'번 올리기'},g:function(L){return 4+Math.round(L/3)}},
+ {k:'zup',ic:'🏘',t:function(g){return '집 · 가게 · 공방 단계 '+g+'번 올리기'},g:function(L){return 4+Math.round(L/3)}},
  {k:'pop',ic:'🐟',t:function(g){return '인구 '+g+' 만들기'},g:function(L){return Math.round((CS.pop||0)+30+L*3)},abs:1},
  {k:'dec',ic:'🌸',t:function(g){return '장식 '+g+'개 놓기'},g:function(){return 3}},
  {k:'box',ic:'📦',t:function(g){return '판에서 모은 재료 상자 '+g+'개 열기'},g:function(){return 6},emb:1}];

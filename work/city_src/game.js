@@ -46,7 +46,7 @@ function lvOf(k){var m=0;G.b.forEach(function(b){if(b.k===k)m=Math.max(m,b.lv||0
 function bOf(k){for(var i=0;i<G.b.length;i++)if(G.b[i].k===k)return G.b[i];return null}
 function hallLv(){return lvOf('hall')}
 function crabsMax(){return D.crabs(lvOf('crab'))}
-function jobs(){return G.b.filter(function(b){return b.job})}
+function jobs(){return G.b.filter(function(b){return b.job&&!isZ(b.k)})} /* 1.1.33: 집 · 가게 · 공방은 물고기들이 지어서 게 일꾼 수에 안 셈 */
 function cap(r){var c=D.storeCap(lvOf('store'));return r==='brick'?c/4:r==='nail'?c/10:c}
 function have(r){return r==='pearl'||r==='gem'?WAL.get(r):(G.res[r]||0)}
 function payOk(c){for(var k in c)if(have(k)<c[k])return false;return true}
@@ -183,6 +183,8 @@ function crabAt(x,y,t,ph){/* 1.1.32: 게 일꾼 크게 · 귀엽게(동글 몸 �
   ctx.save();ctx.translate(-14,-3-bob);ctx.fillStyle='#ff7a4d';ctx.beginPath();ctx.ellipse(-3,0,5.5,4.5,.3,0,7);ctx.fill();ctx.stroke();ctx.restore();
   ctx.save();ctx.translate(14,-4-bob);ctx.rotate(-.6+Math.sin(t*.025+ph)*.9);ctx.fillStyle='#ff7a4d';ctx.beginPath();ctx.ellipse(4,0,6,4.5,0,0,7);ctx.fill();ctx.stroke();ctx.strokeStyle=OUT;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(6,0);ctx.lineTo(6,-16);ctx.stroke();ctx.strokeStyle='#b8793f';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#9aa6b8';ctx.strokeStyle=OUT;ctx.lineWidth=2;rr(-1,-23,14,8,2);ctx.fill();ctx.stroke();ctx.restore();ctx.restore()}
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+/* 1.1.33: 집 · 가게 · 공방 공사는 글 없는 작은 막대(여러 채가 붙어 지어도 안 겹치게) */
+function miniBar(x,y,p){var w=40,h=7;ctx.save();ctx.translate(x-w/2,y);ctx.fillStyle='#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=1.6;rr(-2,-2,w+4,h+4,5);ctx.fill();ctx.stroke();ctx.fillStyle='#4fc36b';rr(0,0,Math.max(h,w*p),h,3.5);ctx.fill();ctx.restore()}
 function progBar(x,y,p,label){var w=128,h=12;ctx.save();ctx.translate(x-w/2,y);ctx.fillStyle='#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=2.2;rr(-6,-22,w+12,h+28,10);ctx.fill();ctx.stroke();
   ctx.font='800 12px "Jua",-apple-system,"Apple SD Gothic Neo",sans-serif';ctx.fillStyle=OUT;ctx.textAlign='center';ctx.fillText(label,w/2,-7);ctx.fillStyle='#d9e4ef';rr(0,0,w,h,6);ctx.fill();ctx.fillStyle='#4fc36b';rr(0,0,Math.max(h,w*p),h,6);ctx.fill();ctx.strokeStyle=OUT;rr(0,0,w,h,6);ctx.stroke();ctx.restore()}
 function badge(x,y,L,hot){ctx.save();ctx.fillStyle=hot?'#ffd54a':'#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,11,0,7);ctx.fill();ctx.stroke();ctx.font='400 12px "Black Han Sans",sans-serif';ctx.fillStyle=OUT;ctx.textAlign='center';ctx.fillText(L,x,y+4);ctx.restore()}
@@ -194,7 +196,7 @@ function drawWorld(t,now){var items=[];
   if(GH){var s2=sz(GH.k);items.push({z:GH.x+GH.y+2*(s2-1)+.6,g:GH,c:sc(GH.x+(s2-1)/2,GH.y+(s2-1)/2)})}
   items.sort(function(a,b){return a.z-b.z});BUBS=[];var ji=0;
   items.forEach(function(it){if(it.ter){drawTer(it.p,it.ter,it.s,t);return}if(it.w){drawWalker(it.w,t);return}if(it.v){drawVeh(it.v,t);return}if(it.wf){var pw=sc(it.wf.fx,it.wf.fy);if(pw.x>-60&&pw.x<VW+60&&pw.y>-60&&pw.y<VH+60)plainFish(pw.x,pw.y-22*cam.z,it.wf,it.wf.fade*.9,t);return}if(it.gate){drawGate(t);return}
-    if(it.g){var g=it.g,s3=sz(g.k),why=siteWhy(g.k,g.x,g.y);if(isD(g.k)&&why==='도로에 붙여 지어야 해요')why='';for(var a=0;a<s3;a++)for(var b2=0;b2<s3;b2++){var pp=sc(g.x+a,g.y+b2);diamond(pp.x,pp.y,TW*cam.z,TH*cam.z);ctx.fillStyle=why?'rgba(255,90,90,.45)':'rgba(90,220,120,.45)';ctx.fill()}
+    if(it.g){var g=it.g,s3=sz(g.k),why=g.h?houseWhy(g.k,g.x,g.y):siteWhy(g.k,g.x,g.y);if(isD(g.k)&&why==='도로에 붙여 지어야 해요')why='';for(var a=0;a<s3;a++)for(var b2=0;b2<s3;b2++){var pp=sc(g.x+a,g.y+b2);diamond(pp.x,pp.y,TW*cam.z,TH*cam.z);ctx.fillStyle=why?'rgba(255,90,90,.45)':'rgba(90,220,120,.45)';ctx.fill()}
       drawArt(art(g.k,1),it.c,.6);g.why=why;return}
     var b=it.b,c=it.c,s=sz(b.k),z=cam.z;
     ctx.fillStyle='rgba(15,60,80,.2)';ctx.beginPath();ctx.ellipse(c.x+4*z,c.y+6*z,44*s*z,20*s*z,0,0,7);ctx.fill();
@@ -204,7 +206,7 @@ function drawWorld(t,now){var items=[];
       ctx.save();ctx.globalCompositeOperation='lighter';var lg=ctx.createLinearGradient(0,rev-8,0,rev+6);lg.addColorStop(0,'rgba(255,255,220,0)');lg.addColorStop(.6,'rgba(255,250,200,.5)');lg.addColorStop(1,'rgba(255,255,220,0)');ctx.fillStyle=lg;ctx.fillRect(c.x-60*s*z,rev-8,120*s*z,14);ctx.restore();
       scaffold(c,s,Math.min(scT,c.y-34*z),true);var u=(Math.sin(t*.0009+ji)+1)/2;crabAt(c.x+(-36+u*72)*s*z*.6,c.y+(20*s-Math.abs(u-.5)*14)*z,t,ji);
       if(Math.random()<.04)dust(c.x+(Math.random()-.5)*60*s*z,rev+Math.random()*20,1,.4);
-      progBar(c.x,Math.max(70,top-34*z),pr,'Lv.'+L+' · '+dur((b.job.end-now)/1000));ji++;return}
+      if(isZ(b.k)){miniBar(c.x,Math.max(70,top-18*z),pr)}else progBar(c.x,Math.max(70,top-34*z),pr,'Lv.'+L+' · '+dur((b.job.end-now)/1000));ji++;return}
     var pop=POPS[b.id],sy=1,e=pop?(now-pop)/700:9;if(e<1)sy=1+Math.sin(e*Math.PI*2.2)*Math.exp(-e*3.5)*.12;
     drawArt(art(b.k,b.lv),c,1,null,sy);if(e<.6)scaffold(c,s,c.y-(140-e*170)*z,true,1-e/.6,e*200);
     if(SEL===b){ctx.save();diamond(c.x,c.y,TW*s*z,TH*s*z);ctx.strokeStyle='#ffd54a';ctx.lineWidth=3;ctx.setLineDash([8,6]);ctx.stroke();ctx.restore()}
@@ -258,17 +260,17 @@ $('goal').onclick=function(e){var k=e.target.dataset&&e.target.dataset.k;if(k===
 function focus(b){var s=sz(b.k);cam.x=((b.x-b.y))*TW/2;cam.y=(b.x+b.y+s-1)*TH/2-60/cam.z}
 /* ===== 메뉴 정리: 아래 [🐢 주문 · 📦 창고] [🔨 짓기] [☰ 메뉴] / 짓기 안 분류 / 도구 쓸 땐 얇은 줄만 ===== */
 var TAB=null,CAT='road';
-var CATS=[['road','🛣 도로'],['zone','🏘 구역'],['base','⚙ 기반'],['prod','🏭 생산'],['trade','🐢 교역'],['pub','🏫 공공'],['mark','✨ 랜드마크'],['deco','🌸 장식'],['clear','🧹 철거']];
+var CATS=[['road','🛣 도로'],['zone','🏠 집 · 가게'],['base','⚙ 기반'],['prod','🏭 생산'],['trade','🐢 교역'],['pub','🏫 공공'],['mark','✨ 랜드마크'],['deco','🌸 장식'],['clear','🧹 철거']];
 var CATOF={pump:'base',crab:'base',store:'base',quarry:'prod',farm:'prod',factory:'prod',sew:'prod',kiln:'prod',pearl:'prod',turtle:'trade',train:'trade',port:'trade',diner:'pub',school:'pub',clinic:'pub',fire:'pub',police:'pub',aqua:'mark',palace:'mark'};
-function setTab(t){if(!t){closeBuild();endTool();return}if(t==='build')t='base';if(t==='road'||t==='zone'||t==='clear'){startTool(t==='zone'?'zR':t);return}openBuild(t)}
+function setTab(t){if(!t){closeBuild();endTool();return}if(t==='build')t='base';if(t==='road'||t==='clear'){startTool(t);return}openBuild(t)}
 function openBuild(c){endTool();closePanel();GH=null;$('place').hidden=true;TAB='build';$('bBuild').classList.add('on');var tr=$('tray');tr.hidden=false;showCat(c||CAT)}
 function closeBuild(){TAB=null;$('bBuild').classList.remove('on');$('tray').hidden=true}
 function catBadge(c){var L=hallLv(),n=0;Object.keys(CATOF).forEach(function(k){if(CATOF[k]===c&&!bOf(k)&&L>=B[k].at&&needList(k,1).every(function(q){return q.ok}))n++});return n}
 function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(function(q){var n=catBadge(q[0]);return '<button data-c="'+q[0]+'" class="'+(q[0]===c?'on':'')+'">'+q[1]+(n?'<em>'+n+'</em>':'')+'</button>'}).join('')+'</div>';
-  if(c==='road')h+='<div class="tools1"><button data-tool="road"><b>🛣 도로 건설</b><i>끌어서 도로를 놓아요 · 한 칸 '+D_ROAD+'🫧</i></button><p class="tip">건물 · 구역은 도로에 붙어야 돌아가요. 도로끼리 이어지면 모양이 저절로 맞춰져요.</p></div>';
+  if(c==='road')h+='<div class="tools1"><button data-tool="road"><b>🛣 도로 건설</b><i>끌어서 도로를 놓아요 · 한 칸 '+D_ROAD+'🫧</i></button><p class="tip">건물 · 집 · 가게는 도로에 붙어야 돌아가요. 도로끼리 이어지면 모양이 저절로 맞춰져요.</p></div>';
   else if(c==='clear')h+='<div class="tools1"><button data-tool="clear"><b>🧹 철거하기</b><i>바위 60🫧 · 덤불 25🫧 · 도로 철거(절반 환급)</i></button><p class="tip">다시마 덤불은 근처 땅값을 조금 올려 줘요. 꼭 필요한 곳만 철거해요.</p></div>';
-  else if(c==='zone'){h+='<div class="tools1 z">';[['zR','R'],['zC','C'],['zI','I']].forEach(function(a){var z=ZN[a[1]],lock=L<z.at,d=CS.dem[a[1]];h+='<button data-tool="'+a[0]+'"'+(lock?' class="off"':'')+'><b>'+z.ic+' '+z.n+'</b><i>'+(lock?'🔒 🏛Lv.'+z.at:'수요 '+(d>.1?'▲ 많음':d<-.1?'▼ 없음':'– 보통'))+'</i></button>'});
-    h+='<button data-tool="z0"><b>🧽 구역 해제</b><i>지정 취소</i></button></div><p class="tip"><b>구역 = 물고기가 직접 짓는 땅</b>이에요. 🏠 주거엔 집, 🛍 상업엔 가게, 🔧 산업엔 공방이 생겨요. 도로 옆 칸을 손가락으로 쭉 끌면 끝 · 산소가 닿아야 지어요 · 한 칸 5🫧</p>'}
+  else if(c==='zone'){var hc='';[['R','물고기가 살아요 · 인구 +'],['C','주민이 경단 · 옷을 사요 · 세금 +'],['I','일자리 + · 생산이 빨라져요']].forEach(function(a){var z=ZN[a[0]],lock=L<z.at,d=CS.dem[a[0]];hc+='<button class="card'+(lock?' off':'')+'" data-hk="'+a[0]+'"><img src="'+thumb('z'+a[0]+'0')+'" alt=""><b>'+z.ic+' '+z.n+'</b><i>'+(lock?'🔒 🏛Lv.'+z.at:'🫧'+H_COST+' · '+(d>.1?'▲ 더 필요해요':d<-.1?'▼ 넘쳐요':'– 적당해요'))+'</i><small>'+a[1]+'</small></button>'});
+    h+='<div class="cards">'+hc+'</div><p class="tip">놓으면 물고기들이 와서 지어요 · 도로 옆 · 산소가 닿는 곳 · ✓를 계속 누르면 옆에 한 채씩 더 지어요 · 다 지은 뒤엔 저절로 커져요</p>'}
   else if(c==='deco'){var dc='';Object.keys(DEC).sort(function(a,b){return (DEC[b].gift?1:0)-(DEC[a].gift?1:0)}).forEach(function(k){var d=DEC[k],inv=(G.inv&&G.inv[k])|0;if(d.fac||d.gift&&!inv)return;var open=d.gift?inv>0:L>=d.at;dc+='<button class="card'+(open?'':' off')+'" data-dk="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+d.n+'</b><i>'+(d.gift?'🎁 '+inv+'개 있어요':open?'🫧'+fmt(d.c):'🔒 🏛Lv.'+d.at)+'</i><small>주변 '+d.r+'칸 땅값 +'+d.v+'</small></button>'});h+='<div class="cards">'+dc+'</div><p class="tip">장식은 도로에 안 붙어도 돼요 · 땅값이 오르면 주택이 2 · 3단계로 자라요</p>'}
   else{var cards='';Object.keys(CATOF).forEach(function(k){if(CATOF[k]!==c)return;var b=B[k],built=bOf(k),open=L>=b.at,cc=D.cost(k,1),why=open?needList(k,1).filter(function(n){return !n.ok}).map(reqTxt).join(', '):'';
       cards+='<button class="card'+(built?' own':!open||why?' off':'')+'" data-k="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+b.n+'</b>'+(built?'<i class="own">✓ Lv.'+built.lv+'</i>':!open?'<i>🔒 🏛Lv.'+b.at+'</i>':why?'<i>'+why+' 필요</i>':'<i>🫧'+fmt(cc.pearl)+' 🪨'+fmt(cc.stone)+'</i>')+'<small>'+(DESC[k]?DESC[k].s:'')+'</small></button>'});
@@ -276,19 +278,20 @@ function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(functi
     h+='<div class="cards">'+cards+'</div>'}
   var tr=$('tray');tr.innerHTML=h+'<button class="close" id="tX">✕</button>';$('tX').onclick=closeBuild;
   tr.querySelectorAll('.pills button').forEach(function(el){el.onclick=function(){showCat(el.dataset.c)}});
-  tr.querySelectorAll('[data-tool]').forEach(function(el){el.onclick=function(){var t=el.dataset.tool;if(t.charAt(0)==='z'&&t!=='z0'&&L<ZN[t.charAt(1)].at){toast(ZN[t.charAt(1)].n+' 구역은 🏛 산호궁 Lv.'+ZN[t.charAt(1)].at+'에 열려요');return}startTool(t)}});
+  tr.querySelectorAll('[data-tool]').forEach(function(el){el.onclick=function(){var t=el.dataset.tool;if(t.charAt(0)==='z'&&t!=='z0'&&L<ZN[t.charAt(1)].at){toast(ZN[t.charAt(1)].n+'은(는) 🏛 산호궁 Lv.'+ZN[t.charAt(1)].at+'에 열려요');return}startTool(t)}});
+  tr.querySelectorAll('[data-hk]').forEach(function(el){el.onclick=function(){var z=el.dataset.hk;if(L<ZN[z].at){toast(ZN[z].n+'은(는) 🏛 산호궁 Lv.'+ZN[z].at+'에 열려요');return}houseAt(z)}});
   tr.querySelectorAll('[data-dk]').forEach(function(el){el.onclick=function(){var k=el.dataset.dk;if(hallLv()<DEC[k].at){toast('🏛 산호궁 Lv.'+DEC[k].at+'에 열려요');return}ghostAt(k)}});
   tr.querySelectorAll('.card[data-k]').forEach(function(el){el.onclick=function(){var k=el.dataset.k;if(bOf(k)){var b=bOf(k);closeBuild();focus(b);SEL=b;openPanel(b);return}
     if(hallLv()<B[k].at){toast('🏛 산호궁 Lv.'+B[k].at+'에 열려요');return}var w=needList(k,1).filter(function(n){return !n.ok});if(w.length){toast(reqTxt(w[0])+'이(가) 먼저 필요해요');return}
     ghostAt(k)}})}
-var TOOLN={road:'🛣 도로 건설',clear:'🧹 철거',zR:'🏠 주거 구역',zC:'🛍 상업 구역',zI:'🔧 산업 구역',z0:'🧽 구역 해제'};
+var TOOLN={road:'🛣 도로 건설',clear:'🧹 철거',zR:'🏠 집',zC:'🛍 가게',zI:'🔧 공방',z0:'🧽 헐기'};
 function startTool(t){TOOL=t;$('tray').hidden=true;TAB=null;$('bBuild').classList.remove('on');closePanel();var el=$('toolbar');el.hidden=false;el.className=t.charAt(0)==='z'?'z':'';$('dock').hidden=true;
   var h='<div class="tl"><b>'+TOOLN[t]+'</b><small>'+(t==='road'?'끌어서 도로를 놓아요 · '+D_ROAD+'🫧':t==='clear'?'눌러서 철거해요':'끌어서 지정해요 · 5🫧')+(t==='clear'?' · 끌면 화면 이동':' · 이동은 두 손가락')+'</small></div>';
   if(t.charAt(0)==='z')h+='<div class="zs">'+['zR','zC','zI','z0'].map(function(z){return '<button data-z="'+z+'" class="'+(z===t?'on':'')+'">'+TOOLN[z].split(' ')[0]+'</button>'}).join('')+'</div>';
   h+='<button class="main" id="tDone">✓ 끝</button>';el.innerHTML=h;$('tDone').onclick=function(){endTool();save()};
-  el.querySelectorAll('[data-z]').forEach(function(b){b.onclick=function(){var z=b.dataset.z;if(z!=='z0'&&hallLv()<ZN[z.charAt(1)].at){toast(ZN[z.charAt(1)].n+' 구역은 🏛 Lv.'+ZN[z.charAt(1)].at+'에 열려요');return}startTool(z)}})}
+  el.querySelectorAll('[data-z]').forEach(function(b){b.onclick=function(){var z=b.dataset.z;if(z!=='z0'&&hallLv()<ZN[z.charAt(1)].at){toast(ZN[z.charAt(1)].n+'은(는) 🏛 Lv.'+ZN[z.charAt(1)].at+'에 열려요');return}startTool(z)}})}
 function endTool(){TOOL=null;var el=$('toolbar');if(el)el.hidden=true;$('dock').hidden=false}
-function zoneTray(){startTool(TOOL&&TOOL.charAt(0)==='z'?TOOL:'zR')}
+function zoneTray(){openBuild('zone')}
 
 /* --- 🐢 주문 배달 --- */
 var GV={kelp:1,stone:1,dango:3,cloth:4,brick:6,nail:15},GB={kelp:8,stone:10,dango:4,cloth:3,brick:2,nail:1};
@@ -326,23 +329,23 @@ function menuPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button>
   el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;el.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){var m=b.dataset.m;if(m==='life')lifePanel();else if(m==='todo')todoPanel();else if(m==='help')helpPanel();else if(m==='snd'){sndToggle();menuPanel()}else if(m==='pro'){closePanel();prologue(0)}else if(confirm('마을을 처음부터 다시 시작할까요? (진주 · 보석은 그대로)')){localStorage.removeItem(KEY);location.reload()}}})}
 function todoPanel(){var el=$('panel'),L=hallLv(),h='<button class="x" id="pX">✕</button><h2>🎯 할 일</h2>';
   if(L<D.HMAX){var nl=needList('hall',L+1),c=D.cost('hall',L+1);h+='<div class="box"><b>🏛 산호궁 Lv.'+(L+1)+'</b><ul class="req">'+nl.map(function(n){return '<li class="'+(n.ok?'ok':'no')+'" data-k="'+n.k+'">'+(n.ok?'✓':'○')+' '+reqTxt(n)+'</li>'}).join('')+'</ul><div class="cost">'+costHtml(c)+'</div></div>'}
-  var tips=[];if(!CS.food)tips.push('🍡 경단이 떨어졌어요 · 경단 공장 말풍선을 받아요');if(CS.pop>=CS.lim)tips.push('🐟 인구 한도가 찼어요 · 식당 · 학교 · 병원을 올려요');if(CS.w<.7)tips.push('👷 일꾼이 모자라요 · 주거 구역을 더 지정해요');if(CS.dem.C>.3)tips.push('🛍 상업 구역이 모자라요');if(ordReady())tips.push('🐢 배달할 수 있는 주문이 '+ordReady()+'개 있어요');
+  var tips=[];if(!CS.food)tips.push('🍡 경단이 떨어졌어요 · 경단 공장 말풍선을 받아요');if(CS.pop>=CS.lim)tips.push('🐟 인구 한도가 찼어요 · 식당 · 학교 · 병원을 올려요');if(CS.w<.7)tips.push('👷 일꾼이 모자라요 · 집을 더 지어요');if(CS.dem.C>.3)tips.push('🛍 가게가 모자라요 · 짓기 → 🏠 집 · 가게');if(ordReady())tips.push('🐢 배달할 수 있는 주문이 '+ordReady()+'개 있어요');
   G.b.forEach(function(b){if(bufReady(b)&&tips.length<8&&!isZ(b.k))tips.push(ICON[bufReady(b)]+' '+B[b.k].n+' 말풍선을 받아요')});
   h+='<div class="box">'+(tips.length?tips.map(function(t){return '<div>'+t+'</div>'}).join(''):'지금은 잘 돌아가고 있어요 ✨')+'</div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null;el.querySelectorAll('.req li').forEach(function(li){li.onclick=function(){if(li.dataset.k==='pop'){lifePanel();return}var t=bOf(li.dataset.k);if(t){focus(t);SEL=t;openPanel(t)}else openBuild(CATOF[li.dataset.k])}})}
 function helpPanel(){var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📖 마을이 도는 법</h2><div class="box help">'+
   '<p><b>🏛 산호궁</b>이 모든 걸 열어요. 올리려면 정해진 건물 레벨 · 인구 · 진주가 필요해요. 다른 건물은 산호궁보다 높게 못 올려요.</p>'+
   '<p><b>🫧 진주</b>는 바닷속의 돈이에요. 아가미 파이터와 같은 지갑이라, 바다에서 모은 진주를 마을에서도 써요. 짓기에 드는 진주는 게 일꾼 품삯과 재료값이에요. <b>💎 보석</b>으로는 공사를 바로 끝내요(5분 이하는 무료).</p>'+
-  '<p><b>🏘 구역</b>을 지정하면 물고기들이 주택 · 상점 · 공장을 지어요. 도로와 산소 펌프의 산소가 닿아야 해요.</p>'+
+  '<p><b>🏠 집 · 🛍 가게 · 🔧 공방</b>은 🔨 짓기 → 🏠 집 · 가게에서 건물처럼 놓으면 물고기들이 와서 지어요. 도로 옆, 산소 펌프의 산소가 닿는 곳이어야 해요. 다 지으면 땅값 · 행복에 따라 저절로 커져요.</p>'+
   '<p><b>🔁 마을이 도는 순서</b>: 주민이 광산 · 농장 · 공장에서 일해 물건을 만들어요 → 창고에 모여요 → 🍡 경단 · 👕 옷은 상점으로 가서 주민이 사 먹고 입어요(그래야 행복해져 주택이 자라요) → 주민은 일해서 번 진주로 장을 보고 세금을 내요 → 남는 물건은 거북이 이웃 마을에 팔아 진주로 바꿔요.</p>'+
   '<p><b>🧾 세금</b>은 주민이 일해서 번 진주 중 일부를 마을에 내는 거예요. 상점에서 장을 본 인구 × 행복만큼 🏛 산호궁에 쌓여요(8시간치까지). 산호궁 위 🫧 말풍선을 눌러 걷어요.</p>'+
   '<p><b>🐢 주문</b>은 이웃 바다 마을이 모자란 물건을 사겠다는 거예요. 우리 마을 광산 · 농장 · 공장이 만들어 창고에 모아 둔 물건을 거북이 실어다 주면 물건값으로 진주 · 명성을 받아요. 세금과 함께 마을의 두 가지 수입이에요. 명성 레벨마다 💎 선물이 있어요.</p>'+
   '<p><b>📜 의뢰</b>는 주민 대표들이 촌장님께 부탁하는 일이에요. 산호궁 Lv.5부터 매주 월요일에 3개씩 와요. 하나에 🫧 진주, 셋 다 하면 💎 보석도 받아요.</p>'+
   '<p><b>🏷 땅값</b>은 장식 · 학교 · 식당 · 명소가 가까우면 오르고 광산 · 가마 · 공장이 가까우면 내려가요. 건물을 놓기 전에 초록 · 빨강 칸과 집 위 숫자로 미리 볼 수 있어요. 땅값이 높아야 집이 높이 자라요.</p>'+(EMB?
-  '<p><b>📦 재료 상자</b>는 내 물고기가 아가미 파이터에서 바다를 헤엄치다 주운 재료를 마을로 보내는 거예요. 20초 넘게 한 판 할 때마다 1개씩(하루 6개) 와요. <b>🐠 내 물고기</b>는 가끔 마을에 놀러 오고, 쓰다듬으면 수족관 친밀도가 올라요.</p><p><b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. <b>🐢 거북 배달소</b>를 지으면 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러, 주민들이 촌장님께 고맙다며 모아 보낸 진주를 전해 줘요(하루 3번).</p>':'')+'<p><b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.</p><p><b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 · 산업 구역 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.</p><p><b>💨 숨샘 · 큰 숨탑</b>(⚙ 기반)은 여러 개 지을 수 있어요. 산소 펌프만으로 모자란 곳에 놓아 구역이 자라는 범위를 넓혀요.</p><p><b>🐟 주민</b>을 누르면 이름 · 집 · 일터 · 기분과 한마디를 들을 수 있어요. 마을에 무엇이 모자란지 주민 말로 알 수 있어요.</p><p><b>🚦 교통</b>: 집 · 가게 · 공방 · 일터가 몰린 길은 막혀요. 막힌 길 옆은 생산 · 입주 · 행복이 줄고, 구역 4단계부터는 길이 안 막혀야 자라요. 🛣 도로 탭 <b>⬆ 길 넓히기</b>로 자갈길(Lv.5) · 산호 대로(Lv.12)를 깔거나, ⚙ 기반의 <b>🚌 해류 버스 정류장</b>을 놓아요. 🗺 지도 → 교통으로 확인해요.</p><p><b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.</p><p><b>🛣 길 자동 연결</b>: 구역을 칠하고 손을 떼면 길에 안 닿은 칸까지 길을 깔아 줘요(한 칸 10🫧). 🏘 구역 탭에서 끌 수 있어요.</p><p><b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.</p><p><b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
+  '<p><b>📦 재료 상자</b>는 내 물고기가 아가미 파이터에서 바다를 헤엄치다 주운 재료를 마을로 보내는 거예요. 20초 넘게 한 판 할 때마다 1개씩(하루 6개) 와요. <b>🐠 내 물고기</b>는 가끔 마을에 놀러 오고, 쓰다듬으면 수족관 친밀도가 올라요.</p><p><b>🐠 수족관 공방</b>(📦 창고 아래)에서는 남는 재료로 내 수족관 전용 소품을 만들어요. <b>🐢 거북 배달소</b>를 지으면 <b>🐢 마을 택배</b> 거북이 수족관에 가끔 들러, 주민들이 촌장님께 고맙다며 모아 보낸 진주를 전해 줘요(하루 3번).</p>':'')+'<p><b>🏆 마을 기록</b>(☰ 메뉴)은 오래 두고 모으는 도장이에요. 단계를 넘을 때마다 💎 · ⭐ 명성을 받고, 맨 위 ✏로 마을 이름을 지어요.</p><p><b>🌫 탁한 물</b>: 광산 · 가마 · 공장 · 공방 · 항구 둘레의 물이 흐려져요. 집 근처가 탁하면 입주가 줄고 행복이 내려가며, 집 3단계는 40 · 4단계는 25 · 5단계는 15 이하여야 자라요. ⚙ 기반의 <b>🫧 물 거르개</b>를 여러 개 지어 맑게 하고, 🗺 지도에서 확인해요.</p><p><b>💨 숨샘 · 큰 숨탑</b>(⚙ 기반)은 여러 개 지을 수 있어요. 산소 펌프만으로 모자란 곳에 놓아 집을 지을 수 있는 범위를 넓혀요.</p><p><b>🐟 주민</b>을 누르면 이름 · 집 · 일터 · 기분과 한마디를 들을 수 있어요. 마을에 무엇이 모자란지 주민 말로 알 수 있어요.</p><p><b>🚦 교통</b>: 집 · 가게 · 공방 · 일터가 몰린 길은 막혀요. 막힌 길 옆은 생산 · 입주 · 행복이 줄고, 집 · 가게 · 공방 4단계부터는 길이 안 막혀야 자라요. 🛣 도로 탭 <b>⬆ 길 넓히기</b>로 자갈길(Lv.5) · 산호 대로(Lv.12)를 깔거나, ⚙ 기반의 <b>🚌 해류 버스 정류장</b>을 놓아요. 🗺 지도 → 교통으로 확인해요.</p><p><b>🚋 열차 · 탈것</b>: 길 위로 🚌 버스 · 🐢 택배 거북 · 🦀 게 수레가 다니고, 막힌 길에선 💢 하며 느려져요. 산호궁 Lv.9에 해류 열차역을 지으면 🛣 도로 탭 <b>🚋 선로 놓기</b>로 선로를 깔 수 있어요. ⚙ 기반의 <b>🚉 해류 열차 정거장</b>을 선로 옆에 놓고 다른 정거장(또는 열차역)과 이으면 트램이 오가고 둘레 5칸 길이 덜 막혀요.</p><p><b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.</p><p><b>⚠ 마을 사건</b>: 산호궁 Lv.6부터 가끔 상어 · 뜨거운 물 · 감기 · 적조가 생겨요. 🚒 소방서 · 👮 순찰대 · 🏥 병원 범위 안이면 저절로 막고, 못 막으면 건물을 눌러 해결하거나 2시간 기다려요.</p></div>';el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 $('bBuild').onclick=function(){if(TAB)closeBuild();else openBuild()};$('bOrd').onclick=function(){closeBuild();orderPanel()};$('bStore').onclick=function(){closeBuild();storePanel()};$('bMenu').onclick=function(){closeBuild();menuPanel()};
 
-function placeBar(){var el=$('place');if(isD(GH.k))return placeDecoBar(el);var c=D.cost(GH.k,1),why=siteWhy(GH.k,GH.x,GH.y);el.hidden=false;
+function placeBar(){var el=$('place');if(GH.h)return placeHouseBar(el);if(isD(GH.k))return placeDecoBar(el);var c=D.cost(GH.k,1),why=siteWhy(GH.k,GH.x,GH.y);el.hidden=false;
   el.innerHTML='<div class="pt"><b>'+(DESC[GH.k]?DESC[GH.k].ic+' ':'')+B[GH.k].n+'</b> <span class="ds">'+(DESC[GH.k]?DESC[GH.k].s:'')+'</span><br>🫧'+fmt(c.pearl)+' 🪨'+fmt(c.stone)+' · ⏱'+dur(D.time(GH.k,1))+'<br><small>'+(why||'여기에 지을 수 있어요 · 건물을 끌거나 다른 칸을 눌러 옮겨요')+'</small></div>';ghBtns(why,'짓기');
   $('pNo').onclick=function(){var k=GH.k;GH=null;el.hidden=true;$('ghb').hidden=true;openBuild(CATOF[k])};
   $('pOk').onclick=function(){var k=GH.k,w=canStart(k,1);if(siteWhy(k,GH.x,GH.y))return;if(w.length){toast(w[0]);return}pushUndo(B[k].n+' 짓기');setTimeout(endAct,0);var b={id:G.nid++,k:k,x:GH.x,y:GH.y,lv:0,buf:{}};G.b.push(b);occ();startJob(b,1);GH=null;el.hidden=true;$('ghb').hidden=true;FLOATU={id:b.id,until:NOW()+8000};setTab(null);toast('🦀 게 일꾼이 '+B[k].n+'을(를) 짓기 시작했어요')}}

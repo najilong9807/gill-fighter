@@ -1,5 +1,5 @@
 /* ===== 도시: 구역 · 주민 · 살림 (집 → 물고기 → 일 · 장 → 생산 효율 · 행복 → 집이 자람) ===== */
-var ZN={R:{n:'주거',c:'67,196,107',cap:[0,4,10,24,48,90],at:1,ic:'🏠'},C:{n:'상업',c:'61,155,255',jobs:[0,3,8,18,32,55],serve:[0,12,30,70,130,220],at:2,ic:'🛍'},I:{n:'산업',c:'255,176,46',jobs:[0,5,12,24,40,64],at:4,ic:'🔧'}};
+var ZN={R:{n:'집',c:'67,196,107',cap:[0,4,10,24,48,90],at:1,ic:'🏠'},C:{n:'가게',c:'61,155,255',jobs:[0,3,8,18,32,55],serve:[0,12,30,70,130,220],at:2,ic:'🛍'},I:{n:'공방',c:'255,176,46',jobs:[0,5,12,24,40,64],at:4,ic:'🔧'}};
 var ZBT=[0,20,60,150,300,600],ZST=[0,0,40,150,300,600],ZBR=[0,0,0,0,40,100],ZLV=[0,45,58,66,74],ZHL=[0,6,12,16,20];
 function isZ(k){return !!k&&k.charAt(0)==='z'}
 function zMax(){var L=hallLv();return L>=20?5:L>=16?4:L>=12?3:L>=6?2:1}
@@ -89,18 +89,18 @@ function drawWalker(f,t){if(f.st){drawArrive(f,t);return}var q=walkerPos(f),p=sc
 function zoneTint(key,p,w,h){var z=G.zone[key];if(z&&!OCC[key]){diamond(p.x,p.y,w*.92,h*.92);ctx.fillStyle='rgba('+ZN[z].c+',.30)';ctx.fill();ctx.strokeStyle='rgba('+ZN[z].c+',.8)';ctx.lineWidth=1.5;ctx.stroke()}
   if(TOOL&&TOOL.charAt(0)==='z'&&!O2[key]&&!G.road[key]){diamond(p.x,p.y,w,h);ctx.fillStyle='rgba(20,40,70,.18)';ctx.fill()}}
 function paintZone(t,k){if(G.road[k]||G.ter[k]){return}var o=OCC[k];if(TOOL==='z0'){if(!G.zone[k])return;delete G.zone[k];if(o&&isZ(o.k)){G.b.splice(G.b.indexOf(o),1);occ()}return}
-  var z=TOOL.charAt(1);if(o)return;if(hallLv()<ZN[z].at){toast(ZN[z].n+' 구역은 🏛 산호궁 Lv.'+ZN[z].at+'에 열려요');return}if(G.zone[k]===z)return;if(WAL.get('pearl')<5){toast('진주가 모자라요');return}WAL.add('pearl',-5);G.zone[k]=z;var p=sc(t.i,t.j);dust(p.x,p.y,2,.3)}
+  var z=TOOL.charAt(1);if(o)return;if(hallLv()<ZN[z].at){toast(ZN[z].n+'은(는) 🏛 산호궁 Lv.'+ZN[z].at+'에 열려요');return}if(G.zone[k]===z)return;if(WAL.get('pearl')<5){toast('진주가 모자라요');return}WAL.add('pearl',-5);G.zone[k]=z;var p=sc(t.i,t.j);dust(p.x,p.y,2,.3)}
 function zonePanel(b){var el=$('panel'),z=b.k.charAt(1),Z=ZN[z],L=b.lv,lv=landVal(b.x,b.y),h='<button class="x" id="pX">✕</button><h2>'+Z.ic+' '+Z.n+' <small>Lv.'+L+'</small></h2>';
   if(b.job)h+='<div class="box">'+(b.job.L===1?'물고기들이 짓는 중':'Lv.'+b.job.L+'로 올리는 중')+' · '+dur((b.job.end-NOW())/1000)+'</div>';
   if(z==='R')h+='<p class="prod">🐟 사는 물고기 '+(b.occ|0)+' / '+Z.cap[Math.max(1,L)]+'</p>';else if(z==='C')h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 물고기 '+Z.serve[Math.max(1,L)]+'마리가 와서 경단 · 옷을 사요</p>';else h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 일꾼이 차면 마을 생산이 빨라져요</p>';
   h+='<p class="prod">땅값 '+lv+'<span class="meter"><i style="width:'+lv+'%;background:'+(lv>=62?'#35C27A':lv>=45?'#F2B233':'#E5484D')+'"></i></span></p>';
   if(!O2[b.x+','+b.y])h+='<p class="why">산소가 안 닿아요 · 산소 펌프를 가까이 지어요</p>';if(!roadAdj(b.x,b.y))h+='<p class="why">도로가 안 닿아요</p>';
   if(L&&!b.job){var why=zUpWhy(b);h+='<div class="box"><b>'+(L>=5?'최고 단계':'Lv.'+(L+1)+'로 자라려면')+'</b>'+(L<5?'<ul class="req">'+(why.length?why.map(function(s){return '<li class="no">○ '+s+'</li>'}).join(''):'<li class="ok">✓ 곧 저절로 올라가요</li>')+'</ul>':'')+'</div>'}
-  h+='<div class="row"><button id="pDel" class="sub">구역 해제</button></div>';
+  h+='<div class="row"><button id="pDel" class="sub">🧽 헐기</button></div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){var k=b.x+','+b.y;delete G.zone[k];G.b.splice(G.b.indexOf(b),1);occ();SEL=null;closePanel();save()};panelFor=b}
 function lifePanel(){var el=$('panel'),c=CS,h='<button class="x" id="pX">✕</button><h2>🐟 마을 현황</h2>';
   function bar(v){var x=Math.round((v+1)*50);return '<span class="meter"><i style="width:'+x+'%;background:'+(v>.1?'#35C27A':v<-.1?'#E5484D':'#F2B233')+'"></i></span>'}
   h+='<div class="box">인구 <b>'+c.pop+' / '+c.lim+'</b> <small>(한도는 식당 · 학교 · 병원 · 랜드마크가 올려요)</small><br>일꾼 '+c.workers+' / 일자리 '+c.jobs+' → 생산 효율 <b>'+Math.round((.5+.5*c.w)*100)+'%</b><br>상점에서 장보는 인구 '+c.served+' / '+c.pop+'<br>🍡 경단 '+fmt(G.res.dango||0)+' <small>(시간당 −'+c.eat.toFixed(1)+')</small>'+(c.clothOn?' · 👕 옷 '+fmt(G.res.cloth||0)+' <small>(−'+c.wear.toFixed(1)+')</small>':'')+'<br>행복 <b>'+c.happy+'</b>'+(c.food?'':' · <span class="no">배고파요! 경단 공장을 돌려요</span>')+(c.cloth?'':' · <span class="no">옷이 없어요</span>')+'<br>🧾 세금 시간당 <b>'+c.tax.toFixed(1)+'🫧</b> <small>(장보는 인구 × 행복 · 산호궁 말풍선으로 걷어요)</small></div>';
-  h+='<div class="box">수요<br>🏠 주거 '+bar(c.dem.R)+'<br>🛍 상업 '+bar(c.dem.C)+'<br>🔧 산업 '+bar(c.dem.I)+'</div>';
+  h+='<div class="box">수요<br>🏠 집 '+bar(c.dem.R)+'<br>🛍 가게 '+bar(c.dem.C)+'<br>🔧 공방 '+bar(c.dem.I)+'</div>';
   var L=hallLv();if(L<D.HMAX)h+='<p class="role">🏛 산호궁 Lv.'+(L+1)+'에는 인구 '+POPREQ(L+1)+'이(가) 필요해요</p>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){closePanel()};panelFor=null}

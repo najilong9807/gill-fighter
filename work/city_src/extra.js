@@ -7,7 +7,7 @@ var DEC={d_coral:{n:'산호 화단',s:1,c:30,at:1,v:6,r:2},d_kelp:{n:'다시마 
   d_bus:{n:'해류 버스 정류장',s:1,c:600,at:7,v:0,r:0,fac:1,bus:4}};
 function isD(k){return !!DEC[k]}
 function placeDeco(k,x,y){pushUndo(DEC[k].n+' 놓기');setTimeout(endAct,0);if(DEC[k].gift){G.inv=G.inv||{};if(!(G.inv[k]>0)){toast('보관한 것이 없어요');return false}G.inv[k]--}else{if(WAL.get('pearl')<DEC[k].c){toast('진주가 모자라요');return false}WAL.add('pearl',-DEC[k].c)}snd('pop');var b={id:G.nid++,k:k,x:x,y:y,lv:1,buf:{},xpd:1};G.b.push(b);occ();var c=centerOf(b);dust(c.x,c.y,10,1);sparkle(c.x,c.y-30*cam.z,8);addXP(2);cityF=0;save();return true}
-function decoPanel(b){var d=DEC[b.k],el=$('panel'),h='<button class="x" id="pX">✕</button><h2>'+(d.fac?'🫧 ':'🌸 ')+d.n+'</h2><p class="prod">'+(d.fac?(d.rst?'선로로 이어지면 주변 '+d.rst+'칸 길 막힘 −45%':d.bus?'주변 '+d.bus+'칸 길의 오가는 양 −35% · 막힌 길이 풀려요':d.o2r?'주변 '+d.o2r+'칸에 산소를 퍼뜨려요 · 구역이 자라는 범위가 넓어져요':'주변 '+d.cr+'칸 탁한 물 −'+d.cv+' · 지금 이 자리 🌫 '+murkAt(b.x,b.y)):'주변 '+d.r+'칸 땅값 +'+d.v+' · 주택이 더 크게 자라요')+'</p><div class="row"><button class="sub" id="pDel">'+(d.gift?'보관함으로 넣기':'철거 (🫧'+Math.floor(d.c/2)+' 환급)')+'</button></div>';
+function decoPanel(b){var d=DEC[b.k],el=$('panel'),h='<button class="x" id="pX">✕</button><h2>'+(d.fac?'🫧 ':'🌸 ')+d.n+'</h2><p class="prod">'+(d.fac?(d.rst?'선로로 이어지면 주변 '+d.rst+'칸 길 막힘 −45%':d.bus?'주변 '+d.bus+'칸 길의 오가는 양 −35% · 막힌 길이 풀려요':d.o2r?'주변 '+d.o2r+'칸에 산소를 퍼뜨려요 · 집을 지을 수 있는 범위가 넓어져요':'주변 '+d.cr+'칸 탁한 물 −'+d.cv+' · 지금 이 자리 🌫 '+murkAt(b.x,b.y)):'주변 '+d.r+'칸 땅값 +'+d.v+' · 주택이 더 크게 자라요')+'</p><div class="row"><button class="sub" id="pDel">'+(d.gift?'보관함으로 넣기':'철거 (🫧'+Math.floor(d.c/2)+' 환급)')+'</button></div>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){G.b.splice(G.b.indexOf(b),1);occ();if(d.gift){G.inv=G.inv||{};G.inv[b.k]=(G.inv[b.k]|0)+1}else WAL.add('pearl',Math.floor(d.c/2));SEL=null;closePanel();cityF=0;save()};panelFor=null}
 function dArt(k,bp){var p=pal(bp),cx=GX,cy=GY,g='',d=DEC[k];
   if(d.s===1)g+=box(p,cx,cy,40,4,sp(p,'#f2f6fa'),sp(p,'#dde6f0'),sp(p,'#b9c8dc'));else g+=box(p,cx,cy,88,6,sp(p,'#f2f6fa'),sp(p,'#dde6f0'),sp(p,'#b9c8dc'));var y=cy-4;
@@ -57,7 +57,7 @@ var TUT=[
  {t:'산호궁 옆에 <b>산호 광산</b>을 지어 봐요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('quarry')},go:function(){quickBuild('quarry')},rw:50},
  {t:'광산 머리 위 <b>🪨 동그라미(말풍선)</b>를 눌러 산호석을 받아요',h:'노란 화살표가 가리키는 곳을 눌러요',ok:function(){return G.tutC},go:function(){var q=bOf('quarry');if(q)focus(q)},rw:30},
  {t:'<b>🏛 산호궁</b>을 Lv.2로 업그레이드해요',h:'산호궁을 눌러 ⬆ 업그레이드',ok:function(){return hallLv()>=2||!!bOf('hall').job},go:function(){var h=bOf('hall');focus(h);SEL=h;openPanel(h)},rw:80},
- {t:'물고기가 살 <b>🏠 집 지을 땅</b>을 정해요',h:'👆 여기를 누르면 도로 옆 4칸을 바로 정해요 · 집은 물고기가 지어요',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){quickZone()},rw:50},
+ {t:'물고기가 살 <b>🏠 집</b>을 4채 지어요',h:'👆 여기를 누르면 도로 옆에 집 4채를 바로 지어요 · 짓는 건 물고기들이 해요',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){quickZone()},rw:50},
  {t:'<b>산소 펌프</b>를 지어 산소를 넓혀요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('pump')},go:function(){quickBuild('pump')},rw:60},
  {t:'물고기 <b>10마리</b>가 입주하게 해요',h:'주택이 도로 · 산소에 닿아야 물고기가 와요',ok:function(){return CS.pop>=10},go:function(){lifePanel()},rw:80},
  {t:'<b>경단 공장</b>을 지어 주민 밥을 만들어요',h:'👆 여기를 누르면 다시마 농장 → 경단 공장을 바로 지어요',ok:function(){return !!bOf('factory')},go:function(){quickBuild(bOf('farm')?'factory':'farm')},rw:100},
@@ -67,7 +67,7 @@ function nextQ(){var L=hallLv();if(L>=D.HMAX)return null;var h=bOf('hall');if(!h
   if(h.job)return {k:'job'+L,t:'🏛 산호궁 Lv.'+(L+1)+' 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(h)}};
   var n=needList('hall',L+1).filter(function(x){return !x.ok})[0];
   if(!n)return {k:'hall'+(L+1),t:'<b>🏛 산호궁</b>을 Lv.'+(L+1)+'로 올려요',h:'👆 여기를 누르면 산호궁 창을 열어요',go:function(){focus(h);SEL=h;openPanel(h)}};
-  if(n.k==='pop')return {k:'pop'+n.lv,t:'물고기 <b>'+n.lv+'마리</b>가 살게 해요 (지금 '+(CS.pop|0)+')',h:'👆 누르면 집 지을 땅을 더 정해요 · 산소 · 경단이 있어야 와요',go:quickZone};
+  if(n.k==='pop')return {k:'pop'+n.lv,t:'물고기 <b>'+n.lv+'마리</b>가 살게 해요 (지금 '+(CS.pop|0)+')',h:'👆 누르면 집을 더 지어요 · 산소 · 경단이 있어야 이사 와요',go:quickZone};
   var b=bOf(n.k);if(!b)return {k:'b'+n.k,t:'<b>'+NM(n.k)+'</b>을(를) 지어요',h:'👆 여기를 누르면 바로 지어요 · 산호궁 Lv.'+(L+1)+' 조건',go:function(){quickBuild(n.k)}};
   if(b.job)return {k:'w'+n.k+b.job.L,t:'🦀 <b>'+NM(n.k)+'</b> 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(b)}};
   return {k:'u'+n.k+n.lv,t:'<b>'+NM(n.k)+'</b>을(를) Lv.'+n.lv+'로 올려요 (지금 Lv.'+b.lv+')',h:'👆 여기를 누르면 그 건물 창을 열어요',go:function(){focus(b);SEL=b;openPanel(b)}}}

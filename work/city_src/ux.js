@@ -36,14 +36,14 @@ var H_COST=5;
 function houseWhy(k,x,y){var w=siteWhy(k,x,y);if(w)return w;if(!O2[x+','+y])return '산소가 안 닿아요 · 산소 펌프 가까이에 지어요';return ''}
 function hSpot(k,near){var cs=[];if(near)cs.push(near);cs.push(tileAt(VW/2,VH*.45));var h=bOf('hall');if(h)cs.push({i:h.x+1,j:h.y+1});
   for(var q=0;q<cs.length;q++){var c=cs[q];for(var r=0;r<26;r++)for(var dx=-r;dx<=r;dx++)for(var dy=-r;dy<=r;dy++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;var x=c.i+dx,y=c.j+dy;if(!houseWhy(k,x,y))return {x:x,y:y}}}return null}
-function houseAt(z){var k='z'+z+Math.floor(Math.random()*3),p=hSpot(k);if(!p){var c0=tileAt(VW/2,VH*.45);p={x:c0.i,y:c0.j}}GH={k:k,x:p.x,y:p.y,h:z};var sc2=sc(p.x,p.y);if(sc2.x<40||sc2.x>VW-40||sc2.y<140||sc2.y>VH-260){cam.x=(p.x-p.y)*TW/2;cam.y=(p.x+p.y)*TH/2+60/cam.z}$('tray').hidden=true;placeBar()}
+function houseAt(z){var k='z'+z+Math.floor(Math.random()*3),p=hSpot(k);if(!p){toast('도로 옆 · 산소가 닿는 빈 땅이 없어요 · 산소 펌프 · 도로를 먼저 놓아요');return}GH={k:k,x:p.x,y:p.y,h:z};var sc2=sc(p.x,p.y);if(sc2.x<40||sc2.x>VW-40||sc2.y<140||sc2.y>VH-260){cam.x=(p.x-p.y)*TW/2;cam.y=(p.x+p.y)*TH/2+60/cam.z}$('tray').hidden=true;placeBar()}
 function placeHouse(z,x,y,quiet){var k='z'+z+Math.floor(Math.random()*3),key=x+','+y;if(houseWhy(k,x,y))return false;if(hallLv()<ZN[z].at)return false;if(WAL.get('pearl')<H_COST){toast('진주가 모자라요');return false}
-  WAL.add('pearl',-H_COST);G.zone[key]=z;var now=NOW(),nb={id:G.nid++,k:k,x:x,y:y,lv:0,occ:0,buf:{}};G.b.push(nb);occ();nb.job={L:1,start:now,end:now+ZBT[1]*1000};cityF=0;if(!quiet){snd('build');var c=centerOf(nb);dust(c.x,c.y,10,.8)}return true}
+  WAL.add('pearl',-H_COST);G.zone[key]=z;var now=NOW(),nb={id:G.nid++,k:k,x:x,y:y,lv:0,occ:0,buf:{},paid:1};G.b.push(nb);occ();nb.job={L:1,start:now,end:now+ZBT[1]*1000};cityF=0;if(!quiet){snd('build');var c=centerOf(nb);dust(c.x,c.y,10,.8)}return true}
 function placeHouseBar(el){var z=GH.h,Z=ZN[z],why=houseWhy(GH.k,GH.x,GH.y);el.hidden=false;GH.why=why;
   el.innerHTML='<div class="pt"><b>'+Z.ic+' '+Z.n+'</b> · 🫧'+H_COST+'<br><small>'+(why||'여기에 지을 수 있어요 · 끌거나 다른 칸을 눌러 옮겨요 · ✓를 또 누르면 옆에 한 채 더')+'</small></div>';ghBtns(why,'짓기');
   $('pNo').onclick=function(){GH=null;el.hidden=true;$('ghb').hidden=true;openBuild('zone')};
   $('pOk').onclick=function(){if(!GH||GH.why)return;pushUndo(Z.ic+' '+Z.n+' 짓기');var ok=placeHouse(z,GH.x,GH.y);setTimeout(endAct,0);if(!ok)return;save();toast('🦀 게 일꾼들이 '+Z.n+'을(를) 짓기 시작했어요');
-    var nk='z'+z+Math.floor(Math.random()*3),np=hSpot(nk,{i:GH.x,j:GH.y});if(np){GH.k=nk;GH.x=np.x;GH.y=np.y;placeBar()}else{GH=null;el.hidden=true;$('ghb').hidden=true}}}
+    var nk='z'+z+Math.floor(Math.random()*3),np=hSpot(nk,{i:GH.x,j:GH.y});if(np){GH.k=nk;GH.x=np.x;GH.y=np.y;placeBar()}else{GH=null;el.hidden=true;$('ghb').hidden=true;setTimeout(function(){toast('도로 옆 · 산소가 닿는 빈 땅이 없어요 · 산소 펌프 · 도로를 먼저 놓아요')},1900)}}}
 /* 도미 비서 카드: 산호궁 가까운 도로 옆에 집 4채를 바로 지음 */
 function quickZone(){var k0='zR0',got=0,near=null;if(WAL.get('pearl')<H_COST){toast('진주가 모자라요');return}endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;pushUndo('🏠 집 짓기');
   var h=bOf('hall');near=h?{i:h.x+1,j:h.y+1}:null;for(var n=0;n<4;n++){var p=hSpot(k0,near);if(!p)break;if(!placeHouse('R',p.x,p.y,true))break;got++;near={i:p.x,j:p.y}}

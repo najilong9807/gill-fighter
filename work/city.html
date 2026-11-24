@@ -123,6 +123,7 @@ html.intab #hP::before,html.intab #hG::before{content:"";display:inline-block;wi
 body.tutOn #goal,body.tutOn #dem{display:none!important}
 body.tutOn #tut{top:calc(var(--sat,env(safe-area-inset-top)) + 92px)}
 #place:not([hidden])~#bUndo,#panel:not([hidden])~#bUndo,#panel:not([hidden])~#bUndo2,#tray:not([hidden])~#bUndo2{display:none!important}
+#tray .cards .card[data-hk]{flex:1 1 0;min-width:0}
 </style></head><body>
 <canvas id="cv"></canvas>
 <div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1 r2"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>
@@ -144,8 +145,8 @@ try{var m=/[?&]lang=([a-z]{2,3})/.exec(location.search||'');if(m)L=m[1];
     else{var n=(((navigator.languages&&navigator.languages[0])||navigator.language||'en')+'').toLowerCase();L=n.indexOf('ko')===0?'ko':n.indexOf('ja')===0?'ja':n.indexOf('es')===0?'es':n.indexOf('vi')===0?'vi':'en'}}}catch(e){}
 window.CITY_LANG=L;try{document.documentElement.lang=L}catch(e){}
 /* 한국어: 이름 뒤 '을(를) · 이(가)'를 받침 보고 바로 고쳐 보여 줌(원문은 다른 언어 번역 열쇠라 그대로 둠) */
-if(L==='ko'){var JX=/([\s\S])(을\(를\)|이\(가\))/g,DB='0136780';
-  var jo=function(s){if(typeof s!=='string'||s.indexOf('(')<0||!JX.test(s))return s;JX.lastIndex=0;return s.replace(JX,function(_,c,p){var h=c.charCodeAt(0),b=null;if(h>=0xAC00&&h<=0xD7A3)b=(h-0xAC00)%28!==0;else if(/\d/.test(c))b=DB.indexOf(c)>=0;if(b===null)return _;return c+(p.charAt(0)==='을'?(b?'을':'를'):(b?'이':'가'))})};
+if(L==='ko'){var JX=/([\s\S])(을\(를\)|이\(가\)|은\(는\))/g,DB='0136780';
+  var jo=function(s){if(typeof s!=='string'||s.indexOf('(')<0||!JX.test(s))return s;JX.lastIndex=0;return s.replace(JX,function(_,c,p){var h=c.charCodeAt(0),b=null;if(h>=0xAC00&&h<=0xD7A3)b=(h-0xAC00)%28!==0;else if(/\d/.test(c))b=DB.indexOf(c)>=0;if(b===null)return _;var f0=p.charAt(0);return c+(f0==='을'?(b?'을':'를'):f0==='은'?(b?'은':'는'):(b?'이':'가'))})};
   window.CITY_TR=jo;try{var k1=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');Object.defineProperty(Element.prototype,'innerHTML',{get:k1.get,set:function(v){k1.set.call(this,jo(v))},configurable:true})}catch(e){}
   try{var k2=Object.getOwnPropertyDescriptor(Node.prototype,'textContent');Object.defineProperty(Node.prototype,'textContent',{get:k2.get,set:function(v){k2.set.call(this,jo(v))},configurable:true})}catch(e){}
   return}
@@ -1159,7 +1160,7 @@ function zonePanel(b){var el=$('panel'),z=b.k.charAt(1),Z=ZN[z],L=b.lv,lv=landVa
   if(!O2[b.x+','+b.y])h+='<p class="why">산소가 안 닿아요 · 산소 펌프를 가까이 지어요</p>';if(!roadAdj(b.x,b.y))h+='<p class="why">도로가 안 닿아요</p>';
   if(L&&!b.job){var why=zUpWhy(b);h+='<div class="box"><b>'+(L>=5?'최고 단계':'Lv.'+(L+1)+'로 자라려면')+'</b>'+(L<5?'<ul class="req">'+(why.length?why.map(function(s){return '<li class="no">○ '+s+'</li>'}).join(''):'<li class="ok">✓ 곧 저절로 올라가요</li>')+'</ul>':'')+'</div>'}
   h+='<div class="row"><button id="pDel" class="sub">🧽 헐기</button></div>';
-  el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){var k=b.x+','+b.y;delete G.zone[k];G.b.splice(G.b.indexOf(b),1);occ();SEL=null;closePanel();save()};panelFor=b}
+  el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){SEL=null;closePanel()};$('pDel').onclick=function(){var k=b.x+','+b.y;if(b.paid&&b.job&&b.job.L===1&&!b.lv)WAL.add('pearl',H_COST);delete G.zone[k];G.b.splice(G.b.indexOf(b),1);occ();SEL=null;closePanel();save()};panelFor=b}
 function lifePanel(){var el=$('panel'),c=CS,h='<button class="x" id="pX">✕</button><h2>🐟 마을 현황</h2>';
   function bar(v){var x=Math.round((v+1)*50);return '<span class="meter"><i style="width:'+x+'%;background:'+(v>.1?'#35C27A':v<-.1?'#E5484D':'#F2B233')+'"></i></span>'}
   h+='<div class="box">인구 <b>'+c.pop+' / '+c.lim+'</b> <small>(한도는 식당 · 학교 · 병원 · 랜드마크가 올려요)</small><br>일꾼 '+c.workers+' / 일자리 '+c.jobs+' → 생산 효율 <b>'+Math.round((.5+.5*c.w)*100)+'%</b><br>상점에서 장보는 인구 '+c.served+' / '+c.pop+'<br>🍡 경단 '+fmt(G.res.dango||0)+' <small>(시간당 −'+c.eat.toFixed(1)+')</small>'+(c.clothOn?' · 👕 옷 '+fmt(G.res.cloth||0)+' <small>(−'+c.wear.toFixed(1)+')</small>':'')+'<br>행복 <b>'+c.happy+'</b>'+(c.food?'':' · <span class="no">배고파요! 경단 공장을 돌려요</span>')+(c.cloth?'':' · <span class="no">옷이 없어요</span>')+'<br>🧾 세금 시간당 <b>'+c.tax.toFixed(1)+'🫧</b> <small>(장보는 인구 × 행복 · 산호궁 말풍선으로 걷어요)</small></div>';
@@ -2137,14 +2138,14 @@ var H_COST=5;
 function houseWhy(k,x,y){var w=siteWhy(k,x,y);if(w)return w;if(!O2[x+','+y])return '산소가 안 닿아요 · 산소 펌프 가까이에 지어요';return ''}
 function hSpot(k,near){var cs=[];if(near)cs.push(near);cs.push(tileAt(VW/2,VH*.45));var h=bOf('hall');if(h)cs.push({i:h.x+1,j:h.y+1});
   for(var q=0;q<cs.length;q++){var c=cs[q];for(var r=0;r<26;r++)for(var dx=-r;dx<=r;dx++)for(var dy=-r;dy<=r;dy++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;var x=c.i+dx,y=c.j+dy;if(!houseWhy(k,x,y))return {x:x,y:y}}}return null}
-function houseAt(z){var k='z'+z+Math.floor(Math.random()*3),p=hSpot(k);if(!p){var c0=tileAt(VW/2,VH*.45);p={x:c0.i,y:c0.j}}GH={k:k,x:p.x,y:p.y,h:z};var sc2=sc(p.x,p.y);if(sc2.x<40||sc2.x>VW-40||sc2.y<140||sc2.y>VH-260){cam.x=(p.x-p.y)*TW/2;cam.y=(p.x+p.y)*TH/2+60/cam.z}$('tray').hidden=true;placeBar()}
+function houseAt(z){var k='z'+z+Math.floor(Math.random()*3),p=hSpot(k);if(!p){toast('도로 옆 · 산소가 닿는 빈 땅이 없어요 · 산소 펌프 · 도로를 먼저 놓아요');return}GH={k:k,x:p.x,y:p.y,h:z};var sc2=sc(p.x,p.y);if(sc2.x<40||sc2.x>VW-40||sc2.y<140||sc2.y>VH-260){cam.x=(p.x-p.y)*TW/2;cam.y=(p.x+p.y)*TH/2+60/cam.z}$('tray').hidden=true;placeBar()}
 function placeHouse(z,x,y,quiet){var k='z'+z+Math.floor(Math.random()*3),key=x+','+y;if(houseWhy(k,x,y))return false;if(hallLv()<ZN[z].at)return false;if(WAL.get('pearl')<H_COST){toast('진주가 모자라요');return false}
-  WAL.add('pearl',-H_COST);G.zone[key]=z;var now=NOW(),nb={id:G.nid++,k:k,x:x,y:y,lv:0,occ:0,buf:{}};G.b.push(nb);occ();nb.job={L:1,start:now,end:now+ZBT[1]*1000};cityF=0;if(!quiet){snd('build');var c=centerOf(nb);dust(c.x,c.y,10,.8)}return true}
+  WAL.add('pearl',-H_COST);G.zone[key]=z;var now=NOW(),nb={id:G.nid++,k:k,x:x,y:y,lv:0,occ:0,buf:{},paid:1};G.b.push(nb);occ();nb.job={L:1,start:now,end:now+ZBT[1]*1000};cityF=0;if(!quiet){snd('build');var c=centerOf(nb);dust(c.x,c.y,10,.8)}return true}
 function placeHouseBar(el){var z=GH.h,Z=ZN[z],why=houseWhy(GH.k,GH.x,GH.y);el.hidden=false;GH.why=why;
   el.innerHTML='<div class="pt"><b>'+Z.ic+' '+Z.n+'</b> · 🫧'+H_COST+'<br><small>'+(why||'여기에 지을 수 있어요 · 끌거나 다른 칸을 눌러 옮겨요 · ✓를 또 누르면 옆에 한 채 더')+'</small></div>';ghBtns(why,'짓기');
   $('pNo').onclick=function(){GH=null;el.hidden=true;$('ghb').hidden=true;openBuild('zone')};
   $('pOk').onclick=function(){if(!GH||GH.why)return;pushUndo(Z.ic+' '+Z.n+' 짓기');var ok=placeHouse(z,GH.x,GH.y);setTimeout(endAct,0);if(!ok)return;save();toast('🦀 게 일꾼들이 '+Z.n+'을(를) 짓기 시작했어요');
-    var nk='z'+z+Math.floor(Math.random()*3),np=hSpot(nk,{i:GH.x,j:GH.y});if(np){GH.k=nk;GH.x=np.x;GH.y=np.y;placeBar()}else{GH=null;el.hidden=true;$('ghb').hidden=true}}}
+    var nk='z'+z+Math.floor(Math.random()*3),np=hSpot(nk,{i:GH.x,j:GH.y});if(np){GH.k=nk;GH.x=np.x;GH.y=np.y;placeBar()}else{GH=null;el.hidden=true;$('ghb').hidden=true;setTimeout(function(){toast('도로 옆 · 산소가 닿는 빈 땅이 없어요 · 산소 펌프 · 도로를 먼저 놓아요')},1900)}}}
 /* 도미 비서 카드: 산호궁 가까운 도로 옆에 집 4채를 바로 지음 */
 function quickZone(){var k0='zR0',got=0,near=null;if(WAL.get('pearl')<H_COST){toast('진주가 모자라요');return}endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;pushUndo('🏠 집 짓기');
   var h=bOf('hall');near=h?{i:h.x+1,j:h.y+1}:null;for(var n=0;n<4;n++){var p=hSpot(k0,near);if(!p)break;if(!placeHouse('R',p.x,p.y,true))break;got++;near={i:p.x,j:p.y}}

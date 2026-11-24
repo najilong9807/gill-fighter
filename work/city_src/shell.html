@@ -122,7 +122,7 @@ html.intab #hP::before,html.intab #hG::before{content:"";display:inline-block;wi
 /* 1.1.32 마을 점검: 겹침 정리 — 도미 비서가 떠 있으면 '다음 단계' 줄 · 수요 막대를 숨기고 비서 카드를 그 자리로, 짓기 자리 창이 뜨면 왼쪽 아래 되돌리기는 숨김(창 안 ↶ 사용) */
 body.tutOn #goal,body.tutOn #dem{display:none!important}
 body.tutOn #tut{top:calc(var(--sat,env(safe-area-inset-top)) + 92px)}
-#place:not([hidden])~#bUndo,#panel:not([hidden])~#bUndo{display:none!important}
+#place:not([hidden])~#bUndo,#panel:not([hidden])~#bUndo,#panel:not([hidden])~#bUndo2,#tray:not([hidden])~#bUndo2{display:none!important}
 </style></head><body>
 <canvas id="cv"></canvas>
 <div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1 r2"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>

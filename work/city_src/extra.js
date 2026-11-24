@@ -35,7 +35,7 @@ function trainNew(){var L=hallLv(),pool=goodsPool().filter(function(g){return g!
 function trainTick(now){if(!lvOf('train'))return;if(!G.tr)G.tr=trainNew();if(G.tr.st==='away'&&now>=G.tr.back)G.tr.st='back'}
 function trainPanel(b){var el=$('panel'),T=G.tr,tl=lvOf('train'),h='<button class="x" id="pX">✕</button><h2>🚋 해류 열차역 <small>Lv.'+tl+'</small></h2>';
   if(!T){h+='<div class="box">열차역을 다 지으면 열차가 들어와요</div>'}
-  else if(T.st==='away')h+='<div class="box">🚋 먼 바다로 떠났어요 · 돌아오기까지 <b>'+dur((T.back-NOW())/1000)+'</b></div><div class="row"><button id="tRush">💎 '+D.rushGems((T.back-NOW())/1000)+' 바로 돌아오기</button></div>';
+  else if(T.st==='away')h+='<div class="box">🚋 산 너머 광산 마을로 물건을 바꾸러 갔어요 · 돌아오기까지 <b>'+dur((T.back-NOW())/1000)+'</b></div><div class="row"><button id="tRush">💎 '+D.rushGems((T.back-NOW())/1000)+' 바로 돌아오기</button></div>';
   else if(T.st==='back')h+='<div class="box">🚋 열차가 돌아왔어요! 🧱 '+T.rw.brick+(T.rw.nail?' · 📌 '+T.rw.nail:'')+' · ⭐'+T.rw.xp+'</div><div class="row"><button id="tGet">받기</button></div>';
   else{h+='<div class="cars">'+T.cars.map(function(c,i){var k=Object.keys(c.it)[0],ok=(G.res[k]||0)>=c.it[k];return '<div class="car'+(c.full?' full':'')+'"><b>'+ICON[k]+' '+c.it[k]+'</b>'+(c.full?'<small>✓ 실었어요</small>':'<button data-c="'+i+'"'+(ok?'':' disabled')+'>싣기</button>')+'</div>'}).join('')+'</div>';
     h+='<p class="role">다 실으면 떠나요 · 돌아오면 <span class="nb">🧱 '+T.rw.brick+'</span> '+(T.rw.nail?'<span class="nb">📌 '+T.rw.nail+'</span> ':'')+'<span class="nb">⭐'+T.rw.xp+'</span><br><small>다녀오는 데 '+dur(trainTrip())+'</small></p>'}

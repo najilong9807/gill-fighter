@@ -40,7 +40,7 @@ function dyTake(i){var S=dyState();if(!S)return;var rw=dyRw();
 function dyHtml(){var S=dyState();if(!S)return '';var rw=dyRw(),now=NOW(),left=(midDayStart(now)+864e5-now)/1000,h='<div class="dyh"><b>📅 오늘의 마을 일</b><small>'+dur(left)+' 뒤 바뀌어요 · 하나에 🫧'+fmt(rw)+' · 셋 다 하면 💎2 + ⚡30분</small></div><div class="wq dy">';
   S.q.forEach(function(q,i){var d=wqDef(q.k),v=Math.min(q.goal,q.v|0),ok=v>=q.goal;h+='<div class="wqr'+(q.got?' got':ok?' can':'')+'"><span class="ic">'+d.ic+'</span><div class="tx"><b>'+d.t(q.goal)+'</b><i class="bar"><u style="width:'+Math.round(v/q.goal*100)+'%"></u></i><small>'+fmt(v)+' / '+fmt(q.goal)+'</small></div>'+(q.got?'<em>✓ 받음</em>':'<button data-dy="'+i+'"'+(ok?'':' disabled')+'>받기</button>')+'</div>'});
   var allOk=S.q.every(function(q){return q.got});h+='<div class="wqr all'+(S.all?' got':allOk?' can':'')+'"><span class="ic">🎁</span><div class="tx"><b>오늘의 일 3개 모두 끝내기</b><small>💎2 · ⚡30분</small></div>'+(S.all?'<em>✓ 받음</em>':'<button data-dy="all"'+(allOk?'':' disabled')+'>받기</button>')+'</div></div>';
-  if((G.boost|0)>0)h+='<p class="role">⚡ 공사 단축 <b>'+(G.boost|0)+'분</b> 모아 둠 · 짓는 중인 건물 창에서 써요</p>';else if(EMB)h+='<p class="role">⚡ 아가미 파이터 한 판마다 공사 단축 15분 (재료 상자를 받을 때)</p>';
+  if((G.boost|0)>0)h+='<p class="role">⚡ 공사 단축 <b>'+(G.boost|0)+'분</b> 모아 둠 · 짓는 중인 건물 창에서 써요</p>';else if(EMB)h+='<p class="role">⚡ 아가미 파이터 한 판마다 공사 단축 15분 · 재료 상자에 든 연장 덕에 게 일꾼 일이 빨라져요</p>';
   return h}
 var _wqPanelMid=wqPanel;wqPanel=function(){var r;if(hallLv()>=5)r=_wqPanelMid.apply(this,arguments);else{var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📅 오늘의 마을 일</h2>';el.hidden=false;panelFor=null;$('pX').onclick=closePanel}
   try{var el2=$('panel'),h2=el2.querySelector('h2'),x=dyHtml();if(x&&h2){var box=document.createElement('div');box.className='dybox';box.innerHTML=(window.CITY_TR||String)(x);h2.parentNode.insertBefore(box,h2.nextSibling);
@@ -69,7 +69,7 @@ function monBuild(m){var s=monLv(m.k);if(s>=MON_N)return;if(hallLv()<monNeed(m,s
   try{var h=bOf('hall');if(h){var cc=centerOf(h);sparkle(cc.x,cc.y-60*cam.z,30)}}catch(e){}toast(m.ic+' '+m.n+' '+(s+1)+'단계 · 💎+'+monGem(s));plazaPanel()}
 function plazaPanel(){var el=$('panel'),L=hallLv(),now=NOW(),h='<button class="x" id="pX">✕</button><h2>🎪 광장</h2>';
   /* 축제의 날 */
-  var c=festCost(),dk=midDayKey(now);h+='<div class="box mid"><b>🎉 축제의 날</b><small>하루 한 번 · 1시간 동안 세금 2배 · 생산 1.5배 · 축제 방울 +15</small>';
+  var c=festCost(),dk=midDayKey(now);h+='<p class="role">축제를 열면 주민들이 광장에 모여 장을 보고, 신이 나서 일도 더 열심히 해요</p><div class="box mid"><b>🎉 축제의 날</b><small>하루 한 번 · 1시간 동안 세금 2배 · 생산 1.5배 · 축제 방울 +15</small>';
   if(L<6)h+='<p class="why">🏛 산호궁 Lv.6에 열려요</p>';
   else if(festOn())h+='<p class="prod">🎉 축제 중 · 남은 시간 <b>'+dur((G.fest.end-now)/1000)+'</b></p>';
   else if(G.fest&&G.fest.day===dk)h+='<p class="why">오늘은 이미 열었어요 · 내일 또 열 수 있어요</p>';

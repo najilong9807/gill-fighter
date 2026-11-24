@@ -43,8 +43,8 @@ function quickZone(){var h=bOf('hall');if(!h){startTool('zR');return}var c={i:h.
 var PRO=[
  {img:'d_shipw',t:'깊고 푸른 바닷속',p:'아주 오래전, 이곳엔 물고기들이 모여 사는 산호 마을이 있었어요. 큰 해류가 휩쓸고 간 뒤로 텅 비어 버렸지요.'},
  {img:'hall',t:'남은 건 작은 산호궁 하나',p:'지금은 분홍 산호궁 하나만 남았어요. 바다 물고기들이 다시 모여 살 곳을 찾아 헤매고 있어요.'},
- {img:'zR0',t:'당신은 새 촌장!',p:'진주로 건물을 짓고, 도로 옆에 주거 구역을 지정하면 물고기들이 입주해요. 마을 입구를 지난 물고기는 다리가 쑥 자라 주민이 돼요.'},
- {img:'quarry',t:'모으고, 만들고, 키우고',p:'건물 머리 위에 뜨는 동그란 말풍선(🪨 🌿 🫧)을 눌러 재료를 받아요. 재료로 건물을 올리고, 주문을 배달해 진주를 벌어요.'},
+ {img:'zR0',t:'당신은 새 촌장!',p:'진주(바닷속 돈)로 게 일꾼에게 공사를 맡기고, 도로 옆에 집 지을 땅을 정해 주면 떠돌던 물고기들이 이사 와요. 마을 입구를 지난 물고기는 다리가 쑥 자라 주민이 돼요.'},
+ {img:'quarry',t:'모으고, 만들고, 키우고',p:'주민들은 광산 · 농장 · 공장에서 일해 재료를 만들어요. 건물 머리 위 동그란 말풍선(🪨 🌿 🫧)을 눌러 창고로 모으고, 그 재료로 건물을 올리거나 이웃 바다 마을에 팔아 진주를 벌어요.'},
  {img:'pal25',t:'목표는 용궁!',p:'산호궁을 올릴수록 새 건물 · 땅 · 고층 건물이 열려요. 25단계가 되면 반짝이는 용궁이 돼요.'},
  {img:'dom',t:'제가 도와드릴게요',p:'저는 도미 비서예요. 화면 위 노란 말풍선과 깜빡이는 화살표를 따라오시면 돼요. 그럼 시작해 볼까요?'}];
 function proImg(k){if(k==='dom')return '<div class="proav">🐠</div>';if(k==='pal25'){var r=palaceL(25),sv='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="'+(GX-170)+' '+(r.top-10)+' 340 '+(GY+90-r.top+10)+'">'+DEFS+r.svg+'</svg>');return CITY_ART.hall?'<img src="'+caSrc('hall',25)+'" data-fb="'+sv+'" onerror="if(this.dataset.fb){this.src=this.dataset.fb;this.dataset.fb=\'\'}">':'<img src="'+sv+'">'}return '<img src="'+thumb(k)+'">'}

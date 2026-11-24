@@ -24,11 +24,12 @@ function plainFish(x,y,f,al,t){var z=cam.z,s=7,wv=Math.sin(t*.009+f.ph)*.35;ctx.
   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s*.62,-s*.18,s*.32,0,7);ctx.fill();ctx.stroke();ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(s*.72,-s*.16,s*.15,0,7);ctx.fill();ctx.restore()}
 function drawArrive(f,t){var p=sc(f.fx,f.fy),z=cam.z;if(f.st==='swim'){plainFish(p.x,p.y-22*z,f,1,t);return}
   var g=f.g,S=1.55;/* 0~.3 두리번 · .3~.45 펑 연기 · .45~1 팔다리가 쑥쑥 */
+  /* 1.1.32: 두리번 끝나면 마을 안쪽(집 쪽)을 보고 변신 — 전엔 두리번 마지막 방향(바깥일 때도)을 그대로 봄 */var inw=f.inw;if(!inw){var hb=f.home&&f.home.x!=null?sc(f.home.x+.5,f.home.y+.5):null,gp=sc(G.gate.x,G.gate.y);inw=f.inw=hb&&Math.abs(hb.x-gp.x)>4?(hb.x>gp.x?1:-1):1}
   ctx.save();ctx.globalCompositeOperation='lighter';ctx.fillStyle='rgba(255,250,200,'+(.25*Math.sin(Math.min(1,g)*Math.PI))+')';ctx.beginPath();ctx.ellipse(p.x,p.y-20*z,46*z,30*z,0,0,7);ctx.fill();ctx.restore();
-  if(g<.3){var hop=Math.abs(Math.sin(g*30))*6;f.dir=Math.sin(g*20)>0?1:-1;ctx.save();ctx.translate(p.x,p.y);ctx.scale(S,S);ctx.translate(-p.x,-p.y);plainFish(p.x,p.y-26*z-hop*z,f,1,t);ctx.restore();
+  if(g<.3){var hop=Math.abs(Math.sin(g*30))*6;f.dir=g>.2?inw:Math.sin(g*20)>0?1:-1;ctx.save();ctx.translate(p.x,p.y);ctx.scale(S,S);ctx.translate(-p.x,-p.y);plainFish(p.x,p.y-26*z-hop*z,f,1,t);ctx.restore();
     ctx.save();ctx.font='400 '+Math.round(22*z+6)+'px "Black Han Sans",sans-serif';ctx.textAlign='center';ctx.fillStyle='#ffe27a';ctx.strokeStyle=OUT;ctx.lineWidth=4;var yy=p.y-70*z-Math.min(1,g*8)*8;ctx.strokeText('?!',p.x+14*z,yy);ctx.fillText('?!',p.x+14*z,yy);ctx.restore();return}
   if(g<.45){var k=(g-.3)/.15;ctx.save();ctx.fillStyle='rgba(255,255,255,'+(.95-.4*k)+')';ctx.strokeStyle='rgba(34,48,77,.35)';ctx.lineWidth=2;[[0,-28,26],[-18,-18,18],[18,-18,18],[-10,-44,16],[12,-42,16]].forEach(function(c){ctx.beginPath();ctx.arc(p.x+c[0]*z*(1+k*.3),p.y+c[1]*z,c[2]*z*(.7+k*.6),0,7);ctx.fill();ctx.stroke()});ctx.restore();return}
-  var r=(g-.45)/.55,gl=Math.min(1,r*2.2),bounce=1+Math.sin(Math.min(1,r*1.6)*Math.PI)*.25,sc2=S*(1-r*.35)*bounce;
+  f.dir=inw;var r=(g-.45)/.55,gl=Math.min(1,r*2.2),bounce=1+Math.sin(Math.min(1,r*1.6)*Math.PI)*.25,sc2=S*(1-r*.35)*bounce;
   ctx.save();ctx.translate(p.x,p.y);ctx.scale(z*sc2*(f.dir||1),z*sc2);ctx.strokeStyle=OUT;ctx.lineCap='round';ctx.lineJoin='round';
   ctx.fillStyle='rgba(15,60,80,.18)';ctx.beginPath();ctx.ellipse(0,1,9,3.5,0,0,7);ctx.fill();
   var L=10*gl,kick=Math.sin(t*.02)*2*(1-gl);

@@ -57,12 +57,25 @@ var TUT=[
  {t:'산호궁 옆에 <b>산호 광산</b>을 지어 봐요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('quarry')},go:function(){quickBuild('quarry')},rw:50},
  {t:'광산 머리 위 <b>🪨 동그라미(말풍선)</b>를 눌러 산호석을 받아요',h:'노란 화살표가 가리키는 곳을 눌러요',ok:function(){return G.tutC},go:function(){var q=bOf('quarry');if(q)focus(q)},rw:30},
  {t:'<b>🏛 산호궁</b>을 Lv.2로 업그레이드해요',h:'산호궁을 눌러 ⬆ 업그레이드',ok:function(){return hallLv()>=2||!!bOf('hall').job},go:function(){var h=bOf('hall');focus(h);SEL=h;openPanel(h)},rw:80},
- {t:'도로 옆에 <b>🏠 주거 구역</b>을 4칸 지정해요',h:'🔨 짓기 → 🏘 구역 → 주거, 끌어서 지정',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){startTool('zR')},rw:50},
+ {t:'물고기가 살 <b>🏠 집 지을 땅</b>을 정해요',h:'👆 여기를 누르면 도로 옆 4칸을 바로 정해요 · 집은 물고기가 지어요',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){quickZone()},rw:50},
  {t:'<b>산소 펌프</b>를 지어 산소를 넓혀요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('pump')},go:function(){quickBuild('pump')},rw:60},
  {t:'물고기 <b>10마리</b>가 입주하게 해요',h:'주택이 도로 · 산소에 닿아야 물고기가 와요',ok:function(){return CS.pop>=10},go:function(){lifePanel()},rw:80},
  {t:'<b>경단 공장</b>을 지어 주민 밥을 만들어요',h:'👆 여기를 누르면 다시마 농장 → 경단 공장을 바로 지어요',ok:function(){return !!bOf('factory')},go:function(){quickBuild(bOf('farm')?'factory':'farm')},rw:100},
  {t:'<b>거북 배달소</b>에서 주문을 하나 배달해요',h:'👆 여기를 누르면 배달소를 바로 짓고, 다 지으면 주문판을 열어요',ok:function(){return (G.ordSent|0)>0},go:function(){if(bOf('turtle'))orderPanel();else quickBuild('turtle')},rw:150}];
-function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length){el.hidden=true;document.body.classList.remove('tutOn');return}var s=TUT[i];
+/* 1.1.32: 첫 안내 8단계가 끝나도 도미 비서가 '다음 할 일' 하나씩 이어서 줌 — 산호궁 다음 레벨 조건 중 아직 안 된 것 하나 → 누르면 바로 짓기 · 건물 창 · 땅 정하기. 하나 끝날 때마다 진주 조금 */
+function nextQ(){var L=hallLv();if(L>=D.HMAX)return null;var h=bOf('hall');if(!h)return null;
+  if(h.job)return {k:'job'+L,t:'🏛 산호궁 Lv.'+(L+1)+' 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(h)}};
+  var n=needList('hall',L+1).filter(function(x){return !x.ok})[0];
+  if(!n)return {k:'hall'+(L+1),t:'<b>🏛 산호궁</b>을 Lv.'+(L+1)+'로 올려요',h:'👆 여기를 누르면 산호궁 창을 열어요',go:function(){focus(h);SEL=h;openPanel(h)}};
+  if(n.k==='pop')return {k:'pop'+n.lv,t:'물고기 <b>'+n.lv+'마리</b>가 살게 해요 (지금 '+(CS.pop|0)+')',h:'👆 누르면 집 지을 땅을 더 정해요 · 산소 · 경단이 있어야 와요',go:quickZone};
+  var b=bOf(n.k);if(!b)return {k:'b'+n.k,t:'<b>'+NM(n.k)+'</b>을(를) 지어요',h:'👆 여기를 누르면 바로 지어요 · 산호궁 Lv.'+(L+1)+' 조건',go:function(){quickBuild(n.k)}};
+  if(b.job)return {k:'w'+n.k+b.job.L,t:'🦀 <b>'+NM(n.k)+'</b> 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(b)}};
+  return {k:'u'+n.k+n.lv,t:'<b>'+NM(n.k)+'</b>을(를) Lv.'+n.lv+'로 올려요 (지금 Lv.'+b.lv+')',h:'👆 여기를 누르면 그 건물 창을 열어요',go:function(){focus(b);SEL=b;openPanel(b)}}}
+var QNOW=null;function qPaint(el){var q=null;try{q=nextQ()}catch(e){}QNOW=q;if(!q){el.hidden=true;document.body.classList.remove('tutOn');return}
+  if(G.q2&&G.q2!==q.k&&!/^(job|w)/.test(G.q2)){var rw=20+hallLv()*10;WAL.add('pearl',rw);toast('🐠 잘했어요! 🫧'+rw);addXP(3)}if(G.q2!==q.k){G.q2=q.k;save()}
+  $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;document.body.classList.remove('tutOn');return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;document.body.classList.toggle('tutOn',true);
+  var hh='<span class="av">🐠</span><div><small>도미 비서 · 다음 할 일</small><p>'+q.t+'</p><i>'+q.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh){el.dataset.h=hh;el.innerHTML=hh}}
+function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length){qPaint(el);return}var s=TUT[i];
   if(s.ok()){G.tut=i+1;WAL.add('pearl',s.rw);toast('🐠 잘했어요! 🫧'+s.rw);addXP(5);save();return tutPaint()}
   $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;document.body.classList.remove('tutOn');return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;document.body.classList.toggle('tutOn',!G.tutMin&&i<TUT.length);var hh2='<span class="av">🐠</span><div><small>도미 비서 · '+(i+1)+'/'+TUT.length+'</small><p>'+s.t+'</p><i>'+s.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh2){el.dataset.h=hh2;el.innerHTML=hh2}}
-$('tut').onclick=function(ev){if(ev.target.id==='tutX'){G.tutMin=true;save();tutPaint();return}var s=TUT[G.tut|0];if(s)s.go()};$('bTut').onclick=function(){G.tutMin=false;save();tutPaint()};
+$('tut').onclick=function(ev){if(ev.target.id==='tutX'){G.tutMin=true;save();tutPaint();return}var s=TUT[G.tut|0];if(s)s.go();else if(QNOW)QNOW.go()};$('bTut').onclick=function(){G.tutMin=false;save();tutPaint()};

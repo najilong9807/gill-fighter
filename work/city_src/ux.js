@@ -31,6 +31,14 @@ function quickBuild(k){var w=canStart(k,1),p=w.length?null:spotNear(k);if(w.leng
   endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;$('ghb').hidden=true;
   pushUndo(B[k].n+' 짓기');setTimeout(endAct,0);var b={id:G.nid++,k:k,x:p.x,y:p.y,lv:0,buf:{}};G.b.push(b);occ();startJob(b,1);FLOATU={id:b.id,until:NOW()+8000};setTab(null);save();snd('done');focus(b);var c=centerOf(b);dust(c.x,c.y,12,1);toast('🦀 게 일꾼이 '+B[k].n+'을(를) 짓기 시작했어요')}
 
+/* 1.1.32: 주거 구역도 도미 비서 카드 한 번이면 산호궁 가까운 도로 옆 4칸을 자동으로 지정 */
+function quickZone(){var h=bOf('hall');if(!h){startTool('zR');return}var c={i:h.x+1,j:h.y+1},got=[],seen={};endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;
+  pushUndo('🏠 주거 구역');TOOL='zR';
+  for(var r=1;r<22&&got.length<4;r++)for(var dx=-r;dx<=r&&got.length<4;dx++)for(var dy=-r;dy<=r&&got.length<4;dy++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;var i=c.i+dx,j=c.j+dy,k=i+','+j;
+    if(!inb(i,j)||!own(i,j)||OCC[k]||G.road[k]||G.ter[k]||G.zone[k]||(G.rail&&G.rail[k]))continue;if(!(isRoad(i+1,j)||isRoad(i-1,j)||isRoad(i,j+1)||isRoad(i,j-1)))continue;paintZone({i:i,j:j},k);if(G.zone[k]==='R')got.push([i,j])}
+  TOOL=null;setTimeout(endAct,0);cityF=0;save();if(!got.length){toast('도로 옆 빈 땅이 없어요 · 직접 지정해 봐요');startTool('zR');return}
+  snd('done');var m=got[Math.floor(got.length/2)],p=sc(m[0],m[1]);cam.x+=(p.x-VW/2)/cam.z;cam.y+=(p.y-VH*.55)/cam.z;got.forEach(function(q){var pp=sc(q[0],q[1]);dust(pp.x,pp.y,6,.6)});toast('🏠 도로 옆 '+got.length+'칸을 집 지을 땅으로 정했어요 · 물고기가 와서 집을 지어요')}
+
 /* --- 📖 프롤로그 --- */
 var PRO=[
  {img:'d_shipw',t:'깊고 푸른 바닷속',p:'아주 오래전, 이곳엔 물고기들이 모여 사는 산호 마을이 있었어요. 큰 해류가 휩쓸고 간 뒤로 텅 비어 버렸지요.'},
@@ -47,9 +55,9 @@ function prologue(i){i=i||0;var el=$('pro'),s=PRO[i];el.hidden=false;el.innerHTM
 function hintEl(sel){document.querySelectorAll('.hint').forEach(function(e){if(!sel||!e.matches(sel))e.classList.remove('hint')});if(sel){var e=document.querySelector(sel);if(e)e.classList.add('hint')}}
 function tutTarget(){var i=G.tut|0;if(G.tutMin||i>=TUT.length||!$('pro').hidden)return null;
   if(i===0){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?'.card[data-k=quarry]':'.pills [data-c=prod]'};return {dom:'#tut'}}
-  if(i===1){var q=bOf('quarry');if(!q)return null;var bb=BUBS.find(function(x){return x.b===q});if(bb)return {x:bb.x,y:bb.y-26,txt:'눌러요!'};var c=centerOf(q);return {x:c.x,y:c.y-90*cam.z,txt:q.job?'다 지어지면 여기 말풍선이 떠요':'곧 말풍선이 떠요'}}
+  if(i===1){var q=bOf('quarry');if(!q)return null;var bb=BUBS.find(function(x){return x.b===q});if(bb)return {x:bb.x,y:bb.y-26,txt:'눌러요!'};var c=centerOf(q);return {x:c.x,y:c.y-(q.job?175:90)*cam.z,txt:q.job?'다 지어지면 여기 말풍선이 떠요':'곧 말풍선이 떠요'}}
   if(i===2){if(!$('panel').hidden)return {dom:'#pUp'};var h=bOf('hall'),c2=centerOf(h);return {x:c2.x,y:c2.y-140*cam.z,txt:'산호궁을 눌러요'}}
-  if(i===3){if(TOOL==='zR')return {txt2:'도로 옆 칸을 손가락으로 쭉 끌어요'};if(!$('tray').hidden)return {dom:CAT==='zone'?'[data-tool=zR]':'.pills [data-c=zone]'};return {dom:'#bBuild'}}
+  if(i===3){if(TOOL==='zR')return {txt2:'도로 옆 칸을 손가락으로 쭉 끌어요'};if(!$('tray').hidden)return {dom:CAT==='zone'?'[data-tool=zR]':'.pills [data-c=zone]'};return {dom:'#tut'}}
   if(i===4){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='base'?'.card[data-k=pump]':'.pills [data-c=base]'};return {dom:'#tut'}}
   if(i===5)return {dom:'#hF'};
   if(i===6){if(GH)return {dom:'#pOk'};if(!$('tray').hidden)return {dom:CAT==='prod'?(bOf('farm')?'.card[data-k=factory]':'.card[data-k=farm]'):'.pills [data-c=prod]'};return {dom:'#tut'}}

@@ -42,7 +42,7 @@ function cityTick(now){if(now-cityT<1000)return;var dt=Math.min(5,(now-(cityT||n
       G.b.push(nb);occ();nb.job={L:1,start:now,end:now+ZBT[1]*1000*(.8+Math.random()*.4)};busy++})}
   /* 이사 오고 나감 */
   G.b.forEach(function(b){if(!isZ(b.k)||b.k.charAt(1)!=='R'||!b.lv||b.job&&b.job.L===1)return;var ok=O2[b.x+','+b.y]&&roadAdj(b.x,b.y),cap=ZN.R.cap[b.lv],tgt=ok?Math.round(cap*Math.min(1,.45+happy/180)*Math.max(.4,1-murkAt(b.x,b.y)/180)*(b.inc?.5:1)*trafM(b)):0;
-    if((b.occ|0)<tgt&&CS.pop<CS.lim&&Math.random()<.35*dt){b.occ=(b.occ|0)+1;CS.pop++;arrive(b)}else if((b.occ|0)>tgt&&Math.random()<.15*dt)b.occ--});
+    if((b.occ|0)<tgt&&CS.pop<CS.lim&&Math.random()<.35*dt){b.occ=(b.occ|0)+1;CS.pop++;arrive(b)}else if((b.occ|0)>tgt&&Math.random()<.15*dt)b.occ--;else if(CS.pop>CS.lim&&(b.occ|0)>0&&Math.random()<.1*dt){b.occ--;CS.pop--}});
   /* 단계 올리기: 산호궁 · 땅값 · 행복 · 산호석 */
   if(now-cityU>4000){cityU=now;var c=G.b.filter(function(b){return isZ(b.k)&&b.lv&&!b.job&&zUpWhy(b).length===0});if(c.length){var b=c[Math.floor(Math.random()*c.length)],to=b.lv+1;G.res.stone-=ZST[to];G.res.brick-=ZBR[to];b.job={L:to,start:now,end:now+ZBT[to]*1000}}}
   walkersTick(dt)}

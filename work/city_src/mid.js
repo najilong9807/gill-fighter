@@ -11,7 +11,7 @@ function midDayStart(t){var d=new Date(t);return +new Date(d.getFullYear(),d.get
 
 /* ---------- ① ⚡ 공사 단축 ---------- */
 function boostAdd(m){G.boost=Math.min(MID_BOOST_MAX,Math.max(0,(G.boost|0)+m));save()}
-var _giftTakeMid=giftTake;giftTake=function(){var n=0;try{n=giftN()}catch(e){}var r=_giftTakeMid.apply(this,arguments);
+var _giftTakeMid=giftTake;giftTake=function(){var n=0;try{n=giftN()}catch(e){}var r=_giftTakeMid.apply(this,arguments);try{n=Math.max(0,n-giftN())}catch(e){} /* 1.1.33: 창고가 차면 일부만 열리니 실제로 연 개수만 */
   try{if(n>0&&(G.gate||hallLv())){boostAdd(n*MID_BOOST_RUN);setTimeout(function(){toast('⚡ 공사 단축 +'+(n*MID_BOOST_RUN)+'분 · 짓는 중인 건물 창에서 써요')},2200)}}catch(e){}return r};
 var _openPanelMid=openPanel;openPanel=function(b){var r=_openPanelMid.apply(this,arguments);
   try{if(b&&b.job&&(G.boost|0)>0&&!isZ(b.k)&&!isD(b.k)){var row=$('pRush')&&$('pRush').parentNode;if(row&&!$('pBoost')){var left=Math.ceil((b.job.end-NOW())/60000),m=Math.min(G.boost|0,Math.max(1,left));

@@ -44,7 +44,7 @@ function polPanel(){var el=$('panel'),S=polSlots(),on=polList(),w=polWait(),h='<
 /* 공사 시간 */
 var _startJobP=startJob;startJob=function(b,L){var r=_startJobP.apply(this,arguments);try{if(polOn('night')&&b.job&&b.job.end>b.job.start)b.job.end=b.job.start+Math.round((b.job.end-b.job.start)*polV('build'))}catch(e){}return r};
 /* 생산: 정책 배수, 사건 중이면 멈춤 */
-var _ratesD=rates;rates=function(b){var o=_ratesD.apply(this,arguments);if(b.k==='hall')return o;if(b.inc&&(b.inc.k==='vent'||b.inc.k==='tide'))return {};var m=polV('prod');if(m!==1)for(var q in o)o[q]*=m;return o};
+var _ratesD=rates;rates=function(b){var o=_ratesD.apply(this,arguments);if(b.k==='hall')return o;if(b.inc&&(b.inc.k==='vent'||b.inc.k==='tide')&&!(b.inc.end&&b.inc.end<=NOW()))return {};var m=polV('prod');if(m!==1)for(var q in o)o[q]*=m;return o};
 
 /* --- 3) 사건 --- */
 var INCT={

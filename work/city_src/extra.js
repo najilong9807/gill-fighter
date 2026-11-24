@@ -76,7 +76,7 @@ var QNOW=null;function qPaint(el,pre){var q=null;try{q=nextQ()}catch(e){}QNOW=q;
   $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;document.body.classList.remove('tutOn');return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;document.body.classList.toggle('tutOn',true);
   var hh='<span class="av">🐠</span><div><small>도미 비서 · 다음 할 일</small><p>'+q.t+'</p><i>'+q.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh){el.dataset.h=hh;el.innerHTML=hh}}
 function tutLock(){return (G.tut|0)===7&&!bOf('turtle')&&hallLv()<B.turtle.at}
-function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length||tutLock()&&!TUT[i].ok()){qPaint(el,true);return}var s=TUT[i];
+function tutPaint(){var el=$('tut'),i=G.tut|0;if(i>=TUT.length||tutLock()&&!TUT[i].ok()){qPaint(el,i<TUT.length);return}var s=TUT[i];
   if(s.ok()){G.tut=i+1;WAL.add('pearl',s.rw);toast('🐠 잘했어요! 🫧'+s.rw);addXP(5);save();return tutPaint()}
   $('bTut').hidden=!G.tutMin;if(G.tutMin){el.hidden=true;document.body.classList.remove('tutOn');return}el.hidden=!!TOOL||!$('panel').hidden||!$('tray').hidden;document.body.classList.toggle('tutOn',!G.tutMin&&i<TUT.length);var hh2='<span class="av">🐠</span><div><small>도미 비서 · '+(i+1)+'/'+TUT.length+'</small><p>'+s.t+'</p><i>'+s.h+'</i></div><b>›</b><span class="tx" id="tutX">✕</span>';if(el.dataset.h!==hh2){el.dataset.h=hh2;el.innerHTML=hh2}}
 $('tut').onclick=function(ev){if(ev.target.id==='tutX'){G.tutMin=true;save();tutPaint();return}var s=TUT[G.tut|0];if(s&&!tutLock())s.go();else if(QNOW)QNOW.go()};$('bTut').onclick=function(){G.tutMin=false;save();tutPaint()};

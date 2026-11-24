@@ -40,5 +40,5 @@ var _collectQ=collect;collect=function(b){var before=JSON.stringify(b.buf);var r
 var _ordSendQ=ordSend;ordSend=function(o){var n0=G.ordSent|0;var r=_ordSendQ.apply(this,arguments);if((G.ordSent|0)>n0){wqAdd('ord',1);gfEv('ord')}return r};
 var _startJobQ=startJob;startJob=function(b,L){var r=_startJobQ.apply(this,arguments);try{if(L>1&&!isZ(b.k)&&!isD(b.k))wqAdd('up',1);if(!isZ(b.k))gfEv('build')}catch(e){}return r};
 var _placeDecoQ=placeDeco;placeDeco=function(){var r=_placeDecoQ.apply(this,arguments);if(r){wqAdd('dec',1);gfEv('dec')}return r};
-var _giftTakeQ=giftTake;giftTake=function(){var n=giftN();var r=_giftTakeQ.apply(this,arguments);if(n){wqAdd('box',n);gfEv('box',n)}return r};
+var _giftTakeQ=giftTake;giftTake=function(){var n=giftN();var r=_giftTakeQ.apply(this,arguments);try{n=Math.max(0,n-giftN())}catch(e){}if(n){wqAdd('box',n);gfEv('box',n)}return r};
 window.__wq=function(){var S=wqState();return S?S.q.map(function(q){return q.k+':'+wqVal(q)+'/'+q.goal+(q.got?'✓':'')}).join(' '):null};

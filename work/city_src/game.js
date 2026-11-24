@@ -292,7 +292,7 @@ function catBadge(c){var L=hallLv(),n=0;Object.keys(CATOF).forEach(function(k){i
 function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(function(q){var n=catBadge(q[0]);return '<button data-c="'+q[0]+'" class="'+(q[0]===c?'on':'')+'">'+q[1]+(n?'<em>'+n+'</em>':'')+'</button>'}).join('')+'</div>';
   if(c==='road')h+='<div class="tools1"><button data-tool="road"><b>🛣 도로 건설</b><i>끌어서 도로를 놓아요 · 한 칸 '+D_ROAD+'🫧</i></button><p class="tip">건물 · 집 · 가게는 도로에 붙어야 돌아가요. 도로끼리 이어지면 모양이 저절로 맞춰져요.</p></div>';
   else if(c==='clear')h+='<div class="tools1"><button data-tool="clear"><b>🧹 철거하기</b><i>바위 60🫧 · 덤불 25🫧 · 도로 철거(절반 환급)</i></button><p class="tip">다시마 덤불은 근처 땅값을 조금 올려 줘요. 꼭 필요한 곳만 철거해요.</p></div>';
-  else if(c==='zone'){var hc='';[['R','물고기가 살아요 · 인구 +'],['C','주민이 경단 · 옷을 사요 · 세금 +'],['I','일자리 + · 생산이 빨라져요']].forEach(function(a){var z=ZN[a[0]],lock=L<z.at,d=CS.dem[a[0]];hc+='<button class="card'+(lock?' off':'')+'" data-hk="'+a[0]+'"><img src="'+thumb('z'+a[0]+'0')+'" alt=""><b>'+z.ic+' '+z.n+'</b><i>'+(lock?'🔒 🏛Lv.'+z.at:'🫧'+H_COST+' · '+(d>.1?'▲ 더 필요해요':d<-.1?'▼ 넘쳐요':'– 적당해요'))+'</i><small>'+a[1]+'</small></button>'});
+  else if(c==='zone'){var hc='';[['R','물고기가 살아요 · 인구가 늘어요'],['C','주민이 경단 · 옷을 사요 · 세금이 늘어요'],['I','일자리가 늘고 생산이 빨라져요']].forEach(function(a){var z=ZN[a[0]],lock=L<z.at,d=CS.dem[a[0]];hc+='<button class="card'+(lock?' off':'')+'" data-hk="'+a[0]+'"><img src="'+thumb('z'+a[0]+'0')+'" alt=""><b>'+z.ic+' '+z.n+'</b><i>'+(lock?'🔒 🏛Lv.'+z.at:'🫧'+H_COST+' · '+(d>.1?'▲ 더 필요해요':d<-.1?'▼ 넘쳐요':'– 적당해요'))+'</i><small>'+a[1]+'</small></button>'});
     h+='<div class="cards">'+hc+'</div><p class="tip">놓으면 게 일꾼들이 와서 지어요(다른 공사와 따로라 일꾼 수에 안 걸려요) · 도로 옆 · 산소가 닿는 곳 · ✓를 계속 누르면 옆에 한 채씩 더 · 다 지은 뒤엔 저절로 커져요</p>'}
   else if(c==='deco'){var dc='';Object.keys(DEC).sort(function(a,b){return (DEC[b].gift?1:0)-(DEC[a].gift?1:0)}).forEach(function(k){var d=DEC[k],inv=(G.inv&&G.inv[k])|0;if(d.fac||d.gift&&!inv)return;var open=d.gift?inv>0:L>=d.at;dc+='<button class="card'+(open?'':' off')+'" data-dk="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+d.n+'</b><i>'+(d.gift?'🎁 '+inv+'개 있어요':open?'🫧'+fmt(d.c):'🔒 🏛Lv.'+d.at)+'</i><small>주변 '+d.r+'칸 땅값 +'+d.v+'</small></button>'});h+='<div class="cards">'+dc+'</div><p class="tip">장식은 도로에 안 붙어도 돼요 · 땅값이 오르면 주택이 2 · 3단계로 자라요</p>'}
   else{var cards='';Object.keys(CATOF).forEach(function(k){if(CATOF[k]!==c)return;var b=B[k],built=bOf(k),open=L>=b.at,cc=D.cost(k,1),why=open?needList(k,1).filter(function(n){return !n.ok}).map(reqTxt).join(', '):'';
@@ -322,12 +322,16 @@ function ordSlots(){var L=lvOf('turtle');return L?Math.min(9,3+Math.floor(L/2)):
 function goodsPool(){var L=hallLv(),p=[];if(lvOf('farm'))p.push('kelp');if(lvOf('quarry'))p.push('stone');if(lvOf('factory'))p.push('dango');if(lvOf('sew'))p.push('cloth');if(lvOf('kiln'))p.push('brick');if(lvOf('pearl')&&L>=12)p.push('nail');return p}
 function genOrder(){var L=hallLv(),pool=goodsPool(),n=Math.min(pool.length,1+Math.floor(Math.random()*Math.min(3,1+L/5))),it={},val=0;pool=pool.slice().sort(function(){return Math.random()-.5});
   for(var i=0;i<n;i++){var g=pool[i],a=Math.max(1,Math.round(GB[g]*(1+L*.35)*(.7+Math.random()*.6)));it[g]=a;val+=a*GV[g]}
-  var rw={pearl:Math.max(10,Math.round(val*.5/5)*5),xp:Math.round(val/3)+3};if(Math.random()<.12&&L>=7)rw.brick=Math.max(2,Math.round(L/2));else if(Math.random()<.05)rw.gem=1;return {id:G.nid++,it:it,rw:rw,at:0,who:ORDWHO[Math.floor(Math.random()*ORDWHO.length)]}}
+  var rw={pearl:Math.max(10,Math.round(val*.5/5)*5),xp:Math.round(val/3)+3};if(Math.random()<.12&&L>=7)rw.brick=Math.max(2,Math.round(L/2));else if(Math.random()<.05&&ogemLeft()>0)rw.gem=1;return {id:G.nid++,it:it,rw:rw,at:0,who:ORDWHO[Math.floor(Math.random()*ORDWHO.length)]}}
+/* 1.1.33: 보석 주는 주문은 하루 3개까지(취소하고 다시 뽑아 보석만 골라 받는 것 막기) */
+function ogemDay(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function ogemLeft(){var o=G.ogem||{};return o.d===ogemDay()?3-(o.n|0):3}
+function ogemUse(){var d=ogemDay();if(!G.ogem||G.ogem.d!==d)G.ogem={d:d,n:0};G.ogem.n++}
 var ORDWHO=['🐡 복어 아주머니','🐠 흰동가리 남매','🦐 새우 요리사','🐙 문어 선생님','🦀 꽃게 목수','🐟 고등어 반장','🦑 오징어 화가','🐚 소라 할머니','🐬 돌고래 우체부','🦞 가재 대장장이'];
 function ordTick(now){var n=ordSlots();G.ord=G.ord||[];while(G.ord.length<n)G.ord.push({id:G.nid++,it:null,at:now});G.ord.forEach(function(o){if(!o.it&&now>=o.at&&goodsPool().length){var g=genOrder();o.it=g.it;o.rw=g.rw;o.who=g.who}})}
 function ordCan(o){if(!o.it)return false;for(var k in o.it)if((G.res[k]||0)<o.it[k])return false;return true}
 function ordReady(){return (G.ord||[]).filter(ordCan).length}
-function ordSend(o){if(!ordCan(o)){toast('창고에 물건이 모자라요');return}for(var k in o.it)G.res[k]-=o.it[k];G.ordSent=(G.ordSent|0)+1;snd('coin');var tc=bOf('turtle'),tcc=tc?centerOf(tc):{x:VW/2,y:VH/2};evtAdd(3+Math.floor(Object.keys(o.it).length*2),tcc.x+30,tcc.y-40*cam.z);WAL.add('pearl',o.rw.pearl);if(o.rw.gem)WAL.add('gem',o.rw.gem);if(o.rw.brick)G.res.brick+=o.rw.brick;addXP(o.rw.xp);
+function ordSend(o){if(!ordCan(o)){toast('창고에 물건이 모자라요');return}for(var k in o.it)G.res[k]-=o.it[k];G.ordSent=(G.ordSent|0)+1;snd('coin');var tc=bOf('turtle'),tcc=tc?centerOf(tc):{x:VW/2,y:VH/2};evtAdd(3+Math.floor(Object.keys(o.it).length*2),tcc.x+30,tcc.y-40*cam.z);WAL.add('pearl',o.rw.pearl);if(o.rw.gem){WAL.add('gem',o.rw.gem);ogemUse()}if(o.rw.brick)G.res.brick+=o.rw.brick;addXP(o.rw.xp);
   var t=bOf('turtle');if(t){var c=centerOf(t);float(c.x,c.y-70*cam.z,'+'+o.rw.pearl+'🫧');bubbleFx(c.x,c.y-50*cam.z)}o.it=null;o.at=NOW()+60000;save();orderPanel()}
 function ordDrop(o){o.it=null;o.at=NOW()+5*60000;save();orderPanel()}
 function orderPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>🐢 주문 배달</h2><p class="tip" style="margin:-4px 0 6px">이웃 바다 마을이 모자란 물건을 주문했어요 · 우리 마을이 만들어 창고에 모은 물건을 거북이 실어다 주면 물건값으로 진주를 받아요</p>';
@@ -431,4 +435,5 @@ window.__signs=function(){return SIGNS};window.__dbg=function(){var h=G.b.find(f
   build:function(k,x,y){var b={id:G.nid++,k:k,x:x,y:y,lv:0,buf:{}};G.b.push(b);occ();startJob(b,1);return b},up:function(k){var b=bOf(k);startJob(b,b.lv+1)},
   road:function(x1,y1,x2,y2){for(var x=x1;x<=x2;x++)for(var y=y1;y<=y2;y++){G.road[x+','+y]=1;delete G.ter[x+','+y]}},cam:cam,tab:setTab,sel:function(k){var b=bOf(k);SEL=b;openPanel(b)},focus:function(k){focus(bOf(k))},
   ghost:function(k,x,y){GH={k:k,x:x,y:y};placeBar()}};
+try{if(!/[?&]dev=1/.test(location.search||'')&&window.__city){['give','res','skip'].forEach(function(k){if(window.__city[k])window.__city[k]=function(){return 'dev only'}})}}catch(e){} /* 1.1.33: 출시본에서 지갑 · 재료를 바로 넣는 시험 훅 막기 */
 })();

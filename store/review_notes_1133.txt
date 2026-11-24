@@ -1,0 +1,23 @@
+What's new in 1.1.33 (Town mode polish only):
+(1) No new purchases, accounts, permissions, SDKs or network features.
+(2) Town: Homes, Shops and Workshops are now placed like other buildings (tap a card, confirm with ✓) instead of painting zones; the secretary guide builds the first 4 homes with one tap.
+(3) Town: crab builders and residents wear work outfits for their jobs; richer seabed art (sand texture from a CC0 source, rocks, kelp).
+(4) Translation fixes for the town in 32 languages.
+How to test: Town tab (bottom) → follow the yellow secretary card, or Build → 🏠 Homes & Shops → Home → ✓.
+
+Previous notes (1.1.32):
+What's new in 1.1.32:
+(1) No new purchases, accounts, permissions or SDKs.
+(2) Thank-you gift for 200 downloads: players who already used the app before updating receive a one-time in-game gift (10,000 in-game pearls and 500 in-game gems, until December 31). In-game currency only; no real money.
+(3) Arena (online): a few seconds of spawn protection right after joining.
+(4) Town: new daily town tasks, a Plaza with a once-a-day Festival Day and three monuments built with town materials (all in-game resources only), construction speed-ups earned by playing runs in the main game, performance improvements for large towns, an offline production fix and more robust save loading.
+(4b) Crown Rank: the best Solo score shown on the home screen now raises a crown through 8 ranks; each rank gives a one-time in-game pearl and gem reward and a small in-game pearl bonus per run (not in the online Arena).
+(5) Friends: players can send a small amount of in-game pearls to a friend's public aquarium (up to 1,000 per day) and search public aquariums by nickname. No chat or personal data; only the nickname the player chose.
+(6) The per-run in-game pearl limit in Solo and Deep Expedition was removed; layout fixes on small screens and translation fixes.
+The Christmas season content is unchanged and still runs until December 30.
+
+Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
+
+Purpose and audience: Gill Fighter is a casual "eat and grow" fish game. The player guides a small fish, eats smaller fish to grow and avoids bigger ones, collects 105 fish species, levels them up with in-game pearls and decorates a personal aquarium. It is for casual mobile gamers (12+) who want short 2-5 minute sessions with one-finger controls, and Solo can be played offline.
+
+How to use: No account, login or sample file is needed. Launch the app and tap Solo on the home screen, then choose Score Challenge or Deep Expedition. Touch and drag anywhere to move; the bottom-right button uses the special ability. Bottom tabs: Play, Tank (aquarium decoration and the aquarium house), Dex (fish collection), Shop (upgrades, decorations and boosters for in-game currency only). "Arena" is an online shared sea with other players and computer-controlled fish; there is no chat. "Friends" lets players who type the same 4-digit number share a separate Arena sea. The gear icon (top right) opens settings and an optional contact form. Progress is saved on the device; the leaderboard (random device ID, optional nickname, best score, optional country code) is stored on Supabase.

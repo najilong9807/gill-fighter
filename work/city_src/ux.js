@@ -45,7 +45,7 @@ function placeHouseBar(el){var z=GH.h,Z=ZN[z],why=houseWhy(GH.k,GH.x,GH.y);el.hi
   $('pOk').onclick=function(){if(!GH||GH.why)return;pushUndo(Z.ic+' '+Z.n+' 짓기');var ok=placeHouse(z,GH.x,GH.y);setTimeout(endAct,0);if(!ok)return;save();toast('🦀 게 일꾼들이 '+Z.n+'을(를) 짓기 시작했어요');
     var nk='z'+z+Math.floor(Math.random()*3),np=hSpot(nk,{i:GH.x,j:GH.y});if(np){GH.k=nk;GH.x=np.x;GH.y=np.y;placeBar()}else{GH=null;el.hidden=true;$('ghb').hidden=true}}}
 /* 도미 비서 카드: 산호궁 가까운 도로 옆에 집 4채를 바로 지음 */
-function quickZone(){var k0='zR0',got=0,near=null;endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;pushUndo('🏠 집 짓기');
+function quickZone(){var k0='zR0',got=0,near=null;if(WAL.get('pearl')<H_COST){toast('진주가 모자라요');return}endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;pushUndo('🏠 집 짓기');
   var h=bOf('hall');near=h?{i:h.x+1,j:h.y+1}:null;for(var n=0;n<4;n++){var p=hSpot(k0,near);if(!p)break;if(!placeHouse('R',p.x,p.y,true))break;got++;near={i:p.x,j:p.y}}
   setTimeout(endAct,0);save();if(!got){toast('도로 옆 · 산소가 닿는 빈 땅이 없어요 · 산소 펌프 · 도로를 먼저 놓아요');openBuild('zone');return}
   snd('done');var last=G.b[G.b.length-1],c=centerOf(last);focus(last);G.b.slice(-got).forEach(function(b){var cc=centerOf(b);dust(cc.x,cc.y,8,.7)});toast('🦀 게 일꾼들이 집 '+got+'채를 짓기 시작했어요 · 다 지으면 물고기들이 이사 와요')}

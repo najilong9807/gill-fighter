@@ -256,7 +256,7 @@ var lastPaint='';
 function paintAt(x,y){var t=tileAt(x,y),k=t.i+','+t.j;if(k===lastPaint||!inb(t.i,t.j))return;lastPaint=k;if(!own(t.i,t.j)){toast('아직 우리 땅이 아니에요');return}
   if(TOOL.charAt(0)==='z'){paintZone(t,k);return}
   if(TOOL==='road'){if(G.road[k]||OCC[k]||G.ter[k])return;if(G.zone[k])delete G.zone[k];if(WAL.get('pearl')<D_ROAD){toast('진주가 모자라요');return}WAL.add('pearl',-D_ROAD);G.road[k]=1;snd('tap');var p=sc(t.i,t.j);dust(p.x,p.y,3,.4)}
-  else if(TOOL==='clear'){if(G.road[k]){if(roadNeeded(t.i,t.j)){toast('건물에 이어진 마지막 도로는 철거할 수 없어요');return}delete G.road[k];WAL.add('pearl',Math.floor(D_ROAD/2));return}
+  else if(TOOL==='clear'){if(G.zone[k]&&!OCC[k]){delete G.zone[k];var pz=sc(t.i,t.j);dust(pz.x,pz.y,4,.5);return}if(G.road[k]){if(roadNeeded(t.i,t.j)){toast('건물에 이어진 마지막 도로는 철거할 수 없어요');return}delete G.road[k];WAL.add('pearl',Math.floor(D_ROAD/2));return}
     if(G.ter[k]){var cst=G.ter[k]===1?60:25;if(WAL.get('pearl')<cst){toast('진주 '+cst+' 필요해요');return}WAL.add('pearl',-cst);delete G.ter[k];var p2=sc(t.i,t.j);dust(p2.x,p2.y,10,1);float(p2.x,p2.y-20,'-'+cst+'🫧')}}}
 var D_ROAD=10;
 function roadNeeded(i,j){var k=i+','+j;delete G.road[k];var bad=G.b.some(function(b){return siteRoad(b)===false});G.road[k]=1;return bad}

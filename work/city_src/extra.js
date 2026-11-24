@@ -67,7 +67,7 @@ function nextQ(){var L=hallLv();if(L>=D.HMAX)return null;var h=bOf('hall');if(!h
   if(h.job)return {k:'job'+L,t:'🏛 산호궁 Lv.'+(L+1)+' 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(h)}};
   var n=needList('hall',L+1).filter(function(x){return !x.ok})[0];
   if(!n)return {k:'hall'+(L+1),t:'<b>🏛 산호궁</b>을 Lv.'+(L+1)+'로 올려요',h:'👆 여기를 누르면 산호궁 창을 열어요',go:function(){focus(h);SEL=h;openPanel(h)}};
-  if(n.k==='pop')return {k:'pop'+n.lv,t:'물고기 <b>'+n.lv+'마리</b>가 살게 해요 (지금 '+(CS.pop|0)+')',h:'👆 누르면 집을 더 지어요 · 산소 · 경단이 있어야 이사 와요',go:quickZone};
+  if(n.k==='pop')return {k:'pop'+n.lv,t:'물고기 <b>'+n.lv+'마리</b>가 살게 해요 (지금 '+(CS.pop|0)+')',h:'👆 누르면 집을 더 지어요 · 산소 · 경단이 있어야 이사 와요',go:function(){if(CS.pop>=CS.lim||CS.dem.R<-.1){lifePanel();return}quickZone()}};
   var b=bOf(n.k);if(!b)return {k:'b'+n.k,t:'<b>'+NM(n.k)+'</b>을(를) 지어요',h:'👆 여기를 누르면 바로 지어요 · 산호궁 Lv.'+(L+1)+' 조건',go:function(){quickBuild(n.k)}};
   if(b.job)return {k:'w'+n.k+b.job.L,t:'🦀 <b>'+NM(n.k)+'</b> 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(b)}};
   return {k:'u'+n.k+n.lv,t:'<b>'+NM(n.k)+'</b>을(를) Lv.'+n.lv+'로 올려요 (지금 Lv.'+b.lv+')',h:'👆 여기를 누르면 그 건물 창을 열어요',go:function(){focus(b);SEL=b;openPanel(b)}}}

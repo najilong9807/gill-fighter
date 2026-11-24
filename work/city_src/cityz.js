@@ -55,7 +55,7 @@ var WALK=[],FISHC=['#ff9f43','#ff6b8b','#4fb3ff','#ffd54a','#7ed957','#b48cff','
 function roadNear(b){var s=sz(b.k),L=[];for(var i=-1;i<=s;i++)for(var j=-1;j<=s;j++){if((i<0||i>=s)&&(j<0||j>=s))continue;if(i>=0&&i<s&&j>=0&&j<s)continue;if(isRoad(b.x+i,b.y+j))L.push([b.x+i,b.y+j])}return L[0]||null}
 function path(a,b){if(!a||!b)return null;var q=[a],prev={},k0=a+'';prev[k0]=null;var goal=b+'',n=0;while(q.length&&n++<900){var c=q.shift(),ck=c+'';if(ck===goal){var out=[];while(ck){var p=ck.split(',');out.unshift([+p[0],+p[1]]);ck=prev[ck]}return out}
   [[1,0],[-1,0],[0,1],[0,-1]].forEach(function(d){var x=c[0]+d[0],y=c[1]+d[1],k=x+','+y;if(isRoad(x,y)&&!(k in prev)){prev[k]=ck;q.push([x,y])}})}return null}
-function newWalker(from,to){var p=path(roadNear(from),roadNear(to));if(!p||p.length<2)return;WALK.push({p:p,i:0,t:0,sp:1+Math.random()*.6,c:FISHC[Math.floor(Math.random()*FISHC.length)],o:OUTF[Math.floor(Math.random()*OUTF.length)],side:(Math.random()-.5)*.36,ph:Math.random()*6})}
+function newWalker(from,to){var p=path(roadNear(from),roadNear(to));if(!p||p.length<2)return;var wb=isZ(from.k)&&from.k.charAt(1)==='R'?to:from,jk=isZ(wb.k)?wb.k.slice(0,2):wb.k;WALK.push({job:JOBW[jk]?jk:null,p:p,i:0,t:0,sp:1+Math.random()*.6,c:FISHC[Math.floor(Math.random()*FISHC.length)],o:OUTF[Math.floor(Math.random()*OUTF.length)],side:(Math.random()-.5)*.36,ph:Math.random()*6})}
 
 /*GATE*/
 function walkersTick(dt){var homes=G.b.filter(function(b){return isZ(b.k)&&b.k.charAt(1)==='R'&&(b.occ|0)>0}),works=G.b.filter(function(b){return b.lv&&!isZ(b.k)&&!isD(b.k)&&b.k!=='hall'||isZ(b.k)&&b.k.charAt(1)!=='R'&&b.lv});
@@ -73,19 +73,73 @@ function pathPt(f,u){var P=f.p,n=P.length-1;u=Math.max(0,Math.min(n,u));var i=Ma
 function walkMove(dt){if(G.gate)wildTick(dt);WALK=WALK.filter(function(f){if(f.st)return gateStep(f,dt);var n=f.p.length-1,u=f.i+f.t;
   if(f.wait>0){f.wait-=dt;if(f.wait<=0)f.emo=null;return true}
   var ease=Math.min(1,.35+u*1.3,.35+(n-u)*1.3),v=f.sp*ease*(1+.08*Math.sin(u*2.1+f.ph)),du=v*dt;u+=du;f.wk=(f.wk||0)+du*7.5;
-  if(Math.floor(u)>Math.floor(f.i+f.t)&&u<n-1&&Math.random()<.05){f.wait=1+Math.random()*1.6;f.emo=EMOS[Math.floor(Math.random()*EMOS.length)]}
+  if(Math.floor(u)>Math.floor(f.i+f.t)&&u<n-1&&Math.random()<.05){f.wait=1+Math.random()*1.6;f.emo=f.job&&JOBW[f.job]&&Math.random()<.55?JOBW[f.job].e[Math.floor(Math.random()*JOBW[f.job].e.length)]:EMOS[Math.floor(Math.random()*EMOS.length)]}
   f.i=Math.floor(Math.min(u,n));f.t=u-f.i;return u<n})}
 function walkerPos(f){if(f.st)return {i:f.fx,j:f.fy,dx:1,dy:0};var u=f.i+f.t,P=pathPt(f,u),A=pathPt(f,u-.06),B=pathPt(f,u+.06),dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy)||1;dx/=L;dy/=L;
   var lane=.17+f.side*.25;return {i:P[0]-dy*lane,j:P[1]+dx*lane,dx:dx,dy:dy,u:u,n:f.p.length-1}}
 function drawWalker(f,t){if(f.st){drawArrive(f,t);return}var q=walkerPos(f),p=sc(q.i,q.j),z=cam.z;if(z<.4)return;var sx=q.dx-q.dy;if(Math.abs(sx)>.15)f.fl=sx<0?-1:1;var flip=f.fl||1,step=f.wait>0?0:Math.sin(f.wk||0),al=Math.min(1,q.u*2.5,(q.n-q.u)*2.5),bob=f.wait>0?0:Math.abs(step)*1.3;ctx.save();ctx.globalAlpha=Math.max(0,al);if(f.emo){ctx.font='400 '+Math.round(15*z+4)+'px sans-serif';ctx.textAlign='center';ctx.fillText(f.emo,p.x,p.y-52*z)}ctx.translate(p.x,p.y-bob*z);ctx.scale(z*flip,z);ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.lineCap='round';
   ctx.fillStyle='rgba(15,60,80,.18)';ctx.beginPath();ctx.ellipse(0,1,9,3.5,0,0,7);ctx.fill();
   ctx.lineWidth=3.2;ctx.beginPath();ctx.moveTo(-3,-10);ctx.lineTo(-3-step*3,0);ctx.moveTo(3,-10);ctx.lineTo(3+step*3,0);ctx.stroke();
-  ctx.lineWidth=2;ctx.fillStyle=f.o;rr(-7,-24,14,15,5);ctx.fill();ctx.stroke();
+  ctx.lineWidth=2;ctx.fillStyle=f.o;rr(-7,-24,14,15,5);ctx.fill();ctx.stroke();if(f.job)jobGear(f.job,'body',step,t);
   ctx.beginPath();ctx.moveTo(-6,-20);ctx.lineTo(-10,-14+step*2);ctx.moveTo(6,-20);ctx.lineTo(10,-14-step*2);ctx.lineWidth=3;ctx.stroke();ctx.lineWidth=2;
   ctx.fillStyle=f.c;ctx.beginPath();ctx.moveTo(-9,-33);ctx.lineTo(-15,-39);ctx.lineTo(-14,-28);ctx.closePath();ctx.fill();ctx.stroke();
   ctx.beginPath();ctx.ellipse(1,-33,10,8,0,0,7);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-2,-40);ctx.quadraticCurveTo(2,-46,6,-40);ctx.fill();ctx.stroke();
   ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(5,-35,3,0,7);ctx.fill();ctx.stroke();ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(5.8,-35,1.4,0,7);ctx.fill();
-  ctx.beginPath();ctx.moveTo(9,-31);ctx.quadraticCurveTo(7,-29.5,9,-28.5);ctx.stroke();ctx.restore()}
+  ctx.beginPath();ctx.moveTo(9,-31);ctx.quadraticCurveTo(7,-29.5,9,-28.5);ctx.stroke();if(f.job){jobGear(f.job,'hat',step,t);jobGear(f.job,'hand',step,t)}ctx.restore()}
+/* 1.1.33: 주민 작업복 — 일하는 곳(집 ↔ 일터)에 맞춰 모자 · 옷 · 손에 든 것 · 말풍선 (간단한 도형으로) */
+var JOBW={quarry:{e:['⛏','💪','🪨']},farm:{e:['🌿','🌱','☀']},factory:{e:['🍡','😋']},diner:{e:['🍽','😋']},sew:{e:['🧵','👕']},kiln:{e:['🔥','🧱']},pearl:{e:['🫧','✨']},turtle:{e:['📦','🐢']},train:{e:['🚋','🎵']},port:{e:['⚓','🐋']},school:{e:['📚','✏']},clinic:{e:['💊','🩹']},fire:{e:['🧯','💦']},police:{e:['🦈','👮']},store:{e:['📦','💪']},pump:{e:['🔧','💨']},zC:{e:['🛍','💰']},zI:{e:['🔨','⚙']},aqua:{e:['🐠','🎟']}};
+function jobGear(k,layer,step,t){var c=ctx;c.save();c.lineWidth=1.6;c.strokeStyle=OUT;c.lineJoin='round';c.lineCap='round';
+  function hat(col,w,h,y){c.fillStyle=col;c.beginPath();c.ellipse(1,y,w,h,0,Math.PI,0);c.closePath();c.fill();c.stroke()}
+  function brim(col,w,y){c.fillStyle=col;rr(1-w/2,y,w,2.6,1.3);c.fill();c.stroke()}
+  function apron(col){c.fillStyle=col;rr(-5,-19,10,10,3);c.fill();c.stroke();c.beginPath();c.moveTo(-4,-19);c.lineTo(-2,-24);c.moveTo(4,-19);c.lineTo(2,-24);c.stroke()}
+  function box(x,y,col,w,h){c.fillStyle=col;rr(x,y,w,h,1.5);c.fill();c.stroke()}
+  var hy=-38.5,hx=10,hyy=-14-step*2;
+  if(layer==='body'){
+    if(k==='quarry'||k==='zI'){c.fillStyle='#4f7fc4';rr(-6,-17,12,8,2);c.fill();c.stroke();c.beginPath();c.moveTo(-4,-17);c.lineTo(-4,-23);c.moveTo(4,-17);c.lineTo(4,-23);c.lineWidth=2.2;c.strokeStyle='#4f7fc4';c.stroke()}
+    else if(k==='factory'||k==='diner'||k==='zC')apron(k==='zC'?'#ff9ab0':'#fffdf7');
+    else if(k==='kiln')apron('#9a6a44');
+    else if(k==='clinic'){c.fillStyle='#fffdf7';rr(-7,-24,14,15,5);c.fill();c.stroke();c.fillStyle='#ff5a6a';c.fillRect(-1,-21,2,6);c.fillRect(-3,-19,6,2)}
+    else if(k==='port'){c.strokeStyle='#2f5fa8';c.lineWidth=2;[-20,-16,-12].forEach(function(y){c.beginPath();c.moveTo(-6,y);c.lineTo(6,y);c.stroke()})}
+    else if(k==='fire'){c.fillStyle='#ffd54a';c.fillRect(-7,-15,14,2.2)}
+    else if(k==='police'){c.fillStyle='#ffd54a';c.beginPath();c.arc(3,-19,2,0,7);c.fill();c.stroke()}
+    else if(k==='sew'){c.strokeStyle='#ffcf3a';c.lineWidth=2;c.beginPath();c.moveTo(-5,-24);c.quadraticCurveTo(-3,-16,-5,-11);c.moveTo(5,-24);c.quadraticCurveTo(3,-16,5,-11);c.stroke()}
+    else if(k==='school'){c.fillStyle='#c0392b';c.beginPath();c.moveTo(0,-23);c.lineTo(-2,-16);c.lineTo(0,-14);c.lineTo(2,-16);c.closePath();c.fill()}
+    c.restore();return}
+  if(layer==='hat'){
+    if(k==='quarry'){hat('#ffd54a',9,6,hy);brim('#f5c518',20,hy-1);c.fillStyle='#fff6a0';c.beginPath();c.arc(8,hy-3.5,2.2,0,7);c.fill();c.stroke();c.globalAlpha=.25+.15*Math.sin(t*.01);c.fillStyle='#fff6a0';c.beginPath();c.moveTo(9,hy-3.5);c.lineTo(22,hy-9);c.lineTo(22,hy+3);c.closePath();c.fill();c.globalAlpha=1}
+    else if(k==='zI'||k==='pump'){hat('#ffd54a',9,6,hy);brim('#f5c518',20,hy-1)}
+    else if(k==='farm'){c.fillStyle='#f2d27a';c.beginPath();c.ellipse(1,hy-.5,13,3.4,0,0,7);c.fill();c.stroke();hat('#f2d27a',7,5.5,hy-1);c.fillStyle='#e0574f';c.fillRect(-5,hy-3,12,1.8)}
+    else if(k==='factory'||k==='diner'){c.fillStyle='#fffdf7';rr(-5,hy-9,12,8,2);c.fill();c.stroke();[-3,1,5].forEach(function(x){c.beginPath();c.arc(x,hy-9,3,0,7);c.fill();c.stroke()})}
+    else if(k==='kiln'){c.fillStyle='#4a3a30';c.fillRect(-8,-37,18,2.2);c.fillStyle='#8fd3ff';c.beginPath();c.arc(5,-36,3.4,0,7);c.fill();c.stroke()}
+    else if(k==='pearl'){c.fillStyle='#8fd3ff';c.globalAlpha=.85;rr(1,-39,9,6,2.5);c.fill();c.globalAlpha=1;c.stroke();c.beginPath();c.moveTo(1,-36);c.lineTo(-9,-36);c.stroke();c.strokeStyle='#ffb02e';c.lineWidth=2;c.beginPath();c.moveTo(-6,-40);c.lineTo(-6,-48);c.stroke()}
+    else if(k==='turtle'){hat('#3b82d6',8.5,5.5,hy);c.fillStyle='#3b82d6';rr(3,hy-1.5,11,2.6,1.3);c.fill();c.stroke()}
+    else if(k==='train'){c.fillStyle='#3d5a8a';rr(-6,hy-7,14,7,2);c.fill();c.stroke();c.strokeStyle='#fff';c.lineWidth=1;[-3,0,3,6].forEach(function(x){c.beginPath();c.moveTo(x,hy-6);c.lineTo(x,hy-1);c.stroke()});c.strokeStyle=OUT;c.lineWidth=1.6;brim('#3d5a8a',16,hy-1)}
+    else if(k==='port'){c.fillStyle='#fffdf7';c.beginPath();c.ellipse(1,hy-1,8,3.2,0,0,7);c.fill();c.stroke();c.fillStyle='#2f5fa8';c.fillRect(-6,hy-2,14,1.6)}
+    else if(k==='school'){c.fillStyle='rgba(255,255,255,.35)';[2.5,8].forEach(function(x){c.beginPath();c.arc(x,-35,3.1,0,7);c.stroke()});c.beginPath();c.moveTo(5.5,-35);c.lineTo(5,-35);c.stroke()}
+    else if(k==='clinic'){c.fillStyle='#fffdf7';rr(-5,hy-4.5,12,5,2);c.fill();c.stroke();c.fillStyle='#ff5a6a';c.fillRect(0,hy-4,2,4);c.fillRect(-1,hy-3,4,2)}
+    else if(k==='fire'){hat('#e74c3c',9.5,6.5,hy);c.fillStyle='#e74c3c';rr(-11,hy-1,22,2.6,1.3);c.fill();c.stroke();c.fillStyle='#ffd54a';c.beginPath();c.arc(1,hy-4,1.8,0,7);c.fill()}
+    else if(k==='police'){c.fillStyle='#2c4f8f';rr(-7,hy-6,16,6,2);c.fill();c.stroke();brim('#1c3566',14,hy-1);c.fillStyle='#ffd54a';c.beginPath();c.arc(1,hy-3,1.6,0,7);c.fill()}
+    else if(k==='zC'){c.fillStyle='#ff6f91';c.beginPath();c.moveTo(-4,hy-1);c.lineTo(-8,hy-5);c.lineTo(-8,hy+2);c.closePath();c.moveTo(-4,hy-1);c.lineTo(0,hy-5);c.lineTo(0,hy+2);c.closePath();c.fill();c.stroke()}
+    else if(k==='store'||k==='aqua'||k==='sew'){hat(k==='aqua'?'#3fbf8f':k==='sew'?'#c56cf0':'#a0784f',8,4.5,hy+.5)}
+    c.restore();return}
+  /* 손에 든 것 */
+  c.translate(hx,hyy);
+  if(k==='quarry'){c.rotate(-.9);c.strokeStyle='#8a5a34';c.lineWidth=2.2;c.beginPath();c.moveTo(0,4);c.lineTo(0,-10);c.stroke();c.strokeStyle=OUT;c.lineWidth=1.6;c.fillStyle='#a9b6c6';c.beginPath();c.moveTo(-6,-9);c.quadraticCurveTo(0,-14,6,-9);c.lineTo(0,-11);c.closePath();c.fill();c.stroke()}
+  else if(k==='farm'){c.fillStyle='#c98b52';rr(-3,-2,8,6,2);c.fill();c.stroke();c.strokeStyle='#4f9e3a';c.lineWidth=1.8;[-1,1.5,4].forEach(function(x){c.beginPath();c.moveTo(x,-2);c.quadraticCurveTo(x+2,-6,x,-9);c.stroke()})}
+  else if(k==='factory'||k==='diner'){c.strokeStyle='#b8793f';c.lineWidth=1.4;c.beginPath();c.moveTo(0,4);c.lineTo(0,-9);c.stroke();c.strokeStyle=OUT;c.lineWidth=1;['#ffd1dc','#fffdf7','#9fe0a0'].forEach(function(col,i){c.fillStyle=col;c.beginPath();c.arc(0,-1-i*3,1.9,0,7);c.fill();c.stroke()})}
+  else if(k==='kiln'||k==='store'||k==='turtle'){box(-3,-4,k==='kiln'?'#d9735a':'#d9a066',k==='kiln'?7:8,k==='kiln'?4:7);if(k!=='kiln'){c.fillStyle='#ff6b8b';c.fillRect(0,-4,1.6,7)}}
+  else if(k==='pearl'){c.fillStyle='#fffdf7';c.beginPath();c.arc(1,-1,3.2,0,7);c.fill();c.stroke();c.fillStyle='rgba(255,255,255,.9)';c.beginPath();c.arc(0,-2,1,0,7);c.fill()}
+  else if(k==='sew'){c.fillStyle='#ff8fb3';c.beginPath();c.arc(1,-1,3,0,7);c.fill();c.stroke();c.strokeStyle='#ff8fb3';c.lineWidth=1;c.beginPath();c.moveTo(3,-1);c.quadraticCurveTo(7,2,5,6);c.stroke()}
+  else if(k==='school'){box(-3,-5,'#4fb3ff',7,8);c.fillStyle='#fff';c.fillRect(-2,-4,1.2,6)}
+  else if(k==='clinic'){c.fillStyle='#fffdf7';rr(-3,-3,7,5,1.5);c.fill();c.stroke();c.fillStyle='#ff5a6a';c.fillRect(0,-2.5,1.2,4);c.fillRect(-1.4,-1.1,4,1.2)}
+  else if(k==='fire'){c.fillStyle='#e74c3c';rr(-2,-6,5,9,2);c.fill();c.stroke();c.strokeStyle=OUT;c.beginPath();c.moveTo(1,-6);c.lineTo(4,-9);c.stroke()}
+  else if(k==='zI'||k==='pump'){c.rotate(-.5);c.fillStyle='#a9b6c6';rr(-1,-8,2.2,11,1);c.fill();c.stroke();c.beginPath();c.arc(.1,-9,2.6,0,7);c.fill();c.stroke()}
+  else if(k==='zC'){c.fillStyle='#ffcf3a';rr(-3,-3,7,6,1.5);c.fill();c.stroke();c.beginPath();c.arc(.5,-3,2,Math.PI,0);c.stroke()}
+  else if(k==='port'){c.strokeStyle='#8fa1ad';c.lineWidth=2;c.beginPath();c.moveTo(0,-8);c.lineTo(0,3);c.moveTo(-3,0);c.quadraticCurveTo(0,4,3,0);c.moveTo(-2.5,-5);c.lineTo(2.5,-5);c.stroke()}
+  else if(k==='train'){c.fillStyle='#ffd54a';c.beginPath();c.arc(0,-1,2.6,0,7);c.fill();c.stroke()}
+  else if(k==='police'){c.strokeStyle='#e74c3c';c.lineWidth=2;c.beginPath();c.moveTo(0,3);c.lineTo(0,-6);c.stroke()}
+  else if(k==='aqua'){c.fillStyle='#ffd54a';rr(-3,-2,7,4,1);c.fill();c.stroke()}
+  c.restore()}
 function zoneTint(key,p,w,h){var z=G.zone[key];if(z&&!OCC[key]){diamond(p.x,p.y,w*.92,h*.92);ctx.fillStyle='rgba('+ZN[z].c+',.30)';ctx.fill();ctx.strokeStyle='rgba('+ZN[z].c+',.8)';ctx.lineWidth=1.5;ctx.stroke()}
   if(TOOL&&TOOL.charAt(0)==='z'&&!O2[key]&&!G.road[key]){diamond(p.x,p.y,w,h);ctx.fillStyle='rgba(20,40,70,.18)';ctx.fill()}}
 function paintZone(t,k){if(G.road[k]||G.ter[k]){return}var o=OCC[k];if(TOOL==='z0'){if(!G.zone[k])return;delete G.zone[k];if(o&&isZ(o.k)){G.b.splice(G.b.indexOf(o),1);occ()}return}
@@ -104,3 +158,5 @@ function lifePanel(){var el=$('panel'),c=CS,h='<button class="x" id="pX">✕</bu
   h+='<div class="box">수요<br>🏠 집 '+bar(c.dem.R)+'<br>🛍 가게 '+bar(c.dem.C)+'<br>🔧 공방 '+bar(c.dem.I)+'</div>';
   var L=hallLv();if(L<D.HMAX)h+='<p class="role">🏛 산호궁 Lv.'+(L+1)+'에는 인구 '+POPREQ(L+1)+'이(가) 필요해요</p>';
   el.innerHTML=h;el.hidden=false;$('pX').onclick=function(){closePanel()};panelFor=null}
+/* 시험용: 작업복 줄 세우기 (tools/web 에서 씀) */
+window.__jobs={list:function(){return Object.keys(JOBW)},line:function(x,y){WALK=WALK.filter(function(f){return f.st});Object.keys(JOBW).forEach(function(k,i){var r=Math.floor(i/5),c2=i%5;WALK.push({job:k,p:[[x+c2*.75,y+r*1.1],[x+c2*.75+1,y+r*1.1]],i:0,t:.5,sp:0,c:FISHC[i%FISHC.length],o:OUTF[i%OUTF.length],side:0,ph:i,wait:9999,fl:1})});var p=sc(x+1.5,y+1.5);cam.x+=(p.x-VW/2)/cam.z;cam.y+=(p.y-VH/2)/cam.z;return WALK.length}};

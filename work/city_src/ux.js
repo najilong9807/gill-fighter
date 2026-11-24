@@ -31,7 +31,7 @@ function quickBuild(k){var w=canStart(k,1),p=w.length?null:spotNear(k);if(w.leng
   endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;$('ghb').hidden=true;
   pushUndo(B[k].n+' 짓기');setTimeout(endAct,0);var b={id:G.nid++,k:k,x:p.x,y:p.y,lv:0,buf:{}};G.b.push(b);occ();startJob(b,1);FLOATU={id:b.id,until:NOW()+8000};setTab(null);save();snd('done');focus(b);var c=centerOf(b);dust(c.x,c.y,12,1);toast('🦀 게 일꾼이 '+B[k].n+'을(를) 짓기 시작했어요')}
 
-/* 1.1.33: '구역 칠하기' 대신 집 · 가게 · 공방을 건물처럼 직접 놓기 — 놓는 즉시 물고기들이 짓기 시작(게 일꾼 수와 따로), 다 지으면 예전처럼 저절로 커짐 */
+/* 1.1.33: '구역 칠하기' 대신 집 · 가게 · 공방을 건물처럼 직접 놓기 — 놓는 즉시 게 일꾼들이 짓기 시작(따로 일하는 반이라 게 일꾼 수에 안 셈), 다 지으면 예전처럼 저절로 커짐 */
 var H_COST=5;
 function houseWhy(k,x,y){var w=siteWhy(k,x,y);if(w)return w;if(!O2[x+','+y])return '산소가 안 닿아요 · 산소 펌프 가까이에 지어요';return ''}
 function hSpot(k,near){var cs=[];if(near)cs.push(near);cs.push(tileAt(VW/2,VH*.45));var h=bOf('hall');if(h)cs.push({i:h.x+1,j:h.y+1});
@@ -42,13 +42,13 @@ function placeHouse(z,x,y,quiet){var k='z'+z+Math.floor(Math.random()*3),key=x+'
 function placeHouseBar(el){var z=GH.h,Z=ZN[z],why=houseWhy(GH.k,GH.x,GH.y);el.hidden=false;GH.why=why;
   el.innerHTML='<div class="pt"><b>'+Z.ic+' '+Z.n+'</b> · 🫧'+H_COST+'<br><small>'+(why||'여기에 지을 수 있어요 · 끌거나 다른 칸을 눌러 옮겨요 · ✓를 또 누르면 옆에 한 채 더')+'</small></div>';ghBtns(why,'짓기');
   $('pNo').onclick=function(){GH=null;el.hidden=true;$('ghb').hidden=true;openBuild('zone')};
-  $('pOk').onclick=function(){if(!GH||GH.why)return;pushUndo(Z.ic+' '+Z.n+' 짓기');var ok=placeHouse(z,GH.x,GH.y);setTimeout(endAct,0);if(!ok)return;save();toast('🐟 물고기들이 '+Z.n+'을(를) 짓기 시작했어요');
+  $('pOk').onclick=function(){if(!GH||GH.why)return;pushUndo(Z.ic+' '+Z.n+' 짓기');var ok=placeHouse(z,GH.x,GH.y);setTimeout(endAct,0);if(!ok)return;save();toast('🦀 게 일꾼들이 '+Z.n+'을(를) 짓기 시작했어요');
     var nk='z'+z+Math.floor(Math.random()*3),np=hSpot(nk,{i:GH.x,j:GH.y});if(np){GH.k=nk;GH.x=np.x;GH.y=np.y;placeBar()}else{GH=null;el.hidden=true;$('ghb').hidden=true}}}
 /* 도미 비서 카드: 산호궁 가까운 도로 옆에 집 4채를 바로 지음 */
 function quickZone(){var k0='zR0',got=0,near=null;endTool();closeBuild();closePanel();GH=null;$('place').hidden=true;pushUndo('🏠 집 짓기');
   var h=bOf('hall');near=h?{i:h.x+1,j:h.y+1}:null;for(var n=0;n<4;n++){var p=hSpot(k0,near);if(!p)break;if(!placeHouse('R',p.x,p.y,true))break;got++;near={i:p.x,j:p.y}}
   setTimeout(endAct,0);save();if(!got){toast('도로 옆 · 산소가 닿는 빈 땅이 없어요 · 산소 펌프 · 도로를 먼저 놓아요');openBuild('zone');return}
-  snd('done');var last=G.b[G.b.length-1],c=centerOf(last);focus(last);G.b.slice(-got).forEach(function(b){var cc=centerOf(b);dust(cc.x,cc.y,8,.7)});toast('🏠 집 '+got+'채를 짓기 시작했어요 · 다 지으면 물고기들이 이사 와요')}
+  snd('done');var last=G.b[G.b.length-1],c=centerOf(last);focus(last);G.b.slice(-got).forEach(function(b){var cc=centerOf(b);dust(cc.x,cc.y,8,.7)});toast('🦀 게 일꾼들이 집 '+got+'채를 짓기 시작했어요 · 다 지으면 물고기들이 이사 와요')}
 
 /* --- 📖 프롤로그 --- */
 var PRO=[

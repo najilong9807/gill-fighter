@@ -57,7 +57,7 @@ var TUT=[
  {t:'산호궁 옆에 <b>산호 광산</b>을 지어 봐요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('quarry')},go:function(){quickBuild('quarry')},rw:50},
  {t:'광산 머리 위 <b>🪨 동그라미(말풍선)</b>를 눌러 산호석을 받아요',h:'노란 화살표가 가리키는 곳을 눌러요',ok:function(){return G.tutC},go:function(){var q=bOf('quarry');if(q)focus(q)},rw:30},
  {t:'<b>🏛 산호궁</b>을 Lv.2로 업그레이드해요',h:'산호궁을 눌러 ⬆ 업그레이드',ok:function(){return hallLv()>=2||!!bOf('hall').job},go:function(){var h=bOf('hall');focus(h);SEL=h;openPanel(h)},rw:80},
- {t:'물고기가 살 <b>🏠 집</b>을 4채 지어요',h:'👆 여기를 누르면 도로 옆에 집 4채를 바로 지어요 · 짓는 건 물고기들이 해요',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){quickZone()},rw:50},
+ {t:'물고기가 살 <b>🏠 집</b>을 4채 지어요',h:'👆 여기를 누르면 게 일꾼들이 도로 옆에 집 4채를 바로 지어요',ok:function(){var n=0;for(var k in G.zone)if(G.zone[k]==='R')n++;return n>=4},go:function(){quickZone()},rw:50},
  {t:'<b>산소 펌프</b>를 지어 산소를 넓혀요',h:'👆 여기를 누르면 바로 지어요',ok:function(){return !!bOf('pump')},go:function(){quickBuild('pump')},rw:60},
  {t:'물고기 <b>10마리</b>가 입주하게 해요',h:'주택이 도로 · 산소에 닿아야 물고기가 와요',ok:function(){return CS.pop>=10},go:function(){lifePanel()},rw:80},
  {t:'<b>경단 공장</b>을 지어 주민 밥을 만들어요',h:'👆 여기를 누르면 다시마 농장 → 경단 공장을 바로 지어요',ok:function(){return !!bOf('factory')},go:function(){quickBuild(bOf('farm')?'factory':'farm')},rw:100},

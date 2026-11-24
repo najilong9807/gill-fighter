@@ -91,7 +91,7 @@ function zoneTint(key,p,w,h){var z=G.zone[key];if(z&&!OCC[key]){diamond(p.x,p.y,
 function paintZone(t,k){if(G.road[k]||G.ter[k]){return}var o=OCC[k];if(TOOL==='z0'){if(!G.zone[k])return;delete G.zone[k];if(o&&isZ(o.k)){G.b.splice(G.b.indexOf(o),1);occ()}return}
   var z=TOOL.charAt(1);if(o)return;if(hallLv()<ZN[z].at){toast(ZN[z].n+'은(는) 🏛 산호궁 Lv.'+ZN[z].at+'에 열려요');return}if(G.zone[k]===z)return;if(WAL.get('pearl')<5){toast('진주가 모자라요');return}WAL.add('pearl',-5);G.zone[k]=z;var p=sc(t.i,t.j);dust(p.x,p.y,2,.3)}
 function zonePanel(b){var el=$('panel'),z=b.k.charAt(1),Z=ZN[z],L=b.lv,lv=landVal(b.x,b.y),h='<button class="x" id="pX">✕</button><h2>'+Z.ic+' '+Z.n+' <small>Lv.'+L+'</small></h2>';
-  if(b.job)h+='<div class="box">'+(b.job.L===1?'물고기들이 짓는 중':'Lv.'+b.job.L+'로 올리는 중')+' · '+dur((b.job.end-NOW())/1000)+'</div>';
+  if(b.job)h+='<div class="box">'+(b.job.L===1?'🦀 게 일꾼들이 짓는 중':'Lv.'+b.job.L+'로 올리는 중')+' · '+dur((b.job.end-NOW())/1000)+'</div>';
   if(z==='R')h+='<p class="prod">🐟 사는 물고기 '+(b.occ|0)+' / '+Z.cap[Math.max(1,L)]+'</p>';else if(z==='C')h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 물고기 '+Z.serve[Math.max(1,L)]+'마리가 와서 경단 · 옷을 사요</p>';else h+='<p class="prod">일자리 '+Z.jobs[Math.max(1,L)]+' · 일꾼이 차면 마을 생산이 빨라져요</p>';
   h+='<p class="prod">땅값 '+lv+'<span class="meter"><i style="width:'+lv+'%;background:'+(lv>=62?'#35C27A':lv>=45?'#F2B233':'#E5484D')+'"></i></span></p>';
   if(!O2[b.x+','+b.y])h+='<p class="why">산소가 안 닿아요 · 산소 펌프를 가까이 지어요</p>';if(!roadAdj(b.x,b.y))h+='<p class="why">도로가 안 닿아요</p>';

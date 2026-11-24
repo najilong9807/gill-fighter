@@ -46,7 +46,7 @@ function lvOf(k){var m=0;G.b.forEach(function(b){if(b.k===k)m=Math.max(m,b.lv||0
 function bOf(k){for(var i=0;i<G.b.length;i++)if(G.b[i].k===k)return G.b[i];return null}
 function hallLv(){return lvOf('hall')}
 function crabsMax(){return D.crabs(lvOf('crab'))}
-function jobs(){return G.b.filter(function(b){return b.job&&!isZ(b.k)})} /* 1.1.33: 집 · 가게 · 공방은 물고기들이 지어서 게 일꾼 수에 안 셈 */
+function jobs(){return G.b.filter(function(b){return b.job&&!isZ(b.k)})} /* 1.1.33: 집 · 가게 · 공방은 따로 일하는 게 일꾼 반이 지어서 일꾼 수에 안 셈 */
 function cap(r){var c=D.storeCap(lvOf('store'));return r==='brick'?c/4:r==='nail'?c/10:c}
 function have(r){return r==='pearl'||r==='gem'?WAL.get(r):(G.res[r]||0)}
 function payOk(c){for(var k in c)if(have(k)<c[k])return false;return true}
@@ -270,7 +270,7 @@ function showCat(c){CAT=c;var L=hallLv(),h='<div class="pills">'+CATS.map(functi
   if(c==='road')h+='<div class="tools1"><button data-tool="road"><b>🛣 도로 건설</b><i>끌어서 도로를 놓아요 · 한 칸 '+D_ROAD+'🫧</i></button><p class="tip">건물 · 집 · 가게는 도로에 붙어야 돌아가요. 도로끼리 이어지면 모양이 저절로 맞춰져요.</p></div>';
   else if(c==='clear')h+='<div class="tools1"><button data-tool="clear"><b>🧹 철거하기</b><i>바위 60🫧 · 덤불 25🫧 · 도로 철거(절반 환급)</i></button><p class="tip">다시마 덤불은 근처 땅값을 조금 올려 줘요. 꼭 필요한 곳만 철거해요.</p></div>';
   else if(c==='zone'){var hc='';[['R','물고기가 살아요 · 인구 +'],['C','주민이 경단 · 옷을 사요 · 세금 +'],['I','일자리 + · 생산이 빨라져요']].forEach(function(a){var z=ZN[a[0]],lock=L<z.at,d=CS.dem[a[0]];hc+='<button class="card'+(lock?' off':'')+'" data-hk="'+a[0]+'"><img src="'+thumb('z'+a[0]+'0')+'" alt=""><b>'+z.ic+' '+z.n+'</b><i>'+(lock?'🔒 🏛Lv.'+z.at:'🫧'+H_COST+' · '+(d>.1?'▲ 더 필요해요':d<-.1?'▼ 넘쳐요':'– 적당해요'))+'</i><small>'+a[1]+'</small></button>'});
-    h+='<div class="cards">'+hc+'</div><p class="tip">놓으면 물고기들이 와서 지어요 · 도로 옆 · 산소가 닿는 곳 · ✓를 계속 누르면 옆에 한 채씩 더 지어요 · 다 지은 뒤엔 저절로 커져요</p>'}
+    h+='<div class="cards">'+hc+'</div><p class="tip">놓으면 게 일꾼들이 와서 지어요(다른 공사와 따로라 일꾼 수에 안 걸려요) · 도로 옆 · 산소가 닿는 곳 · ✓를 계속 누르면 옆에 한 채씩 더 · 다 지은 뒤엔 저절로 커져요</p>'}
   else if(c==='deco'){var dc='';Object.keys(DEC).sort(function(a,b){return (DEC[b].gift?1:0)-(DEC[a].gift?1:0)}).forEach(function(k){var d=DEC[k],inv=(G.inv&&G.inv[k])|0;if(d.fac||d.gift&&!inv)return;var open=d.gift?inv>0:L>=d.at;dc+='<button class="card'+(open?'':' off')+'" data-dk="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+d.n+'</b><i>'+(d.gift?'🎁 '+inv+'개 있어요':open?'🫧'+fmt(d.c):'🔒 🏛Lv.'+d.at)+'</i><small>주변 '+d.r+'칸 땅값 +'+d.v+'</small></button>'});h+='<div class="cards">'+dc+'</div><p class="tip">장식은 도로에 안 붙어도 돼요 · 땅값이 오르면 주택이 2 · 3단계로 자라요</p>'}
   else{var cards='';Object.keys(CATOF).forEach(function(k){if(CATOF[k]!==c)return;var b=B[k],built=bOf(k),open=L>=b.at,cc=D.cost(k,1),why=open?needList(k,1).filter(function(n){return !n.ok}).map(reqTxt).join(', '):'';
       cards+='<button class="card'+(built?' own':!open||why?' off':'')+'" data-k="'+k+'"><img src="'+thumb(k)+'" alt=""><b>'+b.n+'</b>'+(built?'<i class="own">✓ Lv.'+built.lv+'</i>':!open?'<i>🔒 🏛Lv.'+b.at+'</i>':why?'<i>'+why+' 필요</i>':'<i>🫧'+fmt(cc.pearl)+' 🪨'+fmt(cc.stone)+'</i>')+'<small>'+(DESC[k]?DESC[k].s:'')+'</small></button>'});
@@ -336,7 +336,7 @@ function todoPanel(){var el=$('panel'),L=hallLv(),h='<button class="x" id="pX">�
 function helpPanel(){var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📖 마을이 도는 법</h2><div class="box help">'+
   '<p><b>🏛 산호궁</b>이 모든 걸 열어요. 올리려면 정해진 건물 레벨 · 인구 · 진주가 필요해요. 다른 건물은 산호궁보다 높게 못 올려요.</p>'+
   '<p><b>🫧 진주</b>는 바닷속의 돈이에요. 아가미 파이터와 같은 지갑이라, 바다에서 모은 진주를 마을에서도 써요. 짓기에 드는 진주는 게 일꾼 품삯과 재료값이에요. <b>💎 보석</b>으로는 공사를 바로 끝내요(5분 이하는 무료).</p>'+
-  '<p><b>🏠 집 · 🛍 가게 · 🔧 공방</b>은 🔨 짓기 → 🏠 집 · 가게에서 건물처럼 놓으면 물고기들이 와서 지어요. 도로 옆, 산소 펌프의 산소가 닿는 곳이어야 해요. 다 지으면 땅값 · 행복에 따라 저절로 커져요.</p>'+
+  '<p><b>🏠 집 · 🛍 가게 · 🔧 공방</b>은 🔨 짓기 → 🏠 집 · 가게에서 건물처럼 놓으면 게 일꾼들이 와서 지어요(다른 공사와 따로라 일꾼 수에 안 걸려요). 도로 옆, 산소 펌프의 산소가 닿는 곳이어야 해요. 다 지으면 물고기들이 이사 오고, 땅값 · 행복에 따라 저절로 커져요.</p>'+
   '<p><b>🔁 마을이 도는 순서</b>: 주민이 광산 · 농장 · 공장에서 일해 물건을 만들어요 → 창고에 모여요 → 🍡 경단 · 👕 옷은 상점으로 가서 주민이 사 먹고 입어요(그래야 행복해져 주택이 자라요) → 주민은 일해서 번 진주로 장을 보고 세금을 내요 → 남는 물건은 거북이 이웃 마을에 팔아 진주로 바꿔요.</p>'+
   '<p><b>🧾 세금</b>은 주민이 일해서 번 진주 중 일부를 마을에 내는 거예요. 상점에서 장을 본 인구 × 행복만큼 🏛 산호궁에 쌓여요(8시간치까지). 산호궁 위 🫧 말풍선을 눌러 걷어요.</p>'+
   '<p><b>🐢 주문</b>은 이웃 바다 마을이 모자란 물건을 사겠다는 거예요. 우리 마을 광산 · 농장 · 공장이 만들어 창고에 모아 둔 물건을 거북이 실어다 주면 물건값으로 진주 · 명성을 받아요. 세금과 함께 마을의 두 가지 수입이에요. 명성 레벨마다 💎 선물이 있어요.</p>'+

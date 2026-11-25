@@ -14244,7 +14244,11 @@ function setTabsApply(){var box=$('setAll');if(!box)return;var bar=$('setTabs');
   if(!bar){bar=document.createElement('div');bar.id='setTabs';bar.className='dmtabs settabs';bar.setAttribute('role','tablist');SETTABS.forEach(function(o){var b=document.createElement('button');b.type='button';b.id='setTab-'+o[0];b.dataset.k=o[0];b.textContent=(LANG==='en'?{gen:'General',gfx:'Graphics',snd:'Sound',dat:'Data',inf:'Info'}:LANG==='ja'?{gen:'一般',gfx:'画面',snd:'サウンド',dat:'データ',inf:'情報'}:{gen:'일반',gfx:'그래픽',snd:'사운드',dat:'저장',inf:'정보'})[o[0]];b.addEventListener('click',function(){SETTAB=o[0];setTabsApply();var pg=$('setp');if(pg)pg.scrollTop=0});bar.appendChild(b)});box.parentNode.insertBefore(bar,box)}
   [].forEach.call(bar.children,function(b){b.setAttribute('aria-pressed',b.dataset.k===SETTAB?'true':'false')});
   [].forEach.call(box.children,function(s){var h=s.querySelector('h3');var k=h?setTabOf(h.textContent.trim()):'inf';s.style.display=k===SETTAB?'':'none'})}
-var renderSetPageTB=renderSetPage;renderSetPage=function(){var r=renderSetPageTB.apply(this,arguments);try{setTabsApply()}catch(e){}return r};
+var renderSetPageTB=renderSetPage;renderSetPage=function(){var r=renderSetPageTB.apply(this,arguments);try{setTabsApply()}catch(e){}
+  /* 1.1.34 QA: 프랑스어·네덜란드어·그리스어에서 설정 탭 글자 끝이 잘리던 것('Graphisme…') → 칸에 맞게 글자 줄임 */
+  setTimeout(function(){try{var bar=$('setTabs');if(!bar||!bar.offsetParent)return;var bs=[].slice.call(bar.children);bs.forEach(function(b){b.style.removeProperty('font-size')});
+    var f=parseFloat(getComputedStyle(bs[0]).fontSize)||15,n=0,over=function(){return bs.some(function(b){return b.scrollWidth>b.clientWidth+1})};
+    while(over()&&f>10&&n<30){f-=.5;n++;bs.forEach(function(b){b.style.setProperty('font-size',f+'px','important')})}}catch(e){}},0);return r};
 try{$('setBtn').addEventListener('click',function(){SETTAB='gen'},true)}catch(e){}
 /* 1.1.16 종한 선택 ①: 닉네임은 첫 판을 마친 뒤 홈에서 한 번 묻는다(기존 사람은 이미 정했거나 안 뜸) */
 function nickLater(k){try{if(save.nickSet||!save.nickLater||!(save.runs>=1)||state!=='home'||page!=='home')return;if(typeof TUT!=='undefined'&&TUT&&TUT.on)return;

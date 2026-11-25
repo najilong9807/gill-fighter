@@ -4148,7 +4148,7 @@ function campRender(){var box=$('campMap');box.textContent='';box.className='cma
   var ab=document.createElement('div');ab.className='cmap-abyss';ab.style.top=(campNodeY(CAMP_N)+110)+'px';ab.textContent=LANG==='en'?'Deeper seas open soon…':T('더 깊은 바다는 곧 열려요…');box.appendChild(ab);
   campInfo()}
 /* 1.2.0(빌드 60) 층 정보 칸: 층·바다·별 → 미션(크게) → 요령 → 별 조건 3칸 → 첫 보상 칩 → 출발 */
-function campStarShort(f,i){var en=LANG==='en';if(i===0)return en?'Clear':T('깨기');if(i===2)return en?'No revive · boost':T('부활·부스터 없이');
+function campStarShort(f,i){var en=LANG==='en';if(i===0)return en?'Clear':LANG==='ko'?'도전':T('깨기');if(i===2)return en?'No revive · boost':T('부활·부스터 없이');
   return f.type==='survive'?(en?'Eat '+f.eat2+' fish':T('물고기 ')+f.eat2+T('마리 먹기')):(en?'Under '+fmtTime(f.lim):fmtTime(f.lim)+T(' 안에'))}
 function campInfo(){var n=CAMP.sel,f=campFloor(n),box=$('campInfo'),st=campStarsOf(n);box.textContent='';box.classList.toggle('boss',f.type==='boss');
   function el(t,c,tx){var e=document.createElement(t);if(c)e.className=c;if(tx!=null)e.textContent=tx;return e}
@@ -14791,7 +14791,7 @@ campTick=function(){var f=P.camp;if(!f||state!=='play'||P.dead)return;
   /* 보스가 화면 밖 멀리 사라지면(물고기 정리) 다시 데려옴 */if(!CAMP.bossDown&&CAMP.boss&&fish.indexOf(CAMP.boss)<0){if(f.type==='boss')campBoss();else campMB()}
   if(CAMP.bossDown){var s2=(P.eaten||0)>=(f.eat2||campEat2(f)),s3=P.revives>=P.rev0&&!P.boost0&&!P.contd;P.campStars=1+(s2?1:0)+(s2&&s3?1:0);crumb('campClear:'+f.n+':'+P.campStars);endRun(true)}};
 campStar2Text=function(f){var n=f.eat2||campEat2(f);return LANG==='en'?'Eat '+n+' fish and clear':f.type==='survive'?T('버티면서 물고기 ')+n+T('마리 먹기'):T('물고기 ')+n+T('마리 먹고 깨기')};
-campStarShort=function(f,i){var en=LANG==='en';if(i===0)return en?'Clear':T('깨기');if(i===2)return en?'No revive · boost':T('부활·부스터 없이');var n=f.eat2||campEat2(f);return en?'Eat '+n+' fish':T('물고기 ')+n+T('마리 먹기')};
+campStarShort=function(f,i){var en=LANG==='en';if(i===0)return en?'Clear':LANG==='ko'?'도전':T('깨기');if(i===2)return en?'No revive · boost':T('부활·부스터 없이');var n=f.eat2||campEat2(f);return en?'Eat '+n+' fish':T('물고기 ')+n+T('마리 먹기')};
 var campGoalTextMB=campGoalText;campGoalText=function(f,L){var t=campGoalTextMB(f,L);try{if(f.type!=='boss'&&f.mb)t+=(LANG==='en'?' → Boss ':' → '+T('보스 '))+byId(f.mb).name}catch(e){}return t};
 campHud=function(){var f=P.camp,g=$('goal');if(!f||!g)return;g.hidden=false;g.classList.remove('mp');g.classList.add('camp');
   var tm=$('goalTime');if(!tm){tm=document.createElement('div');tm.id='goalTime';tm.className='goal-time';g.appendChild(tm)}

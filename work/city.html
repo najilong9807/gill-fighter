@@ -145,8 +145,8 @@ html:not([lang=ko]) #side button{max-width:58px;padding:0 4px}html:not([lang=ko]
 #panel .x::after,#tray .close::after,#tut .tx::after,#panel .ord .del::after,#panel .ord>button:not(.del)::after,#panel .tr button::after,#panel .car button::after,#panel .wqr>button::after,#hF::after{content:"";position:absolute;inset:-6px}
 #panel .ord>button:not(.del),#panel .tr button,#panel .car button,#panel .wqr>button,#hF{position:relative}
 #panel .ord .del::after{inset:-11px}#panel .ord>button:not(.del)::after,#panel .car button::after{inset:-7px -3px}#panel .tr button::after{inset:-7px -4px}#panel .wqr>button::after{inset:-4px}#hF::after{inset:-9px -3px}#tut .tx::after{inset:-10px}
-/* 짓기 칸 분류 단추: 폰에서 '철거'만 셋째 줄에 남지 않게 조금 줄이고 줄마다 꽉 채움 */
-#tray .pills{gap:5px 4px}#tray .pills button{padding:0 7px;font-size:12.5px;flex:1 0 auto}
+/* 짓기 칸 분류 단추: 폰에서 '철거'만 셋째 줄에 남지 않게 조금 줄임 */
+#tray .pills{gap:5px 4px}#tray .pills button{padding:0 7px;font-size:12.5px}#tray .pills button::after{content:"";position:absolute;inset:-5px -2px}
 /* 재료 값 '📌 110' 이 그림 · 숫자로 갈라지지 않게 */
 #panel .cost>span,#panel .row button>span{white-space:nowrap}
 html[lang=vi] .round small{font-size:10px;letter-spacing:-.5px}
@@ -2045,7 +2045,7 @@ function dyHtml(){var S=dyState();if(!S)return '';var rw=dyRw(),now=NOW(),left=(
   var allOk=S.q.every(function(q){return q.got});h+='<div class="wqr all'+(S.all?' got':allOk?' can':'')+'"><span class="ic">🎁</span><div class="tx"><b>오늘의 일 3개 모두 끝내기</b><small>💎2 · ⚡30분</small></div>'+(S.all?'<em>✓ 받음</em>':'<button data-dy="all"'+(allOk?'':' disabled')+'>받기</button>')+'</div></div>';
   if((G.boost|0)>0)h+='<p class="role">⚡ 공사 단축 <b>'+(G.boost|0)+'분</b> 모아 둠 · 짓는 중인 건물 창에서 써요</p>';else if(EMB)h+='<p class="role">⚡ 아가미 파이터 한 판마다 공사 단축 15분 · 재료 상자에 든 연장 덕에 게 일꾼 일이 빨라져요</p>';
   return h}
-var _wqPanelMid=wqPanel;wqPanel=function(){var r;if(hallLv()>=5)r=_wqPanelMid.apply(this,arguments);else{var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📅 오늘의 마을 일</h2>';el.hidden=false;panelFor=null;$('pX').onclick=closePanel}
+var _wqPanelMid=wqPanel;wqPanel=function(){var r;if(hallLv()>=5)r=_wqPanelMid.apply(this,arguments);else{var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📅 오늘의 마을 일</h2>'+(hallLv()<3?'<div class="box">🏛 산호궁 Lv.3에 열려요</div>':'');el.hidden=false;panelFor=null;$('pX').onclick=closePanel}
   try{var el2=$('panel'),h2=el2.querySelector('h2'),x=dyHtml();if(x&&h2){var box=document.createElement('div');box.className='dybox';box.innerHTML=(window.CITY_TR||String)(x);h2.parentNode.insertBefore(box,h2.nextSibling);
     box.querySelectorAll('[data-dy]').forEach(function(b){b.onclick=function(){var v=b.dataset.dy;dyTake(v==='all'?'all':+v);wqPanel()}})}}catch(e){}return r};
 function midDot(){var b=$('bWq');if(!b)return;var L=hallLv();if(L>=3)b.hidden=false;var e=b.querySelector('em');if(e){var w=0;try{w=L>=5?wqReady():0}catch(x){}e.hidden=!(w||dyReady())}}

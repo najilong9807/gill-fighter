@@ -145,8 +145,8 @@ html:not([lang=ko]) #side button{max-width:58px;padding:0 4px}html:not([lang=ko]
 #panel .x::after,#tray .close::after,#tut .tx::after,#panel .ord .del::after,#panel .ord>button:not(.del)::after,#panel .tr button::after,#panel .car button::after,#panel .wqr>button::after,#hF::after{content:"";position:absolute;inset:-6px}
 #panel .ord>button:not(.del),#panel .tr button,#panel .car button,#panel .wqr>button,#hF{position:relative}
 #panel .ord .del::after{inset:-11px}#panel .ord>button:not(.del)::after,#panel .car button::after{inset:-7px -3px}#panel .tr button::after{inset:-7px -4px}#panel .wqr>button::after{inset:-4px}#hF::after{inset:-9px -3px}#tut .tx::after{inset:-10px}
-/* 짓기 칸 분류 단추: 폰에서 '철거'만 셋째 줄에 남지 않게 조금 줄이고 줄마다 꽉 채움 */
-#tray .pills{gap:5px 4px}#tray .pills button{padding:0 7px;font-size:12.5px;flex:1 0 auto}
+/* 짓기 칸 분류 단추: 폰에서 '철거'만 셋째 줄에 남지 않게 조금 줄임 */
+#tray .pills{gap:5px 4px}#tray .pills button{padding:0 7px;font-size:12.5px}#tray .pills button::after{content:"";position:absolute;inset:-5px -2px}
 /* 재료 값 '📌 110' 이 그림 · 숫자로 갈라지지 않게 */
 #panel .cost>span,#panel .row button>span{white-space:nowrap}
 html[lang=vi] .round small{font-size:10px;letter-spacing:-.5px}

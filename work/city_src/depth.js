@@ -154,3 +154,16 @@ var _hudJQ=hud;hud=function(){var r=_hudJQ.apply(this,arguments);try{var n=jqPen
   function tidy(root){if(!root||root.hidden)return;BUSY=1;try{root.querySelectorAll(SEL).forEach(function(el){if(!el.closest(SKIPG))glue(el)});root.querySelectorAll(SEL).forEach(segs)}catch(e){}BUSY=0}
   function hook(id){var el=$(id);if(!el||!window.MutationObserver)return;var mo=new MutationObserver(function(){if(BUSY)return;tidy(el);mo.takeRecords()});mo.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']})}
   hook('panel');hook('tray');window.panelTidy=tidy})();
+
+/* 1.1.34(늑구 '광산 하나 더 지어서 캐는 양 늘리고 싶은데 업그레이드만 유도해서 아쉬워'):
+   산호 광산 · 다시마 농장은 여러 채 — 🏛 Lv.4 에 2채, Lv.8 에 3채. 값은 처음 짓는 값과 같고, 채마다 따로 올리고 따로 생산.
+   짓기 칸에 '＋' 카드가 하나 더 붙음(새 한국어 글 없이 이름 + ＋ · 개수 · 값). 다른 건물이 '광산 Lv.N 필요'를 볼 땐 가장 높은 레벨(lvOf). */
+var MULTI={quarry:1,farm:1};
+function multiMax(k){var L=hallLv();return MULTI[k]?(L>=8?3:L>=4?2:1):1}
+function multiCnt(k){return G.b.filter(function(b){return b.k===k}).length}
+var _showCatM=showCat;showCat=function(c){var r=_showCatM.apply(this,arguments);try{var tr=$('tray'),L=hallLv();
+  Object.keys(MULTI).forEach(function(k){var el=tr.querySelector('.card[data-k="'+k+'"]');if(!el||!bOf(k))return;var n=multiCnt(k),mx=multiMax(k),nx=L<4?4:L<8?8:0;
+    if(n>=mx&&!(n>=1&&nx&&n<3))return;var can=n<mx,cc=D.cost(k,1),d=document.createElement('button');d.className='card'+(can?'':' off');d.dataset.km=k;
+    d.innerHTML='<img src="'+thumb(k)+'" alt=""><b>'+B[k].n+'\u00a0＋</b><i>'+(can?'🫧'+fmt(cc.pearl)+' 🪨'+fmt(cc.stone):'🔒 🏛Lv.'+nx)+'</i><small>'+n+' / '+(can?mx:mx+1)+'</small>';
+    d.onclick=function(){if(!can){toast('🔒 🏛Lv.'+nx);return}var w=canStart(k,1);if(w.length){toast(w[0]);return}ghostAt(k)};el.parentNode.insertBefore(d,el.nextSibling)})}catch(e){}return r};
+var _catBadgeM=catBadge;catBadge=function(c){var n=_catBadgeM.apply(this,arguments);try{Object.keys(MULTI).forEach(function(k){if(CATOF[k]===c&&bOf(k)&&multiCnt(k)<multiMax(k)&&payOk(D.cost(k,1)))n++})}catch(e){}return n};

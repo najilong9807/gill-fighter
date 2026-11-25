@@ -80,12 +80,32 @@ var _drawFXI=drawFX;drawFX=function(){_drawFXI.apply(this,arguments);try{var t=N
 
 /* 할 일: 탁한 물 · 사건 알림 */
 var _todoD=todoPanel;todoPanel=function(){var r=_todoD.apply(this,arguments);try{var t=[];if((CS.murkH|0)>=4)t.push('🌫 집 근처 물이 탁해요(행복 −'+CS.murkH+') · ⚙ 기반 → 🫧 물 거르개');incOn().forEach(function(b){var q=INCT[b.inc.k];t.push('⚠ '+q.ic+' '+q.n+' · '+NM(b.k)+'을(를) 눌러 해결해요')});if(polSlots()>polList().length)t.push('⚖ 켤 수 있는 정책이 '+(polSlots()-polList().length)+'개 있어요 · ☰ 메뉴 → 마을 정책');
-  if(t.length){var d=document.createElement('div');d.className='box';d.innerHTML=t.join('<br>');$('panel').appendChild(d)}}catch(e){}return r};
+  if(t.length){var bxs=$('panel').querySelectorAll('.box'),bx=bxs[bxs.length-1],d=document.createElement('div');d.innerHTML=t.join('<br>');if(bx){d.style.marginTop='4px';bx.appendChild(d)}else{d.className='box';$('panel').appendChild(d)}}}catch(e){}return r}; /* 1.1.33: 할 일 칸을 따로 만들지 않고 마지막 칸에 이어 붙임 */
 /* --- 마을 현황 · 메뉴 --- */
 var _lifeD=lifePanel;lifePanel=function(){var r=_lifeD.apply(this,arguments);try{var el=$('panel'),c=CS,io=incOn(),d=document.createElement('div');d.className='box';var on=polList();
   d.innerHTML=((c.murkH|0)>0?'🌫 탁한 물 때문에 행복 <b>−'+(c.murkH|0)+'</b> <small>(집 근처 평균 · 🗺 지도 → 탁한 물)</small><br>':'')+'⚖ 정책 '+(polSlots()?on.length+' / '+polSlots()+(on.length?' · '+on.map(function(k){return POLD[k].ic+' '+POLD[k].n}).join(' · '):''):'🔒 🏛Lv.6')+
    '<br>⚠ 사건 '+(hallLv()<6?'🔒 🏛Lv.6':'지금 '+io.length+'개 · 막아 낸 사건 '+((G.inc&&G.inc.blk)|0)+'번')+'<div class="row">'+(polSlots()?'<button id="lPol">⚖ 정책</button>':'')+'<button class="sub" id="lMap">🗺 탁한 물 보기</button></div>';
   var p=el.querySelector('.role');el.insertBefore(d,p||null);if($('lPol'))$('lPol').onclick=polPanel;$('lMap').onclick=function(){closePanel();VIEW=3;viewBtn()}}catch(e){}return r};
+/* 1.1.33 마을 현황 칸 정리(늑구 '칸 크기 · 배치 · 정렬'): 번역이 끝난 뒤 DOM 만 줄 단위로 나눠 정렬 — 글자는 그대로라 32개 언어 번역에 영향 없음
+   줄마다 한 칸 · 긴 괄호 설명은 줄 아래 작은 글씨 · 수요 막대는 이름 칸 너비를 맞추고 남은 폭을 다 씀 · 아래 단추 높이 같게 · 산호궁 조건 줄도 칸으로 */
+var _lifeL=lifePanel;lifePanel=function(){var r=_lifeL.apply(this,arguments);try{lifeTidy()}catch(e){}return r};
+function lifeTidy(){var el=$('panel');if(!el)return;el.classList.add('lifep');
+  el.querySelectorAll('.box').forEach(function(bx){if(bx.dataset.tidy)return;bx.dataset.tidy='1';var out=[],cur=null;
+    function nr(){cur=document.createElement('div');cur.className='lrow'}nr();
+    [].slice.call(bx.childNodes).forEach(function(n){if(n.nodeName==='BR'){out.push(cur);nr();n.parentNode.removeChild(n);return}
+      if(n.nodeType===1&&n.classList&&n.classList.contains('row')){out.push(cur);out.push(n);nr();return}cur.appendChild(n)});out.push(cur);
+    while(bx.firstChild)bx.removeChild(bx.firstChild);
+    out.forEach(function(x){if(x.className==='lrow'&&!(x.textContent||'').trim()&&!x.querySelector('*'))return;bx.appendChild(x)});
+    var hasM=!!bx.querySelector('.meter');
+    bx.querySelectorAll('.lrow').forEach(function(rw,i){var m=rw.querySelector('.meter');
+      if(m){rw.classList.add('lmeter');var lab=document.createElement('span');lab.className='llab';while(rw.firstChild&&rw.firstChild!==m)lab.appendChild(rw.firstChild);rw.insertBefore(lab,m)}
+      else if(hasM&&i===0)rw.classList.add('lttl');
+      rw.querySelectorAll('small').forEach(function(sm){if((sm.textContent||'').trim().length>20)sm.classList.add('lhint')})})});
+  var labs=el.querySelectorAll('.lmeter .llab'),w=0;labs.forEach(function(l){w=Math.max(w,l.getBoundingClientRect().width)});if(w)labs.forEach(function(l){l.style.minWidth=Math.ceil(w)+'px'})}
+(function(){var st=document.createElement('style');st.textContent='.lifep .box .lrow{padding:3px 0}.lifep .box .lrow+.lrow{border-top:1px solid #e3eaf2}.lifep .lrow.lttl{font-weight:800;border-top:0!important;padding-bottom:4px}.lifep .lrow.lttl+.lrow{border-top:0}'+
+  '.lifep .box .lrow.lmeter{display:flex;align-items:center;gap:10px;border-top:0}.lifep .llab{flex:0 0 auto;white-space:nowrap}.lifep .lmeter .meter{flex:1;width:auto;margin:0;height:10px}'+
+  '.lifep small.lhint{display:block;font-size:12px;color:#6a7690;line-height:1.3;margin-top:1px}.lifep .box .row{margin-top:8px}.lifep .box .row button,.lifep .box .row button.sub{height:44px;font-size:15px}'+
+  '.lifep p.role{margin:8px 0 0;padding:8px 10px;background:#fff6d6;border-radius:12px;font-size:13.5px;line-height:1.4}';document.head.appendChild(st)})();
 var _menuP=menuPanel;menuPanel=function(){var r=_menuP.apply(this,arguments);try{var g=$('panel').querySelector('.mgrid');if(g&&!g.querySelector('[data-m="pol"]')){var b=document.createElement('button');b.dataset.m='pol';var S=polSlots();
   b.innerHTML='⚖<b>마을 정책</b><small>'+(S?'켜진 정책 '+polList().length+' / '+S:'🏛 Lv.6에 열려요')+'</small>';b.onclick=function(){polPanel()};g.insertBefore(b,g.children[3]||null)}}catch(e){}return r};
 (function(){var st=document.createElement('style');st.textContent='.pg{color:#2e9b55;font-weight:800}.pb{color:#d0473f;font-weight:800}';document.head.appendChild(st);setInterval(function(){try{incTick()}catch(e){}},5000)})();
@@ -94,3 +114,20 @@ window.__depth.top=function(){var best=null;G.b.forEach(function(b){if(isZ(b.k)&
 window.__depth.addF=function(x,y,k){G.b.push({id:G.nid++,k:k||'d_filt',x:x,y:y,lv:1,buf:{}});occ();fields();return murkAt(x,y)};
 window.__depth.openInc=function(){var b=incOn()[0];if(b)openPanel(b);return !!b};
 window.__depth.homes=function(){var a={n:0,noO2:0,noRoad:0,occ:0,cap:0,inc:0};G.b.forEach(function(b){if(isZ(b.k)&&b.k.charAt(1)==='R'&&b.lv){a.n++;if(!O2[b.x+','+b.y])a.noO2++;if(!roadAdj(b.x,b.y))a.noRoad++;a.occ+=b.occ|0;a.cap+=ZN.R.cap[b.lv]}});a.lim=CS.lim;a.happy=CS.happy;return a};
+
+/* 1.1.33 공사 대기 줄(늑구 '일꾼이 일하고 있어도 대기열 걸리게 해줘 정도껏'):
+   게 일꾼이 다 바빠도 공사를 미리 걸어 둘 수 있음 — 대기 줄은 일꾼 3명 전까지 2칸, 3명부터 3칸. 재료는 걸 때 냄.
+   대기 공사는 앞 공사가 끝나는 시각에 이어서 시작하도록 시각(start · end)을 미리 정해 둠 → 앱을 꺼 둬도 순서대로 끝남.
+   일꾼 칩은 '일하는 수/일꾼 수 +대기 수' */
+function jqPend(now){now=now||NOW();return G.b.filter(function(b){return b.job&&b.job.q&&now<b.job.start})}
+function JQMAX(){return crabsMax()>=3?3:2}
+var _jobsJQ=jobs;jobs=function(){var now=NOW();return _jobsJQ().filter(function(b){return !(b.job.q&&now<b.job.start)})};
+var _canJQ=canStart;canStart=function(k,L){var w=_canJQ.apply(this,arguments),i=w.indexOf('게 일꾼이 다 바빠요 🦀');if(i>=0&&jqPend().length<JQMAX())w.splice(i,1);return w};
+function jqSched(now){var q=jqPend(now).sort(function(a,b){return (a.job.qa||0)-(b.job.qa||0)});if(!q.length)return;
+  var fr=_jobsJQ().filter(function(b){return !(b.job.q&&now<b.job.start)}).map(function(b){return Math.max(now,b.job.end)}).sort(function(a,b){return a-b}),M=crabsMax();
+  while(fr.length<M)fr.unshift(now);fr=fr.slice(0,Math.max(M,1));
+  q.forEach(function(b){fr.sort(function(a,c){return a-c});var st=Math.max(now,fr[0]),d=b.job.dur||Math.max(1000,b.job.end-b.job.start);b.job.dur=d;b.job.start=st;b.job.end=st+d;fr[0]=b.job.end})}
+var _startJQ=startJob;startJob=function(b,L){var now=NOW(),busy=jobs().length>=crabsMax(),r=_startJQ.apply(this,arguments);
+  try{if(busy&&b.job&&!isZ(b.k)){b.job.q=1;b.job.qa=now;b.job.dur=Math.max(1000,b.job.end-b.job.start);b.job.start=now+1;b.job.end=now+1+b.job.dur;jqSched(now);toast('🦀 ⏳ '+jqPend(now).length+' / '+JQMAX());save()}}catch(e){}return r};
+var _stepJQ=step;step=function(now,quiet){try{if(!quiet)jqSched(now)}catch(e){}return _stepJQ.apply(this,arguments)};
+var _hudJQ=hud;hud=function(){var r=_hudJQ.apply(this,arguments);try{var n=jqPend().length;if(n)$('crabs').innerHTML='🦀 <b>'+jobs().length+'/'+crabsMax()+'</b> <small>+'+n+'</small>'}catch(e){}return r};

@@ -148,7 +148,7 @@ html:not([lang=ko]) #side button{max-width:58px;padding:0 4px}html:not([lang=ko]
 /* 짓기 칸 분류 단추: 폰에서 '철거'만 셋째 줄에 남지 않게 조금 줄임 */
 #tray .pills{gap:5px 4px}#tray .pills button{padding:0 7px;font-size:12.5px}#tray .pills button::after{content:"";position:absolute;inset:-5px -2px}
 /* 재료 값 '📌 110' 이 그림 · 숫자로 갈라지지 않게 */
-#panel .cost>span,#panel .row button>span{white-space:nowrap}
+#panel .cost>span,#panel .row button>span{white-space:nowrap}#panel .lvp,#panel .lvp small{text-wrap:pretty}
 html[lang=vi] .round small{font-size:10px;letter-spacing:-.5px}
 /* 놓는 중에 창을 열면 ✓ · ↶ 동그라미가 창 위에 떠 있던 것 → 창이 열린 동안만 숨김(닫으면 다시 보임) */
 #panel:not([hidden])~#ghb{display:none!important}
@@ -957,7 +957,7 @@ function floatUI(){var g=$('ghb');if(GH&&!g.hidden){var s=sz(GH.k),c=sc(GH.x+(s-
 function costHtml(c){return Object.keys(c).map(function(k){var ok=have(k)>=c[k];return '<span class="'+(ok?'ok':'no')+'">'+ICON[k]+' '+fmt(c[k])+'</span>'}).join(' ')}
 function openPanel(b){if(isZ(b.k))return zonePanel(b);if(isD(b.k))return decoPanel(b);var el=$('panel'),k=b.k,L=b.lv,h='<button class="x" id="pX">✕</button><h2>'+(DESC[k]?DESC[k].ic+' ':'')+B[k].n+' <small>Lv.'+L+'</small></h2>';
   h+=descBox(k,L);
-  var r=rates(b),rk=Object.keys(r);if(rk.length)h+='<p class="prod">'+(k==='hall'?'🧾 세금 ':'')+rk.map(function(q){return ICON[q]+' 시간당 '+(r[q]<10?r[q].toFixed(1):fmt(r[q]))}).join(' · ')+' <small>(8시간치까지 쌓여요)</small></p>';
+  var r=rates(b),rk=Object.keys(r);if(rk.length)h+='<p class="prod">'+(k==='hall'?'🧾 세금 ':'')+rk.map(function(q){return ICON[q]+' 시간당 '+(r[q]<10?r[q].toFixed(1):fmt(Math.round(r[q])))}).join(' · ')+' <small>(8시간치까지 쌓여요)</small></p>';
   if(k==='aqua'&&L&&EMB&&window.parent.GF_GO)h+='<div class="row"><button class="sub" id="pAqua">🐠 내 수족관 보러 가기</button></div>'; /* 본게임 수족관 탭으로 */
   if(k==='port'&&L&&!(b.job&&b.job.L===1))h+='<div class="row"><button class="sub" id="pPort">🐋 고래 배 보기'+(G.pt&&G.pt.st==='back'?' · 돌아왔어요!':'')+'</button></div>';if(k==='train'&&L&&!(b.job&&b.job.L===1))h+='<div class="row"><button class="sub" id="pTrain">🚋 열차 보기'+(G.tr&&G.tr.st==='back'?' · 돌아왔어요!':'')+'</button></div>';if(k==='crab')h+='<p class="prod">🦀 게 일꾼 '+crabsMax()+'마리</p>';if(k==='store')h+='<p class="prod">🪨 '+fmt(cap('stone'))+'까지 · 🧱 '+fmt(cap('brick'))+' · 📌 '+fmt(cap('nail'))+'</p>';
   if(b.job){var left=(b.job.end-NOW())/1000,g=D.rushGems(left);h+='<div class="box">Lv.'+b.job.L+'로 올리는 중 · 남은 시간 <b>'+dur(left)+'</b></div><div class="row"><button class="main" id="pRush">'+(g?'💎 '+g+' 바로 완성':'무료로 바로 완성')+'</button></div>'}

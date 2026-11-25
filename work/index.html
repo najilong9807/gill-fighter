@@ -17603,7 +17603,7 @@ try{(function(){var st=document.createElement('style');st.textContent='#welP .we
     ['over','pause','sheet','hud','skill','hint','home','tankUI','menu','sea','rec','setp'].forEach(function(id){var el=document.getElementById(id);if(el)el.hidden=true});
     var t=document.getElementById('tabs');if(t)t.hidden=false;
     ['home','tank','dex','sea'].forEach(function(k){var b=document.getElementById('tab-'+k);if(b)b.removeAttribute('aria-current')});if(tb)tb.setAttribute('aria-current','page');
-    if(!save.cityIn){save.cityIn=Date.now();try{persist()}catch(e){}try{if(typeof nfEv==='function')nfEv('city1')}catch(e){}}
+    if(!save.cityIn){save.cityIn=Date.now();try{persist()}catch(e){}try{if(typeof nfEv==='function'&&Date.now()-(save.firstAt||Date.now())<7*864e5)nfEv('city1')}catch(e){}} /* 1.1.33: 신규 기록(nb)은 깐 지 7일 안인 사람만 — 원래 하던 사람이 마을 처음 들어갈 때 신규로 잡히던 것(11/24 4명) */
     cms('cityOpen');openAt=Date.now();
     var sa=satPx(),l=lg();
     ov=document.createElement('div');ov.id='cityOv';

@@ -1712,6 +1712,8 @@ body.hw #over .row #swapBtn::before{filter:none}
 #home .hcf::after{content:"";position:absolute;inset:-8px}
 /* 1.1.34 QA: 설정 언어 33개 칸이 한 줄 26~29px로 촘촘해 옆 언어를 잘못 누르기 쉽던 것 → 칸 높이 38px */
 .langseg.many button{min-height:38px}
+/* 1.1.34 QA: 크리스마스 이벤트 창 「한정 꾸미기」가 버튼 하나뿐인데 두 칸 틀에 들어가 왼쪽 절반에만 붙어 있던 것 → 한 칸 가득 */
+#xmEv .hwe-btns{grid-template-columns:1fr}
 /* 1.1.34 QA: 긴 언어(독일어·스페인어·핀란드어 등)에서 꾸미기 서랍 「완료」가 화면 오른쪽 밖으로 밀려 반쯤 잘리던 것 → 버튼 묶음이 넘치면 다음 줄로 */
 #decoDrawer .dd-acts{flex-wrap:wrap;justify-content:flex-end;row-gap:4px;min-width:0;max-width:100%}
 /* 1.1.34 QA: 긴 언어에서 버튼 글자가 한 줄을 고집해 창 밖으로 삐져나가던 것 — 친구와 같은 바다 「이 코드로 들어가기」(독·이·스웨·카탈), 결과 창 이어하기 「공유하고」(독·러·헝·카탈), 상점 꾸미기 「펫」 칸(스·프·우·말레이) → 줄바꿈 허용 */

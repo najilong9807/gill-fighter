@@ -35,7 +35,7 @@ function polOn(k){return polList().indexOf(k)>=0}
 function polV(t){var add=t==='happy'||t==='lv',v=add?0:1;try{polList().forEach(function(k){var p=POLD[k];if(p&&p.e[t]!=null){if(add)v+=p.e[t];else v*=p.e[t]}})}catch(e){}return v}
 function polWait(){var t=(G.pol&&G.pol.t)||0;return Math.max(0,t+600e3-NOW())}
 function polPanel(){var el=$('panel'),S=polSlots(),on=polList(),w=polWait(),h='<button class="x" id="pX">✕</button><h2>⚖ 마을 정책</h2>';
-  if(!S){h+='<div class="box">정책은 🏛 산호궁 Lv.6에 열려요 · 좋은 점과 대가가 같이 있어요</div>';el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;return}
+  if(!S){h+='<div class="box"><b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.</div>';el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;return}
   h+='<p class="role">켤 수 있는 정책 <b>'+on.length+' / '+S+'</b> · Lv.10 · Lv.15에 한 칸씩 늘어요'+(w?' · 다시 바꾸기까지 '+dur(w/1000):'')+'</p><div class="wq">';
   POLS.forEach(function(p){var o=polOn(p.k),can=!w&&(o||on.length<S);h+='<div class="wqr'+(o?' can':'')+'"><span class="ic">'+p.ic+'</span><div class="tx"><b>'+p.n+'</b><small><span class="pg">▲ '+p.g+'</span><br><span class="pb">▼ '+p.b+'</span></small></div><button data-p="'+p.k+'"'+(can?'':' disabled')+'>'+(o?'끄기':'켜기')+'</button></div>'});
   h+='</div>';el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;
@@ -90,6 +90,7 @@ var _lifeD=lifePanel;lifePanel=function(){var r=_lifeD.apply(this,arguments);try
    줄마다 한 칸 · 긴 괄호 설명은 줄 아래 작은 글씨 · 수요 막대는 이름 칸 너비를 맞추고 남은 폭을 다 씀 · 아래 단추 높이 같게 · 산호궁 조건 줄도 칸으로 */
 var _lifeL=lifePanel;lifePanel=function(){var r=_lifeL.apply(this,arguments);try{lifeTidy()}catch(e){}return r};
 function lifeTidy(){var el=$('panel');if(!el)return;el.classList.add('lifep');
+  try{var tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),tn;while(tn=tw.nextNode())if(/[−-]0\.0(?![\d])/.test(tn.nodeValue))tn.nodeValue=tn.nodeValue.replace(/[−-]0\.0(?![\d])/g,'0')}catch(e){} /* QA: 먹는 양이 0이면 '−0.0' 대신 0 */
   el.querySelectorAll('.box').forEach(function(bx){if(bx.dataset.tidy)return;bx.dataset.tidy='1';var out=[],cur=null;
     function nr(){cur=document.createElement('div');cur.className='lrow'}nr();
     [].slice.call(bx.childNodes).forEach(function(n){if(n.nodeName==='BR'){out.push(cur);nr();n.parentNode.removeChild(n);return}
@@ -143,11 +144,13 @@ var _hudJQ=hud;hud=function(){var r=_hudJQ.apply(this,arguments);try{var n=jqPen
     var f=document.createDocumentFragment(),i=0,m;while(m=EM.exec(v)){if(m.index>i)f.appendChild(document.createTextNode(v.slice(i,m.index)));var s=document.createElement('span');s.className='nb0';s.textContent=m[0];f.appendChild(s);i=m.index+m[0].length}
     if(i<v.length)f.appendChild(document.createTextNode(v.slice(i)));pa.replaceChild(f,n)})}
   function segs(el){if(el.dataset.sg||el.closest(SKIP)||el.querySelector('div,p,ul,li,button,br,.sg,.meter,.bar'))return;var t=(el.textContent||'').trim();if(t.indexOf('·')<0||t.length>150)return;
-    var parts=t.split(/\s·\s/);if(parts.length<2||parts.some(function(p){return p.length>34}))return;el.dataset.sg='1';
+    var parts=t.split(/\s·\s/);if(parts.length<2||parts.some(function(p){return p.length>34||/[,，、]|[.!?。]\s/.test(p)}))return;el.dataset.sg='1';
     var groups=[[]];[].slice.call(el.childNodes).forEach(function(n){if(n.nodeType!==3){groups[groups.length-1].push(n);return}
       n.nodeValue.split(/\s· /).forEach(function(p,j){if(j>0){groups[groups.length-1].push(document.createTextNode(' ·'));groups.push([]);p=p.replace(/^\s+/,'')}if(p)groups[groups.length-1].push(document.createTextNode(p))})});
     while(el.firstChild)el.removeChild(el.firstChild);
-    groups.forEach(function(g,j){if(!g.length)return;var s=document.createElement('span');s.className='sg';g.forEach(function(n){s.appendChild(n)});if(el.firstChild)el.appendChild(document.createTextNode(' '));el.appendChild(s)})}
+    groups.forEach(function(g,j){if(!g.length)return;var s=document.createElement('span');s.className='sg';g.forEach(function(n){s.appendChild(n)});if(el.firstChild)el.appendChild(document.createTextNode(' '));el.appendChild(s)})
+    /* QA: 한 마디가 두 줄로 접히면(좁은 창 · 긴 언어) 덩어리 묶음을 풀어 보통 줄바꿈으로 — '안 집 ·' 만 한 줄에 남던 것 */
+    try{var lh=parseFloat(getComputedStyle(el).fontSize)*1.9,ss=el.querySelectorAll('.sg'),bad=false;ss.forEach(function(x){if(x.offsetHeight>lh)bad=true});if(bad)ss.forEach(function(x){while(x.firstChild)el.insertBefore(x.firstChild,x);el.removeChild(x)})}catch(e){}}
   function tidy(root){if(!root||root.hidden)return;BUSY=1;try{root.querySelectorAll(SEL).forEach(function(el){if(!el.closest(SKIPG))glue(el)});root.querySelectorAll(SEL).forEach(segs)}catch(e){}BUSY=0}
   function hook(id){var el=$(id);if(!el||!window.MutationObserver)return;var mo=new MutationObserver(function(){if(BUSY)return;tidy(el);mo.takeRecords()});mo.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']})}
   hook('panel');hook('tray');window.panelTidy=tidy})();

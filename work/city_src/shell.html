@@ -140,6 +140,30 @@ body.tutOn #tut{top:calc(var(--sat,env(safe-area-inset-top)) + 92px)}
 #panel>h2{padding-right:42px;min-height:34px;text-wrap:balance}#panel h2 small{white-space:nowrap}:where(html:not([lang=ko])) .round small{font-size:10.5px;letter-spacing:-.4px}
 html:not([lang=ko]) #side button{max-width:58px;padding:0 4px}html:not([lang=ko]) #side button small{font-size:10.5px;letter-spacing:-.3px;max-width:100%;overflow:hidden;text-overflow:ellipsis}html:not([lang=ko]) #tut,html:not([lang=ko]) #goal{right:76px!important} /* 긴 언어: 오른쪽 버튼 줄이 도미 비서 카드 · × 를 덮던 것 */
 #panel .ord .who{padding-right:20px!important}@media (max-width:380px){#panel .ord .who{font-size:11.5px;letter-spacing:-.2px}}
+/* 1.1.33 QA(마을 출시 전 점검) */
+/* 누르는 자리 44px: 보이는 크기는 그대로, 투명 테두리로 손가락 닿는 곳만 넓힘 */
+#panel .x::after,#tray .close::after,#tut .tx::after,#panel .ord .del::after,#panel .ord>button:not(.del)::after,#panel .tr button::after,#panel .car button::after,#panel .wqr>button::after,#hF::after{content:"";position:absolute;inset:-6px}
+#panel .ord>button:not(.del),#panel .tr button,#panel .car button,#panel .wqr>button,#hF{position:relative}
+#panel .ord .del::after{inset:-11px}#panel .ord>button:not(.del)::after,#panel .car button::after{inset:-7px -3px}#panel .tr button::after{inset:-7px -4px}#panel .wqr>button::after{inset:-4px}#hF::after{inset:-9px -3px}#tut .tx::after{inset:-10px}
+/* 짓기 칸 분류 단추: 폰에서 '철거'만 셋째 줄에 남지 않게 조금 줄이고 줄마다 꽉 채움 */
+#tray .pills{gap:5px 4px}#tray .pills button{padding:0 7px;font-size:12.5px;flex:1 0 auto}
+/* 재료 값 '📌 110' 이 그림 · 숫자로 갈라지지 않게 */
+#panel .cost>span,#panel .row button>span{white-space:nowrap}
+html[lang=vi] .round small{font-size:10px;letter-spacing:-.5px}
+/* 가로 화면(폰 눕힘): 창은 오른쪽 세로 판으로 · 도미 비서 카드는 오른쪽 버튼을 덮지 않게 · 짓기 칸은 낮게 */
+@media (max-height:500px) and (orientation:landscape){
+ #panel{left:auto!important;right:10px;width:min(460px,calc(100vw - 20px));top:calc(var(--sat,env(safe-area-inset-top)) + 8px);max-height:none}
+ #tut,#goal{right:auto!important;width:min(520px,calc(100vw - 150px))}
+ #tray .cards .card img{width:46px;height:46px}#tray .cards .card{padding:4px}#tray .cards .card small{min-height:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}#tray .tip{margin-top:4px}
+ #tray .pills{padding-bottom:4px}#tray .pills button{height:30px}
+}
+/* 큰 화면(PC · 태블릿 가로): 창 · 카드 · 짓기 단추가 끝까지 늘어나지 않게 */
+@media (min-width:1000px) and (min-height:600px){
+ #panel{left:auto!important;right:10px;width:500px}
+ #tut,#goal{right:auto!important;width:560px}
+ #dock .big{max-width:560px;margin:0 auto}
+ #toolbar,#place{left:max(10px,calc(50vw - 380px))!important;right:max(10px,calc(50vw - 380px))!important}
+}
 </style></head><body>
 <canvas id="cv"></canvas>
 <div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1 r2"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>

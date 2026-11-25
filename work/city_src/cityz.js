@@ -48,7 +48,7 @@ function cityTick(now){if(now-cityT<1000)return;var dt=Math.min(5,(now-(cityT||n
   walkersTick(dt)}
 function zUpWhy(b){var z=b.k.charAt(1),L=b.lv,why=[];if(L>=5)return ['최고 단계'];if(L>=zMax())why.push('🏛 산호궁 Lv.'+ZHL[L]+' 필요');
   var lv=landVal(b.x,b.y),need=ZLV[L];if(lv<need)why.push('땅값 '+need+' 이상(지금 '+lv+')');if(CS.happy<55)why.push('행복 55 이상(지금 '+CS.happy+')');
-  if(z==='R'&&(b.occ|0)<ZN.R.cap[L]*.8)why.push('주민이 더 입주해야 해요');if(CS.dem[z]<-.2)why.push(ZN[z].n+' 수요가 없어요');if((G.res.stone||0)<ZST[L+1])why.push('🪨 '+ZST[L+1]+' 필요');if(ZBR[L+1]&&(G.res.brick||0)<ZBR[L+1])why.push('🧱 '+ZBR[L+1]+' 필요');if(z!=='I'){var mk=murkAt(b.x,b.y),mx=L+1>=5?15:L+1>=4?25:L+1>=3?40:999;if(mk>mx)why.push('🌫 탁한 물 '+mx+' 이하(지금 '+mk+')');var jm=bJam(b);if(L+1>=4&&jm>1)why.push('🚦 길이 막혀요(막힘 '+jm.toFixed(1)+') · 길 넓히기 · 🚌 버스 정류장')}return why.concat(svcWhy(b,L+1))}
+  if(z==='R'&&(b.occ|0)<ZN.R.cap[L]*.8)why.push('주민이 더 입주해야 해요');if(CS.dem[z]<-.2)why.push(ZN[z].ic+' '+ZN[z].n+' 수요가 없어요');if((G.res.stone||0)<ZST[L+1])why.push('🪨 '+ZST[L+1]+' 필요');if(ZBR[L+1]&&(G.res.brick||0)<ZBR[L+1])why.push('🧱 '+ZBR[L+1]+' 필요');if(z!=='I'){var mk=murkAt(b.x,b.y),mx=L+1>=5?15:L+1>=4?25:L+1>=3?40:999;if(mk>mx)why.push('🌫 탁한 물 '+mx+' 이하(지금 '+mk+')');var jm=bJam(b);if(L+1>=4&&jm>1)why.push('🚦 길이 막혀요(막힘 '+jm.toFixed(1)+') · 길 넓히기 · 🚌 버스 정류장')}return why.concat(svcWhy(b,L+1))}
 
 /* --- 주민: 물고기 머리 · 옷 입은 몸으로 길을 걸어요 --- */
 var WALK=[],FISHC=['#ff9f43','#ff6b8b','#4fb3ff','#ffd54a','#7ed957','#b48cff','#ff7d4d'],OUTF=['#4f8fdc','#3fae6a','#ff7d8f','#ffb347','#8a6cff','#2fb5a7'];

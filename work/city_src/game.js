@@ -223,11 +223,11 @@ function drawWorld(t,now){var items=[];
       drawArt(art(g.k,1),it.c,.6);g.why=why;return}
     var b=it.b,c=it.c,s=sz(b.k),z=cam.z;
     ctx.fillStyle='rgba(15,60,80,.2)';ctx.beginPath();ctx.ellipse(c.x+4*z,c.y+6*z,44*s*z,20*s*z,0,0,7);ctx.fill();
-    if(b.job){var L=b.job.L,nx=art(b.k,L),bp=art(b.k,L,1),pr=Math.min(1,(now-b.job.start)/(b.job.end-b.job.start)),k=pr<.5?2*pr*pr:1-Math.pow(-2*pr+2,2)/2;
+    if(b.job){var L=b.job.L,nx=art(b.k,L),bp=art(b.k,L,1),pr=Math.max(0,Math.min(1,(now-b.job.start)/(b.job.end-b.job.start))),k=pr<.5?2*pr*pr:1-Math.pow(-2*pr+2,2)/2;
       var top=c.y+(nx.top-GY)*z,bot=c.y+(TH/2*s+6)*z,rev=bot-(bot-top)*k,scT=Math.max(top-8*z,rev-30*z);
       scaffold(c,s,Math.min(scT,c.y-34*z),false);if(b.lv)drawArt(art(b.k,b.lv),c);drawArt(bp,c);drawArt(nx,c,1,rev);
       ctx.save();ctx.globalCompositeOperation='lighter';var lg=ctx.createLinearGradient(0,rev-8,0,rev+6);lg.addColorStop(0,'rgba(255,255,220,0)');lg.addColorStop(.6,'rgba(255,250,200,.5)');lg.addColorStop(1,'rgba(255,255,220,0)');ctx.fillStyle=lg;ctx.fillRect(c.x-60*s*z,rev-8,120*s*z,14);ctx.restore();
-      scaffold(c,s,Math.min(scT,c.y-34*z),true);var u=(Math.sin(t*.0009+ji)+1)/2;crabAt(c.x+(-36+u*72)*s*z*.6,c.y+(20*s-Math.abs(u-.5)*14)*z,t,ji);
+      scaffold(c,s,Math.min(scT,c.y-34*z),true);var u=(Math.sin(t*.0009+ji)+1)/2;if(!(b.job.q&&now<b.job.start))crabAt(c.x+(-36+u*72)*s*z*.6,c.y+(20*s-Math.abs(u-.5)*14)*z,t,ji);
       if(Math.random()<.04)dust(c.x+(Math.random()-.5)*60*s*z,rev+Math.random()*20,1,.4);
       if(isZ(b.k)){miniBar(c.x,Math.max(70,top-18*z),pr)}else progBar(c.x,Math.max(70,top-34*z),pr,'Lv.'+L+' · '+dur((b.job.end-now)/1000));ji++;return}
     var pop=POPS[b.id],sy=1,e=pop?(now-pop)/700:9;if(e<1)sy=1+Math.sin(e*Math.PI*2.2)*Math.exp(-e*3.5)*.12;

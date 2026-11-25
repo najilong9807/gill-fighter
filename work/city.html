@@ -126,6 +126,20 @@ body.tutOn #tut{top:calc(var(--sat,env(safe-area-inset-top)) + 92px)}
 #tray .cards .card[data-hk]{flex:1 1 0;min-width:0}
 #panel li[data-k].no{cursor:pointer;text-decoration:underline dotted}
 /* 1.1.33 칸 크기 · 배치 · 정렬 손보기(늑구) */.ord .its{flex:1;justify-content:center}.ord .rw{white-space:nowrap}.ord>button[data-s]{margin-top:auto}.ord .del{top:4px;right:4px;width:22px;height:22px;border:1.5px solid var(--ink);font-size:11px}.ord .who{max-width:100%;padding-right:24px!important}#panel p.tip{margin:-2px 0 6px!important;font-size:13.5px;font-weight:400;color:#2c3a55;line-height:1.4}#panel .row button+button.sub,#panel .row button.sub:has(+button){height:48px}.box:has(>.srow){display:grid;grid-template-columns:auto 1fr auto auto;column-gap:6px;align-items:center}.box:has(>.srow)>.srow{display:contents}.srow .meter{width:auto;margin:0}.srow b{text-align:right;min-width:3.2em}.srow small{min-width:4.2em}.dybox{border-bottom:1.5px dashed #cfd8e3;padding-bottom:10px;margin-bottom:8px}.card small,.desc .fx,.dyh small,#toolbar .tl small,#panel .role{text-wrap:balance}.card i{min-height:2.5em;display:flex;align-items:center;justify-content:center}.rcn button{height:auto;align-self:stretch;width:41px}.track+p{margin-top:8px}.cars{margin:8px 0}#panel .desc+.prod{margin:6px 2px}
+/* 1.1.33 창 하나씩 열어 보고 손보기(늑구): 12px 아래 글씨 키움 · 본문 14px · 마디째 줄바꿈(.sg · .nb0 은 depth.js 가 그린 뒤 씌움) */
+.sg{display:inline-block;max-width:100%}.nb0{white-space:nowrap}
+:where(#panel,#tray) small{font-size:max(12px,.88em)}
+#panel .role,#panel .prod{font-size:13.5px}#panel .desc p{font-size:14px}#panel .why{font-size:13px}#panel .req{font-size:13.5px}#panel .help p{font-size:14px}
+#panel .ord .who{font-size:12px}html:not([lang=ko]) #panel .ord .who{font-size:11.5px}#panel .ord .del{font-size:12px}#panel .ord .rw small{font-size:12px}
+#panel .wqr small{font-size:12.5px;line-height:1.35}#panel .pg,#panel .pb{font-size:12.5px}
+#panel .box.mid small{font-size:12.5px}#panel .car small{font-size:12.5px}
+#tray .card small{font-size:12px}#tray .card i{flex-wrap:wrap;column-gap:.25em}#tray .tip{font-size:13px}
+.round small{font-size:12px}#side button small{font-size:12px}#tut small{font-size:12px}#bBack small{font-size:11px}
+#panel p,#panel li,#panel .lrow,#panel .box{text-wrap:pretty}#panel .role,#panel .why,#panel .tx>b{text-wrap:balance}
+#panel .mgrid small{white-space:normal;text-overflow:clip;text-align:center;line-height:1.25;text-wrap:balance}#panel .mgrid button{justify-content:flex-start}
+#panel>h2{padding-right:42px;min-height:34px;text-wrap:balance}#panel h2 small{white-space:nowrap}:where(html:not([lang=ko])) .round small{font-size:10.5px;letter-spacing:-.4px}
+html:not([lang=ko]) #side button{max-width:58px;padding:0 4px}html:not([lang=ko]) #side button small{font-size:10.5px;letter-spacing:-.3px;max-width:100%;overflow:hidden;text-overflow:ellipsis}html:not([lang=ko]) #tut,html:not([lang=ko]) #goal{right:76px!important} /* 긴 언어: 오른쪽 버튼 줄이 도미 비서 카드 · × 를 덮던 것 */
+#panel .ord .who{padding-right:20px!important}@media (max-width:380px){#panel .ord .who{font-size:11.5px;letter-spacing:-.2px}}
 </style></head><body>
 <canvas id="cv"></canvas>
 <div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1 r2"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>
@@ -1724,6 +1738,26 @@ var _startJQ=startJob;startJob=function(b,L){var now=NOW(),busy=jobs().length>=c
   try{if(busy&&b.job&&!isZ(b.k)){b.job.q=1;b.job.qa=now;b.job.dur=Math.max(1000,b.job.end-b.job.start);b.job.start=now+1;b.job.end=now+1+b.job.dur;jqSched(now);toast('🦀 ⏳ '+jqPend(now).length+' / '+JQMAX());save()}}catch(e){}return r};
 var _stepJQ=step;step=function(now,quiet){try{if(!quiet)jqSched(now)}catch(e){}return _stepJQ.apply(this,arguments)};
 var _hudJQ=hud;hud=function(){var r=_hudJQ.apply(this,arguments);try{var n=jqPend().length;if(n)$('crabs').innerHTML='🦀 <b>'+jobs().length+'/'+crabsMax()+'</b> <small>+'+n+'</small>'}catch(e){}return r};
+/* 1.1.33 창 글씨 줄바꿈 다듬기: 그린 뒤(번역 끝난 뒤)에 글자 나눔만 손봄 — 한국어 열쇠 · 번역 표는 그대로
+   · ' · ' 앞 칸은 안 끊기는 칸으로 → 줄 맨 앞에 '·' 가 혼자 오지 않게
+   · 짧은 ' · ' 목록은 마디째 한 덩어리(.sg) → '하나에 🫧' / '1,080' 처럼 어중간하게 안 끊김
+   · 🫧1,080 · ⭐94 같은 그림+숫자는 붙여 둠(.nb0) */
+(function(){var EM=null;try{EM=new RegExp('\\p{Extended_Pictographic}\\uFE0F?\\s?[+\\-\\u2212\\u00d7]?\\d[\\d,.:]*(?:%|[a-zA-Z\\uac00-\\ud7a3]{1,3})?','gu')}catch(e){}
+  var SEL='p,small,li,i,.lab,.fx,.tip,.role,.why,.prod,.say,.tx>b',SKIPG='.mgrid,script,style',SKIP='.mgrid,h2,.row,.who,.help,button:not(.card)',BUSY=0;
+  function txts(el){var a=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),n;while(n=w.nextNode())a.push(n);return a}
+  function glue(el){txts(el).forEach(function(n){var v=n.nodeValue,o=v.replace(/ · /g,' · ');if(o!==v)n.nodeValue=v=o;
+    var pa=n.parentNode;if(!EM||!pa||pa.classList&&pa.classList.contains('nb0'))return;EM.lastIndex=0;if(!EM.test(v))return;EM.lastIndex=0;
+    var f=document.createDocumentFragment(),i=0,m;while(m=EM.exec(v)){if(m.index>i)f.appendChild(document.createTextNode(v.slice(i,m.index)));var s=document.createElement('span');s.className='nb0';s.textContent=m[0];f.appendChild(s);i=m.index+m[0].length}
+    if(i<v.length)f.appendChild(document.createTextNode(v.slice(i)));pa.replaceChild(f,n)})}
+  function segs(el){if(el.dataset.sg||el.closest(SKIP)||el.querySelector('div,p,ul,li,button,br,.sg,.meter,.bar'))return;var t=(el.textContent||'').trim();if(t.indexOf('·')<0||t.length>150)return;
+    var parts=t.split(/\s·\s/);if(parts.length<2||parts.some(function(p){return p.length>34}))return;el.dataset.sg='1';
+    var groups=[[]];[].slice.call(el.childNodes).forEach(function(n){if(n.nodeType!==3){groups[groups.length-1].push(n);return}
+      n.nodeValue.split(/\s· /).forEach(function(p,j){if(j>0){groups[groups.length-1].push(document.createTextNode(' ·'));groups.push([]);p=p.replace(/^\s+/,'')}if(p)groups[groups.length-1].push(document.createTextNode(p))})});
+    while(el.firstChild)el.removeChild(el.firstChild);
+    groups.forEach(function(g,j){if(!g.length)return;var s=document.createElement('span');s.className='sg';g.forEach(function(n){s.appendChild(n)});if(el.firstChild)el.appendChild(document.createTextNode(' '));el.appendChild(s)})}
+  function tidy(root){if(!root||root.hidden)return;BUSY=1;try{root.querySelectorAll(SEL).forEach(function(el){if(!el.closest(SKIPG))glue(el)});root.querySelectorAll(SEL).forEach(segs)}catch(e){}BUSY=0}
+  function hook(id){var el=$(id);if(!el||!window.MutationObserver)return;var mo=new MutationObserver(function(){if(BUSY)return;tidy(el);mo.takeRecords()});mo.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']})}
+  hook('panel');hook('tray');window.panelTidy=tidy})();
 
 /* ===== 40차 주민 눌러 보기: 길을 걷는 주민을 누르면 이름 · 집 · 일터 · 기분 · 한마디 =====
    - 이름은 집 · 일터 짝으로 정해짐(같은 짝이면 같은 물고기). 언어마다 이름 목록이 따로

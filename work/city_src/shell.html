@@ -126,6 +126,20 @@ body.tutOn #tut{top:calc(var(--sat,env(safe-area-inset-top)) + 92px)}
 #tray .cards .card[data-hk]{flex:1 1 0;min-width:0}
 #panel li[data-k].no{cursor:pointer;text-decoration:underline dotted}
 /* 1.1.33 칸 크기 · 배치 · 정렬 손보기(늑구) */.ord .its{flex:1;justify-content:center}.ord .rw{white-space:nowrap}.ord>button[data-s]{margin-top:auto}.ord .del{top:4px;right:4px;width:22px;height:22px;border:1.5px solid var(--ink);font-size:11px}.ord .who{max-width:100%;padding-right:24px!important}#panel p.tip{margin:-2px 0 6px!important;font-size:13.5px;font-weight:400;color:#2c3a55;line-height:1.4}#panel .row button+button.sub,#panel .row button.sub:has(+button){height:48px}.box:has(>.srow){display:grid;grid-template-columns:auto 1fr auto auto;column-gap:6px;align-items:center}.box:has(>.srow)>.srow{display:contents}.srow .meter{width:auto;margin:0}.srow b{text-align:right;min-width:3.2em}.srow small{min-width:4.2em}.dybox{border-bottom:1.5px dashed #cfd8e3;padding-bottom:10px;margin-bottom:8px}.card small,.desc .fx,.dyh small,#toolbar .tl small,#panel .role{text-wrap:balance}.card i{min-height:2.5em;display:flex;align-items:center;justify-content:center}.rcn button{height:auto;align-self:stretch;width:41px}.track+p{margin-top:8px}.cars{margin:8px 0}#panel .desc+.prod{margin:6px 2px}
+/* 1.1.33 창 하나씩 열어 보고 손보기(늑구): 12px 아래 글씨 키움 · 본문 14px · 마디째 줄바꿈(.sg · .nb0 은 depth.js 가 그린 뒤 씌움) */
+.sg{display:inline-block;max-width:100%}.nb0{white-space:nowrap}
+:where(#panel,#tray) small{font-size:max(12px,.88em)}
+#panel .role,#panel .prod{font-size:13.5px}#panel .desc p{font-size:14px}#panel .why{font-size:13px}#panel .req{font-size:13.5px}#panel .help p{font-size:14px}
+#panel .ord .who{font-size:12px}html:not([lang=ko]) #panel .ord .who{font-size:11.5px}#panel .ord .del{font-size:12px}#panel .ord .rw small{font-size:12px}
+#panel .wqr small{font-size:12.5px;line-height:1.35}#panel .pg,#panel .pb{font-size:12.5px}
+#panel .box.mid small{font-size:12.5px}#panel .car small{font-size:12.5px}
+#tray .card small{font-size:12px}#tray .card i{flex-wrap:wrap;column-gap:.25em}#tray .tip{font-size:13px}
+.round small{font-size:12px}#side button small{font-size:12px}#tut small{font-size:12px}#bBack small{font-size:11px}
+#panel p,#panel li,#panel .lrow,#panel .box{text-wrap:pretty}#panel .role,#panel .why,#panel .tx>b{text-wrap:balance}
+#panel .mgrid small{white-space:normal;text-overflow:clip;text-align:center;line-height:1.25;text-wrap:balance}#panel .mgrid button{justify-content:flex-start}
+#panel>h2{padding-right:42px;min-height:34px;text-wrap:balance}#panel h2 small{white-space:nowrap}:where(html:not([lang=ko])) .round small{font-size:10.5px;letter-spacing:-.4px}
+html:not([lang=ko]) #side button{max-width:58px;padding:0 4px}html:not([lang=ko]) #side button small{font-size:10.5px;letter-spacing:-.3px;max-width:100%;overflow:hidden;text-overflow:ellipsis}html:not([lang=ko]) #tut,html:not([lang=ko]) #goal{right:76px!important} /* 긴 언어: 오른쪽 버튼 줄이 도미 비서 카드 · × 를 덮던 것 */
+#panel .ord .who{padding-right:20px!important}@media (max-width:380px){#panel .ord .who{font-size:11.5px;letter-spacing:-.2px}}
 </style></head><body>
 <canvas id="cv"></canvas>
 <div id="top"><div class="r1"><span class="chip gold" id="hLv"></span><span class="chip" id="hX"></span><span class="chip" id="hP"></span><span class="chip" id="hG"></span></div><div class="r1 r2"><span class="chip tapme" id="hF"></span><span class="chip" id="crabs"></span><span class="chip" id="hS"></span><span class="chip" id="hB"></span><span class="chip" id="hN"></span></div></div>

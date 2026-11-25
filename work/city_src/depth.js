@@ -131,3 +131,23 @@ var _startJQ=startJob;startJob=function(b,L){var now=NOW(),busy=jobs().length>=c
   try{if(busy&&b.job&&!isZ(b.k)){b.job.q=1;b.job.qa=now;b.job.dur=Math.max(1000,b.job.end-b.job.start);b.job.start=now+1;b.job.end=now+1+b.job.dur;jqSched(now);toast('🦀 ⏳ '+jqPend(now).length+' / '+JQMAX());save()}}catch(e){}return r};
 var _stepJQ=step;step=function(now,quiet){try{if(!quiet)jqSched(now)}catch(e){}return _stepJQ.apply(this,arguments)};
 var _hudJQ=hud;hud=function(){var r=_hudJQ.apply(this,arguments);try{var n=jqPend().length;if(n)$('crabs').innerHTML='🦀 <b>'+jobs().length+'/'+crabsMax()+'</b> <small>+'+n+'</small>'}catch(e){}return r};
+/* 1.1.33 창 글씨 줄바꿈 다듬기: 그린 뒤(번역 끝난 뒤)에 글자 나눔만 손봄 — 한국어 열쇠 · 번역 표는 그대로
+   · ' · ' 앞 칸은 안 끊기는 칸으로 → 줄 맨 앞에 '·' 가 혼자 오지 않게
+   · 짧은 ' · ' 목록은 마디째 한 덩어리(.sg) → '하나에 🫧' / '1,080' 처럼 어중간하게 안 끊김
+   · 🫧1,080 · ⭐94 같은 그림+숫자는 붙여 둠(.nb0) */
+(function(){var EM=null;try{EM=new RegExp('\\p{Extended_Pictographic}\\uFE0F?\\s?[+\\-\\u2212\\u00d7]?\\d[\\d,.:]*(?:%|[a-zA-Z\\uac00-\\ud7a3]{1,3})?','gu')}catch(e){}
+  var SEL='p,small,li,i,.lab,.fx,.tip,.role,.why,.prod,.say,.tx>b',SKIPG='.mgrid,script,style',SKIP='.mgrid,h2,.row,.who,.help,button:not(.card)',BUSY=0;
+  function txts(el){var a=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),n;while(n=w.nextNode())a.push(n);return a}
+  function glue(el){txts(el).forEach(function(n){var v=n.nodeValue,o=v.replace(/ · /g,' · ');if(o!==v)n.nodeValue=v=o;
+    var pa=n.parentNode;if(!EM||!pa||pa.classList&&pa.classList.contains('nb0'))return;EM.lastIndex=0;if(!EM.test(v))return;EM.lastIndex=0;
+    var f=document.createDocumentFragment(),i=0,m;while(m=EM.exec(v)){if(m.index>i)f.appendChild(document.createTextNode(v.slice(i,m.index)));var s=document.createElement('span');s.className='nb0';s.textContent=m[0];f.appendChild(s);i=m.index+m[0].length}
+    if(i<v.length)f.appendChild(document.createTextNode(v.slice(i)));pa.replaceChild(f,n)})}
+  function segs(el){if(el.dataset.sg||el.closest(SKIP)||el.querySelector('div,p,ul,li,button,br,.sg,.meter,.bar'))return;var t=(el.textContent||'').trim();if(t.indexOf('·')<0||t.length>150)return;
+    var parts=t.split(/\s·\s/);if(parts.length<2||parts.some(function(p){return p.length>34}))return;el.dataset.sg='1';
+    var groups=[[]];[].slice.call(el.childNodes).forEach(function(n){if(n.nodeType!==3){groups[groups.length-1].push(n);return}
+      n.nodeValue.split(/\s· /).forEach(function(p,j){if(j>0){groups[groups.length-1].push(document.createTextNode(' ·'));groups.push([]);p=p.replace(/^\s+/,'')}if(p)groups[groups.length-1].push(document.createTextNode(p))})});
+    while(el.firstChild)el.removeChild(el.firstChild);
+    groups.forEach(function(g,j){if(!g.length)return;var s=document.createElement('span');s.className='sg';g.forEach(function(n){s.appendChild(n)});if(el.firstChild)el.appendChild(document.createTextNode(' '));el.appendChild(s)})}
+  function tidy(root){if(!root||root.hidden)return;BUSY=1;try{root.querySelectorAll(SEL).forEach(function(el){if(!el.closest(SKIPG))glue(el)});root.querySelectorAll(SEL).forEach(segs)}catch(e){}BUSY=0}
+  function hook(id){var el=$(id);if(!el||!window.MutationObserver)return;var mo=new MutationObserver(function(){if(BUSY)return;tidy(el);mo.takeRecords()});mo.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']})}
+  hook('panel');hook('tray');window.panelTidy=tidy})();

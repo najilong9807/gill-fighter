@@ -83,9 +83,9 @@ var _todoD=todoPanel;todoPanel=function(){var r=_todoD.apply(this,arguments);try
   if(t.length){var d=document.createElement('div');d.className='box';d.innerHTML=t.join('<br>');$('panel').appendChild(d)}}catch(e){}return r};
 /* --- 마을 현황 · 메뉴 --- */
 var _lifeD=lifePanel;lifePanel=function(){var r=_lifeD.apply(this,arguments);try{var el=$('panel'),c=CS,io=incOn(),d=document.createElement('div');d.className='box';var on=polList();
-  d.innerHTML='🌫 탁한 물 때문에 행복 <b>−'+(c.murkH|0)+'</b> <small>(집 근처 평균 · 🗺 지도 → 탁한 물)</small><br>⚖ 정책 '+(polSlots()?on.length+' / '+polSlots()+(on.length?' · '+on.map(function(k){return POLD[k].ic+' '+POLD[k].n}).join(' · '):''):'🔒 🏛Lv.6')+
-   '<br>⚠ 사건 '+(hallLv()<6?'🔒 🏛Lv.6':'지금 '+io.length+'개 · 막아 낸 사건 '+((G.inc&&G.inc.blk)|0)+'번')+'<div class="row"><button id="lPol">⚖ 정책</button><button class="sub" id="lMap">🗺 탁한 물 보기</button></div>';
-  var p=el.querySelector('.role');el.insertBefore(d,p||null);$('lPol').onclick=polPanel;$('lMap').onclick=function(){closePanel();VIEW=3;viewBtn()}}catch(e){}return r};
+  d.innerHTML=((c.murkH|0)>0?'🌫 탁한 물 때문에 행복 <b>−'+(c.murkH|0)+'</b> <small>(집 근처 평균 · 🗺 지도 → 탁한 물)</small><br>':'')+'⚖ 정책 '+(polSlots()?on.length+' / '+polSlots()+(on.length?' · '+on.map(function(k){return POLD[k].ic+' '+POLD[k].n}).join(' · '):''):'🔒 🏛Lv.6')+
+   '<br>⚠ 사건 '+(hallLv()<6?'🔒 🏛Lv.6':'지금 '+io.length+'개 · 막아 낸 사건 '+((G.inc&&G.inc.blk)|0)+'번')+'<div class="row">'+(polSlots()?'<button id="lPol">⚖ 정책</button>':'')+'<button class="sub" id="lMap">🗺 탁한 물 보기</button></div>';
+  var p=el.querySelector('.role');el.insertBefore(d,p||null);if($('lPol'))$('lPol').onclick=polPanel;$('lMap').onclick=function(){closePanel();VIEW=3;viewBtn()}}catch(e){}return r};
 var _menuP=menuPanel;menuPanel=function(){var r=_menuP.apply(this,arguments);try{var g=$('panel').querySelector('.mgrid');if(g&&!g.querySelector('[data-m="pol"]')){var b=document.createElement('button');b.dataset.m='pol';var S=polSlots();
   b.innerHTML='⚖<b>마을 정책</b><small>'+(S?'켜진 정책 '+polList().length+' / '+S:'🏛 Lv.6에 열려요')+'</small>';b.onclick=function(){polPanel()};g.insertBefore(b,g.children[3]||null)}}catch(e){}return r};
 (function(){var st=document.createElement('style');st.textContent='.pg{color:#2e9b55;font-weight:800}.pb{color:#d0473f;font-weight:800}';document.head.appendChild(st);setInterval(function(){try{incTick()}catch(e){}},5000)})();

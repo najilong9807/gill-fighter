@@ -150,12 +150,15 @@ html:not([lang=ko]) #side button{max-width:58px;padding:0 4px}html:not([lang=ko]
 /* 재료 값 '📌 110' 이 그림 · 숫자로 갈라지지 않게 */
 #panel .cost>span,#panel .row button>span{white-space:nowrap}
 html[lang=vi] .round small{font-size:10px;letter-spacing:-.5px}
+/* 놓는 중에 창을 열면 ✓ · ↶ 동그라미가 창 위에 떠 있던 것 → 창이 열린 동안만 숨김(닫으면 다시 보임) */
+#panel:not([hidden])~#ghb{display:none!important}
 /* 가로 화면(폰 눕힘): 창은 오른쪽 세로 판으로 · 도미 비서 카드는 오른쪽 버튼을 덮지 않게 · 짓기 칸은 낮게 */
 @media (max-height:500px) and (orientation:landscape){
  #panel{left:auto!important;right:10px;width:min(460px,calc(100vw - 20px));top:calc(var(--sat,env(safe-area-inset-top)) + 8px);max-height:none}
  #tut,#goal{right:auto!important;width:min(520px,calc(100vw - 150px))}
  #tray .cards .card img{width:46px;height:46px}#tray .cards .card{padding:4px}#tray .cards .card small{min-height:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}#tray .tip{margin-top:4px}
  #tray .pills{padding-bottom:4px}#tray .pills button{height:30px}
+ #toast{top:calc(var(--sat,env(safe-area-inset-top)) + 150px)!important} /* 짓기 단추를 덮던 알림 */
 }
 /* 큰 화면(PC · 태블릿 가로): 창 · 카드 · 짓기 단추가 끝까지 늘어나지 않게 */
 @media (min-width:1000px) and (min-height:600px){

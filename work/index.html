@@ -1706,6 +1706,8 @@ body.hw #over .row #swapBtn{background:linear-gradient(180deg,#B48CFF 0%,#8A5BEA
 body.hw #over .row #swapBtn::before{filter:none}
 /* 1.1.34 QA: 굵기 하나뿐인 제목 글꼴(Black Han Sans)에 800·900 굵기를 주면 브라우저가 가짜로 더 굵게 그려 작은 글씨 획이 뭉개지던 것(「처음 화면으로」, 잠깐 멈춤 켜고 끄기) → 가짜 굵게 끔. 다른 글꼴로 대신 그리는 언어는 진짜 굵은 글꼴 그대로 */
 #over .row #swapBtn,#setPause .toggles .boost{font-synthesis:none}
+/* 1.1.34 QA: 긴 언어(독일어·스페인어·핀란드어 등)에서 꾸미기 서랍 「완료」가 화면 오른쪽 밖으로 밀려 반쯤 잘리던 것 → 버튼 묶음이 넘치면 다음 줄로 */
+#decoDrawer .dd-acts{flex-wrap:wrap;justify-content:flex-end;row-gap:4px;min-width:0;max-width:100%}
 </style>
 
 <canvas id="game" aria-label="바다 게임 화면"></canvas>

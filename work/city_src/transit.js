@@ -81,7 +81,8 @@ try{cv.addEventListener('pointerup',function(){if(TOOL&&TOOL.charAt(0)==='z'&&TO
 /* ---------- ① 탈것 ---------- */
 var VEH=[];
 function roadRand(){var ks=Object.keys(G.road);if(!ks.length)return null;var q=ks[Math.floor(Math.random()*ks.length)].split(',');return [+q[0],+q[1]]}
-function vehNew(kind,a,b){var p=kind==='tram'?railPath(a,b):path(a,b);if(!p||p.length<4)return false;VEH.push({k:kind,p:p,i:0,t:0,sp:kind==='tram'?2.3:kind==='bus'?1.7:kind==='turtle'?1.1:1.3,ph:Math.random()*6,back:kind==='tram'});return true}
+/* 1.1.33(늑구 '거북 · 수레 잘 안 보이고 거북이 너무 빨라'): 거북 1.1 → .42칸/초 · 수레 1.3 → .8, 그림 거북 40 → 58 · 수레 44 → 60, 거북은 헤엄치듯 살짝 기울며 */
+function vehNew(kind,a,b){var p=kind==='tram'?railPath(a,b):path(a,b);if(!p||p.length<4)return false;VEH.push({k:kind,p:p,i:0,t:0,sp:kind==='tram'?2.3:kind==='bus'?1.7:kind==='turtle'?.42:.8,ph:Math.random()*6,back:kind==='tram'});return true}
 function vehSpawn(){var R=Object.keys(G.road).length;if(R<8)return;var avg=0,n=0;for(var k in JAM){avg+=JAM[k];n++}avg=n?avg/n:0;
   var want=Math.min(14,Math.round(R/16*(1+Math.min(1,avg)))),road=VEH.filter(function(v){return v.k!=='tram'}).length;
   if(road<want&&Math.random()<.6){var pick=[],stops=G.b.filter(function(b){return b.k==='d_bus'}),tt=bOf('turtle'),st=bOf('store')||bOf('hall'),prod=G.b.filter(function(b){return b.lv&&/^(quarry|farm|kiln|factory|sew|pearl)$/.test(b.k)}),homes=G.b.filter(function(b){return isZ(b.k)&&b.k.charAt(1)==='R'&&b.lv});
@@ -101,7 +102,7 @@ function vehPos(v){var u=v.i+v.t,P=pathPt(v,u),A=pathPt(v,u-.3),B2=pathPt(v,u+.3
 var VIMG={};function vImg(k){var o=VIMG[k];if(!o){o=VIMG[k]={im:new Image(),ok:0};o.im.onload=function(){o.ok=1};o.im.onerror=function(){o.ok=-1};o.im.src='svart/cv_'+k+'.webp'}return o.ok===1?o.im:null}
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function drawVeh(v,t){var q=vehPos(v),p=sc(q.i,q.j),z=cam.z;if(z<.35)return;var sx=q.dx-q.dy;if(Math.abs(sx)>.35)v.fl=sx<0?-1:1;/* 1.1.32: 방향 바꿀 때 휙 뒤집히지 않고 돌아서듯 · 수레는 통통 튀지 않고 덜컹 */v.fs=v.fs==null?(v.fl||1):v.fs+((v.fl||1)-v.fs)*.18;var fl=Math.abs(v.fs)<.12?(v.fs<0?-.12:.12):v.fs,al=Math.min(1,q.u*2,(q.n-q.u)*2),bob=v.jam?0:v.k==='cart'?Math.abs(Math.sin((v.wk||0)*1.6+v.ph))*.5:v.k==='turtle'?Math.sin((v.wk||0)+v.ph)*.5:Math.sin((v.wk||0)+v.ph)*.8;
-  var vi=vImg(v.k);if(vi){var VW2={bus:50,tram:66,turtle:40,cart:44}[v.k]||44,vh=VW2*vi.naturalHeight/vi.naturalWidth;ctx.save();ctx.globalAlpha=Math.max(0,al);ctx.translate(p.x,p.y);ctx.scale(z*fl,z);ctx.fillStyle='rgba(15,60,80,.22)';ctx.beginPath();ctx.ellipse(0,1,VW2*.45,6,0,0,7);ctx.fill();ctx.translate(0,-bob);if(v.k==='cart')ctx.rotate(Math.sin((v.wk||0)*1.6+v.ph)*.025);ctx.drawImage(vi,-VW2/2,-vh+3,VW2,vh);ctx.restore()}
+  var vi=vImg(v.k);if(vi){var VW2={bus:50,tram:66,turtle:58,cart:60}[v.k]||44,vh=VW2*vi.naturalHeight/vi.naturalWidth;ctx.save();ctx.globalAlpha=Math.max(0,al);ctx.translate(p.x,p.y);ctx.scale(z*fl,z);ctx.fillStyle='rgba(15,60,80,.22)';ctx.beginPath();ctx.ellipse(0,1,VW2*.45,6,0,0,7);ctx.fill();ctx.translate(0,-bob);if(v.k==='cart')ctx.rotate(Math.sin((v.wk||0)*1.6+v.ph)*.025);else if(v.k==='turtle')ctx.rotate(Math.sin((v.wk||0)*.9+v.ph)*.035);ctx.drawImage(vi,-VW2/2,-vh+3,VW2,vh);ctx.restore()}
   else{ctx.save();ctx.globalAlpha=Math.max(0,al);ctx.translate(p.x,p.y-bob*z);ctx.scale(z*fl,z);ctx.lineWidth=2;ctx.strokeStyle=OUT;ctx.lineJoin='round';
   ctx.fillStyle='rgba(15,60,80,.22)';ctx.beginPath();ctx.ellipse(0,2,22,6,0,0,7);ctx.fill();
   if(v.k==='bus'||v.k==='tram'){var W2=v.k==='tram'?52:40;rr(-W2/2,-26,W2,22,8);ctx.fillStyle=v.k==='tram'?'#f5cf5a':'#4fc3c9';ctx.fill();ctx.stroke();

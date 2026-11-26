@@ -86,6 +86,7 @@ function step(now,quiet){var dtH=(now-(G.tick||now))/3600000;if(dtH<0){if(dtH<-4
     if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=Math.min(r[k]*dtH,Math.max(0,r[k]*BUFH-(b.buf[k]||0)));if(u){for(var q in u){var need=u[q]*add,have=Math.max(0,G.res[q]-(q==='stone'&&b.k==='kiln'?stoneKeep():0));if(have<need)add=have/u[q];}for(q in u)G.res[q]-=u[q]*add}
       b.buf[k]=Math.min(r[k]*BUFH,(b.buf[k]||0)+add)}}})}
 var QUIET=0;
+try{document.addEventListener('touchstart',function(){},{passive:true})}catch(e){} /* iOS 웹뷰에서 :active(누름 반응)가 켜지게 */
 /* 1.1.34 야간 점검: 산호궁 최고 단계(엔딩)에 닿아도 다른 단계와 같은 작은 알림뿐이었음 → 산호궁에 큰 반짝임 여러 번 + 알림(앱을 끈 사이 끝났어도 다음에 열 때 한 번) */
 function endFx(){try{var h=bOf('hall');if(!h)return;focus(h);snd('done');for(var i=0;i<6;i++)setTimeout(function(){var c=centerOf(h);sparkle(c.x+(Math.random()-.5)*120*cam.z,c.y-(40+Math.random()*80)*cam.z,24);dust(c.x,c.y,14,1.4)},400+i*450);setTimeout(function(){toast('🏛 산호궁 최고 단계예요 ✨')},900)}catch(e){}}
 /* 1.1.34 끝까지 플레이 점검: 벽돌 가마가 산호석을 바닥까지 다 써서 산호궁 · 건물 공사가 산호석 때문에 계속 막혔음 → 가마는 다음 산호궁 공사에 드는 산호석(최소 300, 창고 절반까지)은 남기고 씀 */

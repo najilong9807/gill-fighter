@@ -360,7 +360,7 @@ function addXP(n){G.xp=(G.xp||0)+n;G.xl=G.xl||1;while(G.xp>=xpNeed(G.xl)){G.xp-=
 
 /* --- 📦 창고 · ☰ 메뉴 --- */
 function storePanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>📦 창고 <small>조개 창고 Lv.'+lvOf('store')+'</small></h2><div class="box">';
-  ['stone','brick','nail','kelp','dango','cloth'].forEach(function(k){var c=cap(k),v=G.res[k]||0;h+='<div class="srow">'+ICON[k]+' '+RNAME[k]+'<span class="meter"><i style="width:'+Math.min(100,v/c*100)+'%;background:'+(v>=c*.95?'#E5484D':'#4fc36b')+'"></i></span><b>'+fmt(v)+'</b><small>/'+fmt(c)+'</small></div>'});
+  ['stone','brick','nail','kelp','dango','cloth'].forEach(function(k){var c=cap(k),v=G.res[k]||0;h+='<div class="srow">'+ICON[k]+'\u00a0'+RNAME[k]+'<span class="meter"><i style="width:'+Math.min(100,v/c*100)+'%;background:'+(v>=c*.95?'#E5484D':'#4fc36b')+'"></i></span><b>'+fmt(v)+'</b><small>/'+fmt(c)+'</small></div>'});
   h+='</div><p class="role">가득 차면 건물 말풍선에 쌓인 채로 기다려요 · 조개 창고를 올리면 넓어져요</p>';el.innerHTML=h;el.hidden=false;$('pX').onclick=closePanel;panelFor=null}
 function menuPanel(){var el=$('panel'),h='<button class="x" id="pX">✕</button><h2>☰ 메뉴</h2><div class="mgrid">'+
   '<button data-m="life">🐟<b>마을 현황</b><small>인구 · 일자리 · 수요</small></button><button data-m="todo">🎯<b>할 일</b><small>다음 산호궁까지</small></button><button data-m="help">📖<b>도움말</b><small>마을이 도는 법</small></button><button data-m="snd">'+(SND?'🔊':'🔇')+'<b>소리</b><small>'+(SND?'켜져 있어요':'꺼져 있어요')+'</small></button><button data-m="pro">📜<b>이야기</b><small>처음 이야기 다시 보기</small></button>'+(EMB?'':'<button data-m="reset">↺<b>처음부터</b><small>시험판 전용</small></button>')+'</div>';

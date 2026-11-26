@@ -186,3 +186,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r17':
         for a,b in R17:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r17 ok')
+
+# --- 야간 점검: 마을에서 창(다녀오셨어요 · 건물 창 등)이 떠 있을 때 위에서 오는 알림 띠가 아래쪽(+150px)에 떠서 그 창의 「모두 받기」 같은 단추를 몇 초 덮던 것 → 마을 창이 열려 있으면 띠를 위쪽 원래 자리에 ---
+R18=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 마을 창 위 알림 띠 */window.addEventListener('load',function(){setTimeout(function(){if(typeof banner1!=='function')return;var prev=banner1;banner1=function(){var r=prev.apply(this,arguments);try{if(document.body.classList.contains('cityOn')){var f=document.querySelector('#cityOv iframe'),d=f&&f.contentDocument,pn=d&&d.getElementById('panel');if(pn&&!pn.hidden&&pn.offsetHeight>0)$('banner').classList.remove('low')}}catch(e){}return r}},1500)});\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r18':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '마을 창 위 알림 띠' in s: print('already')
+    else:
+        for a,b in R18:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r18 ok')

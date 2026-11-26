@@ -231,3 +231,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r21':
         for a,b in R21:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r21 ok')
+
+# --- 야간 점검: 멈춤 창 켜기/끄기 단추 높이 32px(손가락 권장 44 보다 작음, 안에 overflow:hidden 이라 투명 확장 불가) → 세로 640px 이상 화면에서만 40px(375×667 · 360×800 에서 창이 화면 안에 들어감 확인, 320×568 은 그대로) ---
+R22=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 멈춤 창 단추 높이 */(function(){var s=document.createElement('style');s.textContent='@media (min-height:640px){#setPause .toggles .boost{min-height:40px}}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r22':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '멈춤 창 단추 높이' in s: print('already')
+    else:
+        for a,b in R22:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r22 ok')

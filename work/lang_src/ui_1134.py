@@ -132,3 +132,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r12':
         if '탐험 지도 이름 칩 두 줄' in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r12 ok')
+
+# --- 야간 점검: 출석 7칸이 긴 언어(it 'Giorno 7')에서 줄 밖으로 밀려 7일째 칸이 잘리던 것 → 칸이 줄어들게(minmax 0) · 글자 작게 ---
+R13=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 출석 7칸 맞춤 */(function(){var s=document.createElement('style');s.textContent='.attrow{grid-template-columns:repeat(7,minmax(0,1fr))!important}html:not([data-lang=ko]) .attrow li b{font-size:min(12px,2.8vw);letter-spacing:-.04em}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r13':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R13:
+        if '출석 7칸 맞춤' in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r13 ok')

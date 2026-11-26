@@ -326,3 +326,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r30':
         for a,b in R30:
             assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r30 ok')
+
+# --- 야간 점검: 결과창 '다음 물고기 해금까지 진주 N개 남았어요' 줄이 꾸러미 언어 30개에서 영어('Рыба-клоун needs 99 more pearls to unlock.')로 남던 것 → 문법이 필요 없는 꼴 '🔒 Рыба-клоун · Жемчуг 1 / 100' (en · ko · ja 그대로) ---
+R31=[("(LANG==='en'?n.name+' needs '+nf(fishPrice(n)-save.pearls)+' more pearls to unlock.':",
+ "((typeof SUBL==='string'&&SUBL)?'🔒 '+n.name+' · '+T('진주 ')+nf(save.pearls)+' / '+nf(fishPrice(n))+'.':LANG==='en'?n.name+' needs '+nf(fishPrice(n)-save.pearls)+' more pearls to unlock.':")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r31':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if "'🔒 '+n.name+' · '+T('진주 ')" in s: print('already')
+    else:
+        for a,b in R31:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r31 ok')

@@ -6427,7 +6427,7 @@ function endRun(win,quit,by){crumb('end:'+(win?'win':quit?'quit':'eaten'));
   if(mp&&(P.kbest|0)>=2)msg+=T('최고 연속 꺼-억 ')+P.kbest+T('번! ');
   if(P.deep>=40)msg+=T('가장 깊이 내려간 곳은 ')+fmtDepth(P.deep)+T('예요. ');
   if(P.boost&&P.boost.double&&!x2On())msg+=T('진주 1.5배 부스터가 적용됐어요. ');
-  if(n)msg+=save.pearls>=fishPrice(n)?(LANG==='ko'?'지금 ':'')+n.name+josa(n.name,T('을'),T('를'))+T(' 해금할 수 있어요!'):(LANG==='en'?n.name+' needs '+nf(fishPrice(n)-save.pearls)+' more pearls to unlock.':n.name+T(' 해금까지 진주 ')+nf(fishPrice(n)-save.pearls)+T('개 남았어요.'));
+  if(n)msg+=save.pearls>=fishPrice(n)?(LANG==='ko'?'지금 ':'')+n.name+josa(n.name,T('을'),T('를'))+T(' 해금할 수 있어요!'):((typeof SUBL==='string'&&SUBL)?'🔒 '+n.name+' · '+T('진주 ')+nf(save.pearls)+' / '+nf(fishPrice(n))+'.':LANG==='en'?n.name+' needs '+nf(fishPrice(n)-save.pearls)+' more pearls to unlock.':n.name+T(' 해금까지 진주 ')+nf(fishPrice(n)-save.pearls)+T('개 남았어요.'));
   else if(!dev())msg+=T('모든 물고기를 모았어요.');
   if(!mp)msg=(bRank===1?T('최고 기록 경신! '):'')+msg;
   if(P.ngGift)msg=T('처음 오신 선물로 진주 ')+P.ngGift+T('개를 더 받았어요. ')+msg;

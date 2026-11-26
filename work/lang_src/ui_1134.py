@@ -381,3 +381,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r35':
         for a,b in R35:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r35 ok')
+
+# --- 야간 점검: 홈 '대전' 단추 아래 줄이 일본어만 한 줄 고정(…)이라 320폭에서 'いつでも途…'로 잘리던 것 → 한국어처럼 두 줄까지 ---
+R36=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 대전 단추 아래 줄 ja */(function(){var s=document.createElement('style');s.textContent='html[data-lang=ja] #mpSub{white-space:normal!important;text-overflow:clip!important;line-break:strict}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r36':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '대전 단추 아래 줄 ja' in s: print('already')
+    else:
+        for a,b in R36:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r36 ok')

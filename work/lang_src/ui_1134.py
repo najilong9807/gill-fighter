@@ -46,3 +46,12 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r3':
         if '멈춤 창 켜기/끄기가 긴 언어' in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r3 ok')
+
+# --- 야간 점검: 보상함 줄 이름이 긴 언어(de · ru · vi)에서 '…'로 잘리던 것 → 두 줄까지 ---
+R4=[('.rbx-r b{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}','.rbx-r b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font-size:14px;line-height:1.2;overflow:hidden;overflow-wrap:anywhere}')]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r4':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R4:
+        if b in s: print('already');continue
+        assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r4 ok')

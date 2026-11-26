@@ -95,7 +95,7 @@ function bufReady(b){var r=rates(b);for(var k in b.buf)if(b.buf[k]>=Math.max(1,(
 /* --- 짓기 · 올리기 --- */
 function canStart(k,L){var why=[];if(L>D.HMAX)return ['최고 단계예요'];if(k!=='hall'&&hallLv()<B[k].at)why.push('🏛 산호궁 Lv.'+B[k].at+'에 열려요');
   needList(k,L).forEach(function(n){if(!n.ok)why.push(reqTxt(n)+' 필요')});
-  if(!payOk(D.cost(k,L)))why.push('재료가 모자라요');if(jobs().length>=crabsMax())why.push('게 일꾼이 다 바빠요 🦀');return why}
+  var cc0=D.cost(k,L);if(!payOk(cc0)){var st0=(G.res.stone||0)<(cc0.stone||0);why.push(st0?'🪨 산호석이 모자라요':'재료가 모자라요');if(st0)why.push('🪨 산호석은 산호 광산과 바위 치우기로 모아요')}if(jobs().length>=crabsMax())why.push('게 일꾼이 다 바빠요 🦀');return why}
 function startJob(b,L){var c=D.cost(b.k,L);pay(c);snd('build');var t=D.time(b.k,L)*1000,now=NOW();b.job={L:L,start:now,end:now+t};
   var p=centerOf(b);dust(p.x,p.y+10,14,1.2);save()}
 /* 보석으로 바로 끝내기: 20개 이상이면 한 번 물어봄(아가미 파이터와 같은 지갑이라 실수로 크게 쓰지 않게) */
@@ -257,7 +257,7 @@ function paintAt(x,y){var t=tileAt(x,y),k=t.i+','+t.j;if(k===lastPaint||!inb(t.i
   if(TOOL.charAt(0)==='z'){paintZone(t,k);return}
   if(TOOL==='road'){if(G.road[k]||OCC[k]||G.ter[k])return;if(G.zone[k])delete G.zone[k];if(WAL.get('pearl')<D_ROAD){toast('진주가 모자라요');return}WAL.add('pearl',-D_ROAD);G.road[k]=1;snd('tap');var p=sc(t.i,t.j);dust(p.x,p.y,3,.4)}
   else if(TOOL==='clear'){if(G.zone[k]&&!OCC[k]){delete G.zone[k];var pz=sc(t.i,t.j);dust(pz.x,pz.y,4,.5);return}if(G.road[k]){if(roadNeeded(t.i,t.j)){toast('건물에 이어진 마지막 도로는 철거할 수 없어요');return}delete G.road[k];WAL.add('pearl',Math.floor(D_ROAD/2));return}
-    if(G.ter[k]){var cst=G.ter[k]===1?60:25;if(WAL.get('pearl')<cst){toast('진주 '+cst+' 필요해요');return}WAL.add('pearl',-cst);delete G.ter[k];var p2=sc(t.i,t.j);dust(p2.x,p2.y,10,1);float(p2.x,p2.y-20,'-'+cst+'🫧')}}}
+    if(G.ter[k]){var cst=G.ter[k]===1?60:25;if(WAL.get('pearl')<cst){toast('진주 '+cst+' 필요해요');return}var rk=G.ter[k]===1,gv=rk?40:20,gr=rk?'stone':'kelp';WAL.add('pearl',-cst);delete G.ter[k];G.res[gr]=Math.min(Math.max(cap(gr),G.res[gr]||0),(G.res[gr]||0)+gv);var p2=sc(t.i,t.j);dust(p2.x,p2.y,10,1);float(p2.x,p2.y-20,'-'+cst+'🫧 +'+gv+(rk?'🪨':'🌿')) /* 1.1.34 정세영 님 '바닥에 돌 캐면 왜 돌로 안 줘' */}}}
 var D_ROAD=10;
 function roadNeeded(i,j){var k=i+','+j;delete G.road[k];var bad=G.b.some(function(b){return siteRoad(b)===false});G.road[k]=1;return bad}
 function siteRoad(b){var s=sz(b.k);for(var i=-1;i<=s;i++)for(var j=-1;j<=s;j++){if((i<0||i>=s)&&(j<0||j>=s))continue;if(i>=0&&i<s&&j>=0&&j<s)continue;if(isRoad(b.x+i,b.y+j))return true}return false}
@@ -271,7 +271,7 @@ function tap(x,y){
   if(hit){SEL=hit;openPanel(hit)}else{SEL=null;closePanel()}}
 
 /* --- 화면 틀 --- */
-function toast(s){var el=$('toast');el.textContent=s;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove('on')},1800)}
+function toast(s){var lg=0;if(typeof s==='string'&&s.indexOf('산호석이 모자라요')>=0&&s.indexOf('광산')<0){s+=' · 🪨 산호석은 산호 광산과 바위 치우기로 모아요';lg=1}var el=$('toast');el.textContent=s;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove('on')},lg?3200:1800)}
 function hud(){var L=hallLv();if(TAB==='build'&&hud.hl!==L&&hud.hl!=null){try{showCat(CAT)}catch(e){}}hud.hl=L;$('hLv').innerHTML='🏛 <b>Lv.'+L+'</b>';$('hX').innerHTML='⭐ <b>'+(G.xl||1)+'</b><span class="xpb"><i style="width:'+Math.min(100,(G.xp||0)/xpNeed(G.xl||1)*100)+'%"></i></span>';var on=ordReady();$('ordN').textContent=on||'';$('ordN').hidden=!on;var IT=document.documentElement.classList.contains('intab'),hp=(IT?'':'🫧 ')+'<b>'+fmt(WAL.get('pearl'))+'</b>',hg=(IT?'':'💎 ')+'<b>'+fmt(WAL.get('gem'))+'</b>';if(hud.p!==hp){hud.p=hp;$('hP').innerHTML=hp}if(hud.g!==hg){hud.g=hg;$('hG').innerHTML=hg} /* 본게임 탭 안: 진주 · 보석은 본게임과 같은 그림(svart) */
   $('hS').innerHTML='🪨 <b>'+fmtS(G.res.stone)+'</b>';$('hB').hidden=L<7;$('hB').innerHTML='🧱 <b>'+fmtS(G.res.brick)+'</b>';$('hN').hidden=L<8;$('hN').innerHTML='📌 <b>'+fmtS(G.res.nail)+'</b>';
   $('hF').innerHTML='🐟 <b>'+CS.pop+'</b><small>/'+CS.lim+'</small>';['R','C','I'].forEach(function(z){var d=CS.dem[z],el=$('d'+z);el.style.height=Math.round(Math.max(.08,(d+1)/2)*100)+'%';el.style.background=d>.1?'#35C27A':d<-.1?'#E5484D':'#F2B233'});

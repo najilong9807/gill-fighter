@@ -294,3 +294,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r27':
         for a,b in R27:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r27 ok')
+
+# --- 야간 점검: 도감에서 물고기를 고르면 나오는 '레벨 업' 단추 아래 값이 꾸러미 언어(ru · de …)에서 '100 pearls'(영어)로 남던 것 → 그 언어의 '진주' 낱말 ---
+R28=[("lsm.textContent=(LANG==='en'?fmtBig(lc.price)+' pearls':(LANG==='ja'?'真珠 ':'진주 ')+fmtBig(lc.price));",
+ "lsm.textContent=((typeof SUBL==='string'&&SUBL)?T('진주 ')+fmtBig(lc.price):LANG==='en'?fmtBig(lc.price)+' pearls':(LANG==='ja'?'真珠 ':'진주 ')+fmtBig(lc.price));")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r28':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if "(typeof SUBL==='string'&&SUBL)?T('진주 ')+fmtBig(lc.price)" in s: print('already')
+    else:
+        for a,b in R28:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r28 ok')

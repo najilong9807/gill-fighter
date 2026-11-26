@@ -10493,7 +10493,7 @@ function renderMenu(){var dexDrew=false;
   [['',L.trait],['sk',skillLine(L)],['pv',L.passive?T('패시브 · ')+L.passive:''],['homeline',T('서식지 · ')+homeText(L)+(L.depthBonus?'':T(' · 여기서 15% 더 빨리 자라요'))],['lvline','Lv.'+lvOf(L.id)+' / '+LV_MAX+' · '+lvText(L.id)]].forEach(function(r){if(!r[1])return;var e=document.createElement('span');e.className=r[0];dexLine(e,r[1]);more.appendChild(e)});
   inf.appendChild(more);
   var lb=$('lvBtn'),lc=lvCost(L);lb.hidden=!owns(L.id);
-  if(lvOf(L.id)>=LV_MAX){lb.disabled=true;lb.textContent=T('최고 레벨')}else{lb.disabled=!canPay(lc);lb.textContent=T('레벨 업');var lsm=document.createElement('small');lsm.textContent=(LANG==='en'?fmtBig(lc.price)+' pearls':(LANG==='ja'?'真珠 ':'진주 ')+fmtBig(lc.price));lb.appendChild(lsm)} /* 1.1.10(b176) '레벨 업 · 진주 70'이 버튼 안에서 어색하게 두 줄로 꺾이던 것 → 두 줄로 정리 */
+  if(lvOf(L.id)>=LV_MAX){lb.disabled=true;lb.textContent=T('최고 레벨')}else{lb.disabled=!canPay(lc);lb.textContent=T('레벨 업');var lsm=document.createElement('small');lsm.textContent=((typeof SUBL==='string'&&SUBL)?T('진주 ')+fmtBig(lc.price):LANG==='en'?fmtBig(lc.price)+' pearls':(LANG==='ja'?'真珠 ':'진주 ')+fmtBig(lc.price));lb.appendChild(lsm)} /* 1.1.10(b176) '레벨 업 · 진주 70'이 버튼 안에서 어색하게 두 줄로 꺾이던 것 → 두 줄로 정리 */
   var C=costOf(L);
   if(owns(L.id)){btn.disabled=false;btn.textContent=LANG==='en'?'Dive in':LANG==='ja'?L.name+'で出発':L.name+josa(L.name,'으로','로',1)+' 출발'}
   else if(canPay(C)){btn.disabled=false;btn.textContent=curName(C)+' '+nf(C.price)+T('개로 ')+L.name+T(' 해금')}

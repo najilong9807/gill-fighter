@@ -197,3 +197,15 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r18':
         for a,b in R18:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r18 ok')
+
+# --- 야간 점검: 게임 중 아래 안내 줄('작은 물고기를 먹고, 큰 물고기는 <em>입</em>만 피해요')을 세 조각으로 따로 번역해서 여러 언어에서 문장이 깨짐(es "a los grandes' boca", de "weich den großen aus Maul", hr "usta … usta", tr 동사 빠짐 등) → 언어별 한 문장으로(ko · ja · fi · hu · zh 는 그대로) ---
+HINT_FIX={"en": "Eat smaller fish and dodge the <em>mouths</em> of big ones", "es": "Come peces más pequeños y esquiva la <em>boca</em> de los grandes", "vi": "Ăn cá nhỏ hơn và né <em>miệng</em> cá lớn", "ar": "كُل السمك الأصغر وتفادَ <em>فم</em> السمك الكبير", "ca": "Menja peixos més petits i esquiva la <em>boca</em> dels grans", "cs": "Žer menší ryby a vyhýbej se <em>tlamě</em> velkých", "da": "Æd mindre fisk og undvig de stores <em>mund</em>", "de": "Friss kleinere Fische und weich dem <em>Maul</em> der großen aus", "el": "Φάε μικρότερα ψάρια και απόφυγε το <em>στόμα</em> των μεγάλων", "fr": "Mange les petits poissons et évite la <em>bouche</em> des gros", "he": "אכלו דגים קטנים יותר והתחמקו <em>מהפה</em> של הגדולים", "hi": "छोटी मछलियाँ खाओ और बड़ी मछलियों के <em>मुँह</em> से बचो", "hr": "Jedi manje ribe i izbjegavaj <em>usta</em> velikih", "id": "Makan ikan yang lebih kecil dan hindari <em>mulut</em> ikan besar", "it": "Mangia i pesci più piccoli e schiva la <em>bocca</em> di quelli grandi", "ms": "Makan ikan lebih kecil dan elak <em>mulut</em> ikan besar", "nl": "Eet kleinere vissen en ontwijk de <em>bek</em> van de grote", "no": "Spis mindre fisker og unngå <em>munnen</em> til de store", "pl": "Jedz mniejsze ryby i unikaj <em>pysków</em> dużych", "pt": "Coma peixes menores e desvie da <em>boca</em> dos grandes", "ro": "Mănâncă pești mai mici și ferește-te de <em>gura</em> celor mari", "ru": "Ешь рыб поменьше и уворачивайся от <em>пасти</em> больших", "sk": "Jedz menšie ryby a vyhýbaj sa <em>papuli</em> veľkých", "sv": "Ät mindre fiskar och undvik de storas <em>mun</em>", "th": "กินปลาที่เล็กกว่าและหลบ<em>ปาก</em>ของปลาใหญ่", "tr": "Küçük balıkları ye, büyüklerin <em>ağzından</em> kaç", "uk": "Їж менших риб і уникай <em>пащі</em> великих"}
+R19=[("function showTab(p){crumb('tab:'+p);","/* 1.1.34 야간 점검: 안내 줄 한 문장 */var HINT_FIX="+json.dumps(HINT_FIX,ensure_ascii=False)+";\nfunction showTab(p){crumb('tab:'+p);"),
+ ("else hn.innerHTML=hn._h0}","else hn.innerHTML=(typeof HINT_FIX!=='undefined'&&HINT_FIX[window.GF_LC||LANG])||hn._h0}")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r19':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '안내 줄 한 문장' in s: print('already')
+    else:
+        for a,b in R19:
+            assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r19 ok')

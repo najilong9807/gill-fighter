@@ -122,3 +122,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r11':
         if '기록 도전 아래 줄 두 줄' in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r11 ok')
+
+# --- 야간 점검: 심해 탐험 지도 위 '심해 탐험' 이름 칩이 hr · hu · fi · id · el 등에서 '…'로 잘리던 것 → 두 줄 · 작게 ---
+R12=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 탐험 지도 이름 칩 두 줄 */(function(){var s=document.createElement('style');s.textContent='html:not([data-lang=ko]) #camp .head .tag{white-space:normal;text-overflow:clip;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.1;font-size:11.5px;text-align:center}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r12':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R12:
+        if '탐험 지도 이름 칩 두 줄' in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r12 ok')

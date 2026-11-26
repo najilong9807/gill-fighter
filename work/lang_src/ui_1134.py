@@ -65,3 +65,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r5':
         if 'gb-open' in s: print('already');continue
         assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r5 ok')
+
+# --- 야간 점검: 꾸미기 서랍 소품 이름이 한국어도 '다시마 크리스마…'로 잘리던 것 → 두 줄까지 ---
+R6=[('.ddcard b{font-family:var(--disp);font-weight:400;font-size:13px;line-height:1.1;white-space:nowrap;max-width:88px;overflow:hidden;text-overflow:ellipsis}',
+     '.ddcard b{font-family:var(--disp);font-weight:400;font-size:12px;line-height:1.1;max-width:88px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;text-align:center;overflow-wrap:break-word;-webkit-hyphens:auto;hyphens:auto}')]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r6':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R6:
+        if b in s: print('already');continue
+        assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r6 ok')

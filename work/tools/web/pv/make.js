@@ -5,7 +5,7 @@ const FB='/tools/web/fonts/node_modules/@fontsource/';
 const FONT={ko:["black-han-sans/400.css","'Black Han Sans'",400],ja:[null,"'Noto Sans CJK JP'",900],zhs:[null,"'Noto Sans CJK SC'",900],zht:[null,"'Noto Sans CJK TC'",900],
  ar:["noto-sans-arabic/900.css","'Noto Sans Arabic'",900],he:["noto-sans-hebrew/900.css","'Noto Sans Hebrew'",900],th:["noto-sans-thai/900.css","'Noto Sans Thai'",900],hi:["noto-sans-devanagari/900.css","'Noto Sans Devanagari'",900]}[LG]||["noto-sans/900.css","'Noto Sans'",900];
 const RTL=LG==='ar'||LG==='he';
-(async()=>{const seed=JSON.parse(fs.readFileSync(__dirname+'/../seed.json','utf8'));seed.lang=LG;seed.newsSeen='1.1.33';seed.newsMute=1;seed.cur132=0;
+(async()=>{const seed=JSON.parse(fs.readFileSync(__dirname+'/../seed.json','utf8'));seed.lang=LG;seed.newsSeen='9.9.99';seed.newsMute=1;seed.cur132=0;
 const city=JSON.parse(fs.readFileSync(__dirname+'/../bigtown.json','utf8'));city.t=Date.now();city.tick=Date.now();
 const {b,c,p,errs}=await openPV({w:443,h:960,dpr:2,init:CLK+`;if(!sessionStorage.s){localStorage.setItem('fishproto.save2',${JSON.stringify(JSON.stringify(seed))});localStorage.setItem('gfcity.v1',${JSON.stringify(JSON.stringify(city))});sessionStorage.s=1}`});
 await p.goto('http://app.local/index.html');await p.waitForTimeout(3500);
@@ -46,7 +46,7 @@ await hide();await ev("startRun('multi');P.fx.ghost=99;state");await warm(45);aw
 await cap(CAP[4]);await rec(105,async i=>{if(i%15==0)await hide()});
 await ev("endRun(false,true)");await warm(10);await hide();await ev("showTab('home')");await warm(10);
 // 5) 마을(NEW)
-await setAuto(true);await p.click('#tab-city',{timeout:8000});await p.waitForTimeout(4500);await hide();
+await setAuto(true);await hide();await p.click('#tab-city',{timeout:8000});await p.waitForTimeout(4500);await hide();
 let cf=p.frames().find(x=>x.url().includes('city.html'));
 await cf.evaluate(()=>{const x=document.getElementById('pX');if(x)x.click();window.__cityArt.focus('hall',0.9);['toast','goal'].forEach(i=>{const t=document.getElementById(i);if(t)t.style.display='none'});[...document.querySelectorAll('body *')].forEach(e=>{const r=e.getBoundingClientRect();if(r.top>40&&r.top<130&&r.width>300&&r.height>30&&r.height<120&&getComputedStyle(e).position!=='static')e.style.visibility='hidden'})});await p.waitForTimeout(2500);await hide();
 await setAuto(false);await cap(CAP[5],true);await rec(135);

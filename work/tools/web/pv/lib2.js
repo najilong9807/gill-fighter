@@ -1,4 +1,4 @@
-const {open,ROOT}=require('../lib.js');const fs=require('fs');
+const {open,ROOT}=require(process.env.PV_WWW?'./lib_www.js':'../lib.js');const fs=require('fs');
 const A='var joy=null,keys={},t=0,hudT=0,hintT=0,shake=0,trail=[];';
 async function openPV(o){const r=await open(o);
   const html=fs.readFileSync(ROOT+'/index.html','utf8').replace(A,A+'window.__ev=function(s){return eval(s)};');

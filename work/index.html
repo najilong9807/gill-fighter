@@ -15497,7 +15497,7 @@ var RBX={busy:0};
 function rbxRun(list,auto){if(RBX.busy||!list.length)return;RBX.busy=1;var p0=save.pearls||0,g0=save.gems||0,bn=banner,n=0;banner=function(){};
   try{list.forEach(function(it){try{it.fn();n++}catch(e){}})}finally{banner=bn;RBX.busy=0}
   persist();var dp=(save.pearls||0)-p0,dg=(save.gems||0)-g0;crumb('rbx:'+n+':'+dp+':'+dg);try{msEv('rbx')}catch(e){}
-  try{svSnd('gem');buzz([20,30,40])}catch(e){}banner(auto?T('🎁 보상 ')+n+T('개를 자동으로 받았어요'):n>1?T('보상 ')+n+T('개를 받았어요!'):T('보상을 받았어요!'),[dp?T('진주 +')+nf(dp):'',dg?T('보석 +')+dg:''].filter(Boolean).join(' · ')||T('받았어요'));
+  try{svSnd('gem');buzz([20,30,40])}catch(e){}banner(auto&&n>1?T('🎁 보상 ')+n+T('개를 자동으로 받았어요'):auto?'🎁 '+T('보상을 받았어요!'):n>1?T('보상 ')+n+T('개를 받았어요!'):T('보상을 받았어요!'),[dp?T('진주 +')+nf(dp):'',dg?T('보석 +')+dg:''].filter(Boolean).join(' · ')||T('받았어요'));
   try{refreshHome(true)}catch(e){}try{energyUI()}catch(e){}try{if(!$('svCh').hidden)svChRender()}catch(e){}try{achDot()}catch(e){}try{dmDot()}catch(e){}try{c1BarPaint()}catch(e){}rbxPaint();if(!$('rbxP').hidden)rbxRender()}
 function rbxOpen(){var el=$('rbxP');if(!el){el=document.createElement('div');el.className='overlay';el.id='rbxP';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
     el.innerHTML='<div class="panel rbx-panel"><h1></h1><p class="rbx-lead"></p><button type="button" class="btn rbx-all"></button><label class="rbx-auto"><input type="checkbox" id="rbxAutoCk"><span></span></label><div class="rbx-scroll"></div><button type="button" class="btn ghost rbx-x"></button></div>';document.body.appendChild(el);

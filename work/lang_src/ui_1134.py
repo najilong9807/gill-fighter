@@ -93,3 +93,12 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r8':
         if b in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r8 ok')
+
+# --- 야간 점검(1.1.32 남긴 것 es '1 recompensas'): 보상이 1개일 때 자동 받기 알림이 'Rewards 1 rewards…' 처럼 복수로 나오던 것 → 1개면 '보상을 받았어요!' ---
+R9=[("banner(auto?T('🎁 보상 ')+n+T('개를 자동으로 받았어요'):n>1?","banner(auto&&n>1?T('🎁 보상 ')+n+T('개를 자동으로 받았어요'):auto?'🎁 '+T('보상을 받았어요!'):n>1?")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r9':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R9:
+        if b in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r9 ok')

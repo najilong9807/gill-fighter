@@ -359,3 +359,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r33':
         for a,b in R33:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r33 ok')
+
+# --- 야간 점검: 심해 탐험 지도 위 이름 칩이 좁은 화면(320 · 360) 긴 언어에서 낱말 중간으로 꺾이던 것(ru 'Глубоководн-ая…') → 380px 이하 · 한국어 말고는 칩 숨김(화면 이름을 되풀이하는 칩, 생존 창들도 같은 방식) ---
+R34=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 탐험 칩 좁은 화면 */(function(){var s=document.createElement('style');s.textContent='@media (max-width:380px){html:not([data-lang=ko]) #camp .head .tag{display:none}}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r34':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '탐험 칩 좁은 화면' in s: print('already')
+    else:
+        for a,b in R34:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r34 ok')

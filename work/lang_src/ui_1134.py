@@ -142,3 +142,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r13':
         if '출석 7칸 맞춤' in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r13 ok')
+
+# --- 야간 점검: 수족관 '꾸미기' 단추가 긴 언어(uk 'Прикрасити')에서 화면 오른쪽 밖으로 나가던 것 → 줄어들게 · 한국어 말고는 글자 조금 작게 ---
+R14=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 수족관 꾸미기 단추 맞춤 */(function(){var s=document.createElement('style');s.textContent='.tank-bottom .deco-btn{flex:0 1 auto;min-width:0}html:not([data-lang=ko]) .tank-bottom .deco-btn{font-size:min(22px,5.2vw);padding-left:10px;padding-right:12px}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r14':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R14:
+        if '수족관 꾸미기 단추 맞춤' in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r14 ok')

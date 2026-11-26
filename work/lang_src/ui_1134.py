@@ -175,3 +175,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r16':
         for a,b in R16:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r16 ok')
+
+# --- 야간 점검: 심해 생존 위쪽 '꺼-억' 게이지 이름이 긴 언어(ru ОТРЫЖКА · de RÜLPS · el ΜΠΟΥΡΠ)에서 게이지 막대 밑으로 들어가던 것 → 이름 칸(36px)에 맞게 가로로 줄여 그림 ---
+R17=[("ctx.strokeText(T('꺼-억'),x+2,gy+5);ctx.fillStyle='#B9FFCF';ctx.fillText(T('꺼-억'),x+2,gy+5);",
+ "ctx.strokeText(T('꺼-억'),x+2,gy+5,36);ctx.fillStyle='#B9FFCF';ctx.fillText(T('꺼-억'),x+2,gy+5,36);/*1.1.34 야간 점검: 게이지 이름 맞춤*/")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r17':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '게이지 이름 맞춤' in s: print('already')
+    else:
+        for a,b in R17:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r17 ok')

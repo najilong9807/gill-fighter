@@ -164,3 +164,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r15':
         for a,b in R15:
             assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r15 ok')
+
+# --- 야간 점검: 작은 누름 칸(꾸미기 모자/얼굴 칸 34 · 도감 NEW 29)이 44 보다 작아 누르기 어려움 + 설정 켜짐/꺼짐은 누르면 3px 내려가 위 가장자리를 누르면 안 바뀌던 것 → 보이는 모양은 그대로, 눌리는 칸만 투명하게 넓힘 ---
+R16=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 작은 단추 누름 칸 넓힘 */(function(){var s=document.createElement('style');s.textContent='.dd-seg.acc-seg>button,.dex-fbar .nwb{position:relative}.dd-seg.acc-seg>button::before{content:\"\";position:absolute;left:0;right:0;top:-5px;bottom:-5px}.dex-fbar .nwb::before{content:\"\";position:absolute;left:0;right:0;top:-8px;bottom:-8px}#setAll .sw::after{top:-10px}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r16':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '작은 단추 누름 칸 넓힘' in s: print('already')
+    else:
+        for a,b in R16:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r16 ok')

@@ -263,3 +263,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r24':
         for a,b in R24:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r24 ok')
+
+# --- 야간 점검: 저장 백업 코드로 불러오면 d.lang=LANG 을 써서 ko · en · ja 말고 30개 언어(ru · de · es …) 사용자는 다시 켤 때 영어로 바뀌던 것 → 실제 언어 코드(GF_LC) ---
+R25=[("CLOUD_LOCK=1;d.cloud={code:code,at:Date.now(),h:''};d.lang=LANG;","CLOUD_LOCK=1;d.cloud={code:code,at:Date.now(),h:''};d.lang=(window.GF_LC||LANG);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r25':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if 'd.lang=(window.GF_LC||LANG);' in s: print('already')
+    else:
+        for a,b in R25:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r25 ok')

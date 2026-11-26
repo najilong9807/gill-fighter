@@ -52,9 +52,9 @@ function have(r){return r==='pearl'||r==='gem'?WAL.get(r):(G.res[r]||0)}
 function payOk(c){for(var k in c)if(have(k)<c[k])return false;return true}
 function pay(c){for(var k in c){if(k==='pearl'||k==='gem')WAL.add(k,-c[k]);else G.res[k]-=c[k]}}
 function needList(k,L){var o=D.needs(k,L).map(function(n){return {k:n[0],lv:n[1],ok:lvOf(n[0])>=n[1]}});if(k==='hall'&&POPREQ(L))o.push({k:'pop',lv:POPREQ(L),ok:CS.pop>=POPREQ(L)});return o}
-function fmt(n){n=Math.floor(n);return n>=100000?(n/10000).toFixed(n>=1e6?0:1)+'만':n.toLocaleString('ko-KR')}
+function fmt(n){n=Math.floor(n);if(n>=1e8)return (n/1e8).toFixed(1)+'억';return n>=100000?(n/10000).toFixed(n>=1e6?0:1)+'만':n.toLocaleString('ko-KR')}
 /* 위쪽 줄 전용: 1만부터 줄여 써서 칩 다섯 개가 한 줄에 들어가게 */
-function fmtS(n){n=Math.floor(n);return n>=10000?(n/10000).toFixed(n>=1e6?0:1)+'만':n.toLocaleString('ko-KR')}
+function fmtS(n){n=Math.floor(n);if(n>=1e8)return (n/1e8).toFixed(1)+'억';return n>=10000?(n/10000).toFixed(n>=1e6?0:1)+'만':n.toLocaleString('ko-KR')}
 function dur(s){s=Math.max(0,Math.ceil(s));var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),x=s%60;return d?d+'일 '+h+'시간':h?h+'시간 '+m+'분':m?m+'분 '+(m<10?x+'초':''):x+'초'}
 
 /* --- 그림 캐시 --- */

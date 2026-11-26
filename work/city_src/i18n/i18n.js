@@ -31,7 +31,8 @@ var keys=Object.keys(D).sort(function(a,b){return b.length-a.length});
 var RX=keys.length?new RegExp(keys.map(esc).join('|'),'g'):null;
 var cache={},cn=0,MISS={};
 function units(o){
-  o=o.replace(/(\d+(?:\.\d+)?)만/g,function(_,v){return U.man?v+U.man:(Math.round(v*100)/10)+'K'});
+  /* 1.1.34 야간 점검: 1억 넘으면 '억' → 億 · M, 100만 넘는 '만'도 K 대신 M(칸 넘침 막기) */o=o.replace(/(\d+(?:\.\d+)?)억/g,function(_,v){return U.oku?v+U.oku:Math.round(v*100)+'M'});
+  o=o.replace(/(\d+(?:\.\d+)?)만/g,function(_,v){return U.man?v+U.man:+v>=100?(Math.round(v/10)/10)+'M':(Math.round(v*100)/10)+'K'});
   return o.replace(/(\d)\s?(시간|마리|일|분|초|칸|개)(?![가-힣])/g,function(_,d,u){return d+(U[u]!=null?U[u]:'')})}
 function sub(t,a){return t.replace(/\$(\d)/g,function(_,n){return tr(a[+n]==null?'':a[+n])})}
 function tr(s){if(typeof s!=='string'||!HAN.test(s))return s;var c=cache[s];if(c!==undefined)return c;var o=s;

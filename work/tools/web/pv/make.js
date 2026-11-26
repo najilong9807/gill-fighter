@@ -16,11 +16,14 @@ await ev(`(function(){var ids=SPECIES.map(function(s){return s.id});save.owned=i
 // 자막 칸
 await p.evaluate(([FB,F,RTL])=>{const st=document.createElement('style');let css='';if(F[0])css+='@import url('+FB+F[0]+');';
  css+=`#pvCap{position:fixed;left:0;right:0;top:112px;z-index:2147483647;display:flex;flex-direction:column;align-items:center;pointer-events:none;direction:${RTL?'rtl':'ltr'}}
- #pvCap b{display:block;max-width:410px;text-align:center;font-family:${F[1]},'Noto Sans',sans-serif;font-weight:${F[2]};font-size:35px;line-height:1.18;color:#FFE65A;-webkit-text-stroke:8px #14284A;paint-order:stroke fill;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35));letter-spacing:-.3px}
+ #pvCap b{display:block;max-width:330px;text-align:center;font-family:${F[1]},'Noto Sans',sans-serif;font-weight:${F[2]};font-size:35px;line-height:1.18;color:#FFE65A;-webkit-text-stroke:8px #14284A;paint-order:stroke fill;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35));letter-spacing:-.3px;line-break:strict}
  #pvCap i{font-style:normal;font-family:'Noto Sans',sans-serif;font-weight:900;font-size:19px;color:#fff;background:#FF4D6D;border:3px solid #14284A;border-radius:14px;padding:1px 12px;margin-bottom:6px}`;
  st.textContent=css;document.head.appendChild(st);const d=document.createElement('div');d.id='pvCap';document.body.appendChild(d)},[FB,FONT,RTL]);
 await p.waitForTimeout(1500);
-const cap=(t,isNew)=>p.evaluate(([t,n])=>{const d=document.getElementById('pvCap');d.innerHTML=(n?'<i>NEW</i>':'')+'<b></b>';d.querySelector('b').textContent=t},[t,!!isNew]);
+const CJK=['ko','ja','zhs','zht'].includes(LG);
+const cap=(t,isNew)=>p.evaluate(([t,n,cjk])=>{const d=document.getElementById('pvCap');d.innerHTML=(n?'<i>NEW</i>':'')+'<b></b>';const b=d.querySelector('b');
+ if(cjk){b.style.wordBreak='keep-all';b.innerHTML=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/([・，、！])/g,'$1<wbr>').replace(/\n/g,'<br>')}else b.textContent=t;
+ let fs=35;b.style.fontSize=fs+'px';while((b.offsetHeight>88||b.scrollWidth>b.clientWidth+1)&&fs>20){fs-=1;b.style.fontSize=fs+'px'}},[t,!!isNew,CJK]);
 const frames=()=>p.frames().filter(f=>f!==p.mainFrame());
 const adv=async(ms)=>{await p.evaluate(ms=>__adv(ms),ms);for(const f of frames())await f.evaluate(ms=>window.__adv&&window.__adv(ms),ms).catch(()=>{})};
 const setAuto=async v=>{await p.evaluate(v=>__auto(v),v);for(const f of frames())await f.evaluate(v=>window.__auto&&window.__auto(v),v).catch(()=>{})};

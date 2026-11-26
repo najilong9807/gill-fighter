@@ -64,12 +64,16 @@ var TUT=[
  {t:'<b>거북 배달소</b>에서 주문을 하나 배달해요',h:'👆 여기를 누르면 배달소를 바로 짓고, 다 지으면 주문판을 열어요',ok:function(){return (G.ordSent|0)>0},go:function(){if(bOf('turtle'))orderPanel();else quickBuild('turtle')},rw:150}];
 /* 1.1.32: 첫 안내 8단계가 끝나도 도미 비서가 '다음 할 일' 하나씩 이어서 줌 — 산호궁 다음 레벨 조건 중 아직 안 된 것 하나 → 누르면 바로 짓기 · 건물 창 · 땅 정하기. 하나 끝날 때마다 진주 조금 */
 /* 1.1.34 야간 점검: 도미 비서가 '게 일꾼 숙소 Lv.2' 처럼 다른 건물이 먼저 필요한 일을 가리켜 눌러도 안 되던 것 → 먼저 필요한 건물(그 건물의 조건)로 내려가서 안내 */
+/* 1.1.34 야간 점검: '물고기 N마리' 단계에서 집을 더 지을 땅이 없거나 집이 안 자라는 까닭(소방서 · 순찰대 범위 · 땅값 · 길 막힘)을 안내 줄에 · 소방서 · 순찰대는 누르면 바로 짓기 */
+var PB={t:0,v:null};function popBlock(){var now=NOW();if(PB.v&&now-PB.t<3000)return PB.v;var o={};try{var sp=hSpot('zR0',null);var cnt={};G.b.forEach(function(b){if(!isZ(b.k)||b.k.charAt(1)!=='R'||!b.lv||b.job)return;zUpWhy(b).forEach(function(w){if(/최고 단계|입주해야|산호궁 Lv/.test(w))return;var key=/땅값/.test(w)?'land':w;cnt[key]=(cnt[key]||0)+1})});var top=null;for(var k in cnt)if(!top||cnt[k]>cnt[top])top=k;
+  if(top&&cnt[top]>=3){if(/소방서/.test(top)&&canStart('fire',1).length===0)o.b='fire';else if(/순찰대/.test(top)&&canStart('police',1).length===0)o.b='police';o.h=top==='land'?'🌸 장식은 도로에 안 붙어도 돼요 · 땅값이 오르면 주택이 2 · 3단계로 자라요':top}
+  else if(!sp)o.h='도로 옆 · 산소가 닿는 빈 땅이 없어요 · 산소 펌프 · 도로를 먼저 놓아요'}catch(e){}PB={t:now,v:o};return o}
 function qDeep(n){for(var d=0;d<4;d++){if(!n||n.k==='pop')return n;var bb=bOf(n.k),L=bb?(bb.lv||0)+1:1;if(bb&&bb.lv>=n.lv)return n;var u=needList(n.k,L).filter(function(x){return !x.ok&&x.k!=='pop'})[0];if(!u)return n;n=u}return n}
 function nextQ(){var L=hallLv();if(L>=D.HMAX)return null;var h=bOf('hall');if(!h)return null;
   if(h.job)return {k:'job'+L,t:'🏛 산호궁 Lv.'+(L+1)+' 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(h)}};
   var n=needList('hall',L+1).filter(function(x){return !x.ok})[0];
   if(!n)return {k:'hall'+(L+1),t:'<b>🏛 산호궁</b>을 Lv.'+(L+1)+'로 올려요',h:'👆 여기를 누르면 산호궁 창을 열어요',go:function(){focus(h);SEL=h;openPanel(h)}};
-  if(n.k==='pop')return {k:'pop'+n.lv,t:'물고기 <b>'+n.lv+'마리</b>가 살게 해요 (지금 '+(CS.pop|0)+')',h:'👆 누르면 집을 더 지어요 · 산소 · 경단이 있어야 이사 와요',go:function(){if(CS.pop>=CS.lim||CS.dem.R<-.1){lifePanel();return}quickZone()}};
+  if(n.k==='pop'){var pb=popBlock();return {k:'pop'+n.lv,t:'물고기 <b>'+n.lv+'마리</b>가 살게 해요 (지금 '+(CS.pop|0)+')',h:pb.h||'👆 누르면 집을 더 지어요 · 산소 · 경단이 있어야 이사 와요',go:function(){if(pb.b){quickBuild(pb.b);return}if(CS.pop>=CS.lim||CS.dem.R<-.1){lifePanel();return}quickZone()}}}
   n=qDeep(n);var b=bOf(n.k);if(!b)return {k:'b'+n.k,t:'<b>'+NM(n.k)+'</b>을(를) 지어요',h:'👆 여기를 누르면 바로 지어요 · 산호궁 Lv.'+(L+1)+' 조건',go:function(){quickBuild(n.k)}};
   if(b.job)return {k:'w'+n.k+b.job.L,t:'🦀 <b>'+NM(n.k)+'</b> 공사 중이에요',h:'다 지어지면 다음 할 일을 알려 드릴게요',go:function(){focus(b)}};
   return {k:'u'+n.k+n.lv,t:'<b>'+NM(n.k)+'</b>을(를) Lv.'+n.lv+'로 올려요 (지금 Lv.'+b.lv+')',h:'👆 여기를 누르면 그 건물 창을 열어요',go:function(){focus(b);SEL=b;openPanel(b)}}}

@@ -337,3 +337,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r31':
         for a,b in R31:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r31 ok')
+
+# --- 야간 점검: 320폭에서 심해 생존 첫 안내 창 '건너뛰기 · 다음' 두 단추 칸이 글자 폭대로 커져 창 오른쪽 밖으로 나가던 것(ru 'Пропустить') → 칸이 줄어들게, 한국어 말고는 글자 조금 작게 ---
+R32=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 생존 안내 단추 칸 */(function(){var s=document.createElement('style');s.textContent='.svgd-btns{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)!important}.svgd-btns>*{min-width:0}html:not([data-lang=ko]) .svgd-btns>.btn{font-size:min(22px,6vw)!important;padding-left:6px!important;padding-right:6px!important}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r32':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '생존 안내 단추 칸' in s: print('already')
+    else:
+        for a,b in R32:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r32 ok')

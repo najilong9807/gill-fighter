@@ -102,3 +102,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r9':
         if b in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r9 ok')
+
+# --- 야간 점검: 홈 아래 알림 띠(크리스마스 선물 · 업데이트 등)가 세로 화면 긴 언어(ja · es · ru)에서 '…'로 잘리던 것 → 가로 화면처럼 두 줄 ---
+R10=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 홈 알림 띠 두 줄 */(function(){var s=document.createElement('style');s.textContent='.updbar span{white-space:normal!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.15;text-overflow:clip}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r10':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R10:
+        if '홈 알림 띠 두 줄' in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r10 ok')

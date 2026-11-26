@@ -132,15 +132,23 @@ def wait_done(api, ids, limit=240):
     return not left
 
 # 1.1.18 앱 미리보기 영상: store/previews_<버전>/preview_<언어>.mp4 (886x1920, 15~30초) → 아이폰 6.9 · 6.5 칸
+# 1.1.34(11/26 종한 '출시되는 모든 언어용'): 스토어 로캘마다 그 언어 영상(preview_<게임 언어>.mp4)을 올림. 폴더에 없는 언어는 건너뜀(ko · en · ja 는 꼭 있어야 함)
 PREV_SETS = [('ko', 'ko'), ('en-US', 'en'), ('ja', 'ja')]
 PREV_TYPES = ['IPHONE_67', 'IPHONE_65']
+def prev_lang(loc):
+    if loc.startswith('zh-Hans'): return 'zhs'
+    if loc.startswith('zh-Hant'): return 'zht'
+    return loc.split('-')[0]
 def step_previews(api, vid):
     locs = localizations(api, vid)
     d = os.path.join(ROOT, 'store', 'previews_%s' % VER.replace('.', ''))
     pend = []
-    for loc, lg in PREV_SETS:
+    sets_all = list(PREV_SETS) + [(l, prev_lang(l)) for l in sorted(locs) if l not in dict(PREV_SETS)]
+    for loc, lg in sets_all:
         f = os.path.join(d, 'preview_%s.mp4' % lg)
-        if not os.path.exists(f): raise RuntimeError('missing ' + f)
+        if not os.path.exists(f):
+            if (loc, lg) in PREV_SETS: raise RuntimeError('missing ' + f)
+            log('WARN no preview file for', loc, lg); continue
         if loc not in locs: log('WARN locale missing in ASC', loc); continue
         lid = locs[loc]['id']
         sets = {x['attributes']['previewType']: x for x in api.all('appStoreVersionLocalizations/%s/appPreviewSets?limit=50' % lid)}
@@ -179,7 +187,7 @@ def step_previews(api, vid):
                     'attributes': {'uploaded': True, 'sourceFileChecksum': hashlib.md5(data).hexdigest()}}})
             pend.append((loc, pt, pid)); log('  preview uploaded', loc, pt)
     t0 = time.time(); left = list(pend)
-    while left and time.time() - t0 < 600:
+    while left and time.time() - t0 < 1800:
         for q in list(left):
             st = ((api.get('appPreviews/%s' % q[2])['data']['attributes'].get('videoDeliveryState') or {}).get('state'))
             if st == 'COMPLETE': left.remove(q); log('  preview ready', q[0], q[1])

@@ -112,3 +112,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r10':
         if '홈 알림 띠 두 줄' in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r10 ok')
+
+# --- 야간 점검: 모드 고르기 '기록 도전' 아래 줄('첫 기록을 남겨 보세요')이 ca · fi · el · hu · it · he 등에서 '…'로 잘리던 것 → 두 줄 ---
+R11=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 기록 도전 아래 줄 두 줄 */(function(){var s=document.createElement('style');s.textContent='#modePick .mcard.rec .mc-meta{white-space:normal;text-overflow:clip;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.15;font-size:14px}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r11':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R11:
+        if '기록 도전 아래 줄 두 줄' in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r11 ok')

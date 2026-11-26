@@ -75,3 +75,12 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r6':
         if b in s: print('already');continue
         assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r6 ok')
+
+# --- 야간 점검: 미션 창 위 '100명 감사 이벤트' 띠가 긴 언어에서 거의 다 잘리던 것 → 두 줄까지 ---
+R7=[('.dmhw span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}','.dmhw span{flex:1;min-width:0;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-height:1.15;font-size:min(1em,14px);-webkit-hyphens:auto;hyphens:auto}')]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r7':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R7:
+        if b in s: print('already');continue
+        assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r7 ok')

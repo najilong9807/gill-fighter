@@ -209,3 +209,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r19':
         for a,b in R19:
             assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r19 ok')
+
+# --- 야간 점검: 판 시작 알림 띠(보물 바다 · 이번 주 기록 도전 …)가 떠 있는 동안 멈추면 띠가 멈춤 창 제목 · 첫 줄을 덮음(375×667 같은 짧은 화면에서 잘 보임) → 멈춤 창이 열릴 때 이미 떠 있던 띠는 닫음(멈춘 뒤에 뜨는 띠는 그대로) ---
+R20=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 멈춤 창 위 띠 닫기 */(function(){try{var pz=document.getElementById('pause');if(!pz)return;new MutationObserver(function(){if(!pz.hidden){var bn=document.getElementById('banner');if(bn&&!bn.hidden)bn.hidden=true}}).observe(pz,{attributes:true,attributeFilter:['hidden']})}catch(e){}})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r20':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '멈춤 창 위 띠 닫기' in s: print('already')
+    else:
+        for a,b in R20:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r20 ok')

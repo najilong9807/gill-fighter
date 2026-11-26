@@ -83,9 +83,11 @@ function step(now,quiet){var dtH=(now-(G.tick||now))/3600000;if(dtH<0){if(dtH<-4
   G.b.forEach(function(b){
     if(b.job&&now>=b.job.end){b.lv=b.job.L;b.job=null;if(b.lv===1&&!isZ(b.k)){var r0=rates(b);b.buf=b.buf||{};for(var q0 in r0)b.buf[q0]=(b.buf[q0]||0)+Math.max(2,r0[q0]*1.2)}POPS[b.id]=quiet?0:now;if(!quiet){var c=centerOf(b);if(isZ(b.k)){dust(c.x,c.y,8,.8);sparkle(c.x,c.y-30*cam.z,6)}else{dust(c.x,c.y,22,1.8);sparkle(c.x,c.y-60*cam.z,18);float(c.x,c.y-90*cam.z,(b.k==='hall'?'🏛 ':'')+'Lv.'+b.lv+'!',true);snd('done');toast(B[b.k].n+' Lv.'+b.lv+' 완성!')}}else QUIET++}
     if(b.lv&&!b.job&&b.xpd!==b.lv){b.xpd=b.lv;addXP(isZ(b.k)||isD(b.k)?2:Math.min(200,Math.ceil(D.time(b.k,b.lv)/60)+5))}
-    if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=Math.min(r[k]*dtH,Math.max(0,r[k]*BUFH-(b.buf[k]||0)));if(u){for(var q in u){var need=u[q]*add;if(G.res[q]<need)add=G.res[q]/u[q];}for(q in u)G.res[q]-=u[q]*add}
+    if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=Math.min(r[k]*dtH,Math.max(0,r[k]*BUFH-(b.buf[k]||0)));if(u){for(var q in u){var need=u[q]*add,have=Math.max(0,G.res[q]-(q==='stone'&&b.k==='kiln'?stoneKeep():0));if(have<need)add=have/u[q];}for(q in u)G.res[q]-=u[q]*add}
       b.buf[k]=Math.min(r[k]*BUFH,(b.buf[k]||0)+add)}}})}
 var QUIET=0;
+/* 1.1.34 끝까지 플레이 점검: 벽돌 가마가 산호석을 바닥까지 다 써서 산호궁 · 건물 공사가 산호석 때문에 계속 막혔음 → 가마는 다음 산호궁 공사에 드는 산호석(최소 300, 창고 절반까지)은 남기고 씀 */
+function stoneKeep(){var L=hallLv(),c=L<D.HMAX?(D.cost('hall',L+1).stone||0):0;return Math.min(cap('stone')*.5,Math.max(300,c*1.2))}
 function collect(b){var got=[],c=centerOf(b);for(var k in b.buf){var v=Math.floor(b.buf[k]);if(v<1)continue;
     if(k==='pearl'){WAL.add('pearl',v);b.buf[k]-=v;got.push('+'+v+ICON[k])}
     else{var room=Math.floor(cap(k)-G.res[k]);if(room<=0){toast(RNAME[k]+' 창고가 가득 찼어요 · 조개 창고를 올려요');continue}var t=Math.min(v,room);G.res[k]+=t;b.buf[k]-=t;got.push('+'+t+ICON[k])}}

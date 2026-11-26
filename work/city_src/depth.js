@@ -105,7 +105,7 @@ function lifeTidy(){var el=$('panel');if(!el)return;el.classList.add('lifep');
   var labs=el.querySelectorAll('.lmeter .llab'),w=0;labs.forEach(function(l){w=Math.max(w,l.getBoundingClientRect().width)});if(w)labs.forEach(function(l){l.style.minWidth=Math.ceil(w)+'px'})}
 (function(){var st=document.createElement('style');st.textContent='.lifep .box .lrow{padding:3px 0}.lifep .box .lrow+.lrow{border-top:1px solid #e3eaf2}.lifep .lrow.lttl{font-weight:800;border-top:0!important;padding-bottom:4px}.lifep .lrow.lttl+.lrow{border-top:0}'+
   '.lifep .box .lrow.lmeter{display:flex;align-items:center;gap:10px;border-top:0}.lifep .llab{flex:0 0 auto;white-space:nowrap}.lifep .lmeter .meter{flex:1;width:auto;margin:0;height:10px}'+
-  '.lifep small.lhint{display:block;font-size:12px;color:#6a7690;line-height:1.3;margin-top:1px}.lifep .box .row{margin-top:8px}.lifep .box .row button,.lifep .box .row button.sub{height:44px;font-size:15px}'+
+  '.lifep small.lhint{display:block;font-size:12px;color:#56627c;line-height:1.3;margin-top:1px}.lifep .box .row{margin-top:8px}.lifep .box .row button,.lifep .box .row button.sub{height:44px;font-size:15px}'+
   '.lifep p.role{margin:8px 0 0;padding:8px 10px;background:#fff6d6;border-radius:12px;font-size:13.5px;line-height:1.4}';document.head.appendChild(st)})();
 var _menuP=menuPanel;menuPanel=function(){var r=_menuP.apply(this,arguments);try{var g=$('panel').querySelector('.mgrid');if(g&&!g.querySelector('[data-m="pol"]')){var b=document.createElement('button');b.dataset.m='pol';var S=polSlots();
   b.innerHTML='⚖<b>마을 정책</b><small>'+(S?'켜진 정책 '+polList().length+' / '+S:'🏛 Lv.6에 열려요')+'</small>';b.onclick=function(){polPanel()};g.insertBefore(b,g.children[3]||null)}}catch(e){}return r};

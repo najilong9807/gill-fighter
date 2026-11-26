@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","Усе $1"],["^BOSS (\\d+)$","БОС $1"],["^CH\\.
 window.GF_LAB={};
 window.GF_PACK={"town":"Містечко","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Вирости до $1"], ["^Survive for (\\d+)s$", "Протримайся $1 с"], ["^Eat the boss: (.+)$", "З'їж боса: $1"], ["^Clear within (.+)$", "Пройди за $1"], ["^Eat (\\d+) fish while surviving$", "З'їж $1 рибок і виживи"], ["^Based on your fish \\((.+)\\)$", "За твоєю рибкою ($1)"], ["^Again (⚡\\d+)$", "Ще раз $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Декор ★$1 · Перлове джерело +$2% · "], ["Decor (?=\\d)", "Декор "], ["(\\d+) kinds placed", "$1 видів розміщено"], [" · next ★ at (\\d+)", " · наступна ★ при $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Перлове джерело +$1% за різноманітність декору"]]);

@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","Semua $1"],["^BOSS (\\d+)$","BOS $1"],["^CH\\. (\\
 window.GF_LAB={};
 window.GF_PACK={"town":"Kampung","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Membesar hingga $1"], ["^Survive for (\\d+)s$", "Bertahan $1 saat"], ["^Eat the boss: (.+)$", "Makan bos: $1"], ["^Clear within (.+)$", "Selesaikan dalam $1"], ["^Eat (\\d+) fish while surviving$", "Makan $1 ikan sambil bertahan"], ["^Based on your fish \\((.+)\\)$", "Berdasarkan ikan anda ($1)"], ["^Again (⚡\\d+)$", "Lagi $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Hiasan ★$1 · Mata air mutiara +$2% · "], ["Decor (?=\\d)", "Hiasan "], ["(\\d+) kinds placed", "$1 jenis diletak"], [" · next ★ at (\\d+)", " · ★ seterusnya pada $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Mata air mutiara +$1% kerana hiasan lebih pelbagai"]]);

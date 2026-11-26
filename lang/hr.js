@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","Sve $1"],["^BOSS (\\d+)$","ŠEF $1"],["^CH\\. (\\d
 window.GF_LAB={};
 window.GF_PACK={"town":"Selo","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Narasti do $1"], ["^Survive for (\\d+)s$", "Preživi $1 s"], ["^Eat the boss: (.+)$", "Pojedi šefa: $1"], ["^Clear within (.+)$", "Prođi unutar $1"], ["^Eat (\\d+) fish while surviving$", "Pojedi $1 riba i preživi"], ["^Based on your fish \\((.+)\\)$", "Prema tvojoj ribi ($1)"], ["^Again (⚡\\d+)$", "Opet $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Ukrasi ★$1 · Izvor bisera +$2% · "], ["Decor (?=\\d)", "Ukrasi "], ["(\\d+) kinds placed", "$1 vrsta postavljeno"], [" · next ★ at (\\d+)", " · sljedeća ★ na $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Izvor bisera +$1 % za više vrsta ukrasa"]]);

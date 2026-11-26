@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","ทั้งหมด $1"],["^BOSS (\\d+)$","บ�
 window.GF_LAB={};
 window.GF_PACK={"town":"หมู่บ้าน","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "โตให้ถึง $1"], ["^Survive for (\\d+)s$", "เอาตัวรอด $1 วินาที"], ["^Eat the boss: (.+)$", "กินบอส: $1"], ["^Clear within (.+)$", "ผ่านภายใน $1"], ["^Eat (\\d+) fish while surviving$", "กินปลา $1 ตัวระหว่างเอาตัวรอด"], ["^Based on your fish \\((.+)\\)$", "ตามปลาของคุณ ($1)"], ["^Again (⚡\\d+)$", "อีกครั้ง $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "ของตกแต่ง ★$1 · น้ำพุไข่มุก +$2% · "], ["Decor (?=\\d)", "ของตกแต่ง "], ["(\\d+) kinds placed", "วางแล้ว $1 แบบ"], [" · next ★ at (\\d+)", " · ★ ถัดไปที่ $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "น้ำพุไข่มุก +$1% เพราะของตกแต่งหลากหลายขึ้น"]]);

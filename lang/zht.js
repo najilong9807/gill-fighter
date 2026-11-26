@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","全部 $1"],["^BOSS (\\d+)$","首領 $1"],["^CH\\.
 window.GF_LAB={};
 window.GF_PACK={"town":"小鎮","city":"鰓城"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "長到 $1"], ["^Survive for (\\d+)s$", "存活 $1 秒"], ["^Eat the boss: (.+)$", "吃掉首領：$1"], ["^Clear within (.+)$", "在 $1 內過關"], ["^Eat (\\d+) fish while surviving$", "存活時吃掉 $1 條魚"], ["^Based on your fish \\((.+)\\)$", "依你的魚（$1）"], ["^Again (⚡\\d+)$", "再來 $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "擺件 ★$1 · 珍珠泉 +$2% · "], ["Decor (?=\\d)", "擺件 "], ["(\\d+) kinds placed", "已擺 $1 種"], [" · next ★ at (\\d+)", " · 下一顆★：$1 種"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "擺件種類變多，珍珠泉 +$1%"]]);

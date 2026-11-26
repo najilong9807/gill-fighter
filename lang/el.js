@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","Όλα $1"],["^BOSS (\\d+)$","ΑΡΧΗΓΟΣ $1"],
 window.GF_LAB={};
 window.GF_PACK={"town":"Χωριό","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Μεγάλωσε ως $1"], ["^Survive for (\\d+)s$", "Επίζησε $1 δ"], ["^Eat the boss: (.+)$", "Φάε τον αρχηγό: $1"], ["^Clear within (.+)$", "Τερμάτισε σε $1"], ["^Eat (\\d+) fish while surviving$", "Φάε $1 ψάρια επιζώντας"], ["^Based on your fish \\((.+)\\)$", "Με βάση το ψάρι σου ($1)"], ["^Again (⚡\\d+)$", "Ξανά $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Διακοσμητικά ★$1 · Πηγή μαργαριταριών +$2% · "], ["Decor (?=\\d)", "Διακοσμητικά "], ["(\\d+) kinds placed", "$1 είδη τοποθετημένα"], [" · next ★ at (\\d+)", " · επόμενο ★ στα $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Πηγή μαργαριταριών +$1% για περισσότερα είδη διακόσμησης"]]);

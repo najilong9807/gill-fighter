@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","Todos $1"],["^BOSS (\\d+)$","CHEFE $1"],["^CH\\. (
 window.GF_LAB={};
 window.GF_PACK={"town":"Vila","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Cresça até $1"], ["^Survive for (\\d+)s$", "Sobreviva $1 s"], ["^Eat the boss: (.+)$", "Coma o chefe: $1"], ["^Clear within (.+)$", "Conclua em $1"], ["^Eat (\\d+) fish while surviving$", "Coma $1 peixes sobrevivendo"], ["^Based on your fish \\((.+)\\)$", "Com base no seu peixe ($1)"], ["^Again (⚡\\d+)$", "De novo $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Decoração ★$1 · Fonte de pérolas +$2% · "], ["Decor (?=\\d)", "Decoração "], ["(\\d+) kinds placed", "$1 tipos colocados"], [" · next ★ at (\\d+)", " · próxima ★ em $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Fonte de pérolas +$1% por ter mais tipos de decoração"]]);

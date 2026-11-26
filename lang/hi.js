@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","सभी $1"],["^BOSS (\\d+)$","बॉस $1"],["
 window.GF_LAB={};
 window.GF_PACK={"town":"गाँव","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "$1 तक बढ़ें"], ["^Survive for (\\d+)s$", "$1 सेकंड टिके रहें"], ["^Eat the boss: (.+)$", "बॉस को खाएँ: $1"], ["^Clear within (.+)$", "$1 में पूरा करें"], ["^Eat (\\d+) fish while surviving$", "टिके रहते हुए $1 मछलियाँ खाएँ"], ["^Based on your fish \\((.+)\\)$", "आपकी मछली के आधार पर ($1)"], ["^Again (⚡\\d+)$", "फिर से $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "सजावट ★$1 · मोती झरना +$2% · "], ["Decor (?=\\d)", "सजावट "], ["(\\d+) kinds placed", "$1 तरह की सजावट रखी"], [" · next ★ at (\\d+)", " · अगला ★ $1 पर"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "ज़्यादा तरह की सजावट से मोती झरना +$1%"]]);

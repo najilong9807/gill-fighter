@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","Tot $1"],["^BOSS (\\d+)$","CAP $1"],["^CH\\. (\\d+
 window.GF_LAB={};
 window.GF_PACK={"town":"Poble","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Creix fins a $1"], ["^Survive for (\\d+)s$", "Sobreviu $1 s"], ["^Eat the boss: (.+)$", "Menja't el cap: $1"], ["^Clear within (.+)$", "Supera en $1"], ["^Eat (\\d+) fish while surviving$", "Menja $1 peixos mentre sobrevius"], ["^Based on your fish \\((.+)\\)$", "Segons el teu peix ($1)"], ["^Again (⚡\\d+)$", "Una altra $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Decoració ★$1 · Font de perles +$2% · "], ["Decor (?=\\d)", "Decoració "], ["(\\d+) kinds placed", "$1 tipus col·locats"], [" · next ★ at (\\d+)", " · següent ★ a $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Font de perles +$1% per tenir més tipus de decoració"]]);

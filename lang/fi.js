@@ -5,3 +5,4 @@ window.GF_R=[["^All (\\d+)$","Kaikki $1"],["^BOSS (\\d+)$","POMO $1"],["^CH\\. (
 window.GF_LAB={};
 window.GF_PACK={"town":"Kylä","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Kasva kokoon $1"], ["^Survive for (\\d+)s$", "Selviydy $1 s"], ["^Eat the boss: (.+)$", "Syö pomo: $1"], ["^Clear within (.+)$", "Läpäise ajassa $1"], ["^Eat (\\d+) fish while surviving$", "Syö $1 kalaa selviytyessäsi"], ["^Based on your fish \\((.+)\\)$", "Kalasi perusteella ($1)"], ["^Again (⚡\\d+)$", "Uudelleen $1"]]);
+/* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Koristeet ★$1 · Helmilähde +$2% · "], ["Decor (?=\\d)", "Koristeet "], ["(\\d+) kinds placed", "$1 lajia sijoitettu"], [" · next ★ at (\\d+)", " · seuraava ★ kun $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Helmilähde +$1 % useammista koristelajeista"]]);

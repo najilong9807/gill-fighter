@@ -305,3 +305,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r28':
         for a,b in R28:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r28 ok')
+
+# --- 야간 점검: 수족관 친구 창 '📖 Tap a fish to read its story'가 꾸러미 언어(ru 등)에서 영어로 남던 것 — 코드가 '📖 '를 앞에 붙여 번역표(정확히 같은 문장)와 안 맞음 → 그림과 문장을 다른 글 조각으로 ---
+R29=[("hn.className='aq-lead aqs-hint';hn.textContent='📖 '+W.hint;","hn.className='aq-lead aqs-hint';hn.textContent='📖 ';hn.appendChild(document.createTextNode(W.hint));")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r29':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if "hn.appendChild(document.createTextNode(W.hint));" in s: print('already')
+    else:
+        for a,b in R29:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r29 ok')

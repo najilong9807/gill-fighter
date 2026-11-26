@@ -84,3 +84,12 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r7':
         if b in s: print('already');continue
         assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r7 ok')
+
+# --- 야간 점검: 설정 › 언어 'Bahasa Indonesia · Bahasa Melayu'가 '…'로 잘리던 것 → 두 줄 허용(높이 38 그대로) ---
+R8=[('.langseg.many button{min-height:38px}','.langseg.many button{min-height:38px}.langseg.many button{white-space:normal!important;text-overflow:clip!important;line-height:1.05;overflow-wrap:break-word}')]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r8':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R8:
+        if b in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r8 ok')

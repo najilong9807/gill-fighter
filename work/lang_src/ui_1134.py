@@ -253,3 +253,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r23':
         for a,b in R23:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r23 ok')
+
+# --- 야간 점검: 문의 보내기에 언어가 LANG(ru · de 등 꾸러미 언어는 모두 'en')로 가서 받은 메일에서 실제 언어를 알 수 없던 것 → 실제 언어 코드(GF_LC) ---
+R24=[("reply_email:mail||'(없음)',app:APP_VER,lang:LANG,","reply_email:mail||'(없음)',app:APP_VER,lang:(window.GF_LC||LANG),")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r24':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if 'lang:(window.GF_LC||LANG),' in s: print('already')
+    else:
+        for a,b in R24:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r24 ok')

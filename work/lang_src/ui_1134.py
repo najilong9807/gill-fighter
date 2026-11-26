@@ -220,3 +220,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r20':
         for a,b in R20:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r20 ok')
+
+# --- 야간 점검: 좁은 화면(320폭 · iOS 15 지원 기기 iPhone SE 1세대)에서 결과창 '이어하기' 상자가 창 오른쪽 밖으로 나가 '공유하고' 단추가 잘리던 것(min-width:auto) → 상자가 줄어들게, 한국어 말고는 단추 글자 조금 작게 ---
+R21=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 이어하기 상자 좁은 화면 */(function(){var s=document.createElement('style');s.textContent='#contBox{min-width:0;max-width:100%}#contBox .contbtns{min-width:0}#contBox .contbtns>*{min-width:0}html:not([data-lang=ko]) #over #contBox .contbtns>.btn{font-size:min(18px,4.7vw)!important;padding-left:6px!important;padding-right:6px!important}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r21':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '이어하기 상자 좁은 화면' in s: print('already')
+    else:
+        for a,b in R21:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r21 ok')

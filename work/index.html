@@ -8153,7 +8153,7 @@ function iapBuy(pk,lab){crumb('iap');var N=iapNative();if(!N||IAP.busy)return;IA
     if(/pending/i.test(m))banner(T('결제 승인을 기다리고 있어요'),T('승인되면 보석이 들어와요'));else if(!/cancel/i.test(m))banner(T('결제가 완료되지 않았어요'),T('돈은 나가지 않았어요. 잠시 뒤 다시 해 주세요'));
     if(page==='sea')renderSea()})}
 /* 1.1.34 야간 점검: 재화 칸 짧은 숫자 */function pillN(n){n=Math.round(+n||0);if(n<1000000)return nf(n);try{var L={zhs:'zh-CN',zht:'zh-TW',no:'nb'}[LANG]||LANG;return new Intl.NumberFormat(L,{notation:'compact',maximumFractionDigits:1}).format(n)}catch(e){return nf(n)}}
-function fmtBig(n){if(n<100000)return nf(n);return LANG==='en'?(Math.round(n/100)/10)+'K':(Math.round(n/1000)/10)+'만'}
+function fmtBig(n){if(n<100000)return nf(n);return LANG==='en'?(Math.round(n/100)/10)+'K':(Math.round(n/1000)/10)+(LANG==='ja'?'万':'만')}
 function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function canPay(c){return dev()||save[c.cur]>=c.price}
 function pay(c){if(!canPay(c))return false;if(!dev())save[c.cur]-=c.price;return true}

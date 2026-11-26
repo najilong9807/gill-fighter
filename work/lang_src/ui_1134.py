@@ -283,3 +283,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r26':
         for a,b in R26:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r26 ok')
+
+# --- 야간 점검: fmtBig 이 en 말고는 모두 '만'(한국어 단위)이라 일본어에서 비싼 물고기 레벨 업 값이 '真珠 11.9만'처럼 나오던 것 → ja 는 '万' ---
+R27=[("function fmtBig(n){if(n<100000)return nf(n);return LANG==='en'?(Math.round(n/100)/10)+'K':(Math.round(n/1000)/10)+'만'}",
+ "function fmtBig(n){if(n<100000)return nf(n);return LANG==='en'?(Math.round(n/100)/10)+'K':(Math.round(n/1000)/10)+(LANG==='ja'?'万':'만')}")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r27':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if "(LANG==='ja'?'万':'만')" in s: print('already')
+    else:
+        for a,b in R27:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r27 ok')

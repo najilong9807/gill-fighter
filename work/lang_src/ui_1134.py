@@ -33,6 +33,16 @@ R2=[("function showTab(p){crumb('tab:'+p);",
 if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r2':
     p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
     for a,b in R2:
-        if b in s: print('already');continue
+        if 'gfnope' in s: print('already');continue
         assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r2 ok')
+
+# --- 야간 점검: 멈춤 창 켜기/끄기 단추가 긴 언어(ru · vi)에서 '· 켜짐/꺼짐'이 잘려 상태가 안 보이던 것 → 두 줄 허용 ---
+R3=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 멈춤 창 켜기/끄기가 긴 언어(ru · vi)에서 '· 켜짐/꺼짐'까지 잘리던 것 → 두 줄 허용 */(function(){var s=document.createElement('style');s.textContent='.setbox .boost,#setPause .toggles .boost{white-space:normal;line-height:1.12;text-wrap:balance;text-overflow:clip}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r3':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R3:
+        if '멈춤 창 켜기/끄기가 긴 언어' in s: print('already');continue
+        assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r3 ok')

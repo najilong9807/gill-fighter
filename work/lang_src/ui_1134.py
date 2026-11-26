@@ -242,3 +242,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r22':
         for a,b in R22:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r22 ok')
+
+# --- 야간 점검: 출석 · 미션 보상 '받기'를 눌러도 진동 한 번과 숫자만 조용히 바뀌어 받은 느낌이 약함 → 누른 자리에 '+50'(진주 금색 · 보석 파랑)이 떠오르며 사라짐(움직임 줄이기 설정이면 흐려지기만) ---
+R23=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 보상 받기 +숫자 */(function(){try{var s=document.createElement('style');s.textContent='.gfplus{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);font-family:var(--disp);font-size:24px;color:#FFE45C;-webkit-text-stroke:5px #6A3B00;paint-order:stroke fill;white-space:nowrap;animation:gfplus .95s ease-out forwards}.gfplus.g{color:#9FE7FF;-webkit-text-stroke-color:#0B2C4A}@keyframes gfplus{0%{opacity:0;transform:translate(-50%,-30%) scale(.7)}20%{opacity:1;transform:translate(-50%,-80%) scale(1.12)}100%{opacity:0;transform:translate(-50%,-190%) scale(1)}}@media (prefers-reduced-motion:reduce){.gfplus{animation:gfplusR .9s forwards}@keyframes gfplusR{0%,60%{opacity:1}100%{opacity:0}}}';document.head.appendChild(s);var lt={x:innerWidth/2,y:innerHeight/2};document.addEventListener('pointerdown',function(e){lt={x:e.clientX,y:e.clientY}},true);if(typeof dmGive!=='function')return;var g0=dmGive;dmGive=function(o){g0(o);try{var n=o&&(o.g||o.p);if(!n)return;var el=document.createElement('div');el.className='gfplus'+(o.g?' g':'');el.textContent='+'+nf(n);el.style.left=Math.max(40,Math.min(innerWidth-40,lt.x))+'px';el.style.top=Math.max(60,lt.y)+'px';document.body.appendChild(el);setTimeout(function(){el.remove()},1000)}catch(e){}}}catch(e){}})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r23':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '보상 받기 +숫자' in s: print('already')
+    else:
+        for a,b in R23:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r23 ok')

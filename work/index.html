@@ -7603,6 +7603,9 @@ var page='home';
 var PG_EL={dex:'menu',sea:'sea',rec:'rec'};
 function pgImgs(id,on){var el=$(id);if(!el)return 0;var ims=el.getElementsByTagName('img'),n=0;for(var i=0;i<ims.length;i++){var im=ims[i];if(on){if(im.dataset.s&&!im.getAttribute('src')){im.src=im.dataset.s;n++}im.dataset.s=''}else{var s=im.getAttribute('src');if(s&&s.length>200){im.dataset.s=s;im.removeAttribute('src');n++}}}return n} /* 1.1.9(빌드 154) 도감 · 상점 · 기록 화면을 떠나면 그림(img) 해제, 돌아오면 다시 붙임 — WebKit 측정: 화면을 오갈 때마다 메모리가 20MB 넘게 쌓임(10/8 대전 튕김 직전 랭킹 화면 방문) */
 function pgImgsFree(keep){for(var k in PG_EL)if(k!==keep)pgImgs(PG_EL[k],false)}
+/* 1.1.34 야간 점검: 값이 모자라 흐려진 사기 단추(disabled)는 눌러도 반응이 없었음 → 카드를 누르면 '진주가 모자라요' 알림 + 흔들기 */
+document.addEventListener('click',function(e){try{var c=e.target&&e.target.closest&&e.target.closest('#sea .good');if(!c)return;var bt=c.querySelector('button.buy');if(!bt||!bt.disabled)return;var n=+String(bt.textContent||'').replace(/[^0-9]/g,'');if(!(n>0))return;var gem=/gemonly/.test(c.className);if(gem?(save.gems|0)>=n:(save.pearls|0)>=n)return;if(!gem){banner(T('진주가 모자라요'),'')}buzz(30);c.classList.remove('nope');void c.offsetWidth;c.classList.add('nope');setTimeout(function(){c.classList.remove('nope')},450)}catch(x){}},true);
+(function(){var s=document.createElement('style');s.textContent='@keyframes gfnope{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}#sea .good.nope{animation:gfnope .35s ease}';document.head.appendChild(s)})();
 function showTab(p){crumb('tab:'+p);pgImgsFree(p);
   if(deco.on)decoEnd();page=p;state=(p==='home'||p==='tank')?'home':'menu';P.dead=true;joy=null;
   $('over').hidden=true;$('pause').hidden=true;$('sheet').hidden=true;$('hud').hidden=true;$('skill').hidden=true;$('hint').hidden=true;$('tabs').hidden=false;

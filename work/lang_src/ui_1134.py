@@ -315,3 +315,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r29':
         for a,b in R29:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r29 ok')
+
+# --- 야간 점검(R23 보완): 자동 받기(앱 켤 때 출석 자동 수령)도 dmGive 를 불러 누르지 않았는데 화면 가운데 '+50'이 뜨던 것 → 누른 뒤 1.5초 안의 받기만 ---
+R30=[("document.addEventListener('pointerdown',function(e){lt={x:e.clientX,y:e.clientY}},true);","document.addEventListener('pointerdown',function(e){lt={x:e.clientX,y:e.clientY,t:Date.now()}},true);"),
+ ("dmGive=function(o){g0(o);try{var n=o&&(o.g||o.p);if(!n)return;","dmGive=function(o){g0(o);try{var n=o&&(o.g||o.p);if(!n||Date.now()-(lt.t||0)>1500)return;")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r30':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if "Date.now()-(lt.t||0)>1500" in s: print('already')
+    else:
+        for a,b in R30:
+            assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r30 ok')

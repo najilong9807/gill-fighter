@@ -348,3 +348,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r32':
         for a,b in R32:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r32 ok')
+
+# --- 야간 점검: 320폭 미션 이름이 긴 낱말(ru 'Продержись')에서 낱말 중간으로 꺾이던 것 → 340px 이하 · 한국어 말고는 14px + 자동 하이픈 ---
+R33=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 좁은 화면 미션 이름 */(function(){var s=document.createElement('style');s.textContent='@media (max-width:340px){html:not([data-lang=ko]) .dmt strong{font-size:14px!important;hyphens:auto;-webkit-hyphens:auto}}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r33':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '좁은 화면 미션 이름' in s: print('already')
+    else:
+        for a,b in R33:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r33 ok')

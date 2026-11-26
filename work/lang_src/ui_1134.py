@@ -370,3 +370,14 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r34':
         for a,b in R34:
             assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
         open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r34 ok')
+
+# --- 야간 점검: 모드 고르기 '심해 생존' 카드 아래 줄('챕터 30개 · 처음 도전해 보세요')이 한국어(375폭)도 '…'로 잘리던 것 → 기록 도전 카드(R11)처럼 두 줄 ---
+R35=[("function showTab(p){crumb('tab:'+p);",
+ "/* 1.1.34 야간 점검: 생존 카드 아래 줄 두 줄 */(function(){var s=document.createElement('style');s.textContent='#modePick .mcard.surv .mc-meta{white-space:normal;text-overflow:clip;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.15;font-size:14px}';document.head.appendChild(s)})();\nfunction showTab(p){crumb('tab:'+p);")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r35':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '생존 카드 아래 줄 두 줄' in s: print('already')
+    else:
+        for a,b in R35:
+            assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r35 ok')

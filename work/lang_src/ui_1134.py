@@ -55,3 +55,13 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r4':
         if b in s: print('already');continue
         assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r4 ok')
+
+# --- 야간 점검(사용자 질문 '조용한 정원 그거 뭐 해야 열림'): 손님 도감에서 아직 못 만난 손님 줄을 누르면 필요한 소품 이름 · 놓았는지(✓/○)를 보여 줌 ---
+R5=[("    if(G.hw&&!met){var em=document.createElement('em');em.className='hwtag';",
+ "    if(!met){sm.textContent=G.hint+' 👆';li.style.cursor='pointer';li.addEventListener('click',function(){try{var ks={};DS().placed.forEach(function(q){if(!q.pv)ks[q.k]=1});sm.textContent=G.hint+' — '+G.need.map(function(k){var D=decoById(k);return (ks[k]?'✓ ':'○ ')+(D?D.name:k)}).join(' · ');li.classList.add('gb-open')}catch(x){}})}\n    if(G.hw&&!met){var em=document.createElement('em');em.className='hwtag';")]
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r5':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    for a,b in R5:
+        if 'gb-open' in s: print('already');continue
+        assert s.count(a)==1;s=s.replace(a,b);pa.append({"a":a,"b":b})
+    open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r5 ok')

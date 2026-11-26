@@ -11605,6 +11605,7 @@ function guestBook(){var el=$('abyBook');if(!el){el=document.createElement('div'
   GUESTS.forEach(function(G){var L=byId(G.id);if(!L)return;var met=!!o.vis[G.k],li=document.createElement('li');li.className='gb-it'+(met?' met':'');
     var th=document.createElement('i');th.className='gb-th';if(met&&SPRITE_SRC[L.id]){var im=document.createElement('img');im.alt='';im.src=SPRITE_SRC[L.id];th.appendChild(im)}else th.textContent='?';li.appendChild(th);
     var tx=document.createElement('span');tx.className='gb-tx';var b=document.createElement('b');b.textContent=met?L.name:'???';tx.appendChild(b);var sm=document.createElement('small');sm.textContent=met?'✓ '+T('친구예요'):G.hint;tx.appendChild(sm);li.appendChild(tx);
+    if(!met){sm.textContent=G.hint+' 👆';li.style.cursor='pointer';li.addEventListener('click',function(){try{var ks={};DS().placed.forEach(function(q){if(!q.pv)ks[q.k]=1});sm.textContent=G.hint+' — '+G.need.map(function(k){var D=decoById(k);return (ks[k]?'✓ ':'○ ')+(D?D.name:k)}).join(' · ');li.classList.add('gb-open')}catch(x){}})}
     if(G.hw&&!met){var em=document.createElement('em');em.className='hwtag';em.textContent=T('할로윈 한정');li.appendChild(em)}
     ul.appendChild(li)});
   el.hidden=false}

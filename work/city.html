@@ -167,6 +167,7 @@ html[lang=vi] .round small{font-size:10px;letter-spacing:-.5px}
  #dock .big{max-width:560px;margin:0 auto}
  #toolbar,#place{left:max(10px,calc(50vw - 380px))!important;right:max(10px,calc(50vw - 380px))!important}
 }
+.car{min-width:0}.car button,.ord button{white-space:nowrap;overflow:hidden;text-overflow:clip;padding:0 2px;overflow-wrap:normal;word-break:keep-all}
 /* 1.1.34 야간 점검: 마을 단추에 누를 때 반응(:active)이 하나도 없었음 → 살짝 어둡게 · 작게(자리 이동 없는 filter · scale) */
 button:not(:disabled):active,.card:active,#tut:active{filter:brightness(.9)}#bBuild:active,#panel button.main:not(:disabled):active,#panel .row button:not(:disabled):active{filter:brightness(.9);scale:.97}
 </style></head><body>
@@ -660,6 +661,10 @@ function step(now,quiet){var dtH=(now-(G.tick||now))/3600000;if(dtH<0){if(dtH<-4
     if(dtH>0){var r=rates(b),u=USE[b.k];b.buf=b.buf||{};for(var k in r){var add=Math.min(r[k]*dtH,Math.max(0,r[k]*BUFH-(b.buf[k]||0)));if(u){for(var q in u){var need=u[q]*add,have=Math.max(0,G.res[q]-(q==='stone'&&b.k==='kiln'?stoneKeep():0));if(have<need)add=have/u[q];}for(q in u)G.res[q]-=u[q]*add}
       b.buf[k]=Math.min(r[k]*BUFH,(b.buf[k]||0)+add)}}})}
 var QUIET=0;
+/* 1.1.34 야간 점검(ru · de 360폭): 주문 '배달' · 열차 '싣기' 단추와 아래 둥근 단추 이름이 칸을 넘어 낱자가 다음 줄로 떨어지거나 동그라미 밖으로 나가던 것 → 넘치면 글자를 줄여 맞춤(최소 9px) */
+var RSHORT={bOrd:{ru:'Заказ',uk:'Заявки',el:'Εντολές',fr:'Ordres',hu:'Rendel.',id:'Pesan',pt:'Pedidos',nl:'Orders',sv:'Order',cs:'Zakázky',sk:'Zákazky',pl:'Zlecenia'},bStore:{ru:'Склад',uk:'Склад',id:'Gudang',el:'Αποθήκη'}};
+function fitTxt(root){try{document.querySelectorAll('.round small').forEach(function(e){var id=e.parentNode&&e.parentNode.id,lg=window.CITY_LANG,sh=RSHORT[id]&&RSHORT[id][lg];if(sh&&e.scrollWidth>e.parentNode.clientWidth-5&&e.textContent!==sh)e.textContent=sh});(root||document).querySelectorAll('.ord button:not(.del),.car button,.round small').forEach(function(e){if(!e.offsetWidth)return;e.style.fontSize='';var w=e.tagName==='SMALL'?(e.parentNode.clientWidth-6):e.clientWidth-4,fs=parseFloat(getComputedStyle(e).fontSize),n=0;while(e.scrollWidth>w+1&&fs>9&&n<12){fs-=.5;e.style.fontSize=fs+'px';n++}})}catch(x){}}
+try{new MutationObserver(function(){clearTimeout(fitTxt.t);fitTxt.t=setTimeout(function(){fitTxt()},30)}).observe(document.body,{childList:true,subtree:true});setTimeout(function(){fitTxt()},600)}catch(e){}
 try{document.addEventListener('touchstart',function(){},{passive:true})}catch(e){} /* iOS 웹뷰에서 :active(누름 반응)가 켜지게 */
 /* 1.1.34 야간 점검: 산호궁 최고 단계(엔딩)에 닿아도 다른 단계와 같은 작은 알림뿐이었음 → 산호궁에 큰 반짝임 여러 번 + 알림(앱을 끈 사이 끝났어도 다음에 열 때 한 번) */
 function endFx(){try{var h=bOf('hall');if(!h)return;focus(h);snd('done');for(var i=0;i<6;i++)setTimeout(function(){var c=centerOf(h);sparkle(c.x+(Math.random()-.5)*120*cam.z,c.y-(40+Math.random()*80)*cam.z,24);dust(c.x,c.y,14,1.4)},400+i*450);setTimeout(function(){toast('🏛 산호궁 최고 단계예요 ✨')},900)}catch(e){}}

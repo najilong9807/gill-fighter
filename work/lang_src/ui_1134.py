@@ -152,3 +152,15 @@ if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r14':
         if '수족관 꾸미기 단추 맞춤' in s: print('already');continue
         assert s.count(a)==1,s.count(a);s=s.replace(a,b);pa.append({"a":a,"b":b})
     open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r14 ok')
+
+# --- 야간 점검: 진주 · 보석이 아주 많을 때(백만 넘음) 홈 진주 칸이 잘리고 도감 보석 칸이 화면 밖으로 나가던 것 → 백만부터 짧게(언어별 9.9억 · 988M · 9,9 Mio.) ---
+R15=[("function fmtBig(n){","/* 1.1.34 야간 점검: 재화 칸 짧은 숫자 */function pillN(n){n=Math.round(+n||0);if(n<1000000)return nf(n);try{var L={zhs:'zh-CN',zht:'zh-TW',no:'nb'}[LANG]||LANG;return new Intl.NumberFormat(L,{notation:'compact',maximumFractionDigits:1}).format(n)}catch(e){return nf(n)}}\nfunction fmtBig(n){")]
+for _i in ['hmPearl','mPearl','sPearl','tkPearl','rPearl']: R15.append(("$('%s').textContent=nf(save.pearls)"%_i,"$('%s').textContent=pillN(save.pearls)"%_i))
+for _i in ['hmGem','mGem','sGem','tkGem']: R15.append(("$('%s').textContent=nf(save.gems)"%_i,"$('%s').textContent=pillN(save.gems)"%_i))
+if __name__=='__main__' and len(sys.argv)>1 and sys.argv[1]=='r15':
+    p=ROOT+'work/index.html';s=open(p,encoding='utf-8').read();pa=json.load(open(ROOT+'patch_add.json',encoding='utf-8'))
+    if '재화 칸 짧은 숫자' in s: print('already')
+    else:
+        for a,b in R15:
+            assert s.count(a)==1,(a,s.count(a));s=s.replace(a,b);pa.append({"a":a,"b":b})
+        open(p,'w',encoding='utf-8').write(s);open(ROOT+'patch_add.json','w',encoding='utf-8').write(json.dumps(pa,ensure_ascii=False));print('r15 ok')

@@ -6634,7 +6634,7 @@ function refreshHome(keep){
   var bs=save.top&&save.top.score?save.top.score:0,be=$('hmBest');
   if(be){be.hidden=!bs;if(bs)$('hmBestN').textContent=fmtBig(bs)}
   if(keep){Array.prototype.forEach.call($('pickbar').children,function(b){b.setAttribute('aria-selected',b.id==='pb-'+sel?'true':'false')})}else renderPickbar();
-  $('hmPearl').textContent=nf(save.pearls);$('hmGem').textContent=nf(save.gems);renderBoosts();$('devBadge').hidden=!dev();
+  $('hmPearl').textContent=pillN(save.pearls);$('hmGem').textContent=pillN(save.gems);renderBoosts();$('devBadge').hidden=!dev();
   $('hmName').textContent=L.name+(lvOf(L.id)>1?' Lv.'+lvOf(L.id):'');$('hmCap').textContent=T('최대 ')+fmtCap(L.cap);$('hmTrait').textContent=L.trait+(L.passive?' · '+L.passive:'');
   var hk=$('hmSkill');hk.textContent='';dexLine(hk,skillLine(L));
 }
@@ -7472,7 +7472,7 @@ function tankQ(L,x,y,s,dir){var q=null;try{q=accOf(L.id)}catch(e){}if(!q||!q.pet
 function tankTurn(f,dir,s){var n=(typeof performance!=='undefined'?performance.now():Date.now())/1000,d=f._tfT?Math.min(.1,Math.max(0,n-f._tfT)):0;f._tfT=n;if(f._tf==null)f._tf=dir;
   f._tf+=(dir-f._tf)*Math.min(1,d*5.5);var turning=Math.abs(dir-f._tf)>.08,sc=(f._tf<0?-1:1)*(.42+.58*Math.abs(f._tf));
   var sw=swimPh(f,turning?s*7:(f.v!=null?Math.abs(f.v)*3+s*.8:s*2.4),s);return [sc,turning?-dir*.12*Math.sin(Math.PI*Math.min(1,Math.abs(dir-f._tf)/2)):0,sw]}
-function refreshTank(){var d=DS();$('tkPearl').textContent=nf(save.pearls);$('tkGem').textContent=nf(save.gems);var no=tankIds().length,na=ownedIds().length,cnt=(no<na?no+' / '+na:no);
+function refreshTank(){var d=DS();$('tkPearl').textContent=pillN(save.pearls);$('tkGem').textContent=pillN(save.gems);var no=tankIds().length,na=ownedIds().length,cnt=(no<na?no+' / '+na:no);
   var dst=decoStars();$('tkCount').textContent=(LANG==='en'?(cnt+' fish · '+d.placed.length+' decor'):(LANG==='ja'?'魚'+cnt+'匹 · 小物'+d.placed.length+'個':'물고기 '+cnt+' · 소품 '+d.placed.length))+(dst?' · ★'+dst:''); /* 1.1.28 '꾸밈 ' 낱말을 빼고 ★만(줄이 꺾여 Lv 글자와 겹치던 것 · 영어는 decor가 두 번 나오던 것) */
   /* 1.1.10(b173) 아래 안내: 집이 없으면 '집터를 눌러 집을 지어요'(전엔 집이 없어도 '집을 눌러 진주를 받아요'가 떴다) */var tip=$('tkTip');if(tip)tip.textContent=HS().lv>0?(houseN()>=1?T('집을 눌러 진주를 받아요'):T('물을 톡 누르면 물고기가 모여들어요')):T('집터를 눌러 집을 지어요');zoomUI()}
 function toTank(){if(!owns(sel))sel=save.owned[0];showTab('tank')}
@@ -8145,6 +8145,7 @@ function iapBuy(pk,lab){crumb('iap');var N=iapNative();if(!N||IAP.busy)return;IA
   N.purchaseProduct({productIdentifier:pk.id,quantity:1,autoAcknowledgePurchases:false}).then(function(tx){IAP.busy='';iapGrant(tx);if(page==='sea')renderSea()},function(e){IAP.busy='';var m=String(e&&e.message||e||'');
     if(/pending/i.test(m))banner(T('결제 승인을 기다리고 있어요'),T('승인되면 보석이 들어와요'));else if(!/cancel/i.test(m))banner(T('결제가 완료되지 않았어요'),T('돈은 나가지 않았어요. 잠시 뒤 다시 해 주세요'));
     if(page==='sea')renderSea()})}
+/* 1.1.34 야간 점검: 재화 칸 짧은 숫자 */function pillN(n){n=Math.round(+n||0);if(n<1000000)return nf(n);try{var L={zhs:'zh-CN',zht:'zh-TW',no:'nb'}[LANG]||LANG;return new Intl.NumberFormat(L,{notation:'compact',maximumFractionDigits:1}).format(n)}catch(e){return nf(n)}}
 function fmtBig(n){if(n<100000)return nf(n);return LANG==='en'?(Math.round(n/100)/10)+'K':(Math.round(n/1000)/10)+'만'}
 function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function canPay(c){return dev()||save[c.cur]>=c.price}
@@ -8829,7 +8830,7 @@ function renderAcc(){
 }
 function accStep(k){accPv=null;var own=SPECIES.filter(function(L){return owns(L.id)}),i=own.map(function(L){return L.id}).indexOf(sel);if(!own.length)return;i=(i+k+own.length)%own.length;sel=own[i].id;save.pick=sel;persist();renderAcc();refreshHome(true)}
 function renderSea(){if(page!=='sea')accPv=null;
-  $('sPearl').textContent=nf(save.pearls);$('sGem').textContent=nf(save.gems);renderAcc();setTimeout(function(){if(typeof accStick==='function')accStick()},0);
+  $('sPearl').textContent=pillN(save.pearls);$('sGem').textContent=pillN(save.gems);renderAcc();setTimeout(function(){if(typeof accStick==='function')accStick()},0);
   var box=$('goodsItems');box.textContent='';
   ITEMS.forEach(function(it){
     var g=document.createElement('div');g.className='good';g.id='good-'+it.id;
@@ -9073,7 +9074,7 @@ function renderSettings(boxId){
 /* 1.1.10(b176) 영어에서 '1 times · 1 runs'처럼 나오던 것 → 1이면 단수 */
 function tU(n,k){var s=T(k);return LANG==='en'&&+n===1&&/(times|runs)$/.test(s)?s.slice(0,-1):s}
 function renderRec(){
-  $('rPearl').textContent=nf(save.pearls);lbShow(lbMode);
+  $('rPearl').textContent=pillN(save.pearls);lbShow(lbMode);
   var full=0,top=0,topL=null;
   SPECIES.forEach(function(L){var v=save.best[L.id]||0;if(v>=L.cap)full++;if(v>top){top=v;topL=L}});
   var st=$('recStats');st.textContent='';
@@ -10431,7 +10432,7 @@ function renderMenu(){var dexDrew=false;
   var box=$('picks'),quick=dexQuick&&box.children.length;dexQuick=false;
   if(quick){Array.prototype.forEach.call(box.querySelectorAll('.pick'),function(b){b.setAttribute('aria-pressed',dexPick&&b.id==='pick-'+sel?'true':'false')})}else{
   box.textContent='';
-  $('mPearl').textContent=nf(save.pearls);$('mGem').textContent=nf(save.gems);$('dexCount').textContent=T('모은 물고기 ')+save.owned.length+'/'+SPECIES.length;
+  $('mPearl').textContent=pillN(save.pearls);$('mGem').textContent=pillN(save.gems);$('dexCount').textContent=T('모은 물고기 ')+save.owned.length+'/'+SPECIES.length;
   /* 1.1.5 도감은 등급별로 묶고, 같은 등급 안에서는 값 순서 */
   /* 1.1.22 종한 '도감에 보유 물고기 상단 · 필터': 맨 위 필터 줄(전체 · 보유 · 미보유 · NEW), 전체일 땐 '내 물고기' 칸이 먼저 오고 그 아래 아직 없는 물고기를 등급별로 */
   dexFBar(box);var DF=save.dexF||'all';

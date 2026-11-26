@@ -15734,7 +15734,7 @@ askReview=function(why){var R=reviewNative();if(!R)return;var now=Date.now();if(
   if((save.runs||0)<3||now-save.firstAt<864e5)return;
   var last=save.rvAt||0,newVer=save.rvVer!==APP_VER;if(last&&now-last<(newVer?14:30)*864e5)return;
   save.rvAt=now;save.rvWhy=why;save.rvVer=APP_VER;save.rvN=(save.rvN|0)+1;
-  try{save.crashQ=(save.crashQ||[]).concat([{kind:'rv',v:APP_VER,at:now,why:String(why||''),n:save.rvN,runs:save.runs|0,d:Math.floor((now-save.firstAt)/864e5),lang:LANG}]).slice(-40)}catch(e){}
+  try{save.crashQ=(save.crashQ||[]).concat([{kind:'rv',v:APP_VER,at:now,why:String(why||''),n:save.rvN,runs:save.runs|0,d:Math.floor((now-save.firstAt)/864e5),lang:(typeof SUBL==='string'&&SUBL)||LANG}]).slice(-40)}catch(e){}
   persist();try{if(typeof crashSend==='function')setTimeout(crashSend,4000)}catch(e){}
   setTimeout(function(){try{R.requestReview().catch(function(){})}catch(e){}},1600)};
 try{if(SP_ON&&iapNative())setTimeout(function(){try{iapInit();spLoad()}catch(e){}},2500)}catch(e){} /* 광고 없이 보상은 켤 때 getPurchases로 되살림(iapInit이 iapGrant → spGrant) */

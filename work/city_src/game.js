@@ -230,7 +230,7 @@ function drawWorld(t,now){var items=[];
   if(GH){var s2=sz(GH.k);items.push({z:GH.x+GH.y+2*(s2-1)+.6,g:GH,c:sc(GH.x+(s2-1)/2,GH.y+(s2-1)/2)})}
   items.sort(function(a,b){return a.z-b.z});BUBS=[];var ji=0;
   items.forEach(function(it){if(it.ter){drawTer(it.p,it.ter,it.s,t);return}if(it.w){drawWalker(it.w,t);return}if(it.v){drawVeh(it.v,t);return}if(it.wf){var pw=sc(it.wf.fx,it.wf.fy);if(pw.x>-60&&pw.x<VW+60&&pw.y>-60&&pw.y<VH+60)plainFish(pw.x,pw.y-22*cam.z,it.wf,it.wf.fade*.9,t);return}if(it.gate){drawGate(t);return}
-    if(it.g){var g=it.g,s3=sz(g.k),why=g.h?houseWhy(g.k,g.x,g.y):siteWhy(g.k,g.x,g.y);if(isD(g.k)&&why==='도로에 붙여 지어야 해요')why='';for(var a=0;a<s3;a++)for(var b2=0;b2<s3;b2++){var pp=sc(g.x+a,g.y+b2);diamond(pp.x,pp.y,TW*cam.z,TH*cam.z);ctx.fillStyle=why?'rgba(255,90,90,.45)':'rgba(90,220,120,.45)';ctx.fill()}
+    if(it.g){var g=it.g,s3=sz(g.k),why=g.h?houseWhy(g.k,g.x,g.y):siteWhy(g.k,g.x,g.y);if(isD(g.k)&&why==='도로에 붙여 지어야 해요')why='';if(g.fix&&g.fix.x===g.x&&g.fix.y===g.y){why='';g.fix.road.concat(g.fix.clr).forEach(function(t){var q=t.split(','),pq=sc(+q[0],+q[1]);diamond(pq.x,pq.y,TW*cam.z,TH*cam.z);ctx.fillStyle=g.fix.road.indexOf(t)>=0?'rgba(255,205,80,.55)':'rgba(255,255,255,.35)';ctx.fill()})} /* 1.1.35 치우고 · 길 잇고 짓기 미리보기 */for(var a=0;a<s3;a++)for(var b2=0;b2<s3;b2++){var pp=sc(g.x+a,g.y+b2);diamond(pp.x,pp.y,TW*cam.z,TH*cam.z);ctx.fillStyle=why?'rgba(255,90,90,.45)':'rgba(90,220,120,.45)';ctx.fill()}
       drawArt(art(g.k,1),it.c,.6);g.why=why;return}
     var b=it.b,c=it.c,s=sz(b.k),z=cam.z;
     ctx.fillStyle='rgba(15,60,80,.2)';ctx.beginPath();ctx.ellipse(c.x+4*z,c.y+6*z,44*s*z,20*s*z,0,0,7);ctx.fill();

@@ -1,0 +1,10 @@
+const {open}=require('./lib.js');const fs=require('fs');
+(async()=>{const seed=JSON.parse(fs.readFileSync(__dirname+'/seed.json','utf8'));const city=fs.readFileSync(__dirname+'/bigtown.json','utf8');
+const {b,p,errs}=await open({w:320,h:568,init:`if(!sessionStorage.s){localStorage.setItem('fishproto.save2',${JSON.stringify(JSON.stringify(seed))});localStorage.setItem('gfcity.v1',${JSON.stringify(city)});sessionStorage.s=1}`});
+await p.goto('http://app.local/index.html');await p.waitForTimeout(2500);
+await p.evaluate(()=>{document.querySelectorAll('.overlay').forEach(o=>{if(o.id!=='banner')o.hidden=true});document.body.classList.remove('ovOpen')});
+await p.click('#tab-city');await p.waitForTimeout(3500);
+const v0=await p.evaluate(()=>!document.getElementById('banner').hidden);
+await p.mouse.click(160,300);await p.waitForTimeout(300);
+const v1=await p.evaluate(()=>!document.getElementById('banner').hidden);
+console.log('띠 보임 전/후',v0,v1,'errs',errs);await b.close()})();

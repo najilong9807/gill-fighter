@@ -10,7 +10,8 @@ try{var m=/[?&]lang=([a-z]{2,3})/.exec(location.search||'');if(m)L=m[1];
 window.CITY_LANG=L;try{document.documentElement.lang=L}catch(e){}
 /* 한국어: 이름 뒤 '을(를) · 이(가)'를 받침 보고 바로 고쳐 보여 줌(원문은 다른 언어 번역 열쇠라 그대로 둠) */
 if(L==='ko'){var JX=/([\s\S])((?:<\/b>)?)(을\(를\)|이\(가\)|은\(는\))/g,DB='0136780';
-  var jo=function(s){if(typeof s!=='string'||s.indexOf('(')<0||!JX.test(s))return s;JX.lastIndex=0;return s.replace(JX,function(_,c,tg,p){var h=c.charCodeAt(0),b=null;if(h>=0xAC00&&h<=0xD7A3)b=(h-0xAC00)%28!==0;else if(/\d/.test(c))b=DB.indexOf(c)>=0;if(b===null)return _;var f0=p.charAt(0);return c+tg+(f0==='을'?(b?'을':'를'):f0==='은'?(b?'은':'는'):(b?'이':'가'))})};
+  var JR=/(\d)((?:<\/b>)?)로(?=[\s<·),.!]|$)/g;/* 1.1.34: 'Lv.16로' → 'Lv.16으로'(숫자 끝소리 0 · 3 · 6 은 '으로') */
+  var jo=function(s){if(typeof s==='string'&&s.indexOf('로')>=0)s=s.replace(JR,function(_,d,tg){return d+tg+('036'.indexOf(d)>=0?'으로':'로')});if(typeof s!=='string'||s.indexOf('(')<0||!JX.test(s))return s;JX.lastIndex=0;return s.replace(JX,function(_,c,tg,p){var h=c.charCodeAt(0),b=null;if(h>=0xAC00&&h<=0xD7A3)b=(h-0xAC00)%28!==0;else if(/\d/.test(c))b=DB.indexOf(c)>=0;if(b===null)return _;var f0=p.charAt(0);return c+tg+(f0==='을'?(b?'을':'를'):f0==='은'?(b?'은':'는'):(b?'이':'가'))})};
   window.CITY_TR=jo;try{var k1=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');Object.defineProperty(Element.prototype,'innerHTML',{get:k1.get,set:function(v){k1.set.call(this,jo(v))},configurable:true})}catch(e){}
   try{var k2=Object.getOwnPropertyDescriptor(Node.prototype,'textContent');Object.defineProperty(Node.prototype,'textContent',{get:k2.get,set:function(v){k2.set.call(this,jo(v))},configurable:true})}catch(e){}
   return}
@@ -30,7 +31,8 @@ var keys=Object.keys(D).sort(function(a,b){return b.length-a.length});
 var RX=keys.length?new RegExp(keys.map(esc).join('|'),'g'):null;
 var cache={},cn=0,MISS={};
 function units(o){
-  o=o.replace(/(\d+(?:\.\d+)?)만/g,function(_,v){return U.man?v+U.man:(Math.round(v*100)/10)+'K'});
+  /* 1.1.34 야간 점검: 1억 넘으면 '억' → 億 · M, 100만 넘는 '만'도 K 대신 M(칸 넘침 막기) */o=o.replace(/(\d+(?:\.\d+)?)억/g,function(_,v){return U.oku?v+U.oku:Math.round(v*100)+'M'});
+  o=o.replace(/(\d+(?:\.\d+)?)만/g,function(_,v){return U.man?v+U.man:+v>=100?(Math.round(v/10)/10)+'M':(Math.round(v*100)/10)+'K'});
   return o.replace(/(\d)\s?(시간|마리|일|분|초|칸|개)(?![가-힣])/g,function(_,d,u){return d+(U[u]!=null?U[u]:'')})}
 function sub(t,a){return t.replace(/\$(\d)/g,function(_,n){return tr(a[+n]==null?'':a[+n])})}
 function tr(s){if(typeof s!=='string'||!HAN.test(s))return s;var c=cache[s];if(c!==undefined)return c;var o=s;

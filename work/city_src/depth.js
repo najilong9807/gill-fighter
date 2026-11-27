@@ -35,7 +35,7 @@ function polOn(k){return polList().indexOf(k)>=0}
 function polV(t){var add=t==='happy'||t==='lv',v=add?0:1;try{polList().forEach(function(k){var p=POLD[k];if(p&&p.e[t]!=null){if(add)v+=p.e[t];else v*=p.e[t]}})}catch(e){}return v}
 function polWait(){var t=(G.pol&&G.pol.t)||0;return Math.max(0,t+600e3-NOW())}
 function polPanel(){var el=$('panel'),S=polSlots(),on=polList(),w=polWait(),h='<button class="x" id="pX">✕</button><h2>⚖ 마을 정책</h2>';
-  if(!S){h+='<div class="box">정책은 🏛 산호궁 Lv.6에 열려요 · 좋은 점과 대가가 같이 있어요</div>';el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;return}
+  if(!S){h+='<div class="box"><b>⚖ 마을 정책</b>(☰ 메뉴)은 산호궁 Lv.6부터 켜요. 정책마다 좋은 점과 대가가 같이 있어요. Lv.10 · Lv.15에 한 칸씩 늘어요.</div>';el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;return}
   h+='<p class="role">켤 수 있는 정책 <b>'+on.length+' / '+S+'</b> · Lv.10 · Lv.15에 한 칸씩 늘어요'+(w?' · 다시 바꾸기까지 '+dur(w/1000):'')+'</p><div class="wq">';
   POLS.forEach(function(p){var o=polOn(p.k),can=!w&&(o||on.length<S);h+='<div class="wqr'+(o?' can':'')+'"><span class="ic">'+p.ic+'</span><div class="tx"><b>'+p.n+'</b><small><span class="pg">▲ '+p.g+'</span><br><span class="pb">▼ '+p.b+'</span></small></div><button data-p="'+p.k+'"'+(can?'':' disabled')+'>'+(o?'끄기':'켜기')+'</button></div>'});
   h+='</div>';el.innerHTML=h;el.hidden=false;panelFor=null;$('pX').onclick=closePanel;
@@ -90,6 +90,7 @@ var _lifeD=lifePanel;lifePanel=function(){var r=_lifeD.apply(this,arguments);try
    줄마다 한 칸 · 긴 괄호 설명은 줄 아래 작은 글씨 · 수요 막대는 이름 칸 너비를 맞추고 남은 폭을 다 씀 · 아래 단추 높이 같게 · 산호궁 조건 줄도 칸으로 */
 var _lifeL=lifePanel;lifePanel=function(){var r=_lifeL.apply(this,arguments);try{lifeTidy()}catch(e){}return r};
 function lifeTidy(){var el=$('panel');if(!el)return;el.classList.add('lifep');
+  try{var tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),tn;while(tn=tw.nextNode())if(/[−-]0\.0(?![\d])/.test(tn.nodeValue))tn.nodeValue=tn.nodeValue.replace(/[−-]0\.0(?![\d])/g,'0')}catch(e){} /* QA: 먹는 양이 0이면 '−0.0' 대신 0 */
   el.querySelectorAll('.box').forEach(function(bx){if(bx.dataset.tidy)return;bx.dataset.tidy='1';var out=[],cur=null;
     function nr(){cur=document.createElement('div');cur.className='lrow'}nr();
     [].slice.call(bx.childNodes).forEach(function(n){if(n.nodeName==='BR'){out.push(cur);nr();n.parentNode.removeChild(n);return}
@@ -104,11 +105,11 @@ function lifeTidy(){var el=$('panel');if(!el)return;el.classList.add('lifep');
   var labs=el.querySelectorAll('.lmeter .llab'),w=0;labs.forEach(function(l){w=Math.max(w,l.getBoundingClientRect().width)});if(w)labs.forEach(function(l){l.style.minWidth=Math.ceil(w)+'px'})}
 (function(){var st=document.createElement('style');st.textContent='.lifep .box .lrow{padding:3px 0}.lifep .box .lrow+.lrow{border-top:1px solid #e3eaf2}.lifep .lrow.lttl{font-weight:800;border-top:0!important;padding-bottom:4px}.lifep .lrow.lttl+.lrow{border-top:0}'+
   '.lifep .box .lrow.lmeter{display:flex;align-items:center;gap:10px;border-top:0}.lifep .llab{flex:0 0 auto;white-space:nowrap}.lifep .lmeter .meter{flex:1;width:auto;margin:0;height:10px}'+
-  '.lifep small.lhint{display:block;font-size:12px;color:#6a7690;line-height:1.3;margin-top:1px}.lifep .box .row{margin-top:8px}.lifep .box .row button,.lifep .box .row button.sub{height:44px;font-size:15px}'+
+  '.lifep small.lhint{display:block;font-size:12px;color:#56627c;line-height:1.3;margin-top:1px}.lifep .box .row{margin-top:8px}.lifep .box .row button,.lifep .box .row button.sub{height:44px;font-size:15px}'+
   '.lifep p.role{margin:8px 0 0;padding:8px 10px;background:#fff6d6;border-radius:12px;font-size:13.5px;line-height:1.4}';document.head.appendChild(st)})();
 var _menuP=menuPanel;menuPanel=function(){var r=_menuP.apply(this,arguments);try{var g=$('panel').querySelector('.mgrid');if(g&&!g.querySelector('[data-m="pol"]')){var b=document.createElement('button');b.dataset.m='pol';var S=polSlots();
   b.innerHTML='⚖<b>마을 정책</b><small>'+(S?'켜진 정책 '+polList().length+' / '+S:'🏛 Lv.6에 열려요')+'</small>';b.onclick=function(){polPanel()};g.insertBefore(b,g.children[3]||null)}}catch(e){}return r};
-(function(){var st=document.createElement('style');st.textContent='.pg{color:#2e9b55;font-weight:800}.pb{color:#d0473f;font-weight:800}';document.head.appendChild(st);setInterval(function(){try{incTick()}catch(e){}},5000)})();
+(function(){var st=document.createElement('style');st.textContent='.pg{color:#1f7a3e;font-weight:800}.pb{color:#d0473f;font-weight:800}';document.head.appendChild(st);setInterval(function(){try{incTick()}catch(e){}},5000)})();
 window.__depth={murk:function(x,y){return x==null?Object.keys(MURK).length:murkAt(x,y)},inc:function(force,k){if(force){G.inc=G.inc||{};G.inc.next=NOW()-1;if(k){var o=INCT;var keep={};for(var q in o)keep[q]=o[q];Object.keys(o).forEach(function(q){if(q!==k)delete INCT[q]});incTick();for(q in keep)INCT[q]=keep[q]}else incTick()}return incOn().map(function(b){return b.k+':'+b.inc.k})},pol:function(){return polList().join(',')+' happy'+polV('happy')+' tax'+polV('tax')},cs:function(){return {happy:CS.happy,murkH:CS.murkH,pop:CS.pop,tax:CS.tax}}};
 window.__depth.top=function(){var best=null;G.b.forEach(function(b){if(isZ(b.k)&&b.k.charAt(1)==='R'&&b.lv){var m=murkAt(b.x,b.y);if(!best||m>best.m)best={x:b.x,y:b.y,m:m,why:zUpWhy(b).join('/')}}});return best};
 window.__depth.addF=function(x,y,k){G.b.push({id:G.nid++,k:k||'d_filt',x:x,y:y,lv:1,buf:{}});occ();fields();return murkAt(x,y)};
@@ -143,11 +144,32 @@ var _hudJQ=hud;hud=function(){var r=_hudJQ.apply(this,arguments);try{var n=jqPen
     var f=document.createDocumentFragment(),i=0,m;while(m=EM.exec(v)){if(m.index>i)f.appendChild(document.createTextNode(v.slice(i,m.index)));var s=document.createElement('span');s.className='nb0';s.textContent=m[0];f.appendChild(s);i=m.index+m[0].length}
     if(i<v.length)f.appendChild(document.createTextNode(v.slice(i)));pa.replaceChild(f,n)})}
   function segs(el){if(el.dataset.sg||el.closest(SKIP)||el.querySelector('div,p,ul,li,button,br,.sg,.meter,.bar'))return;var t=(el.textContent||'').trim();if(t.indexOf('·')<0||t.length>150)return;
-    var parts=t.split(/\s·\s/);if(parts.length<2||parts.some(function(p){return p.length>34}))return;el.dataset.sg='1';
+    var parts=t.split(/\s·\s/);if(parts.length<2||parts.some(function(p){return p.length>34||/[,，、]|[.!?。]\s/.test(p)}))return;el.dataset.sg='1';
     var groups=[[]];[].slice.call(el.childNodes).forEach(function(n){if(n.nodeType!==3){groups[groups.length-1].push(n);return}
       n.nodeValue.split(/\s· /).forEach(function(p,j){if(j>0){groups[groups.length-1].push(document.createTextNode(' ·'));groups.push([]);p=p.replace(/^\s+/,'')}if(p)groups[groups.length-1].push(document.createTextNode(p))})});
     while(el.firstChild)el.removeChild(el.firstChild);
-    groups.forEach(function(g,j){if(!g.length)return;var s=document.createElement('span');s.className='sg';g.forEach(function(n){s.appendChild(n)});if(el.firstChild)el.appendChild(document.createTextNode(' '));el.appendChild(s)})}
+    groups.forEach(function(g,j){if(!g.length)return;var s=document.createElement('span');s.className='sg';g.forEach(function(n){s.appendChild(n)});if(el.firstChild)el.appendChild(document.createTextNode(' '));el.appendChild(s)})
+    /* QA: 한 마디가 두 줄로 접히면(좁은 창 · 긴 언어) 덩어리 묶음을 풀어 보통 줄바꿈으로 — '안 집 ·' 만 한 줄에 남던 것 */
+    try{var lh=parseFloat(getComputedStyle(el).fontSize)*1.9,ss=el.querySelectorAll('.sg'),bad=false;ss.forEach(function(x){if(x.offsetHeight>lh)bad=true});if(bad)ss.forEach(function(x){while(x.firstChild)el.insertBefore(x.firstChild,x);el.removeChild(x)})}catch(e){}}
   function tidy(root){if(!root||root.hidden)return;BUSY=1;try{root.querySelectorAll(SEL).forEach(function(el){if(!el.closest(SKIPG))glue(el)});root.querySelectorAll(SEL).forEach(segs)}catch(e){}BUSY=0}
   function hook(id){var el=$(id);if(!el||!window.MutationObserver)return;var mo=new MutationObserver(function(){if(BUSY)return;tidy(el);mo.takeRecords()});mo.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']})}
   hook('panel');hook('tray');window.panelTidy=tidy})();
+
+/* 1.1.34(늑구 '광산 하나 더 지어서 캐는 양 늘리고 싶은데 업그레이드만 유도해서 아쉬워'):
+   산호 광산 · 다시마 농장은 여러 채 — 🏛 Lv.4 에 2채, Lv.8 에 3채. 값은 처음 짓는 값과 같고, 채마다 따로 올리고 따로 생산.
+   짓기 칸에 '＋' 카드가 하나 더 붙음(새 한국어 글 없이 이름 + ＋ · 개수 · 값). 다른 건물이 '광산 Lv.N 필요'를 볼 땐 가장 높은 레벨(lvOf). */
+/* 1.1.34(늑구 '모든 건물 그렇게 — 업그레이드만 유도하지 말고 추가 건물 짓게'): 산호궁 · 거북 배달소 · 열차역 · 항구 · 수족관 · 용왕 궁전(하나뿐인 시설) 말고 모두 여러 채.
+   2채째는 그 건물이 열린 레벨 + 2(최소 🏛 Lv.4), 3채째는 + 6(최소 Lv.8). 생산 · 인구 한도 · 산소 · 범위 시설은 채마다 그대로 더해짐.
+   게 일꾼 숙소는 한 채 더마다 일꾼 +1, 조개 창고는 한 채 더마다 그 창고 한도의 절반을 더함. */
+var MULTI={pump:1,quarry:1,farm:1,crab:1,factory:1,store:1,diner:1,sew:1,school:1,kiln:1,pearl:1,clinic:1,fire:1,police:1};
+function multiAt(k,i){var a=B[k].at;return i<=1?a:i===2?Math.max(4,a+2):Math.max(8,a+6)}
+function multiMax(k){if(!MULTI[k])return 1;var L=hallLv(),n=1;if(L>=multiAt(k,2))n=2;if(L>=multiAt(k,3))n=3;return n}
+var _crabsMaxM=crabsMax;crabsMax=function(){var n=G.b.filter(function(b){return b.k==='crab'&&b.lv>0}).length;return _crabsMaxM()+Math.max(0,n-1)};
+var _capM=cap;cap=function(r){var c=_capM(r);try{var st=G.b.filter(function(b){return b.k==='store'&&b.lv>0}).sort(function(x,y){return y.lv-x.lv});if(st.length>1){var base=D.storeCap(st[0].lv),add=0;for(var i=1;i<st.length;i++)add+=D.storeCap(st[i].lv)*.5;c=c*(base+add)/base}}catch(e){}return c};
+function multiCnt(k){return G.b.filter(function(b){return b.k===k}).length}
+var _showCatM=showCat;showCat=function(c){var r=_showCatM.apply(this,arguments);try{var tr=$('tray'),L=hallLv();
+  Object.keys(MULTI).forEach(function(k){var el=tr.querySelector('.card[data-k="'+k+'"]');if(!el||!bOf(k))return;var n=multiCnt(k),mx=multiMax(k),nx=n<3?multiAt(k,n+1):0;
+    if(n>=mx&&!(nx&&nx<=D.HMAX))return;var can=n<mx,cc=D.cost(k,1),d=document.createElement('button');d.className='card'+(can?'':' off');d.dataset.km=k;
+    d.innerHTML='<img src="'+thumb(k)+'" alt=""><b>'+B[k].n+'\u00a0＋</b><i>'+(can?'🫧'+fmt(cc.pearl)+' 🪨'+fmt(cc.stone):'🔒 🏛Lv.'+nx)+'</i><small>'+n+' / '+(can?mx:n+1)+'</small>';
+    d.onclick=function(){if(!can){toast('🔒 🏛Lv.'+nx);return}var w=canStart(k,1);if(w.length){toast(w[0]);return}ghostAt(k)};el.parentNode.insertBefore(d,el.nextSibling)})}catch(e){}return r};
+var _catBadgeM=catBadge;catBadge=function(c){var n=_catBadgeM.apply(this,arguments);try{Object.keys(MULTI).forEach(function(k){if(CATOF[k]===c&&bOf(k)&&multiCnt(k)<multiMax(k)&&payOk(D.cost(k,1)))n++})}catch(e){}return n};

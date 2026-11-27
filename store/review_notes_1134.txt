@@ -1,0 +1,13 @@
+What's new in 1.1.34 (Town mode improvements and fixes only):
+(1) No new purchases, accounts, permissions, SDKs or network features.
+(2) Town: most buildings can now be built more than once (e.g. Coral Quarry and Kelp Farm: 2nd at Coral Hall Lv.4, 3rd at Lv.8). Unique facilities (Coral Hall, Turtle Depot, Current Train Station, Whale Port, Aquarium, Dragon King's Palace) stay single.
+(3) Town: clearing a rock now gives in-game Coral Stone and clearing a bush gives in-game Kelp; early Coral Quarry production was raised; the land expansion window explains that plots open one at a time and which Coral Hall level opens the next one.
+(4) Layout fixes for small screens (320 pt wide) and long languages, translation fixes in many languages, contrast and touch-target improvements, and the selected language is kept when restoring a save with a backup code.
+How to test: Town tab (bottom) → Build → Coral Quarry (a "+" card appears once a second copy is unlocked), or Build → 🧹 Demolish → tap a rock or kelp bush.
+
+
+Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.
+
+Purpose and audience: Gill Fighter is a casual "eat and grow" fish game. The player guides a small fish, eats smaller fish to grow and avoids bigger ones, collects 105 fish species, levels them up with in-game pearls and decorates a personal aquarium. It is for casual mobile gamers (12+) who want short 2-5 minute sessions with one-finger controls, and Solo can be played offline.
+
+How to use: No account, login or sample file is needed. Launch the app and tap Solo on the home screen, then choose Score Challenge or Deep Expedition. Touch and drag anywhere to move; the bottom-right button uses the special ability. Bottom tabs: Play, Tank (aquarium decoration and the aquarium house), Dex (fish collection), Shop (upgrades, decorations and boosters for in-game currency only). "Arena" is an online shared sea with other players and computer-controlled fish; there is no chat. "Friends" lets players who type the same 4-digit number share a separate Arena sea. The gear icon (top right) opens settings and an optional contact form. Progress is saved on the device; the leaderboard (random device ID, optional nickname, best score, optional country code) is stored on Supabase.

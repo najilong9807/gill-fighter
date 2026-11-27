@@ -59,7 +59,7 @@ function storeCap(lv){return 3000+lv*lv*1400}
 /* 보석 빨리 짓기 */
 function rushGems(sec){return sec<=300?0:Math.ceil((sec-300)/60)}
 /* 생산(시간당) — 레벨 배수 */
-function prodPerHour(id,lv){var p=B[id].prod;if(!p||!lv)return {};var o={},k;for(k in p)o[k]=p[k]*lv*(1+lv*.08);return o}
+function prodPerHour(id,lv){var p=B[id].prod;if(!p||!lv)return {};var o={},k,e=id==='quarry'&&lv<5?1+.5*(5-lv)/4:1;for(k in p)o[k]=p[k]*lv*(1+lv*.08)*e;return o} /* 1.1.34: 산호 광산 Lv.1~4 초반 생산 ×1.5~1.125 (정세영 님 '돌이 너무 부족') */
 
 var D={HMAX:HMAX,B:B,HREQ:HREQ,HT:HT,cost:cost,time:time,needs:needs,crabs:crabs,storeCap:storeCap,rushGems:rushGems,prodPerHour:prodPerHour,hallPearl:hallPearl};
 if(typeof module!=='undefined')module.exports=D;else root.VDATA=D;

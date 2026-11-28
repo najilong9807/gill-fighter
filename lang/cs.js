@@ -6,3 +6,4 @@ window.GF_LAB={};
 window.GF_PACK={"town":"Městečko","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Vyrůst na $1"], ["^Survive for (\\d+)s$", "Přežij $1 s"], ["^Eat the boss: (.+)$", "Sněz bosse: $1"], ["^Clear within (.+)$", "Dokonči do $1"], ["^Eat (\\d+) fish while surviving$", "Sněz $1 ryb a přežij"], ["^Based on your fish \\((.+)\\)$", "Podle tvé ryby ($1)"], ["^Again (⚡\\d+)$", "Znovu $1"]]);
 /* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Dekorace ★$1 · Perlový pramen +$2% · "], ["Decor (?=\\d)", "Dekorace "], ["(\\d+) kinds placed", "$1 druhů umístěno"], [" · next ★ at (\\d+)", " · další ★ při $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Perlový pramen +$1 % za více druhů dekorací"]]);
+/* town_1135c */try{window.GF_TRX["🏘 마을이 열렸어요!"]="🏘 Tvoje městečko je otevřené!"}catch(e){}

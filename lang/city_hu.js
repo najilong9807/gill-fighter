@@ -3,3 +3,4 @@ window.I18N_X={"u":{"일":" nap","시간":" ó","분":" p","초":" mp","칸":" m
 /* town_1134 */try{I18N_X.d["한 번에 한 칸씩 열려요"]="A telkek egyenként nyílnak";I18N_X.d["🪨 산호석은 산호 광산과 바위 치우기로 모아요"]="🪨 Korallkövet a Korallbányából vagy sziklák eltakarításával kapsz";I18N_X.t.unshift(["다음 칸은 🏛 산호궁 Lv\\.(\\d+)","Következő telek: 🏛 Korallcsarnok Lv.$1"])}catch(e){}
 /* town_1135 */try{I18N_X.d["모두 배달"]="Összes kiszállítása";I18N_X.d["지금 올릴 수 있어요"]="Most fejleszthető";I18N_X.d["올릴 수 있는 건물이 없어요"]="Most egyik épület sem fejleszthető";}catch(e){}
 /* town_1135b */try{I18N_X.t.unshift(["🧹 (\\d+)곳 치우기","🧹 $1 mező eltakarítása"]);I18N_X.t.unshift(["🛣 길 (\\d+)칸 잇기","🛣 $1 mező út"]);I18N_X.t.unshift(["🫧([^ <]+) 더 들어요","+🫧$1"]);I18N_X.d["✓를 누르면 같이 해요"]="Koppints a ✓-ra, és minden egyszerre megtörténik"}catch(e){}
+/* town_1135c */try{I18N_X.d["보물 방울을 터뜨렸어요"]="Kincsbuborék kipukkasztva";I18N_X.d["🏛 Lv.2에 열려요"]="Nyílik: 🏛 Sz.2"}catch(e){}

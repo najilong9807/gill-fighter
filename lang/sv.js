@@ -6,3 +6,4 @@ window.GF_LAB={};
 window.GF_PACK={"town":"By","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Väx till $1"], ["^Survive for (\\d+)s$", "Överlev i $1 s"], ["^Eat the boss: (.+)$", "Ät bossen: $1"], ["^Clear within (.+)$", "Klara det inom $1"], ["^Eat (\\d+) fish while surviving$", "Ät $1 fiskar medan du överlever"], ["^Based on your fish \\((.+)\\)$", "Baserat på din fisk ($1)"], ["^Again (⚡\\d+)$", "Igen $1"]]);
 /* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Dekor ★$1 · Pärlkälla +$2% · "], ["Decor (?=\\d)", "Dekor "], ["(\\d+) kinds placed", "$1 sorter placerade"], [" · next ★ at (\\d+)", " · nästa ★ vid $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Pärlkälla +$1 % för fler sorters dekor"]]);
+/* town_1135c */try{window.GF_TRX["🏘 마을이 열렸어요!"]="🏘 Din by är öppen!"}catch(e){}

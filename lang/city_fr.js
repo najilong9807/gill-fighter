@@ -3,3 +3,4 @@ window.I18N_X={"u":{"일":"j","시간":"h","분":"min","초":"s","칸":" cases",
 /* town_1134 */try{I18N_X.d["한 번에 한 칸씩 열려요"]="Les parcelles s'ouvrent une par une";I18N_X.d["🪨 산호석은 산호 광산과 바위 치우기로 모아요"]="Obtiens de la 🪨 Pierre de corail à la Carrière de corail ou en dégageant les rochers";I18N_X.t.unshift(["다음 칸은 🏛 산호궁 Lv\\.(\\d+)","Parcelle suivante : 🏛 Mairie de corail Nv.$1"])}catch(e){}
 /* town_1135 */try{I18N_X.d["모두 배달"]="Tout livrer";I18N_X.d["지금 올릴 수 있어요"]="Prêts à améliorer";I18N_X.d["올릴 수 있는 건물이 없어요"]="Aucun bâtiment à améliorer pour l'instant";}catch(e){}
 /* town_1135b */try{I18N_X.t.unshift(["🧹 (\\d+)곳 치우기","🧹 dégager $1 cases"]);I18N_X.t.unshift(["🛣 길 (\\d+)칸 잇기","🛣 $1 cases de route"]);I18N_X.t.unshift(["🫧([^ <]+) 더 들어요","🫧$1 en plus"]);I18N_X.d["✓를 누르면 같이 해요"]="Touchez ✓ pour tout faire d’un coup"}catch(e){}
+/* town_1135c */try{I18N_X.d["보물 방울을 터뜨렸어요"]="Bulle au trésor éclatée";I18N_X.d["🏛 Lv.2에 열려요"]="S'ouvre à 🏛 Niv.2"}catch(e){}

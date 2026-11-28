@@ -3,3 +3,4 @@ window.I18N_X={"u":{"일":"g","시간":"h","분":"min","초":"s","칸":" caselle
 /* town_1134 */try{I18N_X.d["한 번에 한 칸씩 열려요"]="I lotti si aprono uno alla volta";I18N_X.d["🪨 산호석은 산호 광산과 바위 치우기로 모아요"]="Ottieni 🪨 Pietra di corallo dalla Cava di corallo o rimuovendo le rocce";I18N_X.t.unshift(["다음 칸은 🏛 산호궁 Lv\\.(\\d+)","Prossimo lotto: 🏛 Sala del Corallo Lv.$1"])}catch(e){}
 /* town_1135 */try{I18N_X.d["모두 배달"]="Consegna tutto";I18N_X.d["지금 올릴 수 있어요"]="Pronti da migliorare";I18N_X.d["올릴 수 있는 건물이 없어요"]="Nessun edificio da migliorare ora";}catch(e){}
 /* town_1135b */try{I18N_X.t.unshift(["🧹 (\\d+)곳 치우기","🧹 sgombra $1 caselle"]);I18N_X.t.unshift(["🛣 길 (\\d+)칸 잇기","🛣 $1 caselle di strada"]);I18N_X.t.unshift(["🫧([^ <]+) 더 들어요","🫧$1 in più"]);I18N_X.d["✓를 누르면 같이 해요"]="Tocca ✓ per fare tutto insieme"}catch(e){}
+/* town_1135c */try{I18N_X.d["보물 방울을 터뜨렸어요"]="Bolla del tesoro scoppiata";I18N_X.d["🏛 Lv.2에 열려요"]="Si apre a 🏛 Liv.2"}catch(e){}

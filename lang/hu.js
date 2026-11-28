@@ -6,3 +6,4 @@ window.GF_LAB={};
 window.GF_PACK={"town":"Falu","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Nőj meg: $1"], ["^Survive for (\\d+)s$", "Élj túl $1 mp-ig"], ["^Eat the boss: (.+)$", "Edd meg a főellenséget: $1"], ["^Clear within (.+)$", "Teljesítsd $1 alatt"], ["^Eat (\\d+) fish while surviving$", "Egyél $1 halat túlélés közben"], ["^Based on your fish \\((.+)\\)$", "A halad alapján ($1)"], ["^Again (⚡\\d+)$", "Újra $1"]]);
 /* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Dísz ★$1 · Gyöngyforrás +$2% · "], ["Decor (?=\\d)", "Dísz "], ["(\\d+) kinds placed", "$1 fajta lerakva"], [" · next ★ at (\\d+)", " · következő ★: $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Gyöngyforrás +$1% a többféle díszért"]]);
+/* town_1135c */try{window.GF_TRX["🏘 마을이 열렸어요!"]="🏘 Megnyílt a falud!"}catch(e){}

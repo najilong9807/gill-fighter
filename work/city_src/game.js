@@ -221,7 +221,8 @@ function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h
 function miniBar(x,y,p){var w=40,h=7;ctx.save();ctx.translate(x-w/2,y);ctx.fillStyle='#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=1.6;rr(-2,-2,w+4,h+4,5);ctx.fill();ctx.stroke();ctx.fillStyle='#4fc36b';rr(0,0,Math.max(h,w*p),h,3.5);ctx.fill();ctx.restore()}
 function progBar(x,y,p,label){var w=128,h=12;ctx.save();ctx.translate(x-w/2,y);ctx.fillStyle='#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=2.2;rr(-6,-22,w+12,h+28,10);ctx.fill();ctx.stroke();
   ctx.font='800 12px "Jua",-apple-system,"Apple SD Gothic Neo",sans-serif';ctx.fillStyle=OUT;ctx.textAlign='center';ctx.fillText(label,w/2,-7);ctx.fillStyle='#d9e4ef';rr(0,0,w,h,6);ctx.fill();ctx.fillStyle='#4fc36b';rr(0,0,Math.max(h,w*p),h,6);ctx.fill();ctx.strokeStyle=OUT;rr(0,0,w,h,6);ctx.stroke();ctx.restore()}
-function badge(x,y,L,hot){ctx.save();ctx.fillStyle=hot?'#ffd54a':'#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,11,0,7);ctx.fill();ctx.stroke();ctx.font='400 12px "Black Han Sans",sans-serif';ctx.fillStyle=OUT;ctx.textAlign='center';ctx.fillText(L,x,y+4);ctx.restore()}
+var UPOK={}; /* 1.1.35: 지금 올릴 수 있는 건물(id → 1) — life.js 가 1.5초마다 채움 */
+function badge(x,y,L,hot,up){if(up===1){ctx.save();ctx.fillStyle='#5fd16a';ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,y-21);ctx.lineTo(x+6,y-12);ctx.lineTo(x-6,y-12);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.arc(x,y,11,0,7);ctx.fill();ctx.stroke();ctx.font='400 12px "Black Han Sans",sans-serif';ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(L,x,y+4);ctx.restore();return}if(up){ctx.save();ctx.fillStyle='#5fd16a';ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,12,0,7);ctx.fill();ctx.stroke();ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(x,y-7);ctx.lineTo(x+7,y+1);ctx.lineTo(x+3,y+1);ctx.lineTo(x+3,y+7);ctx.lineTo(x-3,y+7);ctx.lineTo(x-3,y+1);ctx.lineTo(x-7,y+1);ctx.closePath();ctx.fill();ctx.lineWidth=1.4;ctx.stroke();ctx.restore();return}ctx.save();ctx.fillStyle=hot?'#ffd54a':'#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,11,0,7);ctx.fill();ctx.stroke();ctx.font='400 12px "Black Han Sans",sans-serif';ctx.fillStyle=OUT;ctx.textAlign='center';ctx.fillText(L,x,y+4);ctx.restore()}
 var BUBS=[];
 function drawWorld(t,now){var items=[];
   for(var key in G.ter){var q=key.split(','),i=+q[0],j=+q[1],p=sc(i,j);if(p.x<-80||p.x>VW+80||p.y<-80||p.y>VH+80)continue;items.push({z:i+j,ter:G.ter[key],p:p,s:i*7+j})}
@@ -244,7 +245,7 @@ function drawWorld(t,now){var items=[];
     var pop=POPS[b.id],sy=1,e=pop?(now-pop)/700:9;if(e<1)sy=1+Math.sin(e*Math.PI*2.2)*Math.exp(-e*3.5)*.12;
     drawArt(art(b.k,b.lv),c,1,null,sy);if(e<.6)scaffold(c,s,c.y-(140-e*170)*z,true,1-e/.6,e*200);
     if(SEL===b){ctx.save();diamond(c.x,c.y,TW*s*z,TH*s*z);ctx.strokeStyle='#ffd54a';ctx.lineWidth=3;ctx.setLineDash([8,6]);ctx.stroke();ctx.restore()}
-    var a2=art(b.k,b.lv),bx=c.x+26*s*z,by=c.y-10*z;if(cam.z>.45&&!isZ(b.k)&&!isD(b.k))badge(bx,by,b.lv,b.k==='hall');
+    var a2=art(b.k,b.lv),bx=c.x+26*s*z,by=c.y-10*z;if(!isZ(b.k)&&!isD(b.k)){var upk=UPOK[b.id];if(cam.z>.6||(upk&&cam.z>.2))badge(bx,by,b.lv,b.k==='hall',upk?(cam.z>.6?1:2):0)} /* 1.1.35: 멀리 축소(.6 아래)하면 Lv 숫자는 숨기고 올릴 수 있는 건물만 초록 ⬆ */
     var rk=bufReady(b);if(rk){var yy=c.y+(a2.top-GY)*z-10+Math.sin(t*.004+b.id)*4,xx=c.x;ctx.save();ctx.fillStyle='#fffdf7';ctx.strokeStyle=OUT;ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(xx,yy,17,0,7);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(xx-6,yy+15);ctx.lineTo(xx,yy+24);ctx.lineTo(xx+6,yy+15);ctx.fill();ctx.font='18px sans-serif';ctx.textAlign='center';ctx.fillText(ICON[rk],xx,yy+6);ctx.restore();BUBS.push({b:b,x:xx,y:yy})}
   })}
 

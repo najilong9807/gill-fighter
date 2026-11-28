@@ -1,4 +1,4 @@
-What's new in 1.1.35 (Town mode convenience only):
+What's new in 1.1.35 (Town mode convenience and small in-game rewards only):
 (1) No new purchases, accounts, permissions, SDKs or network features. No balance or price changes.
 (2) Town building placement: if the chosen spot has rocks/kelp bushes or is not next to a road, the placement bar shows the extra in-game Pearl cost and one ✓ tap clears the tiles, lays the shortest road to the existing road network and starts the building (one Undo reverts all of it).
 (2b) Town: tapping one resource bubble collects that same resource from every building in the town at once.
@@ -6,6 +6,9 @@ What's new in 1.1.35 (Town mode convenience only):
 (4) Town: tapping the crab workers chip in the top bar opens a list of builds in progress (time left) and buildings that can be upgraded right now; tapping a row moves the camera to that building and opens it.
 (5) Town: the Order Delivery window has a "Deliver all" button that sends every order the warehouse can currently fill (in-game items and in-game Pearls only).
 (6) Tapping the town closes the main game's notification banner so it no longer covers town windows.
+(7) Town: now and then a "treasure bubble" floats up over the town (at most 8 per day, Coral Hall Lv.2+); tapping it gives a small amount of in-game Pearls, town materials or construction time. No ads, no purchases.
+(8) Town: buildings that can be upgraded right now show a green ⬆ on their level badge; small decorative fish schools swim across the screen; daily town tasks unlock at Coral Hall Lv.2 instead of Lv.3.
+(9) Main game: after the first round, a small "Your Town is open!" tip appears above the Town tab until the player opens Town once, and the round results line for the Town supply crate opens Town when tapped.
 How to test: Town tab (bottom) → Build → Infrastructure → Oxygen Pump, drag the ghost onto rocks away from the road, then ✓; tap the crab chip (🦀 n/m) at the top; Orders → Deliver all; tap any bubble above a building.
 
 Sign-in and Game Center: there is no required account or login. Optional features: Game Center leaderboards (uses the player's existing Game Center sign-in), an optional backup code (Settings > Data; random 12-character code, the save is stored under a hash of the code) and an optional "Apple account link" in Settings > Data that uses Sign in with Apple only to back up and restore the same save file on another device. No name or email is stored.

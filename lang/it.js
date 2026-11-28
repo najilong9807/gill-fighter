@@ -6,3 +6,4 @@ window.GF_LAB={};
 window.GF_PACK={"town":"Villaggio","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Cresci fino a $1"], ["^Survive for (\\d+)s$", "Sopravvivi $1 s"], ["^Eat the boss: (.+)$", "Mangia il boss: $1"], ["^Clear within (.+)$", "Completa entro $1"], ["^Eat (\\d+) fish while surviving$", "Mangia $1 pesci sopravvivendo"], ["^Based on your fish \\((.+)\\)$", "In base al tuo pesce ($1)"], ["^Again (⚡\\d+)$", "Ancora $1"]]);
 /* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Arredi ★$1 · Fonte di perle +$2% · "], ["Decor (?=\\d)", "Arredi "], ["(\\d+) kinds placed", "$1 tipi piazzati"], [" · next ★ at (\\d+)", " · prossima ★ a $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Fonte di perle +$1% grazie a più tipi di arredi"]]);
+/* town_1135c */try{window.GF_TRX["🏘 마을이 열렸어요!"]="🏘 Il tuo villaggio è aperto!"}catch(e){}

@@ -81,7 +81,7 @@
   function cgAdd(){var o=cgDay();if(o.n>=GBX)return 0;o.n++;try{var g=JSON.parse(localStorage.getItem('gfcity.gift')||'{}');g.n=(g.n|0)+1;g.at=Date.now();localStorage.setItem('gfcity.gift',JSON.stringify(g))}catch(e){}persist();return o.n}
   var _erC=endRun;endRun=function(){var st0=state,t0=P?(P.time||0):0,done=P&&P.cityG;var r=_erC.apply(this,arguments);
     try{if(st0==='play'&&state!=='play'&&!done&&t0>=20&&!(typeof TUT!=='undefined'&&TUT&&TUT.on)){P.cityG=1;var n=cgAdd();
-      if(n&&save.cityIn){var rec=document.getElementById('oRec');if(rec){var li=document.createElement('li');li.className='cityg';var sp=document.createElement('span'),b=document.createElement('b');sp.textContent=T(CGT);b.textContent='+1 · '+n+' / '+GBX;li.appendChild(sp);li.appendChild(b);rec.appendChild(li)}}
+      if(n){var rec=document.getElementById('oRec');if(rec){var li=document.createElement('li');li.className='cityg';var sp=document.createElement('span'),b=document.createElement('b');sp.textContent=T(CGT);b.textContent='+1 · '+n+' / '+GBX;li.appendChild(sp);li.appendChild(b);rec.appendChild(li);if(!save.cityIn){b.textContent='+1 ›';li.className='cityg cgo';li.setAttribute('role','button');li.tabIndex=0;li.onclick=function(){try{buzz(8)}catch(e){}open()}}}}
       setTimeout(dot,200)}}catch(e){}return r};
   var CGT='🏘 마을 재료 상자',CGV={en:'🏘 Town supply crate',ja:'🏘 町の資材箱',es:'🏘 Caja de materiales del pueblo',vi:'🏘 Thùng vật liệu làng'};
   try{TRT[CGT]=CGV.en}catch(e){}try{TRJ[CGT]=CGV.ja}catch(e){}try{if(SUBL&&CGV[SUBL])TRX[CGT]=CGV[SUBL]}catch(e){}
@@ -134,7 +134,14 @@
   function dot(){var d=document.getElementById('cityDot');if(!d)return;var on=false;
     if(!ov){if(!save.cityIn&&(save.runs|0)>=1)on=true;
       else{try{var h=JSON.parse(localStorage.getItem('gfcity.hint')||'null');if(h&&h.next&&Date.now()>=h.next)on=true;var gg=JSON.parse(localStorage.getItem('gfcity.gift')||'null');if(gg&&gg.n>0)on=true}catch(e){}}}
-    d.hidden=!on}
+    d.hidden=!on;tipUp()}
+  /* 1.1.35: 첫 판 뒤 홈 '마을' 탭 위 말풍선(처음 들어갈 때까지) — 신규 76명 중 11명만 마을에 들어가 봄(11/14~27) */
+  var TIPK='🏘 마을이 열렸어요!',TIPV={en:'🏘 Your Town is open!',ja:'🏘 町が開きました！',es:'🏘 ¡Tu pueblo ya está abierto!',vi:'🏘 Làng của bạn đã mở!'};
+  try{TRT[TIPK]=TIPV.en}catch(e){}try{TRJ[TIPK]=TIPV.ja}catch(e){}try{if(SUBL&&TIPV[SUBL])TRX[TIPK]=TIPV[SUBL]}catch(e){}
+  try{var tst=document.createElement('style');tst.textContent='#tab-city{position:relative;overflow:visible}#cityTip{position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%);white-space:nowrap;padding:7px 12px;border-radius:14px;background:#FFF6D6;color:#0B2C4A;border:2.5px solid #0B2C4A;font:400 13px/1.15 "Jua",system-ui,sans-serif;-webkit-text-stroke:0;text-shadow:none;letter-spacing:0;text-transform:none;box-shadow:0 3px 0 #0B2C4A;pointer-events:none;z-index:3;animation:ctipb 1.6s ease-in-out infinite}#cityTip:after{content:"";position:absolute;left:50%;top:100%;margin-left:-7px;border:7px solid transparent;border-top-color:#0B2C4A}#cityTip[hidden]{display:none}@keyframes ctipb{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}li.cityg.cgo{cursor:pointer}@media (prefers-reduced-motion:reduce){#cityTip{animation:none}}';document.head.appendChild(tst)}catch(e){}
+  function tipUp(){try{var tp=document.getElementById('cityTip'),want=!!tb&&!ov&&!save.cityIn&&(save.runs|0)>=1&&typeof page!=='undefined'&&page==='home';
+    if(want&&!tp){tp=document.createElement('div');tp.id='cityTip';tp.setAttribute('aria-hidden','true');tb.appendChild(tp)}if(tp){tp.textContent=T(TIPK);tp.hidden=!want}
+    if(tp&&want){var r=tp.getBoundingClientRect();if(r.right>innerWidth-6)tp.style.marginLeft=(innerWidth-6-r.right)+'px';else if(r.left<6)tp.style.marginLeft=(6-r.left)+'px'}}catch(e){}}
   /* 게임 안 소식: 마을이 처음 들어가는 버전(CITY_VER)에 두 줄을 덧붙임(같은 버전의 다른 소식 뒤에) */
   try{var CITY_VER='1.1.30',NA="🏘 새 메뉴 「마을」: 아래 탭에서 바닷속 물고기 마을 아가미시티를 지어요 · 진주 · 보석은 아가미 파이터와 같이 써요",NB="오늘의 미션에 「마을에서 생산품 3번 받기」가 나와요 · 마을 수족관에서 내 수족관으로 바로 가요";
     var NT={en:["🏘 New menu 「Town」: build Gill City, an undersea fish town, from the bottom tab · Pearls and Gems are shared with Gill Fighter","Today's missions can include 「Collect goods in Town 3 times」 · jump from the Town aquarium straight to your own aquarium"],

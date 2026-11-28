@@ -3,3 +3,4 @@ window.I18N_X={"u":{"일":"d","시간":"t","분":"m","초":"s","칸":" ruter","�
 /* town_1134 */try{I18N_X.d["한 번에 한 칸씩 열려요"]="Tomter åpnes én om gangen";I18N_X.d["🪨 산호석은 산호 광산과 바위 치우기로 모아요"]="Få 🪨 Korallstein fra Korallbruddet eller ved å rydde steiner";I18N_X.t.unshift(["다음 칸은 🏛 산호궁 Lv\\.(\\d+)","Neste tomt ved 🏛 Korallhallen Lv.$1"])}catch(e){}
 /* town_1135 */try{I18N_X.d["모두 배달"]="Lever alle";I18N_X.d["지금 올릴 수 있어요"]="Klar til oppgradering";I18N_X.d["올릴 수 있는 건물이 없어요"]="Ingen bygninger kan oppgraderes nå";}catch(e){}
 /* town_1135b */try{I18N_X.t.unshift(["🧹 (\\d+)곳 치우기","🧹 rydd $1 ruter"]);I18N_X.t.unshift(["🛣 길 (\\d+)칸 잇기","🛣 $1 veiruter"]);I18N_X.t.unshift(["🫧([^ <]+) 더 들어요","🫧$1 ekstra"]);I18N_X.d["✓를 누르면 같이 해요"]="Trykk ✓ for å gjøre alt på en gang"}catch(e){}
+/* town_1135c */try{I18N_X.d["보물 방울을 터뜨렸어요"]="Skatteboble sprakk";I18N_X.d["🏛 Lv.2에 열려요"]="Åpner ved 🏛 nv.2"}catch(e){}

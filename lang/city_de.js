@@ -3,3 +3,4 @@ window.I18N_X={"u":{"일":" T","시간":" h","분":" Min.","초":" s","칸":" Fe
 /* town_1134 */try{I18N_X.d["한 번에 한 칸씩 열려요"]="Grundstücke öffnen sich einzeln";I18N_X.d["🪨 산호석은 산호 광산과 바위 치우기로 모아요"]="🪨 Korallenstein gibt's im Korallensteinbruch oder beim Räumen von Felsen";I18N_X.t.unshift(["다음 칸은 🏛 산호궁 Lv\\.(\\d+)","Nächstes Grundstück ab 🏛 Korallenhalle Lv.$1"])}catch(e){}
 /* town_1135 */try{I18N_X.d["모두 배달"]="Alle liefern";I18N_X.d["지금 올릴 수 있어요"]="Jetzt verbesserbar";I18N_X.d["올릴 수 있는 건물이 없어요"]="Gerade lässt sich kein Gebäude verbessern";}catch(e){}
 /* town_1135b */try{I18N_X.t.unshift(["🧹 (\\d+)곳 치우기","🧹 $1 Felder räumen"]);I18N_X.t.unshift(["🛣 길 (\\d+)칸 잇기","🛣 $1 Straßenfelder"]);I18N_X.t.unshift(["🫧([^ <]+) 더 들어요","🫧$1 extra"]);I18N_X.d["✓를 누르면 같이 해요"]="Tippe ✓, um alles auf einmal zu erledigen"}catch(e){}
+/* town_1135c */try{I18N_X.d["보물 방울을 터뜨렸어요"]="Schatzblase geplatzt";I18N_X.d["🏛 Lv.2에 열려요"]="Ab 🏛 Lv.2"}catch(e){}

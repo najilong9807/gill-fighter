@@ -6,3 +6,4 @@ window.GF_LAB={};
 window.GF_PACK={"town":"Sat","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "Crește până la $1"], ["^Survive for (\\d+)s$", "Supraviețuiește $1 s"], ["^Eat the boss: (.+)$", "Mănâncă șeful: $1"], ["^Clear within (.+)$", "Termină în $1"], ["^Eat (\\d+) fish while surviving$", "Mănâncă $1 pești supraviețuind"], ["^Based on your fish \\((.+)\\)$", "În funcție de peștele tău ($1)"], ["^Again (⚡\\d+)$", "Din nou $1"]]);
 /* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Decor ★$1 · Izvor de perle +$2% · "], ["Decor (?=\\d)", "Decor "], ["(\\d+) kinds placed", "$1 tipuri puse"], [" · next ★ at (\\d+)", " · următoarea ★ la $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Izvor de perle +$1% pentru mai multe tipuri de decor"]]);
+/* town_1135c */try{window.GF_TRX["🏘 마을이 열렸어요!"]="🏘 Satul tău e deschis!"}catch(e){}

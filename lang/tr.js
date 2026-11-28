@@ -6,3 +6,4 @@ window.GF_LAB={};
 window.GF_PACK={"town":"Köy","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "$1 boyuna ulaş"], ["^Survive for (\\d+)s$", "$1 sn hayatta kal"], ["^Eat the boss: (.+)$", "Patronu ye: $1"], ["^Clear within (.+)$", "$1 içinde geç"], ["^Eat (\\d+) fish while surviving$", "Hayatta kalırken $1 balık ye"], ["^Based on your fish \\((.+)\\)$", "Balığına göre ($1)"], ["^Again (⚡\\d+)$", "Tekrar $1"]]);
 /* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "Dekor ★$1 · İnci kaynağı +$2% · "], ["Decor (?=\\d)", "Dekor "], ["(\\d+) kinds placed", "$1 tür yerleştirildi"], [" · next ★ at (\\d+)", " · sonraki ★: $1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "Daha çok dekor türü için İnci kaynağı +%$1"]]);
+/* town_1135c */try{window.GF_TRX["🏘 마을이 열렸어요!"]="🏘 Köyün açıldı!"}catch(e){}

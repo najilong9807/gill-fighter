@@ -3,3 +3,4 @@ window.I18N_X={"u":{"일":"g","시간":"sa","분":"dk","초":"sn","칸":" kare",
 /* town_1134 */try{I18N_X.d["한 번에 한 칸씩 열려요"]="Araziler tek tek açılır";I18N_X.d["🪨 산호석은 산호 광산과 바위 치우기로 모아요"]="🪨 Mercan Taşı'nı Mercan Ocağı'ndan veya kayaları temizleyerek al";I18N_X.t.unshift(["다음 칸은 🏛 산호궁 Lv\\.(\\d+)","Sonraki arazi: 🏛 Mercan Salonu Sv.$1"])}catch(e){}
 /* town_1135 */try{I18N_X.d["모두 배달"]="Hepsini teslim et";I18N_X.d["지금 올릴 수 있어요"]="Şimdi yükseltilebilir";I18N_X.d["올릴 수 있는 건물이 없어요"]="Şu an yükseltilebilecek bina yok";}catch(e){}
 /* town_1135b */try{I18N_X.t.unshift(["🧹 (\\d+)곳 치우기","🧹 $1 kare temizle"]);I18N_X.t.unshift(["🛣 길 (\\d+)칸 잇기","🛣 $1 kare yol"]);I18N_X.t.unshift(["🫧([^ <]+) 더 들어요","+🫧$1"]);I18N_X.d["✓를 누르면 같이 해요"]="Hepsini birden yapmak için ✓'ye dokun"}catch(e){}
+/* town_1135c */try{I18N_X.d["보물 방울을 터뜨렸어요"]="Hazine baloncuğu patladı";I18N_X.d["🏛 Lv.2에 열려요"]="🏛 Sv.2'da açılır"}catch(e){}

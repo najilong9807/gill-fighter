@@ -27,7 +27,7 @@ var DY_POOL=[
  {k:'dec',g:function(){return 1},at:3},
  {k:'box',g:function(){return 2},at:1,emb:1}];
 function dyRw(){return Math.min(800,150+30*hallLv())}
-function dyState(){if(hallLv()<3)return null;var now=NOW(),k=midDayKey(now),st=midDayStart(now);
+function dyState(){if(hallLv()<2)return null; /* 1.1.35: Lv.3 → Lv.2부터(초반 할 거리) */var now=NOW(),k=midDayKey(now),st=midDayStart(now);
   if(!G.dy||G.dy.k!==k&&!(st<=(G.dy.st||0))){var L=hallLv(),pool=DY_POOL.filter(function(q){return L>=q.at&&(!q.emb||EMB)}),h=0,i;for(i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i)+(G.seed|0)*7)>>>0;
     var pick=[];while(pick.length<3&&pool.length){h=(h*1103515245+12345)>>>0;pick.push(pool.splice((h>>>8)%pool.length,1)[0])}
     G.dy={k:k,st:st,L:L,q:pick.map(function(q){return {k:q.k,goal:q.g(L),v:0,got:0}}),all:0};save()}return G.dy}
@@ -42,10 +42,10 @@ function dyHtml(){var S=dyState();if(!S)return '';var rw=dyRw(),now=NOW(),left=(
   var allOk=S.q.every(function(q){return q.got});h+='<div class="wqr all'+(S.all?' got':allOk?' can':'')+'"><span class="ic">🎁</span><div class="tx"><b>오늘의 일 3개 모두 끝내기</b><small>💎2 · ⚡30분</small></div>'+(S.all?'<em>✓ 받음</em>':'<button data-dy="all"'+(allOk?'':' disabled')+'>받기</button>')+'</div></div>';
   if((G.boost|0)>0)h+='<p class="role">⚡ 공사 단축 <b>'+(G.boost|0)+'분</b> 모아 둠 · 짓는 중인 건물 창에서 써요</p>';else if(EMB)h+='<p class="role">⚡ 아가미 파이터 한 판마다 공사 단축 15분 · 재료 상자에 든 연장 덕에 게 일꾼 일이 빨라져요</p>';
   return h}
-var _wqPanelMid=wqPanel;wqPanel=function(){var r;if(hallLv()>=5)r=_wqPanelMid.apply(this,arguments);else{var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📅 오늘의 마을 일</h2>'+(hallLv()<3?'<div class="box">🏛 산호궁 Lv.3에 열려요</div>':'');el.hidden=false;panelFor=null;$('pX').onclick=closePanel}
+var _wqPanelMid=wqPanel;wqPanel=function(){var r;if(hallLv()>=5)r=_wqPanelMid.apply(this,arguments);else{var el=$('panel');el.innerHTML='<button class="x" id="pX">✕</button><h2>📅 오늘의 마을 일</h2>'+(hallLv()<2?'<div class="box">🏛 Lv.2에 열려요</div>':'');el.hidden=false;panelFor=null;$('pX').onclick=closePanel}
   try{var el2=$('panel'),h2=el2.querySelector('h2'),x=dyHtml();if(x&&h2){var box=document.createElement('div');box.className='dybox';box.innerHTML=(window.CITY_TR||String)(x);h2.parentNode.insertBefore(box,h2.nextSibling);
     box.querySelectorAll('[data-dy]').forEach(function(b){b.onclick=function(){var v=b.dataset.dy;dyTake(v==='all'?'all':+v);wqPanel()}})}}catch(e){}return r};
-function midDot(){var b=$('bWq');if(!b)return;var L=hallLv();if(L>=3)b.hidden=false;var e=b.querySelector('em');if(e){var w=0;try{w=L>=5?wqReady():0}catch(x){}e.hidden=!(w||dyReady())}}
+function midDot(){var b=$('bWq');if(!b)return;var L=hallLv();if(L>=2)b.hidden=false;var e=b.querySelector('em');if(e){var w=0;try{w=L>=5?wqReady():0}catch(x){}e.hidden=!(w||dyReady())}}
 var _wqDotMid=wqDot;wqDot=function(){var r=_wqDotMid.apply(this,arguments);try{midDot()}catch(e){}return r};
 
 /* ---------- ③ 🗿 기념물 · ④ 🎉 축제의 날 (🎪 광장) ---------- */

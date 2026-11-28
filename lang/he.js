@@ -6,3 +6,4 @@ window.GF_LAB={};
 window.GF_PACK={"town":"כפר","city":"Gill City"};
 /* rx_1134 */window.GF_R=(window.GF_R||[]).concat([["^Grow to (.+)$", "גדלו עד $1"], ["^Survive for (\\d+)s$", "שרדו $1 שניות"], ["^Eat the boss: (.+)$", "אכלו את הבוס: $1"], ["^Clear within (.+)$", "סיימו תוך $1"], ["^Eat (\\d+) fish while surviving$", "אכלו $1 דגים תוך כדי הישרדות"], ["^Based on your fish \\((.+)\\)$", "לפי הדג שלכם ($1)"], ["^Again (⚡\\d+)$", "שוב $1"]]);
 /* rx_1134b */window.GF_R=(window.GF_R||[]).concat([["Decor ★(\\d+) · spring \\+(\\d+)% · ", "קישוטים ★$1 · מעיין פנינים +$2% · "], ["Decor (?=\\d)", "קישוטים "], ["(\\d+) kinds placed", "$1 סוגים הוצבו"], [" · next ★ at (\\d+)", " · ★ הבא ב-$1"], ["^Pearl spring \\+(\\d+)% for more kinds of decor$", "מעיין פנינים +$1% על יותר סוגי קישוטים"]]);
+/* town_1135c */try{window.GF_TRX["🏘 마을이 열렸어요!"]="🏘 הכפר שלך נפתח!"}catch(e){}
